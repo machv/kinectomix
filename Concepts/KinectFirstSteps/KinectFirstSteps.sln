@@ -12,6 +12,24 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Kinect.Toolkit.Controls", "Microsoft.Kinect.Toolkit.Controls\Microsoft.Kinect.Toolkit.Controls.csproj", "{4508C4D1-85BB-4F3F-9E3B-CC93D231C65D}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = KinectFirstSteps\\KinectFirstSteps\\KinectFirstSteps.csproj
+		SccProjectName1 = KinectFirstSteps/KinectFirstSteps
+		SccLocalPath1 = KinectFirstSteps\\KinectFirstSteps
+		SccProjectUniqueName2 = KinectFirstSteps\\KinectFirstStepsContent\\KinectFirstStepsContent.contentproj
+		SccProjectName2 = KinectFirstSteps/KinectFirstStepsContent
+		SccLocalPath2 = KinectFirstSteps\\KinectFirstStepsContent
+		SccProjectUniqueName3 = Microsoft.Kinect.Toolkit\\Microsoft.Kinect.Toolkit.csproj
+		SccProjectName3 = Microsoft.Kinect.Toolkit
+		SccLocalPath3 = Microsoft.Kinect.Toolkit
+		SccProjectUniqueName4 = Microsoft.Kinect.Toolkit.Controls\\Microsoft.Kinect.Toolkit.Controls.csproj
+		SccProjectName4 = Microsoft.Kinect.Toolkit.Controls
+		SccLocalPath4 = Microsoft.Kinect.Toolkit.Controls
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
