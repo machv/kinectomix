@@ -123,6 +123,9 @@ namespace KinectFirstSteps
             // TODO: Unload any non ContentManager content here
         }
 
+        Vector2 lastHandPosition = new Vector2(0, 0);
+        double lastHandTime;
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -158,9 +161,25 @@ namespace KinectFirstSteps
                 }
             }
 
-            if (_skeletons.TrackedSkeleton != null)
+            if (_skeletons.TrackedSkeleton != null && _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
             {
-                ringPosition = SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
+                Vector2 handPosition = SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
+
+                if (Vector2.Distance(handPosition, lastHandPosition) > 5)
+                {
+                    lastHandTime = 0;
+                }
+                else
+                {
+                    lastHandTime += gameTime.ElapsedGameTime.TotalSeconds;
+                }
+
+                lastHandPosition = handPosition;
+
+                if (lastHandTime > 1)
+                {
+                    ringPosition = handPosition;
+                }
             }
 
             base.Update(gameTime);
