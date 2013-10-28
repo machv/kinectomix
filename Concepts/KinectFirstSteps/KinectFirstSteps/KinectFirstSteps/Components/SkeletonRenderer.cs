@@ -10,12 +10,14 @@ namespace KinectFirstSteps.Components
 {
     public class SkeletonRenderer : DrawableGameComponent
     {
-        private KinectSensor kinect;
+        private KinectSensor _kinect;
+        private Skeletons _skeletons;
 
-        public SkeletonRenderer(Game game, Microsoft.Kinect.KinectSensor sensor, SkeletonPointMap map)
+        public SkeletonRenderer(Game game, Microsoft.Kinect.KinectSensor sensor, Skeletons skeletons, SkeletonPointMap map)
             : base(game)
         {
-            kinect = sensor;
+            _kinect = sensor;
+            _skeletons = skeletons;
 
             mapMethod = map;
         }
@@ -154,10 +156,10 @@ namespace KinectFirstSteps.Components
         /// <returns>A Vector2 of the location on the color frame.</returns>
         private Vector2 SkeletonToColorMap(SkeletonPoint point)
         {
-            if ((null != kinect) && (null != kinect.ColorStream))
+            if ((null != _kinect) && (null != _kinect.ColorStream))
             {
                 // This is used to map a skeleton point to the color image location
-                var colorPt = kinect.CoordinateMapper.MapSkeletonPointToColorPoint(point, kinect.ColorStream.Format);
+                var colorPt = _kinect.CoordinateMapper.MapSkeletonPointToColorPoint(point, _kinect.ColorStream.Format);
                 return new Vector2(colorPt.X, colorPt.Y);
             }
 
@@ -168,37 +170,48 @@ namespace KinectFirstSteps.Components
 
         public override void Update(GameTime gameTime)
         {
-            if (kinect != null)
+            if (_skeletons.Items != null)
             {
-                try
+                foreach (Skeleton skel in _skeletons.Items)
                 {
-                    using (SkeletonFrame skeletonFrame = kinect.SkeletonStream.OpenNextFrame(0))
+                    if (skel.TrackingState == SkeletonTrackingState.Tracked)
                     {
-                        if (skeletonFrame != null)
-                        {
-                            Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-                            
-                            //Copy the skeleton data to our array
-                            skeletonFrame.CopySkeletonDataTo(skeletonData);
-
-                            if (skeletonData != null)
-                            {
-                                foreach (Skeleton skel in skeletonData)
-                                {
-                                    if (skel.TrackingState == SkeletonTrackingState.Tracked)
-                                    {
-                                        skeleton = skel;
-                                    }
-                                }
-                            }
-                        }
+                        skeleton = skel;
                     }
                 }
-                catch (Exception ex)
-                {
-                    //Report an error message
-                }
             }
+
+            //if (_kinect != null)
+            //{
+            //    try
+            //    {
+            //        using (SkeletonFrame skeletonFrame = _kinect.SkeletonStream.OpenNextFrame(0))
+            //        {
+            //            if (skeletonFrame != null)
+            //            {
+            //                Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                            
+            //                //Copy the skeleton data to our array
+            //                skeletonFrame.CopySkeletonDataTo(skeletonData);
+
+            //                if (skeletonData != null)
+            //                {
+            //                    foreach (Skeleton skel in skeletonData)
+            //                    {
+            //                        if (skel.TrackingState == SkeletonTrackingState.Tracked)
+            //                        {
+            //                            skeleton = skel;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        //Report an error message
+            //    }
+            //}
 
             base.Update(gameTime);
         }

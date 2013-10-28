@@ -26,6 +26,7 @@ namespace KinectFirstSteps
 
         Skeleton[] skeletonData;
         Skeleton skeleton;
+        Skeletons _skeletons;
 
         public AtomixGame()
         {
@@ -43,7 +44,9 @@ namespace KinectFirstSteps
         {
             InitializeKinectSensor();
 
-            Components.Add(new Components.SkeletonRenderer(this, kinect, SkeletonToColorMap));
+            _skeletons = new Skeletons();
+
+            Components.Add(new Components.SkeletonRenderer(this, kinect, _skeletons, SkeletonToColorMap));
 
             base.Initialize();
         }
@@ -104,31 +107,31 @@ namespace KinectFirstSteps
             //
             // Skeleton Frame
             //
-            using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
-            {
-                if (skeletonFrame != null)
-                {
-                    if ((skeletonData == null) || (this.skeletonData.Length != skeletonFrame.SkeletonArrayLength))
-                    {
-                        this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-                    }
-                    //Copy the skeleton data to our array
-                    skeletonFrame.CopySkeletonDataTo(this.skeletonData);
+            //using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
+            //{
+            //    if (skeletonFrame != null)
+            //    {
+            //        if ((skeletonData == null) || (this.skeletonData.Length != skeletonFrame.SkeletonArrayLength))
+            //        {
+            //            this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+            //        }
+            //        //Copy the skeleton data to our array
+            //        skeletonFrame.CopySkeletonDataTo(this.skeletonData);
 
-                    if (skeletonData != null)
-                    {
-                        foreach (Skeleton skel in skeletonData)
-                        {
-                            if (skel.TrackingState == SkeletonTrackingState.Tracked)
-                            {
-                                skeleton = skel;
-                            }
-                        }
-                    }
+            //        if (skeletonData != null)
+            //        {
+            //            foreach (Skeleton skel in skeletonData)
+            //            {
+            //                if (skel.TrackingState == SkeletonTrackingState.Tracked)
+            //                {
+            //                    skeleton = skel;
+            //                }
+            //            }
+            //        }
 
 
-                }
-            }
+            //    }
+            //}
 
             using (ColorImageFrame colorVideoFrame = e.OpenColorImageFrame())
             {
@@ -204,39 +207,41 @@ namespace KinectFirstSteps
 
             // TODO: Add your update logic here
 
-            //if (kinect != null)
-            //{
-            //    try
-            //    {
-            //        using (SkeletonFrame skeletonFrame = kinect.SkeletonStream.OpenNextFrame(0))
-            //        {
-            //            if (skeletonFrame != null)
-            //            {
-            //                if ((skeletonData == null) || (this.skeletonData.Length != skeletonFrame.SkeletonArrayLength))
-            //                {
-            //                    this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-            //                }
-            //                //Copy the skeleton data to our array
-            //                skeletonFrame.CopySkeletonDataTo(this.skeletonData);
+            if (kinect != null)
+            {
+                try
+                {
+                    using (SkeletonFrame skeletonFrame = kinect.SkeletonStream.OpenNextFrame(0))
+                    {
+                        if (skeletonFrame != null)
+                        {
+                            if ((skeletonData == null) || (this.skeletonData.Length != skeletonFrame.SkeletonArrayLength))
+                            {
+                                this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                            }
+                            //Copy the skeleton data to our array
+                            skeletonFrame.CopySkeletonDataTo(this.skeletonData);
 
-            //                if (skeletonData != null)
-            //                {
-            //                    foreach (Skeleton skel in skeletonData)
-            //                    {
-            //                        if (skel.TrackingState == SkeletonTrackingState.Tracked)
-            //                        {
-            //                            skeleton = skel;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        //Report an error message
-            //    }
-            //}
+                            _skeletons.Items = skeletonData;
+
+                            //if (skeletonData != null)
+                            //{
+                            //    foreach (Skeleton skel in skeletonData)
+                            //    {
+                            //        if (skel.TrackingState == SkeletonTrackingState.Tracked)
+                            //        {
+                            //            skeleton = skel;
+                            //        }
+                            //    }
+                            //}
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //Report an error message
+                }
+            }
         
 
             base.Update(gameTime);
