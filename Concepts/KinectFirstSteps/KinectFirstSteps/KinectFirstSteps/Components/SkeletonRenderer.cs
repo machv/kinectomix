@@ -44,6 +44,8 @@ namespace KinectFirstSteps.Components
 
         private void DrawSkeleton(Vector2 resolution)
         {
+            Skeleton skeleton = _skeletons.TrackedSkeleton;
+
             if (skeleton != null)
             {
                 if (skeleton.TrackingState != SkeletonTrackingState.Tracked)
@@ -170,16 +172,16 @@ namespace KinectFirstSteps.Components
 
         public override void Update(GameTime gameTime)
         {
-            if (_skeletons.Items != null)
-            {
-                foreach (Skeleton skel in _skeletons.Items)
-                {
-                    if (skel.TrackingState == SkeletonTrackingState.Tracked)
-                    {
-                        skeleton = skel;
-                    }
-                }
-            }
+            //if (_skeletons.Items != null)
+            //{
+            //    foreach (Skeleton skel in _skeletons.Items)
+            //    {
+            //        if (skel.TrackingState == SkeletonTrackingState.Tracked)
+            //        {
+            //            skeleton = skel;
+            //        }
+            //    }
+            //}
 
             //if (_kinect != null)
             //{

@@ -9,5 +9,7 @@ namespace KinectFirstSteps
     public class Skeletons
     {
         public Skeleton[] Items { get; set; }
+
+        public Skeleton TrackedSkeleton { get; set; }
     }
 }

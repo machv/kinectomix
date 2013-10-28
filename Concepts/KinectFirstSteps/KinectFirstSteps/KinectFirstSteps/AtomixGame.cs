@@ -18,19 +18,15 @@ namespace KinectFirstSteps
     /// </summary>
     public class AtomixGame : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        KinectSensor kinect;
-        Texture2D colorVideo;
-        //Texture2D skeletonTexture;
-
-        Skeleton[] skeletonData;
-        Skeleton skeleton;
+        GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
+        KinectSensor _kinect;
+        Texture2D _colorVideo;
         Skeletons _skeletons;
 
         public AtomixGame()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -44,36 +40,25 @@ namespace KinectFirstSteps
         {
             InitializeKinectSensor();
 
-            _skeletons = new Skeletons();
-
-            Components.Add(new Components.SkeletonRenderer(this, kinect, _skeletons, SkeletonToColorMap));
+            Components.Add(new Components.SkeletonRenderer(this, _kinect, _skeletons, SkeletonToColorMap));
 
             base.Initialize();
         }
 
         private void InitializeKinectSensor()
         {
-            kinect = KinectSensor.KinectSensors.FirstOrDefault();
+            _kinect = KinectSensor.KinectSensors.FirstOrDefault();
 
-            kinect.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-            kinect.ColorFrameReady += kinect_ColorFrameReady;
+            _kinect.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+            _kinect.ColorFrameReady += kinect_ColorFrameReady;
             //kinect.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
-            //kinect.AllFramesReady += kinect_AllFramesReady;
-            kinect.SkeletonStream.Enable();
+            _kinect.SkeletonStream.Enable();
 
-            kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default; // tracking of top body 
+            _kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default; // tracking of top body 
+            _kinect.Start();
+            _kinect.ElevationAngle = 0;
 
-            kinect.Start();
-
-            kinect.ElevationAngle = 0;
-
-            //if (skeletonTexture == null)
-            //{
-            //    skeletonTexture = new Texture2D(graphics.GraphicsDevice, 30, 30);
-            //    Color[] data = new Color[30 * 30];
-            //    for (int i = 0; i < data.Length; ++i) data[i] = Color.White;
-            //    skeletonTexture.SetData(data);
-            //}
+            _skeletons = new Skeletons();
         }
 
         void kinect_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
@@ -96,64 +81,8 @@ namespace KinectFirstSteps
                         bgraPixelData[i + 3] = (Byte)255; //The video comes with 0 alpha so it is transparent
                     }
 
-                    colorVideo = new Texture2D(graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
-                    colorVideo.SetData(bgraPixelData);
-                }
-            }
-        }
-
-        void kinect_AllFramesReady(object sender, AllFramesReadyEventArgs e)
-        {
-            //
-            // Skeleton Frame
-            //
-            //using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
-            //{
-            //    if (skeletonFrame != null)
-            //    {
-            //        if ((skeletonData == null) || (this.skeletonData.Length != skeletonFrame.SkeletonArrayLength))
-            //        {
-            //            this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-            //        }
-            //        //Copy the skeleton data to our array
-            //        skeletonFrame.CopySkeletonDataTo(this.skeletonData);
-
-            //        if (skeletonData != null)
-            //        {
-            //            foreach (Skeleton skel in skeletonData)
-            //            {
-            //                if (skel.TrackingState == SkeletonTrackingState.Tracked)
-            //                {
-            //                    skeleton = skel;
-            //                }
-            //            }
-            //        }
-
-
-            //    }
-            //}
-
-            using (ColorImageFrame colorVideoFrame = e.OpenColorImageFrame())
-            {
-                if (colorVideoFrame != null)
-                {
-                    // Create array for pixel data and copy it from the image frame
-                    Byte[] pixelData = new Byte[colorVideoFrame.PixelDataLength];
-                    colorVideoFrame.CopyPixelDataTo(pixelData);
-
-                    //Convert RGBA to BGRA
-                    Byte[] bgraPixelData = new Byte[colorVideoFrame.PixelDataLength];
-                    for (int i = 0; i < pixelData.Length; i += 4)
-                    {
-                        bgraPixelData[i] = pixelData[i + 2];
-                        bgraPixelData[i + 1] = pixelData[i + 1];
-                        bgraPixelData[i + 2] = pixelData[i];
-                        bgraPixelData[i + 3] = (Byte)255; //The video comes with 0 alpha so it is transparent
-                    }
-
-
-                    colorVideo = new Texture2D(graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
-                    colorVideo.SetData(bgraPixelData);
+                    _colorVideo = new Texture2D(_graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
+                    _colorVideo.SetData(bgraPixelData);
                 }
             }
         }
@@ -165,10 +94,10 @@ namespace KinectFirstSteps
         /// <returns>A Vector2 of the location on the color frame.</returns>
         private Vector2 SkeletonToColorMap(SkeletonPoint point)
         {
-            if ((null != kinect) && (null != kinect.ColorStream))
+            if ((null != _kinect) && (null != _kinect.ColorStream))
             {
                 // This is used to map a skeleton point to the color image location
-                var colorPt = kinect.CoordinateMapper.MapSkeletonPointToColorPoint(point, kinect.ColorStream.Format);
+                var colorPt = _kinect.CoordinateMapper.MapSkeletonPointToColorPoint(point, _kinect.ColorStream.Format);
                 return new Vector2(colorPt.X, colorPt.Y);
             }
 
@@ -182,7 +111,7 @@ namespace KinectFirstSteps
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         /// <summary>
@@ -205,35 +134,21 @@ namespace KinectFirstSteps
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
-
-            if (kinect != null)
+            if (_kinect != null)
             {
                 try
                 {
-                    using (SkeletonFrame skeletonFrame = kinect.SkeletonStream.OpenNextFrame(0))
+                    using (SkeletonFrame skeletonFrame = _kinect.SkeletonStream.OpenNextFrame(0))
                     {
                         if (skeletonFrame != null)
                         {
-                            if ((skeletonData == null) || (this.skeletonData.Length != skeletonFrame.SkeletonArrayLength))
-                            {
-                                this.skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-                            }
+                            Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+
                             //Copy the skeleton data to our array
-                            skeletonFrame.CopySkeletonDataTo(this.skeletonData);
+                            skeletonFrame.CopySkeletonDataTo(skeletonData);
 
                             _skeletons.Items = skeletonData;
-
-                            //if (skeletonData != null)
-                            //{
-                            //    foreach (Skeleton skel in skeletonData)
-                            //    {
-                            //        if (skel.TrackingState == SkeletonTrackingState.Tracked)
-                            //        {
-                            //            skeleton = skel;
-                            //        }
-                            //    }
-                            //}
+                            _skeletons.TrackedSkeleton = _skeletons.Items.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
                         }
                     }
                 }
@@ -242,10 +157,16 @@ namespace KinectFirstSteps
                     //Report an error message
                 }
             }
-        
+
+            if (_skeletons.TrackedSkeleton != null)
+            {
+                ringPosition = SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
+            }
 
             base.Update(gameTime);
         }
+
+        Vector2 ringPosition = new Vector2(650, 100);
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -255,12 +176,18 @@ namespace KinectFirstSteps
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            if (colorVideo != null)
+            if (_colorVideo != null)
             {
-                spriteBatch.Begin();
-                spriteBatch.Draw(colorVideo, new Rectangle(0, 0, 640, 480), Color.White);
-                spriteBatch.End();
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(_colorVideo, new Rectangle(0, 0, 640, 480), Color.White);
+                _spriteBatch.End();
             }
+
+            _spriteBatch.Begin();
+
+            Texture2D ring = Content.Load<Texture2D>("ring");
+            _spriteBatch.Draw(ring, ringPosition, Color.White);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
