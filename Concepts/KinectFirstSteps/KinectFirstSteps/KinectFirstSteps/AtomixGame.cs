@@ -161,6 +161,7 @@ namespace KinectFirstSteps
                 }
             }
 
+            // check for ring position
             if (_skeletons.TrackedSkeleton != null && _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked)
             {
                 Vector2 handPosition = SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
@@ -179,12 +180,54 @@ namespace KinectFirstSteps
                 if (lastHandTime > 1)
                 {
                     ringPosition = handPosition;
+                    hasRingMatch = true;
+                    isToRight = true;
                 }
             }
 
+            // check for gesture move
+            // to right and after ring match
+            if (hasRingMatch && isToRight)
+            {
+                // if y-coordinates are near -- same line
+                if (Math.Abs(lastHandPosition.Y - ringPosition.Y) < 10)
+                {
+                    toRightDifference = lastHandPosition.X - ringPosition.X;
+
+                    // if the move is more that threshold, mark it as gesture and reset position
+                    if (toRightDifference > 20)
+                    {
+                        rightMove = true;
+                        hasRingMatch = false;
+                        isToRight = false;
+                    }
+                }
+                else
+                {
+                    isToRight = false;
+
+                    // if the move is more that threshold, mark it as gesture and reset position
+                    if (toRightDifference > 50)
+                    {
+                        rightMove = true;
+                        hasRingMatch = false;
+                    }
+                }
+            }
+
+
             base.Update(gameTime);
         }
+        float toRightDifference = 0;
 
+        // if is right gesture correct
+        bool rightMove = false;
+
+        // could be right festure?
+        bool isToRight = false;
+
+        // have we cursor aquired?
+        bool hasRingMatch = false;
         Vector2 ringPosition = new Vector2(650, 100);
 
         /// <summary>
