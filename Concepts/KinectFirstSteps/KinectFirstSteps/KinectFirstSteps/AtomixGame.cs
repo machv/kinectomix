@@ -49,9 +49,11 @@ namespace KinectFirstSteps
         {
             _kinect = KinectSensor.KinectSensors.FirstOrDefault();
 
-            _kinect.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+            //_kinect.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
             _kinect.ColorFrameReady += kinect_ColorFrameReady;
             //kinect.DepthStream.Enable(DepthImageFormat.Resolution320x240Fps30);
+            _kinect.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+            _kinect.DepthFrameReady += _kinect_DepthFrameReady;
             _kinect.SkeletonStream.Enable();
 
             _kinect.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default; // tracking of top body 
@@ -59,6 +61,45 @@ namespace KinectFirstSteps
             _kinect.ElevationAngle = 0;
 
             _skeletons = new Skeletons();
+        }
+
+        private byte[] ConvertDepthFrame(short[] depthFrameData, DepthImageFrame depthFrame)
+        {
+            int RedIndex = 0, GreenIndex = 1, BlueIndex = 2, AlphaIndex = 3;
+            byte[] depthFrame32 = new byte[depthFrame.Width * depthFrame.Height * 4];
+
+            for (int i16 = 0, i32 = 0; i16 < depthFrameData.Length && i32 < depthFrame32.Length; i16++, i32 += 4)
+            {
+                int player = depthFrameData[i16] & DepthImageFrame.PlayerIndexBitmask;
+                int realDepth = depthFrameData[i16] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                // transform 13-bit depth information into an 8-bit intensity appropriate
+                // for display (we disregard information in most significant bit)
+                byte intensity = (byte)(~(realDepth >> 4));
+
+                depthFrame32[i32 + RedIndex] = (byte)(intensity);
+                depthFrame32[i32 + GreenIndex] = (byte)(intensity);
+                depthFrame32[i32 + BlueIndex] = (byte)(intensity);
+                depthFrame32[i32 + AlphaIndex] = 255;
+            }
+
+            return depthFrame32;
+        }
+
+        void _kinect_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
+        {
+            using (DepthImageFrame colorVideoFrame = e.OpenDepthImageFrame())
+            {
+                if (colorVideoFrame != null)
+                {
+                    // Create array for pixel data and copy it from the image frame
+                    short[] pixelData = new short[colorVideoFrame.PixelDataLength];
+                    colorVideoFrame.CopyPixelDataTo(pixelData);
+
+                    _colorVideo = new Texture2D(_graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
+                    _colorVideo.SetData(ConvertDepthFrame(pixelData, colorVideoFrame));
+                }
+            }
         }
 
         void kinect_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
