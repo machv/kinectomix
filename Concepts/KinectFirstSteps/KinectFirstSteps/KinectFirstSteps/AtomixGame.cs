@@ -83,8 +83,13 @@ namespace KinectFirstSteps
                 depthFrame32[i32 + AlphaIndex] = 255;
             }
 
+            rawDepthFrame = depthFrame32;
+
             return depthFrame32;
         }
+
+        byte[] rawDepthFrame;
+        short[] lastDepthFrameData = null;
 
         void _kinect_DepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
@@ -98,6 +103,8 @@ namespace KinectFirstSteps
 
                     _colorVideo = new Texture2D(_graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
                     _colorVideo.SetData(ConvertDepthFrame(pixelData, colorVideoFrame));
+
+                    lastDepthFrameData = pixelData;
                 }
             }
         }
@@ -145,6 +152,10 @@ namespace KinectFirstSteps
             return Vector2.Zero;
         }
 
+        SpriteFont _font1;
+        Vector2 _fontPos;
+        string _textToRender;
+
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -153,6 +164,11 @@ namespace KinectFirstSteps
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Create a new SpriteBatch, which can be used to draw textures.
+            _font1 = Content.Load<SpriteFont>("Font1");
+            _fontPos = new Vector2(500,
+                GraphicsDevice.Viewport.Height - 50);
         }
 
         /// <summary>
@@ -166,6 +182,8 @@ namespace KinectFirstSteps
 
         Vector2 lastHandPosition = new Vector2(0, 0);
         double lastHandTime;
+
+        DepthImagePoint handDepthPoint;
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -220,10 +238,42 @@ namespace KinectFirstSteps
 
                 if (lastHandTime > 1)
                 {
-                    ringPosition = handPosition;
+                    //TODO: uncomment ring position
+                    ///ringPosition = handPosition;
                     hasRingMatch = true;
                     isToRight = true;
                 }
+
+                //                DepthImagePixel[] depthPixels;
+                //                depthPixels = new DepthImagePixel[_kinect.DepthStream.FramePixelDataLength];
+                //                lastDepthFrame.CopyDepthImagePixelDataTo(depthPixels);
+
+                handDepthPoint = _kinect.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position, DepthImageFormat.Resolution640x480Fps30);
+
+                SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
+                SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position;
+
+                float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
+
+                if (wrist.X < hand.X)
+                {
+                    // go up
+                }
+
+                //lastDepthFrame.
+
+                // podivame se, v jake vzdalenosti bod je
+                short[] frameData = lastDepthFrameData;
+
+                int stride = 640;
+                int index = handDepthPoint.Y * stride + handDepthPoint.X;
+
+                int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
+                int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                double depth = Math.Round(realDepth / 10f, 2);
+
+                _textToRender = "Player's " + player + " hand at [" + handDepthPoint.X + "x" + handDepthPoint.Y + "] in depth " + depth + " cm at angle " + angle + ".";
             }
 
             // check for gesture move
@@ -290,6 +340,31 @@ namespace KinectFirstSteps
 
             Texture2D ring = Content.Load<Texture2D>("ring");
             _spriteBatch.Draw(ring, ringPosition, Color.White);
+
+            // draw hand
+            Texture2D jointTexture = Content.Load<Texture2D>("Joint");
+            Vector2 jointOrigin = new Vector2(jointTexture.Width / 2, jointTexture.Height / 2);
+
+            _spriteBatch.Draw(
+                jointTexture,
+                new Vector2(handDepthPoint.X, handDepthPoint.Y),
+                null,
+                Color.Pink,
+                0.0f,
+                jointOrigin,
+                1.0f,
+                SpriteEffects.None,
+                0.0f);
+
+            if (_textToRender != null)
+            {
+                // Find the center of the string
+                Vector2 FontOrigin = _font1.MeasureString(_textToRender) / 2;
+                // Draw the string
+                _spriteBatch.DrawString(_font1, _textToRender, _fontPos, Color.Red,
+                    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+            }
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
