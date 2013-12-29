@@ -184,7 +184,7 @@ namespace KinectFirstSteps
         double lastHandTime;
 
         DepthImagePoint _handDepthPoint;
-        int[] histogram;
+        int[] _histogram;
         int _handRadius;
 
         DepthImagePoint _handRectPoint;
@@ -261,56 +261,80 @@ namespace KinectFirstSteps
                 Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
                 Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
 
-                float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
-                float radius = Vector2.Distance(handVector, wristVector);
+                // podivame se, v jake vzdalenosti bod je
                 int stride = 640;
                 int index = _handDepthPoint.Y * stride + _handDepthPoint.X;
-
-
-                // podivame se, v jake vzdalenosti bod je
                 short[] frameData = lastDepthFrameData;
                 int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                 int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
-                _handRadius = (int)(radius * 1.5);
-                if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
+                float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
+                if (realDepth > 0)
                 {
-                    _handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
+                    float radius = 35000 / realDepth;
 
 
 
-                    // transform 13-bit depth information into an 8-bit intensity appropriate
-                    // for display (we disregard information in most significant bit)
-                    //                byte intensity = (byte)(~(realDepth >> 4));
 
-                    histogram = new int[256];
 
-                    for (int y = _handRect.Top; y < _handRect.Bottom; y++)
+
+                    _handRadius = (int)(radius * 1.5);
+                    if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
                     {
-                        for (int x = _handRect.Left; x < _handRect.Right; x++)
+                        _handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
+
+
+
+                        // transform 13-bit depth information into an 8-bit intensity appropriate
+                        // for display (we disregard information in most significant bit)
+                        //                byte intensity = (byte)(~(realDepth >> 4));
+
+                        _histogram = new int[256];
+
+                        for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                         {
-                            int i = y * stride + x;
-                            if (i < frameData.Length && i >= 0)
+                            for (int x = _handRect.Left; x < _handRect.Right; x++)
                             {
-                                int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
-                                if (playerIndex > 0)
+                                int i = y * stride + x;
+                                if (i < frameData.Length && i >= 0)
                                 {
-                                    int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+                                    int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
+                                    if (playerIndex > 0)
+                                    {
+                                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
-                                    // transform 13-bit depth information into an 8-bit intensity appropriate
-                                    // for display (we disregard information in most significant bit)
-                                    byte intensity = (byte)(~(realPixelDepth >> 4));
+                                        // transform 13-bit depth information into an 8-bit intensity appropriate
+                                        // for display (we disregard information in most significant bit)
+                                        byte intensity = (byte)(~(realPixelDepth >> 4));
 
-                                    histogram[intensity]++;
+                                        _histogram[intensity]++;
+                                    }
                                 }
                             }
                         }
                     }
+
+                    int max = 0;
+                    for (int i = 0; i < _histogram.Length; i++)
+                    {
+                        max = Math.Max(max, _histogram[i]);
+                    }
+
+                    if (max > (_handRect.Width * _handRect.Height) / 3)
+                    {
+                        _textToRender = "Open!";
+                    }
+                    else
+                    {
+                        _textToRender = "Closed";
+                    }
+
+                    _textToRender += string.Format(" [{0:P2}]", (double)max / (_handRect.Width * _handRect.Height));
                 }
 
                 double depth = Math.Round(realDepth / 10f, 2);
 
-                _textToRender = "Player's " + player + " hand at [" + _handDepthPoint.X + "x" + _handDepthPoint.Y + "] in depth " + depth + " cm, radius " + radius + ".";
+                //_textToRender = "Player's " + player + " hand at [" + _handDepthPoint.X + "x" + _handDepthPoint.Y + "] in depth " + depth + " cm, radius " + radius + ".";
             }
 
             // check for gesture move
@@ -408,13 +432,13 @@ namespace KinectFirstSteps
             Int32[] pixel = { 0xFFFFFF }; // White. 0xFF is Red, 0xFF0000 is Blue
             SimpleTexture.SetData<Int32>(pixel, 0, SimpleTexture.Width * SimpleTexture.Height);
 
-            if (histogram != null && _handRect.Width != 0)
+            if (_histogram != null && _handRect.Width != 0)
             {
                 int startX = 0;
                 // Draw histogram
-                for (int i = 0; i < histogram.Length; i++)
+                for (int i = 0; i < _histogram.Length; i++)
                 {
-                    int value = 480 * histogram[i] / (_handRect.Width * _handRect.Height);
+                    int value = 480 * _histogram[i] / (_handRect.Width * _handRect.Height);
                     _spriteBatch.Draw(SimpleTexture, new Rectangle(startX, 0, 1, value), Color.Red);
 
                     startX += 1;
