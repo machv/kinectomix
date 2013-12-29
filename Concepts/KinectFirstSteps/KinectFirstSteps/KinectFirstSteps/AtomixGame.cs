@@ -252,8 +252,11 @@ namespace KinectFirstSteps
 
                 SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
                 SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position;
+                Vector2 handVector = new Vector2(hand.X, hand.Y);
+                Vector2 wristVector = new Vector2(wrist.X, wrist.Y);
 
                 float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
+                float radius = Vector2.Distance(handVector, wristVector);
 
                 if (wrist.X < hand.X)
                 {
@@ -270,10 +273,33 @@ namespace KinectFirstSteps
 
                 int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                 int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+                // transform 13-bit depth information into an 8-bit intensity appropriate
+                // for display (we disregard information in most significant bit)
+//                byte intensity = (byte)(~(realDepth >> 4));
+
+                int[] histogram = new int[255];
+
+                int startIndex = (int)((handDepthPoint.Y - radius) * stride + (handDepthPoint.X - radius));
+                int endIndex = (int)((handDepthPoint.Y + radius) * stride + (handDepthPoint.X + radius));
+                for (int i16 = startIndex; i16 < endIndex; i16++)
+                {
+                    int playerIndex = frameData[i16] & DepthImageFrame.PlayerIndexBitmask;
+                    if (playerIndex > 0)
+                    {
+                        int realPixelDepth = frameData[i16] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                        // transform 13-bit depth information into an 8-bit intensity appropriate
+                        // for display (we disregard information in most significant bit)
+                        byte intensity = (byte)(~(realPixelDepth >> 4));
+
+                        histogram[intensity]++;
+                    }
+
+                }
 
                 double depth = Math.Round(realDepth / 10f, 2);
 
-                _textToRender = "Player's " + player + " hand at [" + handDepthPoint.X + "x" + handDepthPoint.Y + "] in depth " + depth + " cm at angle " + angle + ".";
+                _textToRender = "Player's " + player + " hand at [" + handDepthPoint.X + "x" + handDepthPoint.Y + "] in depth " + depth + " cm, radius " + radius + ".";
             }
 
             // check for gesture move
@@ -364,6 +390,18 @@ namespace KinectFirstSteps
                 _spriteBatch.DrawString(_font1, _textToRender, _fontPos, Color.Red,
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
+
+            Texture2D SimpleTexture = new Texture2D(GraphicsDevice, 1, 1, false,
+    SurfaceFormat.Color);
+
+            Int32[] pixel = { 0xFFFFFF }; // White. 0xFF is Red, 0xFF0000 is Blue
+            SimpleTexture.SetData<Int32>(pixel, 0, SimpleTexture.Width * SimpleTexture.Height);
+
+            // Paint a 100x1 line starting at 20, 50
+            _spriteBatch.Draw(SimpleTexture, new Rectangle(20, 50, 100, 1), Color.Blue);
+
+            // Draw histogram
+
 
             _spriteBatch.End();
 
