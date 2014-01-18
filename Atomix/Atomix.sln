@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atomix", "Atomix\Atomix\Atomix.csproj", "{50576933-926E-4951-92FD-9FE370386BC2}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "AtomixContent", "Atomix\AtomixContent\AtomixContent.contentproj", "{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleLevelGenerator", "SimpleLevelGenerator\SimpleLevelGenerator.csproj", "{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomixData", "AtomixData\AtomixData.csproj", "{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Atomix\\Atomix\\Atomix.csproj
+		SccProjectName1 = Atomix/Atomix
+		SccLocalPath1 = Atomix\\Atomix
+		SccProjectUniqueName2 = Atomix\\AtomixContent\\AtomixContent.contentproj
+		SccProjectName2 = Atomix/AtomixContent
+		SccLocalPath2 = Atomix\\AtomixContent
+		SccProjectUniqueName3 = SimpleLevelGenerator\\SimpleLevelGenerator.csproj
+		SccProjectName3 = SimpleLevelGenerator
+		SccLocalPath3 = SimpleLevelGenerator
+		SccProjectUniqueName4 = AtomixData\\AtomixData.csproj
+		SccProjectName4 = AtomixData
+		SccLocalPath4 = AtomixData
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{50576933-926E-4951-92FD-9FE370386BC2}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Debug|x86.ActiveCfg = Debug|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Debug|x86.Build.0 = Debug|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Release|Any CPU.ActiveCfg = Release|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Release|Mixed Platforms.Build.0 = Release|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Release|x86.ActiveCfg = Release|x86
+		{50576933-926E-4951-92FD-9FE370386BC2}.Release|x86.Build.0 = Release|x86
+		{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}.Debug|x86.ActiveCfg = Debug|x86
+		{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}.Release|Any CPU.ActiveCfg = Release|x86
+		{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}.Release|x86.ActiveCfg = Release|x86
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Debug|x86.ActiveCfg = Debug|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Debug|x86.Build.0 = Debug|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Release|Any CPU.ActiveCfg = Release|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Release|x86.ActiveCfg = Release|x86
+		{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
