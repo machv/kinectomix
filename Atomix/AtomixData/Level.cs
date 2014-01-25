@@ -16,17 +16,12 @@ namespace AtomixData
     public class Level
     {
         public BoardTileCollection Board;
-        public int Rows;
-        public int Columns;
         public Molecule Molecule;
 
         public Level() { }
 
         public Level(int rows, int columns)
         {
-            Rows = rows;
-            Columns = columns;
-
             Board = new BoardTileCollection(rows, columns);
         }
     }

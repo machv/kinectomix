@@ -7,9 +7,6 @@ namespace AtomixData
 {
     public class Molecule
     {
-        public int Rows;
-        public int Columns;
-
         public string Name;
 
         public BoardTileCollection Definition;
@@ -18,9 +15,6 @@ namespace AtomixData
 
         public Molecule(int rows, int columns)
         {
-            Rows = rows;
-            Columns = columns;
-
             Definition = new BoardTileCollection(rows, columns);
         }
     }

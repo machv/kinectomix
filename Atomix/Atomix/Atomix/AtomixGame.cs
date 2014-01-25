@@ -107,20 +107,32 @@ namespace Atomix
 
             // TODO: Add your drawing code here
 
-            Vector2 mPosition = new Vector2(0, 0);
 
             spriteBatch.Begin();
+
+            DrawBoard(spriteBatch, new Vector2(10, 10), currentLevel.Board);
+
+            DrawBoard(spriteBatch, new Vector2(600, 10), currentLevel.Molecule.Definition);
+
+            spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+
+        private void DrawBoard(SpriteBatch spriteBach, Vector2 position, BoardTileCollection board)
+        {
+            Vector2 mPosition = new Vector2(position.X, position.Y);
 
             int width = 25;
             int height = 25;
 
-            for (int x = 0; x < currentLevel.Rows; x++)
+            for (int x = 0; x < board.RowsCount; x++)
             {
-                for (int y = 0; y < currentLevel.Columns; y++)
+                for (int y = 0; y < board.ColumnsCount; y++)
                 {
                     Texture2D tile = emptyTexture;
 
-                    switch (currentLevel.Board[x, y].Type)
+                    switch (board[x, y].Type)
                     {
                         case TileType.Wall:
                             tile = brickTexture;
@@ -144,13 +156,9 @@ namespace Atomix
                     mPosition.X += width;
 
                 }
-                mPosition.X = 0;
+                mPosition.X = position.X;
                 mPosition.Y += height;
             }
-
-            spriteBatch.End();
-
-            base.Draw(gameTime);
         }
     }
 }

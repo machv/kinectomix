@@ -30,12 +30,12 @@ namespace SimpleLevelGenerator
             //    level.Board[y] = row;
             //}
 
-            for (int y = 0; y < level.Rows; y++)
+            for (int y = 0; y < level.Board.RowsCount; y++)
             {
-                for (int x = 0; x < level.Columns; x++)
+                for (int x = 0; x < level.Board.ColumnsCount; x++)
                 {
                     BoardTile tile = new BoardTile();
-                    tile.Type = y == 0 || y == level.Rows - 1 || x == 0 || x == level.Columns - 1 ? 
+                    tile.Type = y == 0 || y == level.Board.RowsCount - 1 || x == 0 || x == level.Board.ColumnsCount - 1 ? 
                         TileType.Wall : TileType.Empty;
 
                     level.Board[y, x] = tile;

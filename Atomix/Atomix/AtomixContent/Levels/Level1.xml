@@ -2,6 +2,8 @@
 <XnaContent>
   <Asset Type="AtomixData.Level">
     <Board>
+      <RowsCount>9</RowsCount>
+      <ColumnsCount>11</ColumnsCount>
       <Rows>
         <Item>
           <Columns>
@@ -437,13 +439,11 @@
         </Item>
       </Rows>
     </Board>
-    <Rows>9</Rows>
-    <Columns>11</Columns>
     <Molecule>
-      <Rows>1</Rows>
-      <Columns>3</Columns>
       <Name>Water</Name>
       <Definition>
+        <RowsCount>1</RowsCount>
+        <ColumnsCount>3</ColumnsCount>
         <Rows>
           <Item>
             <Columns>
