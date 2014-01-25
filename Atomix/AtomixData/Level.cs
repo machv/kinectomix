@@ -8,25 +8,26 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace AtomixData
 {
     public class Level
     {
-        public BoardRow[] Rows;
-        public int RowsCount;
-        public int ColumnsCount;
+        public BoardTileCollection Board;
+        public int Rows;
+        public int Columns;
+        public Molecule Molecule;
 
-        public Level()
-        {
-        }
+        public Level() { }
 
         public Level(int rows, int columns)
         {
-            RowsCount = rows;
-            ColumnsCount = columns;
+            Rows = rows;
+            Columns = columns;
 
-            Rows = new BoardRow[RowsCount];
+            Board = new BoardTileCollection(rows, columns);
         }
     }
 }

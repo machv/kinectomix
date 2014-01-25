@@ -64,7 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoardRow.cs" />
+    <Compile Include="BoardTileCollection.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Molecule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

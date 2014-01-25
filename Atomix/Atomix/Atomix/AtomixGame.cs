@@ -22,6 +22,9 @@ namespace Atomix
         Level currentLevel;
         Texture2D brickTexture;
         Texture2D emptyTexture;
+        Texture2D carbonTexture;
+        Texture2D hydrogenTexture;
+        Texture2D oxygenTexture;
 
         public AtomixGame()
         {
@@ -60,6 +63,9 @@ namespace Atomix
 
             brickTexture = this.Content.Load<Texture2D>("Board/Brick");
             emptyTexture = this.Content.Load<Texture2D>("Board/Empty");
+            carbonTexture = this.Content.Load<Texture2D>("Board/Carbon");
+            hydrogenTexture = this.Content.Load<Texture2D>("Board/Hydrogen");
+            oxygenTexture = this.Content.Load<Texture2D>("Board/Oxygen");
 
             // Load level
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
@@ -108,14 +114,13 @@ namespace Atomix
             int width = 25;
             int height = 25;
 
-            int x = 0;
-            int y = 0;
-            foreach (var row in currentLevel.Rows)
+            for (int x = 0; x < currentLevel.Rows; x++)
             {
-                Texture2D tile = emptyTexture;
-                foreach (var column in row.Columns)
+                for (int y = 0; y < currentLevel.Columns; y++)
                 {
-                    switch (column.Type)
+                    Texture2D tile = emptyTexture;
+
+                    switch (currentLevel.Board[x, y].Type)
                     {
                         case TileType.Wall:
                             tile = brickTexture;
@@ -123,18 +128,24 @@ namespace Atomix
                         case TileType.Empty:
                             tile = emptyTexture;
                             break;
+                        case TileType.Carbon:
+                            tile = carbonTexture;
+                            break;
+                        case TileType.Oxygen:
+                            tile = oxygenTexture;
+                            break;
+                        case TileType.Hydrogen:
+                            tile = hydrogenTexture;
+                            break;
                     }
 
                     spriteBatch.Draw(tile, mPosition, Color.White);
 
                     mPosition.X += width;
-                    x += 1;
-                }
 
+                }
                 mPosition.X = 0;
                 mPosition.Y += height;
-                x = 0;
-                y += 1;
             }
 
             spriteBatch.End();

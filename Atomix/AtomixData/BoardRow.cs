@@ -9,11 +9,15 @@ namespace AtomixData
     {
         Empty,
         Wall,
+        Carbon,
+        Oxygen,
+        Hydrogen,
     }
 
     public class BoardTile
     {
         public TileType Type;
+        public bool IsFixed;
     }
 
     public class BoardRow

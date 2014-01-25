@@ -84,6 +84,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Player.spritefont">
+      <Name>Player</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
     <Compile Include="Levels\Level1.xml">
       <Name>Level1</Name>
       <Importer>XmlImporter</Importer>
