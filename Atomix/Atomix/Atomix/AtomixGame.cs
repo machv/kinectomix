@@ -28,8 +28,8 @@ namespace Atomix
         MouseState mouseState;
         MouseState lastMouseState;
 
-        int TileWidth = 25;
-        int TileHeight = 25;
+        int TileWidth = 49;
+        int TileHeight = 49;
 
         public AtomixGame()
         {
@@ -167,7 +167,7 @@ namespace Atomix
 
             spriteBatch.Begin();
 
-            DrawBoard(spriteBatch, new Vector2(10, 10), currentLevel.Board);
+            DrawBoard(spriteBatch, new Vector2(10, 10), currentLevel.Board, true);
 
             DrawBoard(spriteBatch, new Vector2(600, 10), currentLevel.Molecule.Definition);
 
@@ -176,15 +176,16 @@ namespace Atomix
             base.Draw(gameTime);
         }
 
-        private void DrawBoard(SpriteBatch spriteBach, Vector2 position, BoardTileCollection board)
+        private void DrawBoard(SpriteBatch spriteBach, Vector2 position, BoardTileCollection board, bool drawEmptyTiles = false)
         {
             Vector2 mPosition = new Vector2(position.X, position.Y);
+            bool drawEmpty = false;
 
             for (int x = 0; x < board.RowsCount; x++)
             {
                 for (int y = 0; y < board.ColumnsCount; y++)
                 {
-                    Texture2D tile = emptyTexture;
+                    Texture2D tile = null;
 
                     switch (board[x, y].Type)
                     {
@@ -192,20 +193,26 @@ namespace Atomix
                             tile = brickTexture;
                             break;
                         case TileType.Empty:
-                            tile = emptyTexture;
+                            drawEmpty = true;
                             break;
                         case TileType.Carbon:
                             tile = carbonTexture;
+                            drawEmpty = true;
                             break;
                         case TileType.Oxygen:
                             tile = oxygenTexture;
+                            drawEmpty = true;
                             break;
                         case TileType.Hydrogen:
                             tile = hydrogenTexture;
+                            drawEmpty = true;
                             break;
                     }
+                    if (drawEmpty && drawEmptyTiles)
+                        spriteBatch.Draw(emptyTexture, mPosition, Color.White);
 
-                    spriteBatch.Draw(tile, mPosition, Color.White);
+                    if (tile != null)
+                        spriteBatch.Draw(tile, mPosition, Color.White);
 
                     mPosition.X += TileWidth;
 
