@@ -9,47 +9,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -57,47 +68,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -105,47 +127,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Hydrogen</Type>
               <IsFixed>false</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -153,47 +186,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -201,47 +245,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -249,47 +304,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Oxygen</Type>
               <IsFixed>false</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -297,47 +363,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -345,47 +422,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Hydrogen</Type>
               <IsFixed>false</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Empty</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -393,47 +481,58 @@
           <Columns>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
             <Item>
               <Type>Wall</Type>
-              <IsFixed>false</IsFixed>
+              <IsFixed>true</IsFixed>
+              <IsSelected>false</IsSelected>
             </Item>
           </Columns>
         </Item>
@@ -449,15 +548,18 @@
             <Columns>
               <Item>
                 <Type>Hydrogen</Type>
-                <IsFixed>false</IsFixed>
+                <IsFixed>true</IsFixed>
+                <IsSelected>false</IsSelected>
               </Item>
               <Item>
                 <Type>Oxygen</Type>
-                <IsFixed>false</IsFixed>
+                <IsFixed>true</IsFixed>
+                <IsSelected>false</IsSelected>
               </Item>
               <Item>
                 <Type>Hydrogen</Type>
-                <IsFixed>false</IsFixed>
+                <IsFixed>true</IsFixed>
+                <IsSelected>false</IsSelected>
               </Item>
             </Columns>
           </Item>

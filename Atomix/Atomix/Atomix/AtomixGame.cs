@@ -25,6 +25,11 @@ namespace Atomix
         Texture2D carbonTexture;
         Texture2D hydrogenTexture;
         Texture2D oxygenTexture;
+        MouseState mouseState;
+        MouseState lastMouseState;
+
+        int TileWidth = 25;
+        int TileHeight = 25;
 
         public AtomixGame()
         {
@@ -94,6 +99,58 @@ namespace Atomix
 
             // TODO: Add your update logic here
 
+            bool clickOccurred = false;
+
+            // The active state from the last frame is now old
+            lastMouseState = mouseState;
+
+            // Get the mouse state relevant for this frame
+            mouseState = Mouse.GetState();
+
+            // Recognize a single click of the left mouse button
+            if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+            {
+                // React to the click
+                // ...
+                clickOccurred = true;
+            }
+
+            if (clickOccurred)
+            {
+                var mousePosition = new Point(mouseState.X, mouseState.Y);
+
+                // Find nearest point
+                Vector2 position = new Vector2(10, 10);
+                Vector2 mPosition = new Vector2(position.X, position.Y);
+
+                for (int x = 0; x < currentLevel.Board.RowsCount; x++)
+                {
+                    for (int y = 0; y < currentLevel.Board.ColumnsCount; y++)
+                    {
+                        if (!currentLevel.Board[x, y].IsFixed)
+                        {
+                            Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
+                            if (tile.Contains(mousePosition))
+                            {
+                                currentLevel.Board[x, y].IsSelected = true;
+
+                                //zjistit jakymi smery se muze pohnout
+                            }
+                            else
+                            {
+                                currentLevel.Board[x, y].IsFixed = false;
+                            }
+                        }
+
+                        mPosition.X += TileWidth;
+                    }
+
+                    mPosition.X = position.X;
+                    mPosition.Y += TileHeight;
+                }
+            }
+
+
             base.Update(gameTime);
         }
 
@@ -123,9 +180,6 @@ namespace Atomix
         {
             Vector2 mPosition = new Vector2(position.X, position.Y);
 
-            int width = 25;
-            int height = 25;
-
             for (int x = 0; x < board.RowsCount; x++)
             {
                 for (int y = 0; y < board.ColumnsCount; y++)
@@ -153,11 +207,11 @@ namespace Atomix
 
                     spriteBatch.Draw(tile, mPosition, Color.White);
 
-                    mPosition.X += width;
+                    mPosition.X += TileWidth;
 
                 }
                 mPosition.X = position.X;
-                mPosition.Y += height;
+                mPosition.Y += TileHeight;
             }
         }
     }

@@ -16,20 +16,6 @@ namespace SimpleLevelGenerator
 
             Level level = new Level(9, 11);
 
-            //for (int y = 0; y < level.Rows; y++)
-            //{
-            //    BoardRow row = new BoardRow(level.Columns);
-            //    for (int x = 0; x < level.Columns; x++)
-            //    {
-            //        BoardTile tile = new BoardTile();
-            //        tile.Type = y == 0 ? TileType.Wall : TileType.Empty;
-
-            //        row.Columns[x] = tile;
-            //    }
-
-            //    level.Board[y] = row;
-            //}
-
             for (int y = 0; y < level.Board.RowsCount; y++)
             {
                 for (int x = 0; x < level.Board.ColumnsCount; x++)
@@ -65,9 +51,9 @@ namespace SimpleLevelGenerator
                 level.Board[wall.Item1, wall.Item2] = new BoardTile { Type = TileType.Wall };
             }
 
-            level.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen };
-            level.Board[7, 1] = new BoardTile() { Type = TileType.Hydrogen };
-            level.Board[5, 7] = new BoardTile() { Type = TileType.Oxygen };
+            level.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            level.Board[7, 1] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            level.Board[5, 7] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
 
             // Molecule
             Molecule molecule = new Molecule(1, 3);

@@ -17,7 +17,8 @@ namespace AtomixData
     public class BoardTile
     {
         public TileType Type;
-        public bool IsFixed;
+        public bool IsFixed = true;
+        public bool IsSelected;
     }
 
     public class BoardRow
