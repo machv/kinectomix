@@ -12,6 +12,20 @@ namespace AtomixData
         Carbon,
         Oxygen,
         Hydrogen,
+        Up,
+        Down,
+        Left,
+        Right,
+    }
+
+    [Flags]
+    public enum Direction
+    {
+        None = 0,
+        Up = 1,
+        Right = 2,
+        Down = 4,
+        Left = 8,
     }
 
     public class BoardTile
@@ -19,6 +33,7 @@ namespace AtomixData
         public TileType Type;
         public bool IsFixed = true;
         public bool IsSelected;
+        public Direction Movements;
     }
 
     public class BoardRow

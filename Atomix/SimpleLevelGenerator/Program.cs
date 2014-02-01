@@ -68,7 +68,7 @@ namespace SimpleLevelGenerator
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
 
-            using (XmlWriter writer = XmlWriter.Create("Level1.xml", settings))
+            using (XmlWriter writer = XmlWriter.Create("../../../Atomix/AtomixContent/Levels/Level1.xml", settings))
             {
                 IntermediateSerializer.Serialize(writer, level, null);
             }

@@ -23,8 +23,12 @@ namespace Atomix
         Texture2D brickTexture;
         Texture2D emptyTexture;
         Texture2D carbonTexture;
+        Texture2D carbonSelectedTexture;
         Texture2D hydrogenTexture;
+        Texture2D hydrogenSelectedTexture;
         Texture2D oxygenTexture;
+        Texture2D oxygenSelectedTexture;
+        Texture2D arrowTexture;
         MouseState mouseState;
         MouseState lastMouseState;
 
@@ -69,8 +73,12 @@ namespace Atomix
             brickTexture = this.Content.Load<Texture2D>("Board/Brick");
             emptyTexture = this.Content.Load<Texture2D>("Board/Empty");
             carbonTexture = this.Content.Load<Texture2D>("Board/Carbon");
+            carbonSelectedTexture = this.Content.Load<Texture2D>("Board/CarbonSelected");
             hydrogenTexture = this.Content.Load<Texture2D>("Board/Hydrogen");
+            hydrogenSelectedTexture = this.Content.Load<Texture2D>("Board/HydrogenSelected");
             oxygenTexture = this.Content.Load<Texture2D>("Board/Oxygen");
+            oxygenSelectedTexture = this.Content.Load<Texture2D>("Board/OxygenSelected");
+            arrowTexture = this.Content.Load<Texture2D>("Board/Up");
 
             // Load level
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
@@ -123,23 +131,69 @@ namespace Atomix
                 Vector2 position = new Vector2(10, 10);
                 Vector2 mPosition = new Vector2(position.X, position.Y);
 
-                for (int x = 0; x < currentLevel.Board.RowsCount; x++)
+                for (int i = 0; i < currentLevel.Board.RowsCount; i++)
                 {
-                    for (int y = 0; y < currentLevel.Board.ColumnsCount; y++)
+                    for (int j = 0; j < currentLevel.Board.ColumnsCount; j++)
                     {
-                        if (!currentLevel.Board[x, y].IsFixed)
+                        Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
+                        if (tile.Contains(mousePosition))
                         {
-                            Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
-                            if (tile.Contains(mousePosition))
+                            if (!currentLevel.Board[i, j].IsFixed)
                             {
-                                currentLevel.Board[x, y].IsSelected = true;
+                                ClearBoard();
+
+                                currentLevel.Board[i, j].IsSelected = true;
+                                currentLevel.Board[i, j].Movements = Direction.None;
 
                                 //zjistit jakymi smery se muze pohnout
+                                if (currentLevel.Board.CanGoUp(i, j))
+                                {
+                                    currentLevel.Board[i, j].Movements |= Direction.Up;
+                                    currentLevel.Board[i - 1, j].Type = TileType.Up;
+                                }
+                                if (currentLevel.Board.CanGoDown(i, j))
+                                {
+                                    currentLevel.Board[i, j].Movements |= Direction.Down;
+                                    currentLevel.Board[i + 1, j].Type = TileType.Down;
+                                }
+                                if (currentLevel.Board.CanGoLeft(i, j))
+                                {
+                                    currentLevel.Board[i, j].Movements |= Direction.Left;
+                                    currentLevel.Board[i, j - 1].Type = TileType.Left;
+                                }
+                                if (currentLevel.Board.CanGoRight(i, j))
+                                {
+                                    currentLevel.Board[i, j].Movements |= Direction.Right;
+                                    currentLevel.Board[i, j + 1].Type = TileType.Right;
+                                }
                             }
-                            else
+                            else if (currentLevel.Board[i, j].Type == TileType.Right)
                             {
-                                currentLevel.Board[x, y].IsFixed = false;
+                                BoardTile atom = currentLevel.Board[i, j - 1];
+                                int jj = j;
+                                while (jj < currentLevel.Board.ColumnsCount)
+                                {
+                                    if (currentLevel.Board[i, jj].Type != TileType.Right && currentLevel.Board[i, jj].Type != TileType.Empty)
+                                    {
+                                        break;
+                                    }
+
+                                    jj++;
+                                }
+                                if (jj > j) jj--; //pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
+
+                                currentLevel.Board[i, jj].Type = atom.Type;
+                                currentLevel.Board[i, jj].IsFixed = false;
+
+                                currentLevel.Board[i, j - 1].Type = TileType.Empty;
+                                currentLevel.Board[i, j - 1].IsFixed = true;
+                                
+                                ClearBoard();
                             }
+                            //else
+                            //{
+                            //    currentLevel.Board[x, y].IsFixed = false;
+                            //}
                         }
 
                         mPosition.X += TileWidth;
@@ -152,6 +206,28 @@ namespace Atomix
 
 
             base.Update(gameTime);
+        }
+
+        private void ClearBoard()
+        {
+            for (int x = 0; x < currentLevel.Board.RowsCount; x++)
+            {
+                for (int y = 0; y < currentLevel.Board.ColumnsCount; y++)
+                {
+                    switch (currentLevel.Board[x, y].Type)
+                    {
+                        case TileType.Down:
+                        case TileType.Up:
+                        case TileType.Right:
+                        case TileType.Left:
+                            currentLevel.Board[x, y].Type = TileType.Empty;
+                            break;
+                    }
+
+                    currentLevel.Board[x, y].IsSelected = false;
+                    currentLevel.Board[x, y].Movements = Direction.None;
+                }
+            }
         }
 
         /// <summary>
@@ -186,33 +262,58 @@ namespace Atomix
                 for (int y = 0; y < board.ColumnsCount; y++)
                 {
                     Texture2D tile = null;
+                    drawEmpty = true;
+                    float RotationAngle = 0;
+                    Vector2 origin = new Vector2();
 
                     switch (board[x, y].Type)
                     {
                         case TileType.Wall:
                             tile = brickTexture;
+                            drawEmpty = false;
                             break;
                         case TileType.Empty:
-                            drawEmpty = true;
                             break;
                         case TileType.Carbon:
-                            tile = carbonTexture;
-                            drawEmpty = true;
+                            tile = board[x, y].IsSelected ? carbonSelectedTexture : carbonTexture;
                             break;
                         case TileType.Oxygen:
-                            tile = oxygenTexture;
-                            drawEmpty = true;
+                            tile = board[x, y].IsSelected ? oxygenSelectedTexture : oxygenTexture;
                             break;
                         case TileType.Hydrogen:
-                            tile = hydrogenTexture;
-                            drawEmpty = true;
+                            tile = board[x, y].IsSelected ? hydrogenSelectedTexture : hydrogenTexture;
+                            break;
+                        case TileType.Up:
+                            tile = arrowTexture;
+                            break;
+                        case TileType.Down:
+                            tile = arrowTexture;
+                            RotationAngle = MathHelper.Pi;
+                            origin.X = tile.Width;
+                            origin.Y = tile.Height;
+                            break;
+                        case TileType.Left:
+                            tile = arrowTexture;
+                            RotationAngle = -1 * MathHelper.Pi / 2;
+                            origin.X = tile.Width;
+                            origin.Y = 0;
+                            break;
+                        case TileType.Right:
+                            tile = arrowTexture;
+                            RotationAngle = MathHelper.Pi / 2;
+                            //origin.X = tile.Width;
+                            origin.Y = tile.Height;
                             break;
                     }
+
                     if (drawEmpty && drawEmptyTiles)
                         spriteBatch.Draw(emptyTexture, mPosition, Color.White);
 
                     if (tile != null)
-                        spriteBatch.Draw(tile, mPosition, Color.White);
+                    {
+                        spriteBatch.Draw(tile, mPosition, null, Color.White, RotationAngle, origin, 1.0f, SpriteEffects.None, 0f);
+                        //                       spriteBatch.Draw(tile, mPosition, Color.White);
+                    }
 
                     mPosition.X += TileWidth;
 

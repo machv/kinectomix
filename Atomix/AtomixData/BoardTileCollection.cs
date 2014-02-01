@@ -30,5 +30,37 @@ namespace AtomixData
             for (int x = 0; x < rows; x++)
                 Rows[x] = new BoardRow(columns);
         }
+
+        public bool CanGoUp(int x, int y)
+        {
+            if (x > 0 && this[x - 1, y].Type == TileType.Empty)
+                return true;
+
+            return false;
+        }
+
+        public bool CanGoDown(int x, int y)
+        {
+            if (x + 1 < Rows.Length && this[x + 1, y].Type == TileType.Empty)
+                return true;
+
+            return false;
+        }
+
+        public bool CanGoLeft(int x, int y)
+        {
+            if (y > 0 && this[x, y - 1].Type == TileType.Empty)
+                return true;
+
+            return false;
+        }
+
+        public bool CanGoRight(int x, int y)
+        {
+            if (y + 1 < ColumnsCount && this[x, y + 1].Type == TileType.Empty)
+                return true;
+
+            return false;
+        }
     }
 }
