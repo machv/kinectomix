@@ -60,7 +60,8 @@ namespace Atomix
             // Load level
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
 
-            gameScreen = new LevelScreen(this, currentLevel, spriteBatch);
+            //gameScreen = new LevelScreen(this, currentLevel, spriteBatch);
+            gameScreen = new StartScreen(this, spriteBatch);
 
             gameScreen.LoadContent();
         }
@@ -101,6 +102,15 @@ namespace Atomix
             gameScreen.Draw(gameTime);
 
             base.Draw(gameTime);
+        }
+
+        public void ChangeScreen(IGameScreen screen)
+        {
+            gameScreen.UnloadContent();
+
+            gameScreen = screen;
+
+            gameScreen.LoadContent();
         }
     }
 }
