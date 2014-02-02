@@ -33,6 +33,7 @@ namespace Atomix
         MouseState lastMouseState;
         SoundEffect applause;
         Vector2 boardPosition;
+        SpriteFont normalFont;
 
         int TileWidth = 49;
         int TileHeight = 49;
@@ -58,7 +59,7 @@ namespace Atomix
         {
             this.IsMouseVisible = true;
 
-            boardPosition = new Vector2(20, 20);
+            boardPosition = new Vector2(20, 60);
 
             base.Initialize();
         }
@@ -84,6 +85,7 @@ namespace Atomix
             oxygenSelectedTexture = this.Content.Load<Texture2D>("Board/OxygenSelected");
             arrowTexture = this.Content.Load<Texture2D>("Board/Up");
             applause = Content.Load<SoundEffect>("Sounds/Applause");
+            normalFont = Content.Load<SpriteFont>("Fonts/Normal");
 
             // Load level
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
@@ -100,6 +102,7 @@ namespace Atomix
             // TODO: Unload any non ContentManager content here
         }
 
+        // Animation stuff
         protected bool isMovementAnimation = false;
         protected Vector2 atomPosition;
         protected Vector2 finalPosition;
@@ -107,6 +110,9 @@ namespace Atomix
         TileType atomToMove;
         TileType moveDirection;
         float atomSpeed = 200f;
+
+        // Scoring
+        int moves;
 
 
         /// <summary>
@@ -170,8 +176,7 @@ namespace Atomix
                     var mousePosition = new Point(mouseState.X, mouseState.Y);
 
                     // Find nearest point
-                    Vector2 position = new Vector2(10, 10);
-                    Vector2 mPosition = new Vector2(position.X, position.Y);
+                    Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);
 
                     for (int i = 0; i < currentLevel.Board.RowsCount; i++)
                     {
@@ -234,6 +239,8 @@ namespace Atomix
 
                                     CalculateBoardTilePositions(boardPosition, currentLevel.Board);
 
+                                    moves += 1;
+
                                     //BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
                                     //currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
                                     //currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
@@ -252,7 +259,7 @@ namespace Atomix
                             mPosition.X += TileWidth;
                         }
 
-                        mPosition.X = position.X;
+                        mPosition.X = boardPosition.X;
                         mPosition.Y += TileHeight;
                     }
                 }
@@ -420,6 +427,8 @@ namespace Atomix
 
             DrawBoard(spriteBatch, currentLevel.Board, true);
             DrawBoard(spriteBatch, currentLevel.Molecule.Definition);
+
+            spriteBatch.DrawString(normalFont, string.Format("Score: {0}", moves), new Vector2(10, 20), Color.Red);
 
             if (isMovementAnimation)
             {
