@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using AtomixData;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
+using System.Reflection;
+using System.IO;
+using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace SimpleLevelGenerator
 {
@@ -84,23 +89,57 @@ namespace SimpleLevelGenerator
                 for (int x = 0; x < level2.Board.ColumnsCount; x++)
                 {
                     BoardTile tile = new BoardTile();
-                    tile.Type = y == 0 || y == level1.Board.RowsCount - 1 || x == 0 || x == level1.Board.ColumnsCount - 1 ?
+                    tile.Type = y == 0 || y == level2.Board.RowsCount - 1 || x == 0 || x == level2.Board.ColumnsCount - 1 ?
                         TileType.Wall : TileType.Empty;
 
                     level2.Board[y, x] = tile;
                 }
             }
 
-            level2.Board[1, 4] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level2.Board[1, 9] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level2.Board[1, 5] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
+            level2.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            level2.Board[7, 1] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            level2.Board[5, 7] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
 
             level2.Molecule = molecule;
 
             using (XmlWriter writer = XmlWriter.Create("../../../Atomix/AtomixContent/Levels/Level2.xml", settings))
             {
-                IntermediateSerializer.Serialize(writer, level1, null);
+                IntermediateSerializer.Serialize(writer, level2, null);
             }
+
+            // Level 4
+            Level level4 = new Level(5, 5);
+
+            for (int y = 0; y < level4.Board.RowsCount; y++)
+            {
+                for (int x = 0; x < level4.Board.ColumnsCount; x++)
+                {
+                    BoardTile tile = new BoardTile();
+                    tile.Type = y == 0 || y == level4.Board.RowsCount - 1 || x == 0 || x == level4.Board.ColumnsCount - 1 ?
+                        TileType.Wall : TileType.Empty;
+
+                    level4.Board[y, x] = tile;
+                }
+            }
+
+            level4.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            level4.Board[4, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            level4.Board[2, 3] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
+
+            level4.Molecule = molecule;
+
+            Type compilerType = typeof(ContentCompiler);
+            ContentCompiler cc = compilerType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0].Invoke(null) as ContentCompiler;
+            var compileMethod = compilerType.GetMethod("Compile", BindingFlags.NonPublic | BindingFlags.Instance);
+            string fullPath = "../../../Atomix/AtomixContent/Levels/Level4.xnb"; //Path.Combine(@"d:\", "Level.xnb");
+            using (FileStream fs = File.Create(fullPath))
+            {
+                compileMethod.Invoke(cc, new object[]{
+      fs, level4, TargetPlatform.Windows, GraphicsProfile.Reach, false/*true*/, fullPath, fullPath
+      });
+            }
+
+            //IntermediateSerializer.Deserialize
 
         }
     }

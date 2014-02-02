@@ -30,7 +30,7 @@ namespace Atomix
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
                 // React to the click
-                Level currentLevel = game.Content.Load<AtomixData.Level>("Levels/Level1");
+                Level currentLevel = game.Content.Load<AtomixData.Level>("Levels/Level4");
                 LevelScreen gameScreen = new LevelScreen(game, currentLevel, spriteBatch);
 
                 game.ChangeScreen(gameScreen);
