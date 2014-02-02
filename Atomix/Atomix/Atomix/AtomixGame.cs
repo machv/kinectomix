@@ -31,6 +31,7 @@ namespace Atomix
         Texture2D arrowTexture;
         MouseState mouseState;
         MouseState lastMouseState;
+        SoundEffect applause;
 
         int TileWidth = 49;
         int TileHeight = 49;
@@ -79,6 +80,7 @@ namespace Atomix
             oxygenTexture = this.Content.Load<Texture2D>("Board/Oxygen");
             oxygenSelectedTexture = this.Content.Load<Texture2D>("Board/OxygenSelected");
             arrowTexture = this.Content.Load<Texture2D>("Board/Up");
+            applause = Content.Load<SoundEffect>("Sounds/Applause");
 
             // Load level
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
@@ -181,7 +183,11 @@ namespace Atomix
                                 currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
 
                                 // Check victory
-                                CheckFinish();
+                                bool isFinished = CheckFinish();
+                                if (isFinished)
+                                {
+                                    applause.Play();
+                                }
 
                                 ClearBoard();
                             }
