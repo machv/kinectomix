@@ -128,6 +128,7 @@ namespace SimpleLevelGenerator
 
             level4.Molecule = molecule;
 
+            // http://stackoverflow.com/questions/8856528/serialize-texture2d-programatically-in-xna
             Type compilerType = typeof(ContentCompiler);
             ContentCompiler cc = compilerType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0].Invoke(null) as ContentCompiler;
             var compileMethod = compilerType.GetMethod("Compile", BindingFlags.NonPublic | BindingFlags.Instance);
