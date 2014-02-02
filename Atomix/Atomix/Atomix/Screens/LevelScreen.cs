@@ -87,8 +87,33 @@ namespace Atomix
 
         public void Update(GameTime gameTime)
         {
+            bool clickOccurred = false;
+
+            // The active state from the last frame is now old
+            lastMouseState = mouseState;
+
+            // Get the mouse state relevant for this frame
+            mouseState = Mouse.GetState();
+
+            // Recognize a single click of the left mouse button
+            if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+            {
+                // React to the click
+                clickOccurred = true;
+            }
+
             if (isLevelFinished)
+            {
+                if (clickOccurred)
+                {
+                    // Load next level
+                    Level currentLevel = game.Content.Load<AtomixData.Level>("Levels/Level2");
+                    LevelScreen gameScreen = new LevelScreen(game, currentLevel, spriteBatch);
+
+                    game.ChangeScreen(gameScreen);
+                }
                 return;
+            }
 
             gameDuration = DateTime.Now - gameStarted;
 
@@ -126,21 +151,6 @@ namespace Atomix
                 }
 
                 return;
-            }
-
-            bool clickOccurred = false;
-
-            // The active state from the last frame is now old
-            lastMouseState = mouseState;
-
-            // Get the mouse state relevant for this frame
-            mouseState = Mouse.GetState();
-
-            // Recognize a single click of the left mouse button
-            if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
-            {
-                // React to the click
-                clickOccurred = true;
             }
 
             if (clickOccurred)
