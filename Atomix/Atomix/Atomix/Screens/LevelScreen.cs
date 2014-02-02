@@ -13,19 +13,21 @@ namespace Atomix
     public class LevelScreen : IGameScreen
     {
         Level currentLevel;
-        SpriteBatch _spriteBatch;
-        Game _game;
+        SpriteBatch spriteBatch;
+        AtomixGame game;
 
-        public LevelScreen(Game game, Level currentLevel, SpriteBatch spriteBatch)
+        public LevelScreen(AtomixGame game, Level currentLevel, SpriteBatch spriteBatch)
         {
             this.currentLevel = currentLevel;
-            _spriteBatch = spriteBatch;
-            _game = game;
+            this.spriteBatch = spriteBatch;
+            this.game = game;
 
             boardPosition = new Vector2(20, 60);
 
             CalculateBoardTilePositions(boardPosition, currentLevel.Board);
             CalculateBoardTilePositions(new Vector2(600, 20), currentLevel.Molecule.Definition);
+
+            gameStarted = DateTime.Now;
         }
 
         Texture2D brickTexture;
@@ -37,11 +39,13 @@ namespace Atomix
         Texture2D oxygenTexture;
         Texture2D oxygenSelectedTexture;
         Texture2D arrowTexture;
+        Texture2D idleTexture;
         MouseState mouseState;
         MouseState lastMouseState;
         SoundEffect applause;
         Vector2 boardPosition;
         SpriteFont normalFont;
+        SpriteFont splashFont;
 
         int TileWidth = 49;
         int TileHeight = 49;
@@ -57,22 +61,26 @@ namespace Atomix
 
         // Scoring
         int moves;
+        DateTime gameStarted;
+        TimeSpan gameDuration;
 
         bool isLevelFinished = false;
 
         public void LoadContent()
         {
-            brickTexture = _game.Content.Load<Texture2D>("Board/Brick");
-            emptyTexture = _game.Content.Load<Texture2D>("Board/Empty");
-            carbonTexture = _game.Content.Load<Texture2D>("Board/Carbon");
-            carbonSelectedTexture = _game.Content.Load<Texture2D>("Board/CarbonSelected");
-            hydrogenTexture = _game.Content.Load<Texture2D>("Board/Hydrogen");
-            hydrogenSelectedTexture = _game.Content.Load<Texture2D>("Board/HydrogenSelected");
-            oxygenTexture = _game.Content.Load<Texture2D>("Board/Oxygen");
-            oxygenSelectedTexture = _game.Content.Load<Texture2D>("Board/OxygenSelected");
-            arrowTexture = _game.Content.Load<Texture2D>("Board/Up");
-            applause = _game.Content.Load<SoundEffect>("Sounds/Applause");
-            normalFont = _game.Content.Load<SpriteFont>("Fonts/Normal");
+            brickTexture = game.Content.Load<Texture2D>("Board/Brick");
+            emptyTexture = game.Content.Load<Texture2D>("Board/Empty");
+            carbonTexture = game.Content.Load<Texture2D>("Board/Carbon");
+            carbonSelectedTexture = game.Content.Load<Texture2D>("Board/CarbonSelected");
+            hydrogenTexture = game.Content.Load<Texture2D>("Board/Hydrogen");
+            hydrogenSelectedTexture = game.Content.Load<Texture2D>("Board/HydrogenSelected");
+            oxygenTexture = game.Content.Load<Texture2D>("Board/Oxygen");
+            oxygenSelectedTexture = game.Content.Load<Texture2D>("Board/OxygenSelected");
+            arrowTexture = game.Content.Load<Texture2D>("Board/Up");
+            applause = game.Content.Load<SoundEffect>("Sounds/Applause");
+            normalFont = game.Content.Load<SpriteFont>("Fonts/Normal");
+            splashFont = game.Content.Load<SpriteFont>("Fonts/Splash");
+            idleTexture = game.Content.Load<Texture2D>("Idle");
         }
 
         public void UnloadContent() { }
@@ -81,6 +89,8 @@ namespace Atomix
         {
             if (isLevelFinished)
                 return;
+
+            gameDuration = DateTime.Now - gameStarted;
 
             if (isMovementAnimation)
             {
@@ -222,19 +232,37 @@ namespace Atomix
 
         public void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin();
+            spriteBatch.Begin();
 
-            DrawBoard(_spriteBatch, currentLevel.Board, true);
-            DrawBoard(_spriteBatch, currentLevel.Molecule.Definition);
+            DrawBoard(spriteBatch, currentLevel.Board, true);
+            DrawBoard(spriteBatch, currentLevel.Molecule.Definition);
 
-            _spriteBatch.DrawString(normalFont, string.Format("Score: {0}", moves), new Vector2(10, 20), Color.Red);
+            spriteBatch.DrawString(normalFont, string.Format("Score: {0}", moves), new Vector2(20, 20), Color.Red);
+
+            spriteBatch.DrawString(normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(200, 20), Color.Red);
 
             if (isMovementAnimation)
             {
-                _spriteBatch.Draw(GetTileTexture(atomToMove, true), atomPosition, Color.White);
+                spriteBatch.Draw(GetTileTexture(atomToMove, true), atomPosition, Color.White);
             }
 
-            _spriteBatch.End();
+            if (isLevelFinished)
+            {
+                spriteBatch.Draw(idleTexture, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Bounds.Width, game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
+                spriteBatch.Draw(brickTexture, new Rectangle(0, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, game.GraphicsDevice.Viewport.Bounds.Width, 200), Color.Brown);
+
+                string name = "level done";
+                Vector2 size = splashFont.MeasureString(name);
+
+                spriteBatch.DrawString(splashFont, name, new Vector2(game.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
+
+                name = "click screen to load next level";
+                size = normalFont.MeasureString(name);
+
+                spriteBatch.DrawString(normalFont, name, new Vector2(game.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, game.GraphicsDevice.Viewport.Bounds.Height / 2 + 40), Color.White);
+            }
+
+            spriteBatch.End();
         }
 
 
@@ -372,11 +400,6 @@ namespace Atomix
             return newCoordinates;
         }
 
-        private void SwitchTiles(BoardTile boardTile1, BoardTile boardTile2)
-        {
-            throw new NotImplementedException();
-        }
-
         private void ClearBoard()
         {
             for (int x = 0; x < currentLevel.Board.RowsCount; x++)
@@ -466,11 +489,11 @@ namespace Atomix
                     }
 
                     if (drawEmpty && drawEmptyTiles)
-                        _spriteBatch.Draw(emptyTexture, board[i, j].RenderPosition, Color.White);
+                        spriteBatch.Draw(emptyTexture, board[i, j].RenderPosition, Color.White);
 
                     if (tile != null)
                     {
-                        _spriteBatch.Draw(tile, board[i, j].RenderPosition, null, Color.White, RotationAngle, origin, 1.0f, SpriteEffects.None, 0f);
+                        spriteBatch.Draw(tile, board[i, j].RenderPosition, null, Color.White, RotationAngle, origin, 1.0f, SpriteEffects.None, 0f);
                     }
                 }
             }
