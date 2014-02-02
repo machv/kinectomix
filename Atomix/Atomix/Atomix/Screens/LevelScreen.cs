@@ -58,6 +58,8 @@ namespace Atomix
         // Scoring
         int moves;
 
+        bool isLevelFinished = false;
+
         public void LoadContent()
         {
             brickTexture = _game.Content.Load<Texture2D>("Board/Brick");
@@ -77,6 +79,9 @@ namespace Atomix
 
         public void Update(GameTime gameTime)
         {
+            if (isLevelFinished)
+                return;
+
             if (isMovementAnimation)
             {
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -100,116 +105,117 @@ namespace Atomix
                 {
                     isMovementAnimation = false;
                     currentLevel.Board[destination.X, destination.Y].Type = atomToMove;
-                }
-            }
-            else
-            {
-                bool clickOccurred = false;
 
-                // The active state from the last frame is now old
-                lastMouseState = mouseState;
-
-                // Get the mouse state relevant for this frame
-                mouseState = Mouse.GetState();
-
-                // Recognize a single click of the left mouse button
-                if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
-                {
-                    // React to the click
-                    clickOccurred = true;
-                }
-
-                if (clickOccurred)
-                {
-                    var mousePosition = new Point(mouseState.X, mouseState.Y);
-
-                    // Find nearest point
-                    Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);
-
-                    for (int i = 0; i < currentLevel.Board.RowsCount; i++)
+                    // Animation finished -> check victory
+                    bool isFinished = CheckFinish();
+                    if (isFinished)
                     {
-                        for (int j = 0; j < currentLevel.Board.ColumnsCount; j++)
+                        applause.Play();
+                        isLevelFinished = true;
+                    }
+                }
+
+                return;
+            }
+
+            bool clickOccurred = false;
+
+            // The active state from the last frame is now old
+            lastMouseState = mouseState;
+
+            // Get the mouse state relevant for this frame
+            mouseState = Mouse.GetState();
+
+            // Recognize a single click of the left mouse button
+            if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+            {
+                // React to the click
+                clickOccurred = true;
+            }
+
+            if (clickOccurred)
+            {
+                var mousePosition = new Point(mouseState.X, mouseState.Y);
+
+                // Find nearest point
+                Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);
+
+                for (int i = 0; i < currentLevel.Board.RowsCount; i++)
+                {
+                    for (int j = 0; j < currentLevel.Board.ColumnsCount; j++)
+                    {
+                        Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
+                        if (tile.Contains(mousePosition))
                         {
-                            Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
-                            if (tile.Contains(mousePosition))
+                            if (!currentLevel.Board[i, j].IsFixed)
                             {
-                                if (!currentLevel.Board[i, j].IsFixed)
+                                ClearBoard();
+
+                                currentLevel.Board[i, j].IsSelected = true;
+                                currentLevel.Board[i, j].Movements = Direction.None;
+
+                                //zjistit jakymi smery se muze pohnout
+                                if (currentLevel.Board.CanGoUp(i, j))
                                 {
-                                    ClearBoard();
-
-                                    currentLevel.Board[i, j].IsSelected = true;
-                                    currentLevel.Board[i, j].Movements = Direction.None;
-
-                                    //zjistit jakymi smery se muze pohnout
-                                    if (currentLevel.Board.CanGoUp(i, j))
-                                    {
-                                        currentLevel.Board[i, j].Movements |= Direction.Up;
-                                        currentLevel.Board[i - 1, j].Type = TileType.Up;
-                                    }
-                                    if (currentLevel.Board.CanGoDown(i, j))
-                                    {
-                                        currentLevel.Board[i, j].Movements |= Direction.Down;
-                                        currentLevel.Board[i + 1, j].Type = TileType.Down;
-                                    }
-                                    if (currentLevel.Board.CanGoLeft(i, j))
-                                    {
-                                        currentLevel.Board[i, j].Movements |= Direction.Left;
-                                        currentLevel.Board[i, j - 1].Type = TileType.Left;
-                                    }
-                                    if (currentLevel.Board.CanGoRight(i, j))
-                                    {
-                                        currentLevel.Board[i, j].Movements |= Direction.Right;
-                                        currentLevel.Board[i, j + 1].Type = TileType.Right;
-                                    }
+                                    currentLevel.Board[i, j].Movements |= Direction.Up;
+                                    currentLevel.Board[i - 1, j].Type = TileType.Up;
                                 }
-                                else if (currentLevel.Board[i, j].Type == TileType.Right ||
-                                         currentLevel.Board[i, j].Type == TileType.Left ||
-                                         currentLevel.Board[i, j].Type == TileType.Up ||
-                                         currentLevel.Board[i, j].Type == TileType.Down)
+                                if (currentLevel.Board.CanGoDown(i, j))
                                 {
-                                    Point coordinates = new Point(i, j);
-                                    Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Type);
-                                    Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Type);
-
-                                    BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
-
-                                    // start animation
-                                    isMovementAnimation = true;
-                                    atomPosition = atom.RenderPosition;
-                                    destination = newCoordinates;
-                                    atomToMove = atom.Type;
-                                    moveDirection = currentLevel.Board[i, j].Type;
-
-                                    //instead of just switching do the animation
-                                    currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
-                                    currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
-                                    currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type = TileType.Empty; // but now will be rendered as empty
-
-                                    CalculateBoardTilePositions(boardPosition, currentLevel.Board);
-
-                                    moves += 1;
-
-                                    //BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
-                                    //currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
-                                    //currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
-
-                                    // Check victory
-                                    bool isFinished = CheckFinish();
-                                    if (isFinished)
-                                    {
-                                        applause.Play();
-                                    }
-
-                                    ClearBoard();
+                                    currentLevel.Board[i, j].Movements |= Direction.Down;
+                                    currentLevel.Board[i + 1, j].Type = TileType.Down;
+                                }
+                                if (currentLevel.Board.CanGoLeft(i, j))
+                                {
+                                    currentLevel.Board[i, j].Movements |= Direction.Left;
+                                    currentLevel.Board[i, j - 1].Type = TileType.Left;
+                                }
+                                if (currentLevel.Board.CanGoRight(i, j))
+                                {
+                                    currentLevel.Board[i, j].Movements |= Direction.Right;
+                                    currentLevel.Board[i, j + 1].Type = TileType.Right;
                                 }
                             }
+                            else if (currentLevel.Board[i, j].Type == TileType.Right ||
+                                     currentLevel.Board[i, j].Type == TileType.Left ||
+                                     currentLevel.Board[i, j].Type == TileType.Up ||
+                                     currentLevel.Board[i, j].Type == TileType.Down)
+                            {
+                                Point coordinates = new Point(i, j);
+                                Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Type);
+                                Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Type);
 
-                            mPosition.X += TileWidth;
+                                BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
+
+                                // start animation
+                                isMovementAnimation = true;
+                                atomPosition = atom.RenderPosition;
+                                destination = newCoordinates;
+                                atomToMove = atom.Type;
+                                moveDirection = currentLevel.Board[i, j].Type;
+
+                                //instead of just switching do the animation
+                                currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
+                                currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
+                                currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type = TileType.Empty; // but now will be rendered as empty
+
+                                CalculateBoardTilePositions(boardPosition, currentLevel.Board);
+
+                                moves += 1;
+
+                                //BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
+                                //currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
+                                //currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
+
+                                ClearBoard();
+                            }
                         }
 
-                        mPosition.X = boardPosition.X;
-                        mPosition.Y += TileHeight;
+                        mPosition.X += TileWidth;
                     }
+
+                    mPosition.X = boardPosition.X;
+                    mPosition.Y += TileHeight;
                 }
             }
         }
