@@ -51,9 +51,12 @@ namespace SimpleLevelGenerator
                 level.Board[wall.Item1, wall.Item2] = new BoardTile { Type = TileType.Wall };
             }
 
-            level.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level.Board[7, 1] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level.Board[5, 7] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
+            //level.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            //level.Board[7, 1] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            //level.Board[5, 7] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
+            level.Board[1, 4] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            level.Board[1, 9] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
+            level.Board[1, 5] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
 
             // Molecule
             Molecule molecule = new Molecule(1, 3);

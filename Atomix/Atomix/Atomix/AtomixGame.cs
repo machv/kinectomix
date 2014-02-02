@@ -167,33 +167,24 @@ namespace Atomix
                                     currentLevel.Board[i, j + 1].Type = TileType.Right;
                                 }
                             }
-                            else if (currentLevel.Board[i, j].Type == TileType.Right)
+                            else if (currentLevel.Board[i, j].Type == TileType.Right ||
+                                     currentLevel.Board[i, j].Type == TileType.Left ||
+                                     currentLevel.Board[i, j].Type == TileType.Up ||
+                                     currentLevel.Board[i, j].Type == TileType.Down)
                             {
-                                BoardTile atom = currentLevel.Board[i, j - 1];
-                                int jj = j;
-                                while (jj < currentLevel.Board.ColumnsCount)
-                                {
-                                    if (currentLevel.Board[i, jj].Type != TileType.Right && currentLevel.Board[i, jj].Type != TileType.Empty)
-                                    {
-                                        break;
-                                    }
+                                Point coordinates = new Point(i, j);
+                                Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Type);
+                                Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Type);
 
-                                    jj++;
-                                }
-                                if (jj > j) jj--; //pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
+                                BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
+                                currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
+                                currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
 
-                                currentLevel.Board[i, jj].Type = atom.Type;
-                                currentLevel.Board[i, jj].IsFixed = false;
+                                // Check victory
+                                CheckFinish();
 
-                                currentLevel.Board[i, j - 1].Type = TileType.Empty;
-                                currentLevel.Board[i, j - 1].IsFixed = true;
-                                
                                 ClearBoard();
                             }
-                            //else
-                            //{
-                            //    currentLevel.Board[x, y].IsFixed = false;
-                            //}
                         }
 
                         mPosition.X += TileWidth;
@@ -206,6 +197,127 @@ namespace Atomix
 
 
             base.Update(gameTime);
+        }
+
+        private bool CheckFinish()
+        {
+            for (int i = 0; i < currentLevel.Board.RowsCount; i++)
+            {
+                for (int j = 0; j < currentLevel.Board.ColumnsCount; j++)
+                {
+                    // We expect match
+                    bool isMatch = true;
+
+                    for (int x = 0; x < currentLevel.Molecule.Definition.RowsCount; x++)
+                    {
+                        for (int y = 0; y < currentLevel.Molecule.Definition.ColumnsCount; y++)
+                        {
+                            // If we have empty tile in definition it is like a wildcard that matches everything
+                            if (currentLevel.Molecule.Definition[x, y].Type == TileType.Empty)
+                                continue;
+
+                            if (currentLevel.Board[i + x, j + y].Type != currentLevel.Molecule.Definition[x, y].Type)
+                            {
+                                isMatch = false;
+                                break;
+                            }
+                        }
+
+                        // If we did not matched we can stop here and continue to next tile on the board.
+                        if (!isMatch)
+                            break;
+                    }
+
+                    // Expectation was correct
+                    if (isMatch)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private Point GetAtomPosition(Point directionTilePosition, TileType direction)
+        {
+            Point atomPosition = directionTilePosition;
+
+            switch (direction)
+            {
+                case TileType.Right:
+                    atomPosition.Y -= 1;
+                    break;
+                case TileType.Left:
+                    atomPosition.Y += 1;
+                    break;
+                case TileType.Down:
+                    atomPosition.X -= 1;
+                    break;
+                case TileType.Up:
+                    atomPosition.X += 1;
+                    break;
+            }
+
+            return atomPosition;
+        }
+
+        private Point NewPosition(Point coordinates, TileType direction)
+        {
+            Point newCoordinates = coordinates;
+
+            switch (direction)
+            {
+                case TileType.Right:
+                    while (newCoordinates.Y < currentLevel.Board.ColumnsCount)
+                    {
+                        if (currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Right && currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Empty)
+                            break;
+
+                        newCoordinates.Y++;
+                    }
+
+                    if (newCoordinates.Y != coordinates.Y) newCoordinates.Y--; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
+                    break;
+                case TileType.Left:
+                    while (newCoordinates.Y >= 0)
+                    {
+                        if (currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Left && currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Empty)
+                            break;
+
+                        newCoordinates.Y--;
+                    }
+
+                    if (newCoordinates.Y != coordinates.Y) newCoordinates.Y++; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
+                    break;
+                case TileType.Down:
+                    while (newCoordinates.X < currentLevel.Board.RowsCount)
+                    {
+                        if (currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Down && currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Empty)
+                            break;
+
+                        newCoordinates.X++;
+                    }
+
+                    if (newCoordinates.X != coordinates.X) newCoordinates.X--; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
+                    break;
+                case TileType.Up:
+                    while (newCoordinates.X >= 0)
+                    {
+                        if (currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Up && currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Empty)
+                            break;
+
+                        newCoordinates.X--;
+                    }
+
+                    if (newCoordinates.X != coordinates.X) newCoordinates.X++; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
+                    break;
+            }
+
+            return newCoordinates;
+        }
+
+        private void SwitchTiles(BoardTile boardTile1, BoardTile boardTile2)
+        {
+            throw new NotImplementedException();
         }
 
         private void ClearBoard()
