@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,7 @@ namespace AtomixData
         public bool IsFixed = true;
         public bool IsSelected;
         public Direction Movements;
+        public Vector2 RenderPosition;
     }
 
     public class BoardRow

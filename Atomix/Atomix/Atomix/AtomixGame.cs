@@ -32,6 +32,7 @@ namespace Atomix
         MouseState mouseState;
         MouseState lastMouseState;
         SoundEffect applause;
+        Vector2 boardPosition;
 
         int TileWidth = 49;
         int TileHeight = 49;
@@ -56,6 +57,8 @@ namespace Atomix
         protected override void Initialize()
         {
             this.IsMouseVisible = true;
+
+            boardPosition = new Vector2(20, 20);
 
             base.Initialize();
         }
@@ -84,7 +87,8 @@ namespace Atomix
 
             // Load level
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
-
+            CalculateBoardTilePositions(boardPosition, currentLevel.Board);
+            CalculateBoardTilePositions(new Vector2(600, 20), currentLevel.Molecule.Definition);
         }
 
         /// <summary>
@@ -95,6 +99,15 @@ namespace Atomix
         {
             // TODO: Unload any non ContentManager content here
         }
+
+        protected bool isMovementAnimation = false;
+        protected Vector2 atomPosition;
+        protected Vector2 finalPosition;
+        Point destination;
+        TileType atomToMove;
+        TileType moveDirection;
+        float atomSpeed = 200f;
+
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -109,98 +122,142 @@ namespace Atomix
 
             // TODO: Add your update logic here
 
-            bool clickOccurred = false;
-
-            // The active state from the last frame is now old
-            lastMouseState = mouseState;
-
-            // Get the mouse state relevant for this frame
-            mouseState = Mouse.GetState();
-
-            // Recognize a single click of the left mouse button
-            if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+            if (isMovementAnimation)
             {
-                // React to the click
-                // ...
-                clickOccurred = true;
-            }
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (clickOccurred)
-            {
-                var mousePosition = new Point(mouseState.X, mouseState.Y);
+                Vector2 destinationPosition = currentLevel.Board[destination.X, destination.Y].RenderPosition;
 
-                // Find nearest point
-                Vector2 position = new Vector2(10, 10);
-                Vector2 mPosition = new Vector2(position.X, position.Y);
-
-                for (int i = 0; i < currentLevel.Board.RowsCount; i++)
+                if (atomPosition.X == destinationPosition.X)
                 {
-                    for (int j = 0; j < currentLevel.Board.ColumnsCount; j++)
-                    {
-                        Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
-                        if (tile.Contains(mousePosition))
-                        {
-                            if (!currentLevel.Board[i, j].IsFixed)
-                            {
-                                ClearBoard();
+                    int direction = moveDirection == TileType.Up ? -1 : 1;
+                    atomPosition.Y += direction * atomSpeed * elapsed;
+                }
 
-                                currentLevel.Board[i, j].IsSelected = true;
-                                currentLevel.Board[i, j].Movements = Direction.None;
+                if (atomPosition.Y == destinationPosition.Y)
+                {
+                    int direction = moveDirection == TileType.Left ? -1 : 1;
+                    atomPosition.X += direction * atomSpeed * elapsed;
+                }
 
-                                //zjistit jakymi smery se muze pohnout
-                                if (currentLevel.Board.CanGoUp(i, j))
-                                {
-                                    currentLevel.Board[i, j].Movements |= Direction.Up;
-                                    currentLevel.Board[i - 1, j].Type = TileType.Up;
-                                }
-                                if (currentLevel.Board.CanGoDown(i, j))
-                                {
-                                    currentLevel.Board[i, j].Movements |= Direction.Down;
-                                    currentLevel.Board[i + 1, j].Type = TileType.Down;
-                                }
-                                if (currentLevel.Board.CanGoLeft(i, j))
-                                {
-                                    currentLevel.Board[i, j].Movements |= Direction.Left;
-                                    currentLevel.Board[i, j - 1].Type = TileType.Left;
-                                }
-                                if (currentLevel.Board.CanGoRight(i, j))
-                                {
-                                    currentLevel.Board[i, j].Movements |= Direction.Right;
-                                    currentLevel.Board[i, j + 1].Type = TileType.Right;
-                                }
-                            }
-                            else if (currentLevel.Board[i, j].Type == TileType.Right ||
-                                     currentLevel.Board[i, j].Type == TileType.Left ||
-                                     currentLevel.Board[i, j].Type == TileType.Up ||
-                                     currentLevel.Board[i, j].Type == TileType.Down)
-                            {
-                                Point coordinates = new Point(i, j);
-                                Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Type);
-                                Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Type);
-
-                                BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
-                                currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
-                                currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
-
-                                // Check victory
-                                bool isFinished = CheckFinish();
-                                if (isFinished)
-                                {
-                                    applause.Play();
-                                }
-
-                                ClearBoard();
-                            }
-                        }
-
-                        mPosition.X += TileWidth;
-                    }
-
-                    mPosition.X = position.X;
-                    mPosition.Y += TileHeight;
+                Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, TileWidth / 8, TileHeight / 8);
+                if (tile.Contains((int)atomPosition.X, (int)atomPosition.Y))
+                {
+                    isMovementAnimation = false;
+                    currentLevel.Board[destination.X, destination.Y].Type = atomToMove;
                 }
             }
+            else
+            {
+                bool clickOccurred = false;
 
+                // The active state from the last frame is now old
+                lastMouseState = mouseState;
+
+                // Get the mouse state relevant for this frame
+                mouseState = Mouse.GetState();
+
+                // Recognize a single click of the left mouse button
+                if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    // React to the click
+                    // ...
+                    clickOccurred = true;
+                }
+
+                if (clickOccurred)
+                {
+                    var mousePosition = new Point(mouseState.X, mouseState.Y);
+
+                    // Find nearest point
+                    Vector2 position = new Vector2(10, 10);
+                    Vector2 mPosition = new Vector2(position.X, position.Y);
+
+                    for (int i = 0; i < currentLevel.Board.RowsCount; i++)
+                    {
+                        for (int j = 0; j < currentLevel.Board.ColumnsCount; j++)
+                        {
+                            Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
+                            if (tile.Contains(mousePosition))
+                            {
+                                if (!currentLevel.Board[i, j].IsFixed)
+                                {
+                                    ClearBoard();
+
+                                    currentLevel.Board[i, j].IsSelected = true;
+                                    currentLevel.Board[i, j].Movements = Direction.None;
+
+                                    //zjistit jakymi smery se muze pohnout
+                                    if (currentLevel.Board.CanGoUp(i, j))
+                                    {
+                                        currentLevel.Board[i, j].Movements |= Direction.Up;
+                                        currentLevel.Board[i - 1, j].Type = TileType.Up;
+                                    }
+                                    if (currentLevel.Board.CanGoDown(i, j))
+                                    {
+                                        currentLevel.Board[i, j].Movements |= Direction.Down;
+                                        currentLevel.Board[i + 1, j].Type = TileType.Down;
+                                    }
+                                    if (currentLevel.Board.CanGoLeft(i, j))
+                                    {
+                                        currentLevel.Board[i, j].Movements |= Direction.Left;
+                                        currentLevel.Board[i, j - 1].Type = TileType.Left;
+                                    }
+                                    if (currentLevel.Board.CanGoRight(i, j))
+                                    {
+                                        currentLevel.Board[i, j].Movements |= Direction.Right;
+                                        currentLevel.Board[i, j + 1].Type = TileType.Right;
+                                    }
+                                }
+                                else if (currentLevel.Board[i, j].Type == TileType.Right ||
+                                         currentLevel.Board[i, j].Type == TileType.Left ||
+                                         currentLevel.Board[i, j].Type == TileType.Up ||
+                                         currentLevel.Board[i, j].Type == TileType.Down)
+                                {
+                                    Point coordinates = new Point(i, j);
+                                    Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Type);
+                                    Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Type);
+
+                                    BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
+
+                                    // start animation
+                                    isMovementAnimation = true;
+                                    atomPosition = atom.RenderPosition;
+                                    destination = newCoordinates;
+                                    atomToMove = atom.Type;
+                                    moveDirection = currentLevel.Board[i, j].Type;
+
+                                    //instead of just switching do the animation
+                                    currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
+                                    currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
+                                    currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type = TileType.Empty; // but now will be rendered as empty
+
+                                    CalculateBoardTilePositions(boardPosition, currentLevel.Board);
+
+                                    //BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
+                                    //currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
+                                    //currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
+
+                                    // Check victory
+                                    bool isFinished = CheckFinish();
+                                    if (isFinished)
+                                    {
+                                        applause.Play();
+                                    }
+
+                                    ClearBoard();
+                                }
+                            }
+
+                            mPosition.X += TileWidth;
+                        }
+
+                        mPosition.X = position.X;
+                        mPosition.Y += TileHeight;
+                    }
+                }
+
+            }
 
             base.Update(gameTime);
         }
@@ -361,83 +418,111 @@ namespace Atomix
 
             spriteBatch.Begin();
 
-            DrawBoard(spriteBatch, new Vector2(10, 10), currentLevel.Board, true);
+            DrawBoard(spriteBatch, currentLevel.Board, true);
+            DrawBoard(spriteBatch, currentLevel.Molecule.Definition);
 
-            DrawBoard(spriteBatch, new Vector2(600, 10), currentLevel.Molecule.Definition);
+            if (isMovementAnimation)
+            {
+                spriteBatch.Draw(GetTileTexture(atomToMove, true), atomPosition, Color.White);
+            }
 
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        private void DrawBoard(SpriteBatch spriteBach, Vector2 position, BoardTileCollection board, bool drawEmptyTiles = false)
+        private void CalculateBoardTilePositions(Vector2 startPosition, BoardTileCollection board)
         {
-            Vector2 mPosition = new Vector2(position.X, position.Y);
+            Vector2 mPosition = new Vector2(startPosition.X, startPosition.Y);
+
+            for (int i = 0; i < board.RowsCount; i++)
+            {
+                for (int j = 0; j < board.ColumnsCount; j++)
+                {
+                    board[i, j].RenderPosition = mPosition;
+
+                    mPosition.X += TileWidth;
+                }
+
+                mPosition.X = startPosition.X;
+                mPosition.Y += TileHeight;
+            }
+        }
+
+        private Texture2D GetTileTexture(TileType tileType, bool isSelected)
+        {
+            Texture2D tile = null;
+
+            switch (tileType)
+            {
+                case TileType.Wall:
+                    tile = brickTexture;
+                    break;
+                case TileType.Empty:
+                    tile = emptyTexture;
+                    break;
+                case TileType.Carbon:
+                    tile = isSelected ? carbonSelectedTexture : carbonTexture;
+                    break;
+                case TileType.Oxygen:
+                    tile = isSelected ? oxygenSelectedTexture : oxygenTexture;
+                    break;
+                case TileType.Hydrogen:
+                    tile = isSelected ? hydrogenSelectedTexture : hydrogenTexture;
+                    break;
+                case TileType.Left:
+                case TileType.Right:
+                case TileType.Down:
+                case TileType.Up:
+                    tile = arrowTexture;
+                    break;
+            }
+
+            return tile;
+        }
+
+        private void DrawBoard(SpriteBatch spriteBach, BoardTileCollection board, bool drawEmptyTiles = false)
+        {
             bool drawEmpty = false;
 
-            for (int x = 0; x < board.RowsCount; x++)
+            for (int i = 0; i < board.RowsCount; i++)
             {
-                for (int y = 0; y < board.ColumnsCount; y++)
+                for (int j = 0; j < board.ColumnsCount; j++)
                 {
-                    Texture2D tile = null;
+                    Texture2D tile = GetTileTexture(board[i, j].Type, board[i, j].IsSelected);
                     drawEmpty = true;
                     float RotationAngle = 0;
                     Vector2 origin = new Vector2();
 
-                    switch (board[x, y].Type)
+                    switch (board[i, j].Type)
                     {
                         case TileType.Wall:
-                            tile = brickTexture;
                             drawEmpty = false;
                             break;
-                        case TileType.Empty:
-                            break;
-                        case TileType.Carbon:
-                            tile = board[x, y].IsSelected ? carbonSelectedTexture : carbonTexture;
-                            break;
-                        case TileType.Oxygen:
-                            tile = board[x, y].IsSelected ? oxygenSelectedTexture : oxygenTexture;
-                            break;
-                        case TileType.Hydrogen:
-                            tile = board[x, y].IsSelected ? hydrogenSelectedTexture : hydrogenTexture;
-                            break;
-                        case TileType.Up:
-                            tile = arrowTexture;
-                            break;
                         case TileType.Down:
-                            tile = arrowTexture;
                             RotationAngle = MathHelper.Pi;
                             origin.X = tile.Width;
                             origin.Y = tile.Height;
                             break;
                         case TileType.Left:
-                            tile = arrowTexture;
                             RotationAngle = -1 * MathHelper.Pi / 2;
                             origin.X = tile.Width;
                             origin.Y = 0;
                             break;
                         case TileType.Right:
-                            tile = arrowTexture;
                             RotationAngle = MathHelper.Pi / 2;
-                            //origin.X = tile.Width;
                             origin.Y = tile.Height;
                             break;
                     }
 
                     if (drawEmpty && drawEmptyTiles)
-                        spriteBatch.Draw(emptyTexture, mPosition, Color.White);
+                        spriteBatch.Draw(emptyTexture, board[i, j].RenderPosition, Color.White);
 
                     if (tile != null)
                     {
-                        spriteBatch.Draw(tile, mPosition, null, Color.White, RotationAngle, origin, 1.0f, SpriteEffects.None, 0f);
-                        //                       spriteBatch.Draw(tile, mPosition, Color.White);
+                        spriteBatch.Draw(tile, board[i, j].RenderPosition, null, Color.White, RotationAngle, origin, 1.0f, SpriteEffects.None, 0f);
                     }
-
-                    mPosition.X += TileWidth;
-
                 }
-                mPosition.X = position.X;
-                mPosition.Y += TileHeight;
             }
         }
     }
