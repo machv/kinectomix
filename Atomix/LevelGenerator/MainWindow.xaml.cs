@@ -1,12 +1,16 @@
 ﻿using AtomixData;
 using Microsoft.Win32;
+using Microsoft.Xna.Framework.Content.Pipeline;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,6 +22,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Xml;
 
 namespace LevelGenerator
@@ -118,6 +123,65 @@ namespace LevelGenerator
 
             if (dialog.ShowDialog(this) == true)
                 Load(dialog.FileName);
+        }
+
+        private void handler(object sender, RoutedEventArgs e)
+        {
+            BoardTile tile = ((ContentPresenter)ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource)).Content as BoardTile;
+
+            tile.Type = activeTile.Type;
+
+            ((ContentPresenter)ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource)).UpdateLayout();
+        }
+
+        BoardTile activeTile;
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox box = sender as ListBox;
+            BoardTile tile = box.SelectedItem as BoardTile;
+
+            activeTile = tile;
+        }
+
+        private void Button_Save(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Atomix level (*.xml)|*.xml|Atomix binary level (*.xnb)|*.xnb";
+            dialog.Title = "Save Kinectomix level definition";
+            if (dialog.ShowDialog(this) == true)
+            {
+                if (dialog.FileName == "")
+                    return;
+
+                using (Stream stream = dialog.OpenFile())
+                {
+
+                    switch (dialog.FilterIndex)
+                    {
+                        case 1:
+                            // Save definition
+                            XmlWriterSettings settings = new XmlWriterSettings();
+                            settings.Indent = true;
+
+                            using (XmlWriter writer = XmlWriter.Create(stream, settings))
+                            {
+                                IntermediateSerializer.Serialize(writer, Level, null);
+                            }
+                            break;
+                        case 2:
+                            // http://stackoverflow.com/questions/8856528/serialize-texture2d-programatically-in-xna
+                            Type compilerType = typeof(ContentCompiler);
+                            ContentCompiler cc = compilerType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0].Invoke(null) as ContentCompiler;
+                            var compileMethod = compilerType.GetMethod("Compile", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                            compileMethod.Invoke(cc, new object[]{
+                              stream, Level, TargetPlatform.Windows, GraphicsProfile.Reach, false/*true*/, dialog.FileName, dialog.FileName
+                              });
+                            break;
+                    }
+                }
+            }
         }
     }
 
