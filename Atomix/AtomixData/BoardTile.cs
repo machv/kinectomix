@@ -7,25 +7,6 @@ using System.Text;
 
 namespace AtomixData
 {
-    public enum TileType
-    {
-        Carbon,
-        Oxygen,
-        Hydrogen,
-        [TileProperties(IsFixed = true)]
-        Empty,
-        [TileProperties(IsFixed = true)]
-        Wall,
-        [TileProperties(ShowInEditor = false)]
-        Up,
-        [TileProperties(ShowInEditor = false)]
-        Down,
-        [TileProperties(ShowInEditor = false)]
-        Left,
-        [TileProperties(ShowInEditor = false)]
-        Right,
-    }
-
     [Flags]
     public enum Direction
     {
@@ -71,18 +52,6 @@ namespace AtomixData
         public BoardTile()
         {
             IsFixed = true;
-        }
-    }
-
-    public class BoardRow
-    {
-        public BoardTile[] Columns;
-
-        public BoardRow() { }
-
-        public BoardRow(int columns)
-        {
-            Columns = new BoardTile[columns];
         }
     }
 }
