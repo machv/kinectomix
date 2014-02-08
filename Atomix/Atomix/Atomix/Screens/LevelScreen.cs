@@ -175,22 +175,22 @@ namespace Atomix
                                 currentLevel.Board[i, j].Movements = Direction.None;
 
                                 //zjistit jakymi smery se muze pohnout
-                                if (currentLevel.Board.CanGoUp(i, j))
+                                if (currentLevel.CanGoUp(i, j))
                                 {
                                     currentLevel.Board[i, j].Movements |= Direction.Up;
                                     currentLevel.Board[i - 1, j].Type = TileType.Up;
                                 }
-                                if (currentLevel.Board.CanGoDown(i, j))
+                                if (currentLevel.CanGoDown(i, j))
                                 {
                                     currentLevel.Board[i, j].Movements |= Direction.Down;
                                     currentLevel.Board[i + 1, j].Type = TileType.Down;
                                 }
-                                if (currentLevel.Board.CanGoLeft(i, j))
+                                if (currentLevel.CanGoLeft(i, j))
                                 {
                                     currentLevel.Board[i, j].Movements |= Direction.Left;
                                     currentLevel.Board[i, j - 1].Type = TileType.Left;
                                 }
-                                if (currentLevel.Board.CanGoRight(i, j))
+                                if (currentLevel.CanGoRight(i, j))
                                 {
                                     currentLevel.Board[i, j].Movements |= Direction.Right;
                                     currentLevel.Board[i, j + 1].Type = TileType.Right;

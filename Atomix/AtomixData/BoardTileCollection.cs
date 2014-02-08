@@ -31,38 +31,6 @@ namespace AtomixData
                 Rows[x] = new BoardRow(columns);
         }
 
-        public bool CanGoUp(int x, int y)
-        {
-            if (x > 0 && this[x - 1, y].Type == TileType.Empty)
-                return true;
-
-            return false;
-        }
-
-        public bool CanGoDown(int x, int y)
-        {
-            if (x + 1 < Rows.Length && this[x + 1, y].Type == TileType.Empty)
-                return true;
-
-            return false;
-        }
-
-        public bool CanGoLeft(int x, int y)
-        {
-            if (y > 0 && this[x, y - 1].Type == TileType.Empty)
-                return true;
-
-            return false;
-        }
-
-        public bool CanGoRight(int x, int y)
-        {
-            if (y + 1 < ColumnsCount && this[x, y + 1].Type == TileType.Empty)
-                return true;
-
-            return false;
-        }
-
         public void Clear()
         {
             foreach (var row in Rows)
@@ -89,7 +57,7 @@ namespace AtomixData
 
         public void Add(BoardTile item)
         {
-            throw new NotSupportedException("This Method is not valid for this implementation.");
+            //throw new NotSupportedException("This Method is not valid for this implementation.");
         }
 
         public int Count
@@ -97,6 +65,7 @@ namespace AtomixData
             get { return RowsCount * ColumnsCount; }
         }
 
+        // viz http://blog.stephencleary.com/2009/11/icollection-isreadonly-and-arrays.html
         public bool IsReadOnly
         {
             get { return true; }
@@ -109,24 +78,16 @@ namespace AtomixData
 
         public IEnumerator<BoardTile> GetEnumerator()
         {
-            foreach (var row in Rows)
-            {
+            foreach (BoardRow row in Rows)
                 foreach (BoardTile tile in row.Columns)
-                {
                     yield return tile;
-                }
-            }
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            foreach (var row in Rows)
-            {
+            foreach (BoardRow row in Rows)
                 foreach (BoardTile tile in row.Columns)
-                {
                     yield return tile;
-                }
-            }
         }
     }
 
