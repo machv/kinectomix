@@ -70,6 +70,12 @@ namespace SimpleLevelGenerator
             molecule.Definition[0, 1] = new BoardTile() { Type = TileType.Oxygen };
             molecule.Definition[0, 2] = new BoardTile() { Type = TileType.Hydrogen };
 
+            foreach (var x in molecule.Definition)
+            {
+                Console.WriteLine(x.Type);
+            }
+
+
             level1.Molecule = molecule;
 
             // Save definition
