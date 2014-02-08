@@ -22,7 +22,10 @@
                     <Button>
                         <Button.Template>
                             <ControlTemplate>
-                                <Image Source="Board/Wall.png" Stretch="None" />
+                                <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Stretch="None" />
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
