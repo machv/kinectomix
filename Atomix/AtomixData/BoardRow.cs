@@ -8,14 +8,20 @@ namespace AtomixData
 {
     public enum TileType
     {
-        Empty,
-        Wall,
         Carbon,
         Oxygen,
         Hydrogen,
+        [TileProperties(IsFixed = true)]
+        Empty,
+        [TileProperties(IsFixed = true)]
+        Wall,
+        [TileProperties(ShowInEditor = false)]
         Up,
+        [TileProperties(ShowInEditor = false)]
         Down,
+        [TileProperties(ShowInEditor = false)]
         Left,
+        [TileProperties(ShowInEditor = false)]
         Right,
     }
 
