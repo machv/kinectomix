@@ -7,8 +7,23 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
+        <StackPanel Grid.Row="0" Margin="5">
             <Button Content="Load level" Click="Button_Click"/>
         </StackPanel>
+
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Level.Board}" Margin="5">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding Path=Level.Board.ColumnsCount}"
+                                 Rows="{Binding Path=Level.Board.RowsCount}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
     </Grid>
 </Window>

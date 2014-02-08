@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,14 +23,39 @@ namespace LevelGenerator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        AtomixData.Level level;
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            // zjistíme, zda je někdo k události přihlášen
+            // musí existovat nějaký delegát, který bude event zpracovávat
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+
+        protected AtomixData.Level _level;
+        public AtomixData.Level Level { 
+            get { return _level;}
+            set
+            {
+                _level = value;
+                OnPropertyChanged("Level");
+            }
+        }
 
         public MainWindow()
         {
             InitializeComponent();
 
+            DataContext = this;
         }
 
         void Load(string path)
@@ -39,13 +65,13 @@ namespace LevelGenerator
 
             if (System.IO.Path.GetExtension(path).ToLower() == ".xnb")
             {
-                level = cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
+                Level = cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
             }
             else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
             {
                 using (XmlReader reader = XmlReader.Create(path))
                 {
-                    level = IntermediateSerializer.Deserialize<AtomixData.Level>(reader, null);
+                    Level = IntermediateSerializer.Deserialize<AtomixData.Level>(reader, null);
                 }
             }
         }
