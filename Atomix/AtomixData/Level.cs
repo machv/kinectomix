@@ -15,8 +15,8 @@ namespace AtomixData
 {
     public class Level
     {
-        public BoardTileCollection Board;
-        public Molecule Molecule;
+        public BoardTileCollection Board { get; set; }
+        public Molecule Molecule { get; set; }
 
         public Level() { }
 

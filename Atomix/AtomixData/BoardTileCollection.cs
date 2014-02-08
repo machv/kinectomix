@@ -8,8 +8,8 @@ namespace AtomixData
 {
     public class BoardTileCollection : ICollection<BoardTile>
     {
-        public int RowsCount;
-        public int ColumnsCount;
+        public int RowsCount { get; set; }
+        public int ColumnsCount { get; set; }
 
         public BoardRow[] Rows;
 
