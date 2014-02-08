@@ -31,11 +31,16 @@ namespace AtomixData
 
     public class BoardTile
     {
-        public TileType Type;
-        public bool IsFixed = true;
-        public bool IsSelected;
+        public TileType Type { get; set; }
+        public bool IsFixed { get; set; }
+        public bool IsSelected { get; set; }
         public Direction Movements;
         public Vector2 RenderPosition;
+
+        public BoardTile()
+        {
+            IsFixed = true;
+        }
     }
 
     public class BoardRow
