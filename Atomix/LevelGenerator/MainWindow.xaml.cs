@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,43 @@ namespace LevelGenerator
     /// </summary>
     public partial class MainWindow : Window
     {
+        private IntPtr _handle;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            Loaded += MainWindow_Loaded;
+            SourceInitialized += MainWindow_SourceInitialized;
+        }
+
+        void MainWindow_SourceInitialized(object sender, EventArgs e)
+        {
+            _handle = (new System.Windows.Interop.WindowInteropHelper(this)).Handle;
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            string path = @"d:\TEMP\Level1.xml";
+            Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new DummyServiceProvider());
+            cm.RootDirectory = System.IO.Path.GetDirectoryName(path);
+            AtomixData.Level level = null;
+            if (System.IO.Path.GetExtension(path) == "xnb")
+            {
+                level = cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
+            }
+            else if (System.IO.Path.GetExtension(path) == "xml")
+            {
+               // TODO
+            }
+        }
+
+        public class DummyServiceProvider : IServiceProvider
+        {
+            public object GetService(Type serviceType)
+            {
+                return null;
+            }
         }
     }
 }
