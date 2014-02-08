@@ -79,13 +79,22 @@ namespace LevelGenerator
             }
         }
 
-        public ObservableCollection<BoardTile> AvailableTiles { get; set; }
+        private ObservableCollection<BoardTile> _boardTiles = new ObservableCollection<BoardTile>();
+        private ObservableCollection<BoardTile> _moleculeTiles = new ObservableCollection<BoardTile>();
+        private ObservableCollection<BoardTile> _availableTiles  = new ObservableCollection<BoardTile>();
+        public ObservableCollection<BoardTile> AvailableTiles
+        {
+            get { return _availableTiles; }
+            set
+            {
+                _availableTiles = value;
+                OnPropertyChanged("AvailableTiles");
+            }
+        }
 
         public MainWindow()
         {
             InitializeComponent();
-
-            AvailableTiles = new ObservableCollection<BoardTile>();
 
             DataContext = this;
 
@@ -94,11 +103,24 @@ namespace LevelGenerator
                 TilePropertiesAttribute properties = type.GetAttributeOfType<TilePropertiesAttribute>();
                 bool isFixed = properties != null ? properties.IsFixed : false;
 
-                if (properties != null && !properties.ShowInEditor)
+                if (properties != null && !properties.ShowInBoardEditor)
                     continue;
 
-                AvailableTiles.Add(new BoardTile() { Type = type, IsFixed = isFixed });
+                _boardTiles.Add(new BoardTile() { Type = type, IsFixed = isFixed });
             }
+
+            foreach (var type in Enum.GetValues(typeof(TileType)).Cast<TileType>())
+            {
+                TilePropertiesAttribute properties = type.GetAttributeOfType<TilePropertiesAttribute>();
+                bool isFixed = properties != null ? properties.IsFixed : false;
+
+                if (properties != null && !properties.ShowInMoleculeEditor)
+                    continue;
+
+                _moleculeTiles.Add(new BoardTile() { Type = type, IsFixed = isFixed });
+            }
+
+            AvailableTiles = _boardTiles;
         }
 
         void Load(string path)
@@ -108,7 +130,6 @@ namespace LevelGenerator
 
             try
             {
-
                 if (System.IO.Path.GetExtension(path).ToLower() == ".xnb")
                 {
                     Level = cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
@@ -201,6 +222,19 @@ namespace LevelGenerator
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TabControl tabs = sender as TabControl;
+            TabItem item = tabs.SelectedItem as TabItem;
+            string tag = item.Tag as string;
+            
+            if (tag == "Board")
+                AvailableTiles = _boardTiles;
+            
+            if (tag == "Molecule")
+                AvailableTiles = _moleculeTiles;
         }
     }
 

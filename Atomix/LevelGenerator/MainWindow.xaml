@@ -32,8 +32,8 @@
 
         </Grid>
 
-        <TabControl Grid.Row="1">
-            <TabItem Header="Board">
+        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="Board" Tag="Board">
                 <ItemsControl Grid.Column="0" ItemsSource="{Binding Path=Level.Board}" Margin="5" ButtonBase.Click="handler">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -61,7 +61,7 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </TabItem>
-            <TabItem Header="Molecule">
+            <TabItem Header="Molecule" Tag="Molecule">
                 <ItemsControl Grid.Column="2" ItemsSource="{Binding Path=Level.Molecule.Definition}" Margin="5" ButtonBase.Click="handler">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
