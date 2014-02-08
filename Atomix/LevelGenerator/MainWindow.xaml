@@ -32,77 +32,65 @@
 
         </Grid>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <ItemsControl Grid.Column="0" ItemsSource="{Binding Path=Level.Board}" Margin="5" ButtonBase.Click="handler">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button>
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
+        <TabControl Grid.Row="1">
+            <TabItem Header="Board">
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding Path=Level.Board}" Margin="5" ButtonBase.Click="handler">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button>
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Width="49"
                                        Height="49"
                                        Stretch="None" />
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding Path=Level.Board.ColumnsCount}"
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding Path=Level.Board.ColumnsCount}"
                                  Rows="{Binding Path=Level.Board.RowsCount}"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-
-            <GridSplitter Grid.Column="1"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Stretch"
-              Background="Black" 
-              ShowsPreview="True"
-              Width="5"
-              />
-
-            <ItemsControl Grid.Column="2" ItemsSource="{Binding Path=Level.Molecule.Definition}" Margin="5" ButtonBase.Click="handler">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button>
-                            <Button.Template>
-                                <ControlTemplate>
-                                    <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </TabItem>
+            <TabItem Header="Molecule">
+                <ItemsControl Grid.Column="2" ItemsSource="{Binding Path=Level.Molecule.Definition}" Margin="5" ButtonBase.Click="handler">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button>
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        Width="49"
                                        Height="49"
                                        Stretch="None" />
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding Path=Level.Molecule.Definition.ColumnsCount}"
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding Path=Level.Molecule.Definition.ColumnsCount}"
                                  Rows="{Binding Path=Level.Molecule.Definition.RowsCount}"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-
-        </Grid>
-
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </TabItem>
+        </TabControl>
+        
         <StackPanel Grid.Row="2">
             <TextBlock Text="Available tiles:" FontWeight="Bold" />
             <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectionChanged="ListBox_SelectionChanged">
