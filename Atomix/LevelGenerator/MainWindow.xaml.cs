@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace LevelGenerator
 {
@@ -42,13 +44,16 @@ namespace LevelGenerator
             Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new DummyServiceProvider());
             cm.RootDirectory = System.IO.Path.GetDirectoryName(path);
             AtomixData.Level level = null;
-            if (System.IO.Path.GetExtension(path) == "xnb")
+            if (System.IO.Path.GetExtension(path).ToLower() == ".xnb")
             {
                 level = cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
             }
-            else if (System.IO.Path.GetExtension(path) == "xml")
+            else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
             {
-               // TODO
+                using (XmlReader reader = XmlReader.Create(path))
+                {
+                    level = IntermediateSerializer.Deserialize < AtomixData.Level>(reader, null);
+                }
             }
         }
 
