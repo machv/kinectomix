@@ -30,7 +30,7 @@ namespace Atomix
             gameStarted = DateTime.Now;
         }
 
-        Texture2D brickTexture;
+        Texture2D wallTexture;
         Texture2D emptyTexture;
         Texture2D carbonTexture;
         Texture2D carbonSelectedTexture;
@@ -68,7 +68,7 @@ namespace Atomix
 
         public void LoadContent()
         {
-            brickTexture = game.Content.Load<Texture2D>("Board/Brick");
+            wallTexture = game.Content.Load<Texture2D>("Board/Wall");
             emptyTexture = game.Content.Load<Texture2D>("Board/Empty");
             carbonTexture = game.Content.Load<Texture2D>("Board/Carbon");
             carbonSelectedTexture = game.Content.Load<Texture2D>("Board/CarbonSelected");
@@ -259,7 +259,7 @@ namespace Atomix
             if (isLevelFinished)
             {
                 spriteBatch.Draw(idleTexture, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Bounds.Width, game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
-                spriteBatch.Draw(brickTexture, new Rectangle(0, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, game.GraphicsDevice.Viewport.Bounds.Width, 200), Color.Brown);
+                spriteBatch.Draw(wallTexture, new Rectangle(0, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, game.GraphicsDevice.Viewport.Bounds.Width, 200), Color.Brown);
 
                 string name = "level done";
                 Vector2 size = splashFont.MeasureString(name);
@@ -439,7 +439,7 @@ namespace Atomix
             switch (tileType)
             {
                 case TileType.Wall:
-                    tile = brickTexture;
+                    tile = wallTexture;
                     break;
                 case TileType.Empty:
                     tile = emptyTexture;
