@@ -245,7 +245,7 @@ namespace Atomix
             spriteBatch.Begin();
 
             DrawBoard(spriteBatch, currentLevel.Board, true);
-            DrawBoard(spriteBatch, currentLevel.Molecule.Definition);
+            DrawBoard(spriteBatch, currentLevel.Molecule);
 
             spriteBatch.DrawString(normalFont, string.Format("Score: {0}", moves), new Vector2(20, 20), Color.Red);
 
@@ -303,15 +303,15 @@ namespace Atomix
                     // We expect match
                     bool isMatch = true;
 
-                    for (int x = 0; x < currentLevel.Molecule.Definition.RowsCount; x++)
+                    for (int x = 0; x < currentLevel.Molecule.RowsCount; x++)
                     {
-                        for (int y = 0; y < currentLevel.Molecule.Definition.ColumnsCount; y++)
+                        for (int y = 0; y < currentLevel.Molecule.ColumnsCount; y++)
                         {
                             // If we have empty tile in definition it is like a wildcard that matches everything
-                            if (currentLevel.Molecule.Definition[x, y].Type == TileType.Empty)
+                            if (currentLevel.Molecule[x, y].Type == TileType.Empty)
                                 continue;
 
-                            if (currentLevel.Board[i + x, j + y].Type != currentLevel.Molecule.Definition[x, y].Type)
+                            if (currentLevel.Board[i + x, j + y].Type != currentLevel.Molecule[x, y].Type)
                             {
                                 isMatch = false;
                                 break;
