@@ -48,7 +48,7 @@ namespace AtomixData
 
         public void CopyTo(BoardTile[] array, int arrayIndex)
         {
-            throw new NotSupportedException("This Method is not valid for this implementation.");
+            _tiles.CopyTo(array, arrayIndex);
         }
 
         public void Add(BoardTile item) { }
