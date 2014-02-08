@@ -65,6 +65,9 @@ namespace LevelGenerator
 
         #endregion
 
+        public int Rows { get; set; }
+        public int Columns { get; set; }
+
         protected AtomixData.Level _level;
         public AtomixData.Level Level
         {
@@ -103,16 +106,27 @@ namespace LevelGenerator
             Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new DummyServiceProvider());
             cm.RootDirectory = System.IO.Path.GetDirectoryName(path);
 
-            if (System.IO.Path.GetExtension(path).ToLower() == ".xnb")
+            try
             {
-                Level = cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
-            }
-            else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
-            {
-                using (XmlReader reader = XmlReader.Create(path))
+
+                if (System.IO.Path.GetExtension(path).ToLower() == ".xnb")
                 {
-                    Level = IntermediateSerializer.Deserialize<AtomixData.Level>(reader, null);
+                    Level = cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
                 }
+                else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
+                {
+                    using (XmlReader reader = XmlReader.Create(path))
+                    {
+                        Level = IntermediateSerializer.Deserialize<AtomixData.Level>(reader, null);
+                    }
+                }
+
+                Rows = Level.Board.RowsCount;
+                Columns = Level.Board.ColumnsCount;
+            }
+            catch
+            {
+                MessageBox.Show("Unable to load level definition.", "Error", MessageBoxButton.OK, MessageBoxImage.Stop);
             }
         }
 
@@ -182,6 +196,11 @@ namespace LevelGenerator
                     }
                 }
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
