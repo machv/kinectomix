@@ -35,7 +35,7 @@ namespace AtomixData
 
         public bool CanGoDown(int x, int y)
         {
-            if (x + 1 < Board.Rows.Length && Board[x + 1, y].Type == TileType.Empty)
+            if (x + 1 < Board.RowsCount && Board[x + 1, y].Type == TileType.Empty)
                 return true;
 
             return false;
