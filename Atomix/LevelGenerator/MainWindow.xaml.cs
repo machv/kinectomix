@@ -141,11 +141,11 @@ namespace LevelGenerator
 
         private void handler(object sender, RoutedEventArgs e)
         {
+            if (activeTile == null)
+                return;
+
             BoardTile tile = ((ContentPresenter)ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource)).Content as BoardTile;
-
             tile.Type = activeTile.Type;
-
-            ((ContentPresenter)ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource)).UpdateLayout();
         }
 
         BoardTile activeTile;

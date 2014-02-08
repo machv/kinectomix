@@ -6,13 +6,13 @@
     <Window.Resources>
         <l:TileTypeToTexturePathConverter x:Key="TileTypeToTexturePathConverter" />
     </Window.Resources>
-    <Grid>
+    <Grid Margin="3">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="5">
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
@@ -41,6 +41,8 @@
                                 <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
+                                       Width="49"
+                                       Height="49"
                                        Stretch="None" />
                             </ControlTemplate>
                         </Button.Template>
@@ -51,32 +53,35 @@
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="{Binding Path=Level.Board.ColumnsCount}"
                                  Rows="{Binding Path=Level.Board.RowsCount}"
-                                 />
-                    <!-- VerticalAlignment="Center"
-                                 HorizontalAlignment="Center" -->
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
-        <ListBox ItemsSource="{Binding AvailableTiles}" Grid.Row="2" SelectionChanged="ListBox_SelectionChanged">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="2">
+            <TextBlock Text="Available tiles:" FontWeight="Bold" />
+            <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectionChanged="ListBox_SelectionChanged">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
 
-                        <Image Grid.Row="0" Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" />
-                        <TextBlock Grid.Row="1" Text="{Binding Type}" TextAlignment="Center"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                            <Image Grid.Row="0" Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" />
+                            <TextBlock Grid.Row="1" Text="{Binding Type}" TextAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
     </Grid>
 </Window>
