@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace LevelGenerator
+namespace Kinectomix.LevelGenerator
 {
     public class TileTypeToTexturePathConverter : IValueConverter
     {

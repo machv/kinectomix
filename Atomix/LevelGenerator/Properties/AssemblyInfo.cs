@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LevelGenerator")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Kinectomix.LevelGenerator")]
+[assembly: AssemblyDescription("Level generator for Kinectomix game.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("LevelGenerator")]
+[assembly: AssemblyCompany("Vladimír Mach")]
+[assembly: AssemblyProduct("Kinectomix.LevelGenerator")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

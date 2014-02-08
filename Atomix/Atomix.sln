@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleLevelGenerator", "Sim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomixData", "AtomixData\AtomixData.csproj", "{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LevelGenerator", "LevelGenerator\LevelGenerator.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelGenerator", "LevelGenerator\Kinectomix.LevelGenerator.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -31,7 +31,7 @@ Global
 		SccProjectUniqueName4 = AtomixData\\AtomixData.csproj
 		SccProjectName4 = AtomixData
 		SccLocalPath4 = AtomixData
-		SccProjectUniqueName5 = LevelGenerator\\LevelGenerator.csproj
+		SccProjectUniqueName5 = LevelGenerator\\Kinectomix.LevelGenerator.csproj
 		SccProjectName5 = LevelGenerator
 		SccLocalPath5 = LevelGenerator
 	EndGlobalSection
