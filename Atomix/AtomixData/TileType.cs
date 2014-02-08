@@ -7,20 +7,23 @@ namespace AtomixData
 {
     public enum TileType
     {
-        Carbon,
-        Oxygen,
-        Hydrogen,
-        [TileProperties(IsFixed = true)]
+        [TileProperties(ShowInBoardEditor = true, ShowInMoleculeEditor = false, IsFixed = true)]
         Empty,
-        [TileProperties(IsFixed = true)]
+        [TileProperties(ShowInBoardEditor = true, ShowInMoleculeEditor = false, IsFixed = true)]
         Wall,
-        [TileProperties(ShowInEditor = false)]
+        [TileProperties(ShowInBoardEditor = false, ShowInMoleculeEditor = false)]
         Up,
-        [TileProperties(ShowInEditor = false)]
+        [TileProperties(ShowInBoardEditor = false, ShowInMoleculeEditor = false)]
         Down,
-        [TileProperties(ShowInEditor = false)]
+        [TileProperties(ShowInBoardEditor = false, ShowInMoleculeEditor = false)]
         Left,
-        [TileProperties(ShowInEditor = false)]
+        [TileProperties(ShowInBoardEditor = false, ShowInMoleculeEditor = false)]
         Right,
+        [TileProperties(ShowInBoardEditor = true, ShowInMoleculeEditor = true)]
+        Carbon,
+        [TileProperties(ShowInBoardEditor = true, ShowInMoleculeEditor = true)]
+        Oxygen,
+        [TileProperties(ShowInBoardEditor = true, ShowInMoleculeEditor = true)]
+        Hydrogen,
     }
 }

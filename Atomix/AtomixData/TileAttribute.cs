@@ -8,27 +8,34 @@ namespace AtomixData
     [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
     public sealed class TilePropertiesAttribute : Attribute
     {
-        bool isFixed = false;
-        bool showInEditor = true;
+        bool _isFixed = false;
+        bool _showInBoardEditor = true;
+        bool _showInMoleculeEditor = false;
 
         public TilePropertiesAttribute() { }
 
-        // This is a positional argument
         public TilePropertiesAttribute(bool isFixed, bool showInEditor)
         {
-            this.isFixed = isFixed;
-            this.showInEditor = showInEditor;
+            _isFixed = isFixed;
+            _showInBoardEditor = showInEditor;
         }
 
-        public bool IsFixed// { get; set; }
+        public bool IsFixed
         {
-            get { return isFixed; }
-            set { isFixed = value; }
+            get { return _isFixed; }
+            set { _isFixed = value; }
         }
-        public bool ShowInEditor
+
+        public bool ShowInBoardEditor
         {
-            get { return showInEditor; }
-            set { showInEditor = value; }
+            get { return _showInBoardEditor; }
+            set { _showInBoardEditor = value; }
+        }
+
+        public bool ShowInMoleculeEditor
+        {
+            get { return _showInMoleculeEditor; }
+            set { _showInMoleculeEditor = value; }
         }
     }
 }
