@@ -735,6 +735,699 @@
           </Columns>
         </Item>
       </Rows>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Hydrogen</Type>
+        <IsFixed>false</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Oxygen</Type>
+        <IsFixed>false</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Hydrogen</Type>
+        <IsFixed>false</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Empty</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
+      <Item>
+        <Type>Wall</Type>
+        <IsFixed>true</IsFixed>
+        <IsSelected>false</IsSelected>
+        <Movements>None</Movements>
+        <RenderPosition>0 0</RenderPosition>
+      </Item>
     </Board>
     <Molecule>
       <Name>Water</Name>
@@ -768,6 +1461,27 @@
             </Columns>
           </Item>
         </Rows>
+        <Item>
+          <Type>Hydrogen</Type>
+          <IsFixed>true</IsFixed>
+          <IsSelected>false</IsSelected>
+          <Movements>None</Movements>
+          <RenderPosition>0 0</RenderPosition>
+        </Item>
+        <Item>
+          <Type>Oxygen</Type>
+          <IsFixed>true</IsFixed>
+          <IsSelected>false</IsSelected>
+          <Movements>None</Movements>
+          <RenderPosition>0 0</RenderPosition>
+        </Item>
+        <Item>
+          <Type>Hydrogen</Type>
+          <IsFixed>true</IsFixed>
+          <IsSelected>false</IsSelected>
+          <Movements>None</Movements>
+          <RenderPosition>0 0</RenderPosition>
+        </Item>
       </Definition>
     </Molecule>
   </Asset>
