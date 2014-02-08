@@ -17,7 +17,7 @@ namespace AtomixData
 
         protected int GetIndex(int row, int column)
         {
-            return row * RowsCount + column;
+            return row * ColumnsCount + column;
         }
 
         [ContentSerializerIgnore]
