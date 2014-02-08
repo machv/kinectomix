@@ -30,12 +30,6 @@ namespace LevelGenerator
             InitializeComponent();
 
             Loaded += MainWindow_Loaded;
-            SourceInitialized += MainWindow_SourceInitialized;
-        }
-
-        void MainWindow_SourceInitialized(object sender, EventArgs e)
-        {
-            _handle = (new System.Windows.Interop.WindowInteropHelper(this)).Handle;
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
