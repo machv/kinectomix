@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
+﻿using Microsoft.Win32;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -23,21 +24,19 @@ namespace LevelGenerator
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IntPtr _handle;
+        AtomixData.Level level;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Loaded += MainWindow_Loaded;
         }
 
-        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        void Load(string path)
         {
-            string path = @"d:\TEMP\Level1.xml";
             Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new DummyServiceProvider());
             cm.RootDirectory = System.IO.Path.GetDirectoryName(path);
-            AtomixData.Level level = null;
+
             if (System.IO.Path.GetExtension(path).ToLower() == ".xnb")
             {
                 level = cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
@@ -46,17 +45,26 @@ namespace LevelGenerator
             {
                 using (XmlReader reader = XmlReader.Create(path))
                 {
-                    level = IntermediateSerializer.Deserialize < AtomixData.Level>(reader, null);
+                    level = IntermediateSerializer.Deserialize<AtomixData.Level>(reader, null);
                 }
             }
         }
 
-        public class DummyServiceProvider : IServiceProvider
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            public object GetService(Type serviceType)
-            {
-                return null;
-            }
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Atomix level (*.xnb, *.xml)|*.xnb;*.xml|All files|*.*";
+
+            if (dialog.ShowDialog(this) == true)
+                Load(dialog.FileName);
+        }
+    }
+
+    public class DummyServiceProvider : IServiceProvider
+    {
+        public object GetService(Type serviceType)
+        {
+            return null;
         }
     }
 }
