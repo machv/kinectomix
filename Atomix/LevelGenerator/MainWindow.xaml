@@ -1,11 +1,16 @@
 ﻿<Window x:Class="LevelGenerator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:LevelGenerator"
         Title="Atomix Level Editor" Height="350" Width="525">
+    <Window.Resources>
+        <l:TileTypeToTexturePathConverter x:Key="TileTypeToTexturePathConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="5">
             <Button Content="Load level" Click="Button_Click"/>
@@ -14,16 +19,45 @@
         <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Level.Board}" Margin="5">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding}" />
+                    <Button>
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Image Source="Board/Wall.png" Stretch="None" />
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="{Binding Path=Level.Board.ColumnsCount}"
-                                 Rows="{Binding Path=Level.Board.RowsCount}"/>
+                                 Rows="{Binding Path=Level.Board.RowsCount}"
+                                 />
+                    <!-- VerticalAlignment="Center"
+                                 HorizontalAlignment="Center" -->
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
+        <ListBox ItemsSource="{Binding AvailableTiles}" Grid.Row="2">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        
+                        <Image Grid.Row="0" Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" />
+                        <TextBlock Grid.Row="1" Text="{Binding Type}" TextAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>
