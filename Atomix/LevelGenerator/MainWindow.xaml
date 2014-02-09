@@ -32,7 +32,7 @@
 
         </Grid>
 
-        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
+        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged" SelectedIndex="{Binding SelectedTab}">
             <TabItem Header="Board" Tag="Board">
                 <ItemsControl ItemsSource="{Binding Path=Tiles}" Margin="3" ButtonBase.Click="handler">
                     <ItemsControl.ItemTemplate>

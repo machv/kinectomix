@@ -48,6 +48,20 @@ namespace Kinectomix.LevelGenerator
 
         #endregion
 
+        protected int _selectedTab;
+        public int SelectedTab
+        {
+            get { return _selectedTab; }
+            set
+            {
+                if (value > 0)
+                {
+                    _selectedTab = value;
+                    OnPropertyChanged("SelectedTab");
+                }
+            }
+        }
+
         protected int _rows;
         public int Rows
         {
@@ -163,7 +177,7 @@ namespace Kinectomix.LevelGenerator
 
                 Rows = _level.Board.RowsCount;
                 Columns = _level.Board.ColumnsCount;
-                //TODO nastavit záložku na první
+                SelectedTab = 0;
                 Tiles = _level.Board;
             }
             catch
@@ -365,6 +379,16 @@ namespace Kinectomix.LevelGenerator
                 {
                     newTiles[i, j] = _tiles[i, j];
                 }
+            }
+
+            switch (_selectedTab)
+            {
+                case 0: // Board
+                    _level.Board = newTiles;
+                    break;
+                case 1: // Molecule
+                    _level.Molecule = newTiles;
+                    break;
             }
 
             Tiles = newTiles;
