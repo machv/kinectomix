@@ -53,7 +53,7 @@ namespace Atomix
             skeletonRenderer = new SkeletonRenderer(this, chooser.Sensor, _skeletons, new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2));
 
             Components.Add(chooser);
-            Components.Add(skeletonRenderer);            
+            Components.Add(skeletonRenderer);
 
             base.Initialize();
         }
@@ -90,6 +90,63 @@ namespace Atomix
 
         Vector2 cursorPosition;
 
+        float xPrevious;
+        float yPrevious;
+        int MoveThreshold = 0;
+        int trackingTimerCounter;
+
+        double RightHandX;
+        double RightHandY;
+
+        // http://stackoverflow.com/questions/12569706/how-to-use-skeletal-joint-to-act-as-cursor-using-bounds-no-gestures
+        /// <summary>
+        /// Shoulders = top of screen
+        /// Hips = bottom of screen
+        /// Left Should = left most on screen
+        /// </summary>
+        /// <param name="skeleton"></param>
+
+        private void TrackHandMovement(Skeleton skeleton)
+        {
+            Joint leftHand = skeleton.Joints[JointType.HandLeft];
+            Joint rightHand = skeleton.Joints[JointType.HandRight];
+
+            Joint leftShoulder = skeleton.Joints[JointType.ShoulderLeft];
+            Joint rightShoulder = skeleton.Joints[JointType.ShoulderRight];
+
+            Joint rightHip = skeleton.Joints[JointType.HipRight];
+
+            // the right hand joint is being tracked
+            if (rightHand.TrackingState == JointTrackingState.Tracked)
+            {
+                // the hand is sufficiently in front of the shoulder
+                if (rightShoulder.Position.Z - rightHand.Position.Z > 0.4)
+                {
+                    double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
+                    double yScaled = (rightHand.Position.Y - rightShoulder.Position.Y) / (rightHip.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
+
+                    if (yScaled < 0) yScaled = 0;
+                    if (yScaled > GraphicsDevice.Viewport.Bounds.Height) yScaled = GraphicsDevice.Viewport.Bounds.Height;
+
+                    if (xScaled < 0) xScaled = 0;
+                    if (xScaled > GraphicsDevice.Viewport.Bounds.Width) xScaled = GraphicsDevice.Viewport.Bounds.Width;
+
+                    // the hand has moved enough to update screen position (jitter control / smoothing)
+                    if (Math.Abs(rightHand.Position.X - xPrevious) > MoveThreshold || Math.Abs(rightHand.Position.Y - yPrevious) > MoveThreshold)
+                    {
+                        RightHandX = xScaled;
+                        RightHandY = yScaled;
+
+                        xPrevious = rightHand.Position.X;
+                        yPrevious = rightHand.Position.Y;
+
+                        // reset the tracking timer
+                        trackingTimerCounter = 10;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -117,6 +174,12 @@ namespace Atomix
 
                         if (_skeletons.TrackedSkeleton != null)
                         {
+                            Joint rightHand = _skeletons.TrackedSkeleton.Joints[JointType.HandRight];
+                            Joint head = _skeletons.TrackedSkeleton.Joints[JointType.Head];
+                            Joint leftShoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderLeft];
+                            Joint rightShoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderRight];
+                            Joint rightHip = _skeletons.TrackedSkeleton.Joints[JointType.HipRight];
+
                             SkeletonPoint handPoint = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
                             int width = GraphicsDevice.Viewport.Bounds.Width;
                             int height = GraphicsDevice.Viewport.Bounds.Height;
@@ -126,9 +189,17 @@ namespace Atomix
                             double ratioX = (double)colorPt.X / chooser.Sensor.ColorStream.FrameWidth;
                             double ratioY = (double)colorPt.Y / chooser.Sensor.ColorStream.FrameHeight;
 
+                            //http://stackoverflow.com/questions/13313005/kinect-sdk-1-6-and-joint-scaleto-method
+                            double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * width;
+                            double yScaled = (rightHand.Position.Y - head.Position.Y) / (rightHip.Position.Y - head.Position.Y) * height;
+
                             cursorPosition = new Vector2();
-                            cursorPosition.X = (int) (width * ratioX);
-                            cursorPosition.Y = (int) (height * ratioY);
+                            cursorPosition.X = (int)xScaled; // (int)(width * ratioX);
+                            cursorPosition.Y = (int)yScaled; // (int)(height * ratioY);
+
+                            TrackHandMovement(_skeletons.TrackedSkeleton);
+                            cursorPosition.X = (int)RightHandX;
+                            cursorPosition.Y = (int)RightHandY;
                         }
                     }
                 }
@@ -181,14 +252,14 @@ namespace Atomix
                 spriteBatch.End();
             }
 
+            gameScreen.Draw(gameTime);
+
             if (cursorPosition != null)
             {
                 spriteBatch.Begin();
-                spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White,0, new Vector2(0,0), 0.25f, SpriteEffects.None, 0);
+                spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
                 spriteBatch.End();
             }
-
-            gameScreen.Draw(gameTime);
 
             base.Draw(gameTime);
         }

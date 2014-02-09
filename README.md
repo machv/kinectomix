@@ -1,9 +1,9 @@
-# Atomix for Kinect aka Kinectomix
+# Atomix for Kinect -- Kinectomix
 
 Tento projekt je vázán k diplomové práci Atomix pro Xbox Kinect zadané na Matematicko fyzikální fakultì Univerzity Karlovy.
 
 ### Zadání
-Cílem hry Atomix, jejíž první verze byla vyvinutá v roce 1990, je složení molekuly z množiny vstupních atomù v 2D hracím poli. V rámci diplomové práce by se mìl student seznámit s API pro ovládání Microsoft Kinect. Následnì by mìla být vyvinuta aplikace graficky simulující hru Atomix ovšem s možností jejího ovládání pomocí Microsoft Kinect.
+> Cílem hry Atomix, jejíž první verze byla vyvinutá v roce 1990, je složení molekuly z množiny vstupních atomù v 2D hracím poli. V rámci diplomové práce by se mìl student seznámit s API pro ovládání Microsoft Kinect. Následnì by mìla být vyvinuta aplikace graficky simulující hru Atomix ovšem s možností jejího ovládání pomocí Microsoft Kinect.
 
 ### Literatura k nastudování
 
