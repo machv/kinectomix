@@ -7,7 +7,7 @@ namespace AtomixData
 {
     public enum TileType
     {
-        [TileProperties(ShowInBoardEditor = true, ShowInMoleculeEditor = false, IsFixed = true)]
+        [TileProperties(ShowInBoardEditor = true, ShowInMoleculeEditor = true, IsFixed = true)]
         Empty,
         [TileProperties(ShowInBoardEditor = true, ShowInMoleculeEditor = false, IsFixed = true)]
         Wall,
