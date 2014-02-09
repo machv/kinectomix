@@ -25,7 +25,7 @@ namespace Atomix
             boardPosition = new Vector2(20, 60);
 
             CalculateBoardTilePositions(boardPosition, currentLevel.Board);
-            CalculateBoardTilePositions(new Vector2(600, 20), currentLevel.Molecule.Definition);
+            CalculateBoardTilePositions(new Vector2(600, 20), currentLevel.Molecule);
 
             gameStarted = DateTime.Now;
         }
