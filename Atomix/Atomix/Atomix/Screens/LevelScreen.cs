@@ -57,7 +57,7 @@ namespace Atomix
         Point destination;
         TileType atomToMove;
         TileType moveDirection;
-        float atomSpeed = 200f;
+        float atomSpeed = 400f;
 
         // Scoring
         int moves;
@@ -261,7 +261,7 @@ namespace Atomix
                 spriteBatch.Draw(idleTexture, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Bounds.Width, game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
                 spriteBatch.Draw(wallTexture, new Rectangle(0, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, game.GraphicsDevice.Viewport.Bounds.Width, 200), Color.Brown);
 
-                string name = "level done";
+                string name = "level completed";
                 Vector2 size = splashFont.MeasureString(name);
 
                 spriteBatch.DrawString(splashFont, name, new Vector2(game.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
