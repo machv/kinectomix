@@ -154,6 +154,9 @@ namespace Kinectomix.LevelGenerator
             }
 
             AvailableTiles = _boardTiles;
+
+            // DEBUG load level
+            Load(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
         }
 
         void Load(string path)
@@ -193,6 +196,14 @@ namespace Kinectomix.LevelGenerator
 
             if (dialog.ShowDialog(this) == true)
                 Load(dialog.FileName);
+        }
+
+        private void Tiles_TileSelected(object sender, TileSelectedEventArgs e)
+        {
+            if (activeTile == null)
+                return;
+
+            e.Tile.Type = activeTile.Type;
         }
 
         private void handler(object sender, RoutedEventArgs e)
