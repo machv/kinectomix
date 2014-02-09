@@ -59,6 +59,9 @@ namespace Atomix
                     try
                     {
                         sensor.SkeletonStream.Enable();
+                        sensor.DepthStream.Enable();
+                        sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+
                         sensor.Start();
 
                         Sensor = sensor;

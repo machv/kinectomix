@@ -88,6 +88,8 @@
     <Compile Include="AtomixGame.cs" />
     <Compile Include="Screens\LevelScreen.cs" />
     <Compile Include="Screens\StartScreen.cs" />
+    <Compile Include="SkeletonRenderer.cs" />
+    <Compile Include="Skeletons.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

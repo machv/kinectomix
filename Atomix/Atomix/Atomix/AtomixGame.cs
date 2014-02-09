@@ -24,6 +24,7 @@ namespace Atomix
         Level currentLevel;
         IGameScreen gameScreen;
         KinectChooser chooser;
+        SkeletonRenderer skeletonRenderer;
 
         public AtomixGame()
         {
@@ -34,8 +35,10 @@ namespace Atomix
             //graphics.IsFullScreen = true;
 
             chooser = new KinectChooser(this);
+            //skeletonRenderer = new SkeletonRenderer(this, chooser.Sensor);
 
             Components.Add(chooser);
+            //Components.Add(new Components.SkeletonRenderer(this, _kinect, _skeletons, SkeletonToColorMap));
 
             Content.RootDirectory = "Content";
         }
@@ -49,6 +52,8 @@ namespace Atomix
         protected override void Initialize()
         {
             this.IsMouseVisible = true;
+
+            
 
             base.Initialize();
         }
@@ -98,6 +103,8 @@ namespace Atomix
             base.Update(gameTime);
         }
 
+        Texture2D _colorVideo;
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -105,6 +112,38 @@ namespace Atomix
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            using (ColorImageFrame colorVideoFrame = chooser.Sensor.ColorStream.OpenNextFrame(500))
+            {
+                if (colorVideoFrame != null)
+                {
+                    // Create array for pixel data and copy it from the image frame
+                    Byte[] pixelData = new Byte[colorVideoFrame.PixelDataLength];
+                    colorVideoFrame.CopyPixelDataTo(pixelData);
+
+                    //Convert RGBA to BGRA
+                    Byte[] bgraPixelData = new Byte[colorVideoFrame.PixelDataLength];
+                    for (int i = 0; i < pixelData.Length; i += 4)
+                    {
+                        bgraPixelData[i] = pixelData[i + 2];
+                        bgraPixelData[i + 1] = pixelData[i + 1];
+                        bgraPixelData[i + 2] = pixelData[i];
+                        bgraPixelData[i + 3] = (Byte)255; //The video comes with 0 alpha so it is transparent
+                    }
+
+                    _colorVideo = new Texture2D(graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
+                    _colorVideo.SetData(bgraPixelData);
+                }
+            }
+
+            if (_colorVideo != null)
+            {
+                spriteBatch.Begin();
+                int scale = 2;
+                spriteBatch.Draw(_colorVideo, new Rectangle(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / scale, 640 / scale, 480 / scale), Color.White);
+                //spriteBatch.Draw(_colorVideo, new Vector2(500, 20), null, Color.White,0, new Vector2(0,0), 0.5f, SpriteEffects.None, 0);
+                spriteBatch.End();
+            }
 
             gameScreen.Draw(gameTime);
 
