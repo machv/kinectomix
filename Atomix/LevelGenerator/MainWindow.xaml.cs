@@ -25,25 +25,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Xml;
 
-namespace LevelGenerator
+namespace Kinectomix.LevelGenerator
 {
-    public static class EnumHelper
-    {
-        /// <summary>
-        /// Gets an attribute on an enum field value
-        /// </summary>
-        /// <typeparam name="T">The type of the attribute you want to retrieve</typeparam>
-        /// <param name="enumVal">The enum value</param>
-        /// <returns>The attribute of type T that exists on the enum value</returns>
-        public static T GetAttributeOfType<T>(this Enum enumVal) where T : System.Attribute
-        {
-            var type = enumVal.GetType();
-            var memInfo = type.GetMember(enumVal.ToString());
-            var attributes = memInfo[0].GetCustomAttributes(typeof(T), false);
-            return (attributes.Length > 0) ? (T)attributes[0] : null;
-        }
-    }
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -65,8 +48,33 @@ namespace LevelGenerator
 
         #endregion
 
-        public int Rows { get; set; }
-        public int Columns { get; set; }
+        protected int _rows;
+        public int Rows
+        {
+            get { return _rows; }
+            set
+            {
+                if (value > 0)
+                {
+                    _rows = value;
+                    OnPropertyChanged("Rows");
+                }
+            }
+        }
+
+        protected int _columns;
+        public int Columns
+        {
+            get { return _columns; }
+            set
+            {
+                if (value > 0)
+                {
+                    _columns = value;
+                    OnPropertyChanged("Columns");
+                }
+            }
+        }
 
         protected AtomixData.Level _level;
         public AtomixData.Level Level
@@ -76,6 +84,17 @@ namespace LevelGenerator
             {
                 _level = value;
                 OnPropertyChanged("Level");
+            }
+        }
+
+        protected AtomixData.BoardTileCollection _tiles;
+        public AtomixData.BoardTileCollection Tiles
+        {
+            get { return _tiles; }
+            set
+            {
+                _tiles = value;
+                OnPropertyChanged("Tiles");
             }
         }
 
@@ -142,8 +161,10 @@ namespace LevelGenerator
                     }
                 }
 
-                Rows = Level.Board.RowsCount;
-                Columns = Level.Board.ColumnsCount;
+                Rows = _level.Board.RowsCount;
+                Columns = _level.Board.ColumnsCount;
+                //TODO nastavit záložku na první
+                Tiles = _level.Board;
             }
             catch
             {
@@ -229,20 +250,124 @@ namespace LevelGenerator
             TabControl tabs = sender as TabControl;
             TabItem item = tabs.SelectedItem as TabItem;
             string tag = item.Tag as string;
-            
-            if (tag == "Board")
-                AvailableTiles = _boardTiles;
-            
-            if (tag == "Molecule")
-                AvailableTiles = _moleculeTiles;
-        }
-    }
 
-    public class DummyServiceProvider : IServiceProvider
-    {
-        public object GetService(Type serviceType)
+            if (tag == "Board")
+            {
+                if (Level != null)
+                {
+                    Rows = _level.Board.RowsCount;
+                    Columns = _level.Board.ColumnsCount;
+                    Tiles = _level.Board;
+                }
+                
+                AvailableTiles = _boardTiles;
+            }
+
+            if (tag == "Molecule")
+            {
+                if (Level != null)
+                {
+                    Rows = _level.Molecule.RowsCount;
+                    Columns = _level.Molecule.ColumnsCount;
+                    Tiles = _level.Molecule;
+                }
+   
+                AvailableTiles = _moleculeTiles;
+            }
+        }
+
+        Point startPoint;
+        private void List_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            // Store the mouse position
+            startPoint = e.GetPosition(null);
+        }
+
+        private void List_MouseMove(object sender, MouseEventArgs e)
+        {
+            // Get the current mouse position
+            Point mousePos = e.GetPosition(null);
+            Vector diff = startPoint - mousePos;
+
+            if (e.LeftButton == MouseButtonState.Pressed &&
+                (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
+                Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+            {
+                // Get the dragged ListViewItem
+                ListBox listBox = sender as ListBox;
+                //BoardTile tile = listBox.SelectedItem as BoardTile;
+                ListBoxItem listBoxItem =
+                    FindAnchestor<ListBoxItem>((DependencyObject)e.OriginalSource);
+
+                if (listBoxItem == null)
+                    return;
+
+                // Find the data behind the ListViewItem
+                BoardTile tile = (BoardTile)listBox.ItemContainerGenerator.
+                    ItemFromContainer(listBoxItem);
+
+                // Initialize the drag & drop operation
+                DataObject dragData = new DataObject("myFormat", tile);
+                DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
+            }
+        }
+
+        // Helper to search up the VisualTree
+        private static T FindAnchestor<T>(DependencyObject current)
+            where T : DependencyObject
+        {
+            do
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
             return null;
+        }
+
+        private void DropList_DragEnter(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent("myFormat") ||
+                sender == e.Source)
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void DropList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("myFormat"))
+            {
+                BoardTile tile = e.Data.GetData("myFormat") as BoardTile;
+                //ListView listView = sender as ListView;
+                //listView.Items.Add(contact);
+            }
+        }
+
+        private void Button_Resize(object sender, RoutedEventArgs e)
+        {
+            BoardTileCollection newTiles = new BoardTileCollection(_rows, _columns);
+            for (int i = 0; i < newTiles.RowsCount; i++)
+            {
+                for (int j = 0; j < newTiles.ColumnsCount; j++)
+                {
+                    newTiles[i, j] = new BoardTile() { Type = TileType.Empty, IsFixed = true };
+                }
+            }
+
+
+            for (int i = 0; i < Math.Min(newTiles.RowsCount, _tiles.RowsCount); i++)
+            {
+                for (int j = 0; j < Math.Min(newTiles.ColumnsCount, _tiles.ColumnsCount); j++)
+                {
+                    newTiles[i, j] = _tiles[i, j];
+                }
+            }
+
+            Tiles = newTiles;
         }
     }
 }
