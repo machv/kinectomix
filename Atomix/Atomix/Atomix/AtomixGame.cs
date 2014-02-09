@@ -25,6 +25,7 @@ namespace Atomix
         IGameScreen gameScreen;
         KinectChooser chooser;
         SkeletonRenderer skeletonRenderer;
+        Skeletons _skeletons = new Skeletons();
 
         public AtomixGame()
         {
@@ -33,12 +34,6 @@ namespace Atomix
             graphics.PreferredBackBufferHeight = 720;
 
             //graphics.IsFullScreen = true;
-
-            chooser = new KinectChooser(this);
-            //skeletonRenderer = new SkeletonRenderer(this, chooser.Sensor);
-
-            Components.Add(chooser);
-            //Components.Add(new Components.SkeletonRenderer(this, _kinect, _skeletons, SkeletonToColorMap));
 
             Content.RootDirectory = "Content";
         }
@@ -53,7 +48,11 @@ namespace Atomix
         {
             this.IsMouseVisible = true;
 
-            
+            chooser = new KinectChooser(this);
+            skeletonRenderer = new SkeletonRenderer(this, chooser.Sensor, _skeletons, new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2));
+
+            Components.Add(chooser);
+            Components.Add(skeletonRenderer);            
 
             base.Initialize();
         }
@@ -100,7 +99,21 @@ namespace Atomix
 
             if (chooser.Sensor != null)
             {
-                using (ColorImageFrame colorVideoFrame = chooser.Sensor.ColorStream.OpenNextFrame(500))
+                using (SkeletonFrame skeletonFrame = chooser.Sensor.SkeletonStream.OpenNextFrame(0))
+                {
+                    if (skeletonFrame != null)
+                    {
+                        Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+
+                        //Copy the skeleton data to our array
+                        skeletonFrame.CopySkeletonDataTo(skeletonData);
+
+                        _skeletons.Items = skeletonData;
+                        _skeletons.TrackedSkeleton = _skeletons.Items.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
+                    }
+                }
+
+                using (ColorImageFrame colorVideoFrame = chooser.Sensor.ColorStream.OpenNextFrame(0))
                 {
                     if (colorVideoFrame != null)
                     {

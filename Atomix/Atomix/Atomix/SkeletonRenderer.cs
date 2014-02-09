@@ -12,14 +12,16 @@ namespace Atomix
     {
         private KinectSensor _kinect;
         private Skeletons _skeletons;
+        Vector2 _offset;
 
-        public SkeletonRenderer(Game game, Microsoft.Kinect.KinectSensor sensor, Skeletons skeletons, SkeletonPointMap map)
+        public SkeletonRenderer(Game game, Microsoft.Kinect.KinectSensor sensor, Skeletons skeletons, Vector2 offset)
             : base(game)
         {
             _kinect = sensor;
             _skeletons = skeletons;
 
-            mapMethod = map;
+            _mapMethod = SkeletonToColorMap;
+            _offset = offset;
         }
 
         /// <summary>
@@ -42,7 +44,7 @@ namespace Atomix
             this.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
         }
 
-        private void DrawSkeleton(Vector2 resolution)
+        private void DrawSkeleton(Vector2 resolutions)
         {
             Skeleton skeleton = _skeletons.TrackedSkeleton;
 
@@ -87,7 +89,7 @@ namespace Atomix
 
                     spriteBatch.Draw(
                         this.jointTexture,
-                        this.mapMethod(j.Position),
+                        this._mapMethod(j.Position) + _offset,
                         null,
                         jointColor,
                         0.0f,
@@ -130,12 +132,12 @@ namespace Atomix
         /// This is the map method called when mapping from
         /// skeleton space to the target space.
         /// </summary>
-        private readonly SkeletonPointMap mapMethod;
+        private readonly SkeletonPointMap _mapMethod;
 
         private void DrawBone(JointCollection joints, JointType startJoint, JointType endJoint)
         {
-            Vector2 start = this.mapMethod(joints[startJoint].Position);
-            Vector2 end = this.mapMethod(joints[endJoint].Position);
+            Vector2 start = this._mapMethod(joints[startJoint].Position);
+            Vector2 end = this._mapMethod(joints[endJoint].Position);
             Vector2 diff = end - start;
             Vector2 scale = new Vector2(1.0f, diff.Length() / this.boneTexture.Height);
 
@@ -148,7 +150,7 @@ namespace Atomix
                 color = Color.Gray;
             }
 
-            spriteBatch.Draw(this.boneTexture, start, null, color, angle, this.boneOrigin, scale, SpriteEffects.None, 1.0f);
+            spriteBatch.Draw(this.boneTexture, start + _offset, null, color, angle, this.boneOrigin, scale, SpriteEffects.None, 1.0f);
         }
 
         /// <summary>
@@ -162,7 +164,7 @@ namespace Atomix
             {
                 // This is used to map a skeleton point to the color image location
                 var colorPt = _kinect.CoordinateMapper.MapSkeletonPointToColorPoint(point, _kinect.ColorStream.Format);
-                return new Vector2(colorPt.X, colorPt.Y);
+                return new Vector2(colorPt.X/2, colorPt.Y/2);
             }
 
             return Vector2.Zero;
@@ -246,10 +248,10 @@ namespace Atomix
         {
             base.LoadContent();
 
-            this.jointTexture = Game.Content.Load<Texture2D>("Joint");
+            this.jointTexture = Game.Content.Load<Texture2D>("Images/Joint");
             this.jointOrigin = new Vector2(this.jointTexture.Width / 2, this.jointTexture.Height / 2);
 
-            this.boneTexture = Game.Content.Load<Texture2D>("Bone");
+            this.boneTexture = Game.Content.Load<Texture2D>("Images/Bone");
             this.boneOrigin = new Vector2(0.5f, 0.0f);
         }
 
