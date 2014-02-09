@@ -135,7 +135,7 @@ namespace Atomix
                     atomPosition.X += direction * atomSpeed * elapsed;
                 }
 
-                Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, TileWidth / 8, TileHeight / 8);
+                Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, TileWidth / 4, TileHeight / 4);
                 if (tile.Contains((int)atomPosition.X, (int)atomPosition.Y))
                 {
                     isMovementAnimation = false;

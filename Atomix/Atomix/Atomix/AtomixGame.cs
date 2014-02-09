@@ -98,6 +98,32 @@ namespace Atomix
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            if (chooser.Sensor != null)
+            {
+                using (ColorImageFrame colorVideoFrame = chooser.Sensor.ColorStream.OpenNextFrame(500))
+                {
+                    if (colorVideoFrame != null)
+                    {
+                        // Create array for pixel data and copy it from the image frame
+                        Byte[] pixelData = new Byte[colorVideoFrame.PixelDataLength];
+                        colorVideoFrame.CopyPixelDataTo(pixelData);
+
+                        //Convert RGBA to BGRA
+                        Byte[] bgraPixelData = new Byte[colorVideoFrame.PixelDataLength];
+                        for (int i = 0; i < pixelData.Length; i += 4)
+                        {
+                            bgraPixelData[i] = pixelData[i + 2];
+                            bgraPixelData[i + 1] = pixelData[i + 1];
+                            bgraPixelData[i + 2] = pixelData[i];
+                            bgraPixelData[i + 3] = (Byte)255; //The video comes with 0 alpha so it is transparent
+                        }
+
+                        _colorVideo = new Texture2D(graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
+                        _colorVideo.SetData(bgraPixelData);
+                    }
+                }
+            }
+
             gameScreen.Update(gameTime);
 
             base.Update(gameTime);
@@ -112,29 +138,6 @@ namespace Atomix
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            using (ColorImageFrame colorVideoFrame = chooser.Sensor.ColorStream.OpenNextFrame(500))
-            {
-                if (colorVideoFrame != null)
-                {
-                    // Create array for pixel data and copy it from the image frame
-                    Byte[] pixelData = new Byte[colorVideoFrame.PixelDataLength];
-                    colorVideoFrame.CopyPixelDataTo(pixelData);
-
-                    //Convert RGBA to BGRA
-                    Byte[] bgraPixelData = new Byte[colorVideoFrame.PixelDataLength];
-                    for (int i = 0; i < pixelData.Length; i += 4)
-                    {
-                        bgraPixelData[i] = pixelData[i + 2];
-                        bgraPixelData[i + 1] = pixelData[i + 1];
-                        bgraPixelData[i + 2] = pixelData[i];
-                        bgraPixelData[i + 3] = (Byte)255; //The video comes with 0 alpha so it is transparent
-                    }
-
-                    _colorVideo = new Texture2D(graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
-                    _colorVideo.SetData(bgraPixelData);
-                }
-            }
 
             if (_colorVideo != null)
             {
