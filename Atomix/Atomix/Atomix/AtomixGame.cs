@@ -26,6 +26,7 @@ namespace Atomix
         KinectChooser chooser;
         SkeletonRenderer skeletonRenderer;
         Skeletons _skeletons = new Skeletons();
+        Texture2D _handTexture;
 
         public AtomixGame()
         {
@@ -67,6 +68,7 @@ namespace Atomix
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            _handTexture = Content.Load<Texture2D>("Images/Hand");
 
             // Load level
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
@@ -85,6 +87,8 @@ namespace Atomix
         {
             gameScreen.UnloadContent();
         }
+
+        Vector2 cursorPosition;
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -110,6 +114,22 @@ namespace Atomix
 
                         _skeletons.Items = skeletonData;
                         _skeletons.TrackedSkeleton = _skeletons.Items.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
+
+                        if (_skeletons.TrackedSkeleton != null)
+                        {
+                            SkeletonPoint handPoint = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
+                            int width = GraphicsDevice.Viewport.Bounds.Width;
+                            int height = GraphicsDevice.Viewport.Bounds.Height;
+
+                            var colorPt = chooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, chooser.Sensor.ColorStream.Format);
+
+                            double ratioX = (double)colorPt.X / chooser.Sensor.ColorStream.FrameWidth;
+                            double ratioY = (double)colorPt.Y / chooser.Sensor.ColorStream.FrameHeight;
+
+                            cursorPosition = new Vector2();
+                            cursorPosition.X = (int) (width * ratioX);
+                            cursorPosition.Y = (int) (height * ratioY);
+                        }
                     }
                 }
 
@@ -158,6 +178,13 @@ namespace Atomix
                 int scale = 2;
                 spriteBatch.Draw(_colorVideo, new Rectangle(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / scale, 640 / scale, 480 / scale), Color.White);
                 //spriteBatch.Draw(_colorVideo, new Vector2(500, 20), null, Color.White,0, new Vector2(0,0), 0.5f, SpriteEffects.None, 0);
+                spriteBatch.End();
+            }
+
+            if (cursorPosition != null)
+            {
+                spriteBatch.Begin();
+                spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White,0, new Vector2(0,0), 0.25f, SpriteEffects.None, 0);
                 spriteBatch.End();
             }
 
