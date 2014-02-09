@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using AtomixData;
 using System.Xml;
+using Microsoft.Kinect;
 
 namespace Atomix
 {
@@ -22,6 +23,7 @@ namespace Atomix
         SpriteBatch spriteBatch;
         Level currentLevel;
         IGameScreen gameScreen;
+        KinectChooser chooser;
 
         public AtomixGame()
         {
@@ -30,6 +32,10 @@ namespace Atomix
             graphics.PreferredBackBufferHeight = 720;
 
             //graphics.IsFullScreen = true;
+
+            chooser = new KinectChooser(this);
+
+            Components.Add(chooser);
 
             Content.RootDirectory = "Content";
         }
