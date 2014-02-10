@@ -139,9 +139,6 @@ namespace Atomix
 
                         xPrevious = rightHand.Position.X;
                         yPrevious = rightHand.Position.Y;
-
-                        // reset the tracking timer
-                        trackingTimerCounter = 10;
                     }
                 }
             }
