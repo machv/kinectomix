@@ -93,7 +93,6 @@ namespace Atomix
         float xPrevious;
         float yPrevious;
         int MoveThreshold = 0;
-        int trackingTimerCounter;
 
         double RightHandX;
         double RightHandY;
@@ -388,6 +387,15 @@ namespace Atomix
                 spriteBatch.Begin();
                 spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
                 spriteBatch.End();
+            }
+
+            if (_textToRender != null)
+            {
+                // Find the center of the string
+                //Vector2 FontOrigin = _font1.MeasureString(_textToRender) / 2;
+                // Draw the string
+                //_spriteBatch.DrawString(_font1, _textToRender, _fontPos, Color.Red,
+                //    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
             base.Draw(gameTime);
