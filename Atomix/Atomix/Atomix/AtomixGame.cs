@@ -144,6 +144,21 @@ namespace Atomix
             }
         }
 
+        // Hand tracking variables
+        Vector2 lastHandPosition = new Vector2(0, 0);
+        double lastHandTime;
+
+        DepthImagePoint _handDepthPoint;
+        int[] _histogram;
+        int _handRadius;
+
+        DepthImagePoint _handRectPoint;
+        Rectangle _handRect;
+        string _textToRender;
+        short[] lastDepthFrameData = null;
+        // / Hand trackign variables
+
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -223,7 +238,124 @@ namespace Atomix
                         _colorVideo.SetData(bgraPixelData);
                     }
                 }
+
+                using (DepthImageFrame depthFrame = chooser.Sensor.DepthStream.OpenNextFrame(0))
+                {
+                    if (depthFrame != null)
+                    {
+                        // Create array for pixel data and copy it from the image frame
+                        short[] pixelData = new short[depthFrame.PixelDataLength];
+                        depthFrame.CopyPixelDataTo(pixelData);
+
+                        //_colorVideo = new Texture2D(_graphics.GraphicsDevice, depthFrame.Width, depthFrame.Height);
+                        //_colorVideo.SetData(ConvertDepthFrame(pixelData, depthFrame));
+
+                        lastDepthFrameData = pixelData;
+                    }
+                }
             }
+
+            // Hand tracking START
+
+            // check for hand
+            if (cursorPosition != Vector2.Zero)
+            {
+                Vector2 handPosition = cursorPosition; // SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
+
+                if (Vector2.Distance(handPosition, lastHandPosition) > 5)
+                {
+                    lastHandTime = 0;
+                }
+                else
+                {
+                    lastHandTime += gameTime.ElapsedGameTime.TotalSeconds;
+                }
+
+                lastHandPosition = handPosition;
+
+                _handDepthPoint = chooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position, DepthImageFormat.Resolution640x480Fps30);
+                var wristDepthPoint = chooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position, DepthImageFormat.Resolution640x480Fps30);
+
+                SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
+                SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position;
+                Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
+                Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
+
+                // podivame se, v jake vzdalenosti bod je
+                int stride = 640;
+                int index = _handDepthPoint.Y * stride + _handDepthPoint.X;
+                short[] frameData = lastDepthFrameData;
+                int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
+                int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
+                if (realDepth > 0)
+                {
+                    float radius = 35000 / realDepth;
+
+
+                    _handRadius = (int)(radius * 1.5);
+                    if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
+                    {
+                        _handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
+
+
+
+                        // transform 13-bit depth information into an 8-bit intensity appropriate
+                        // for display (we disregard information in most significant bit)
+                        //                byte intensity = (byte)(~(realDepth >> 4));
+
+                        _histogram = new int[256];
+
+                        for (int y = _handRect.Top; y < _handRect.Bottom; y++)
+                        {
+                            for (int x = _handRect.Left; x < _handRect.Right; x++)
+                            {
+                                int i = y * stride + x;
+                                if (i < frameData.Length && i >= 0)
+                                {
+                                    int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
+                                    if (playerIndex > 0)
+                                    {
+                                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                                        // transform 13-bit depth information into an 8-bit intensity appropriate
+                                        // for display (we disregard information in most significant bit)
+                                        byte intensity = (byte)(~(realPixelDepth >> 4));
+
+                                        _histogram[intensity]++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    int max = 0;
+                    for (int i = 0; i < _histogram.Length; i++)
+                    {
+                        max = Math.Max(max, _histogram[i]);
+                    }
+
+                    if (max > (_handRect.Width * _handRect.Height) / 3)
+                    {
+                        _textToRender = "Open!";
+                    }
+                    else
+                    {
+                        _textToRender = "Closed";
+                    }
+
+                    _textToRender += string.Format(" [{0:P2}]", (double)max / (_handRect.Width * _handRect.Height));
+                }
+
+                double depth = Math.Round(realDepth / 10f, 2);
+
+                //_textToRender = "Player's " + player + " hand at [" + _handDepthPoint.X + "x" + _handDepthPoint.Y + "] in depth " + depth + " cm, radius " + radius + ".";
+            }
+
+            // Hand trackign stop
+
+
 
             gameScreen.Update(gameTime);
 
