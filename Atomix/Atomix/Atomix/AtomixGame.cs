@@ -261,7 +261,7 @@ namespace Atomix
             // Hand tracking START
 
             // check for hand
-            if (cursorPosition != Vector2.Zero)
+            if (cursorPosition != Vector2.Zero && _skeletons.TrackedSkeleton != null)
             {
                 Vector2 handPosition = cursorPosition; // SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
 
@@ -288,7 +288,7 @@ namespace Atomix
                 short[] frameData = lastDepthFrameData;
                 int stride = 640;
                 int index = (_handDepthPoint.Y > stride ? stride : _handDepthPoint.Y) * stride + _handDepthPoint.X;
-                if (index > frameData.Length) index = frameData.Length;
+                if (index > frameData.Length) index = frameData.Length - 1;
 
                 int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                 int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
@@ -303,8 +303,6 @@ namespace Atomix
                     if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
                     {
                         _handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
-
-
 
                         // transform 13-bit depth information into an 8-bit intensity appropriate
                         // for display (we disregard information in most significant bit)
@@ -403,6 +401,14 @@ namespace Atomix
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, _textToRender, new Vector2(500,20), Color.Red,
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+                spriteBatch.End();
+            }
+
+            if (_handRect != null)
+            {
+                spriteBatch.Begin();
+                Texture2D SimpleTexture = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+                spriteBatch.Draw(SimpleTexture, _handRect, Color.Red);
                 spriteBatch.End();
             }
 
