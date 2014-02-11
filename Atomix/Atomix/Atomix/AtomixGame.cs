@@ -27,6 +27,7 @@ namespace Atomix
         SkeletonRenderer skeletonRenderer;
         Skeletons _skeletons = new Skeletons();
         Texture2D _handTexture;
+        SpriteFont font;
 
         public AtomixGame()
         {
@@ -69,6 +70,7 @@ namespace Atomix
 
             // TODO: use this.Content to load your game content here
             _handTexture = Content.Load<Texture2D>("Images/Hand");
+            font = Content.Load<SpriteFont>("Fonts/Normal");
 
             // Load level
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
@@ -118,8 +120,10 @@ namespace Atomix
             // the right hand joint is being tracked
             if (rightHand.TrackingState == JointTrackingState.Tracked)
             {
+                _textToRender = rightShoulder.Position.Z - rightHand.Position.Z + " m"; 
+
                 // the hand is sufficiently in front of the shoulder
-                if (rightShoulder.Position.Z - rightHand.Position.Z > 0.4)
+                if (rightShoulder.Position.Z - rightHand.Position.Z > 0.2)
                 {
                     double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
                     double yScaled = (rightHand.Position.Y - rightShoulder.Position.Y) / (rightHip.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
@@ -281,9 +285,11 @@ namespace Atomix
                 Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
 
                 // podivame se, v jake vzdalenosti bod je
-                int stride = 480;
-                int index = _handDepthPoint.Y * stride + _handDepthPoint.X;
                 short[] frameData = lastDepthFrameData;
+                int stride = 640;
+                int index = (_handDepthPoint.Y > stride ? stride : _handDepthPoint.Y) * stride + _handDepthPoint.X;
+                if (index > frameData.Length) index = frameData.Length;
+
                 int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                 int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
@@ -392,10 +398,12 @@ namespace Atomix
             if (_textToRender != null)
             {
                 // Find the center of the string
-                //Vector2 FontOrigin = _font1.MeasureString(_textToRender) / 2;
+                Vector2 FontOrigin = font.MeasureString(_textToRender) / 2;
                 // Draw the string
-                //_spriteBatch.DrawString(_font1, _textToRender, _fontPos, Color.Red,
-                //    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+                spriteBatch.Begin();
+                spriteBatch.DrawString(font, _textToRender, new Vector2(500,20), Color.Red,
+                    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+                spriteBatch.End();
             }
 
             base.Draw(gameTime);
