@@ -281,7 +281,7 @@ namespace Atomix
                 Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
 
                 // podivame se, v jake vzdalenosti bod je
-                int stride = 640;
+                int stride = 480;
                 int index = _handDepthPoint.Y * stride + _handDepthPoint.X;
                 short[] frameData = lastDepthFrameData;
                 int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
