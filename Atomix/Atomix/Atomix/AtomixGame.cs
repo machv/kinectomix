@@ -418,6 +418,7 @@ namespace Atomix
             base.Draw(gameTime);
         }
 
+        // credits http://stackoverflow.com/questions/13893959/how-to-draw-the-border-of-a-square
         Texture2D _pointTexture;
         private void DrawBoudingBox(Rectangle rectangle, Color color, int lineWidth)
         {
