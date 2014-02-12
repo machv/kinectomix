@@ -406,17 +406,31 @@ namespace Atomix
                 spriteBatch.End();
             }
 
-            _handRect = new Rectangle(10, 10, 40, 40);
-
             if (_handRect != null)
             {
                 spriteBatch.Begin();
-                Texture2D SimpleTexture = CreateColorTexture(Color.Red);
-                spriteBatch.Draw(SimpleTexture, _handRect, Color.Red * 0.5f);
+                DrawBoudingBox(_handRect, Color.Red, 1);
+                //Texture2D SimpleTexture = CreateColorTexture(Color.Red);
+                //spriteBatch.Draw(SimpleTexture, _handRect, Color.Red * 0.5f);
                 spriteBatch.End();
             }
 
             base.Draw(gameTime);
+        }
+
+        Texture2D _pointTexture;
+        private void DrawBoudingBox(Rectangle rectangle, Color color, int lineWidth)
+        {
+            if (_pointTexture == null)
+            {
+                _pointTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+                _pointTexture.SetData<Color>(new Color[] { Color.White });
+            }
+
+            spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
+            spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width + lineWidth, lineWidth), color);
+            spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
+            spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X, rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth), color);
         }
 
         private Texture2D CreateColorTexture(Color color, int width = 1, int height = 1)
