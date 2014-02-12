@@ -285,6 +285,8 @@ namespace Atomix
                 Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
 
                 // podivame se, v jake vzdalenosti bod je
+                // i kdyz prevadime body ze skeletonu do depth space, tak to vraci body i mimo ten obrazek, proto 
+                // je nutne takhle osetrit okrajove podminky pri cteni surovych dat
                 short[] frameData = lastDepthFrameData;
                 int stride = 640;
                 int index = (_handDepthPoint.Y > stride ? stride : _handDepthPoint.Y) * stride + _handDepthPoint.X;
