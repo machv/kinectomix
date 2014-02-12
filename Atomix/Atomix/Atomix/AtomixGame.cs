@@ -343,11 +343,11 @@ namespace Atomix
 
                     if (max > (_handRect.Width * _handRect.Height) / 3)
                     {
-                        _textToRender = "Open!";
+                        _textToRender += "Open!";
                     }
                     else
                     {
-                        _textToRender = "Closed";
+                        _textToRender += "Closed";
                     }
 
                     _textToRender += string.Format(" [{0:P2}]", (double)max / (_handRect.Width * _handRect.Height));
