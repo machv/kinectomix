@@ -406,15 +406,34 @@ namespace Atomix
                 spriteBatch.End();
             }
 
+            _handRect = new Rectangle(10, 10, 40, 40);
+
             if (_handRect != null)
             {
                 spriteBatch.Begin();
-                Texture2D SimpleTexture = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-                spriteBatch.Draw(SimpleTexture, _handRect, Color.Red);
+                Texture2D SimpleTexture = CreateColorTexture(Color.Red);
+                spriteBatch.Draw(SimpleTexture, _handRect, Color.Red * 0.5f);
                 spriteBatch.End();
             }
 
             base.Draw(gameTime);
+        }
+
+        private Texture2D CreateColorTexture(Color color, int width = 1, int height = 1)
+        {
+            Texture2D texture = new Texture2D(GraphicsDevice, width, height, false, SurfaceFormat.Color);
+
+            // Create a color array for the pixels
+            Color[] colors = new Color[width * height];
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colors[i] = new Color(color.ToVector3());
+            }
+
+            // Set the color data for the texture
+            texture.SetData(colors);
+
+            return texture;
         }
 
         public void ChangeScreen(IGameScreen screen)
