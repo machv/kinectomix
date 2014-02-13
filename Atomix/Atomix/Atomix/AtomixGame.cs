@@ -53,8 +53,8 @@ namespace Atomix
             Vector2 offset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2);
 
             chooser = new KinectChooser(this);
-            skeletonRenderer = new SkeletonRenderer(this, chooser.Sensor, _skeletons, offset);
-            var videoStream = new VideoStreamComponent(this, chooser.Sensor, graphics, offset);
+            skeletonRenderer = new SkeletonRenderer(this, chooser, _skeletons, offset);
+            var videoStream = new VideoStreamComponent(this, chooser, graphics, offset);
 
             Components.Add(chooser);
             Components.Add(skeletonRenderer);

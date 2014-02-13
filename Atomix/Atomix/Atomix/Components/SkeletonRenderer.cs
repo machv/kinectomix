@@ -10,14 +10,14 @@ namespace Atomix
 {
     public class SkeletonRenderer : DrawableGameComponent
     {
-        private KinectSensor _kinect;
+        private KinectChooser _chooser;
         private Skeletons _skeletons;
         Vector2 _offset;
 
-        public SkeletonRenderer(Game game, Microsoft.Kinect.KinectSensor sensor, Skeletons skeletons, Vector2 offset)
+        public SkeletonRenderer(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset)
             : base(game)
         {
-            _kinect = sensor;
+            _chooser = chooser;
             _skeletons = skeletons;
 
             _mapMethod = SkeletonToColorMap;
@@ -160,10 +160,10 @@ namespace Atomix
         /// <returns>A Vector2 of the location on the color frame.</returns>
         private Vector2 SkeletonToColorMap(SkeletonPoint point)
         {
-            if ((null != _kinect) && (null != _kinect.ColorStream))
+            if ((null != _chooser) && (null != _chooser.Sensor.ColorStream))
             {
                 // This is used to map a skeleton point to the color image location
-                var colorPt = _kinect.CoordinateMapper.MapSkeletonPointToColorPoint(point, _kinect.ColorStream.Format);
+                var colorPt = _chooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(point, _chooser.Sensor.ColorStream.Format);
                 return new Vector2(colorPt.X/2, colorPt.Y/2);
             }
 
