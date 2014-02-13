@@ -57,8 +57,8 @@ namespace Atomix
             var videoStream = new VideoStreamComponent(this, chooser, graphics, offset);
 
             Components.Add(chooser);
-            Components.Add(skeletonRenderer);
             Components.Add(videoStream);
+            Components.Add(skeletonRenderer);
 
             base.Initialize();
         }
