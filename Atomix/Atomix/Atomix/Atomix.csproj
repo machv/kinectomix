@@ -80,6 +80,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\VideoStreamComponent.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="KinectChooser.cs" />
     <Compile Include="Screens\IGameScreen.cs" />

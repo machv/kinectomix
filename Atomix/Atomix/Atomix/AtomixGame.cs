@@ -50,11 +50,15 @@ namespace Atomix
         {
             this.IsMouseVisible = true;
 
+            Vector2 offset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2);
+
             chooser = new KinectChooser(this);
-            skeletonRenderer = new SkeletonRenderer(this, chooser.Sensor, _skeletons, new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2));
+            skeletonRenderer = new SkeletonRenderer(this, chooser.Sensor, _skeletons, offset);
+            var videoStream = new VideoStreamComponent(this, chooser.Sensor, graphics, offset);
 
             Components.Add(chooser);
             Components.Add(skeletonRenderer);
+            Components.Add(videoStream);
 
             base.Initialize();
         }
@@ -219,29 +223,6 @@ namespace Atomix
                     }
                 }
 
-                using (ColorImageFrame colorVideoFrame = chooser.Sensor.ColorStream.OpenNextFrame(0))
-                {
-                    if (colorVideoFrame != null)
-                    {
-                        // Create array for pixel data and copy it from the image frame
-                        Byte[] pixelData = new Byte[colorVideoFrame.PixelDataLength];
-                        colorVideoFrame.CopyPixelDataTo(pixelData);
-
-                        //Convert RGBA to BGRA
-                        Byte[] bgraPixelData = new Byte[colorVideoFrame.PixelDataLength];
-                        for (int i = 0; i < pixelData.Length; i += 4)
-                        {
-                            bgraPixelData[i] = pixelData[i + 2];
-                            bgraPixelData[i + 1] = pixelData[i + 1];
-                            bgraPixelData[i + 2] = pixelData[i];
-                            bgraPixelData[i + 3] = (Byte)255; //The video comes with 0 alpha so it is transparent
-                        }
-
-                        _colorVideo = new Texture2D(graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
-                        _colorVideo.SetData(bgraPixelData);
-                    }
-                }
-
                 using (DepthImageFrame depthFrame = chooser.Sensor.DepthStream.OpenNextFrame(0))
                 {
                     if (depthFrame != null)
@@ -367,8 +348,6 @@ namespace Atomix
             base.Update(gameTime);
         }
 
-        Texture2D _colorVideo;
-
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -376,15 +355,6 @@ namespace Atomix
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            if (_colorVideo != null)
-            {
-                spriteBatch.Begin();
-                int scale = 2;
-                spriteBatch.Draw(_colorVideo, new Rectangle(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / scale, 640 / scale, 480 / scale), Color.White);
-                //spriteBatch.Draw(_colorVideo, new Vector2(500, 20), null, Color.White,0, new Vector2(0,0), 0.5f, SpriteEffects.None, 0);
-                spriteBatch.End();
-            }
 
             gameScreen.Draw(gameTime);
 
