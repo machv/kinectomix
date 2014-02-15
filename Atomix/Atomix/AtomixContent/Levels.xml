@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="AtomixData.LevelDefinition[]">
+    <Item>
+      <Name>Level 1</Name>
+      <FileName>Level1.xml</FileName>
+      <LevelType>Serialized</LevelType>
+      <IsFinished>false</IsFinished>
+      <Finished>0001-01-01T00:00:00</Finished>
+    </Item>
+    <Item>
+      <Name>Level 2</Name>
+      <FileName>Level2.xml</FileName>
+      <LevelType>Serialized</LevelType>
+      <IsFinished>false</IsFinished>
+      <Finished>0001-01-01T00:00:00</Finished>
+    </Item>
+    <Item>
+      <Name>Level 4</Name>
+      <FileName>Level4.xnb</FileName>
+      <LevelType>Compiled</LevelType>
+      <IsFinished>false</IsFinished>
+      <Finished>0001-01-01T00:00:00</Finished>
+    </Item>
+  </Asset>
+</XnaContent>

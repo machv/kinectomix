@@ -141,8 +141,16 @@ namespace SimpleLevelGenerator
       });
             }
 
-            //IntermediateSerializer.Deserialize
+            LevelDefinition[] levels = new LevelDefinition[3];
 
+            levels[0] = new LevelDefinition() { FileName = "Level1.xml", Name = "Level 1", LevelType = LevelDefinition.Type.Serialized };
+            levels[1] = new LevelDefinition() { FileName = "Level2.xml", Name = "Level 2", LevelType = LevelDefinition.Type.Serialized };
+            levels[2] = new LevelDefinition() { FileName = "Level4.xnb", Name = "Level 4", LevelType = LevelDefinition.Type.Compiled };
+
+            using (XmlWriter writer = XmlWriter.Create("../../../Atomix/AtomixContent/Levels.xml", settings))
+            {
+                IntermediateSerializer.Serialize(writer, levels, null);
+            }
         }
     }
 }
