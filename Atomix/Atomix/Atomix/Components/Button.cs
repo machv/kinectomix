@@ -49,8 +49,8 @@ namespace Atomix
             Foreground = Color.White;
             BorderColor = Color.Black;
             BorderThickness = 2;
-            Width = 132;
-            Height = 64;
+            Width = 160;
+            Height = 70;
             _spriteBatch = spriteBatch;
         }
 
