@@ -168,7 +168,5 @@ namespace Atomix
                 this.Sensor.Stop();
             }
         }
-
-
     }
 }

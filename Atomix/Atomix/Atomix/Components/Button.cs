@@ -44,11 +44,12 @@ namespace Atomix
 
         public Button(SpriteBatch spriteBatch)
         {
-            Background = Color.Black;
+            Background = Color.Gray;
             Foreground = Color.White;
-            BorderThickness = 1;
-            Width = 100;
-            Height = 50;
+            BorderColor = Color.Black;
+            BorderThickness = 2;
+            Width = 132;
+            Height = 64;
             _spriteBatch = spriteBatch;
         }
 
