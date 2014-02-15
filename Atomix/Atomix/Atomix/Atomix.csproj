@@ -93,7 +93,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="AtomixGame.cs" />
     <Compile Include="Screens\LevelScreen.cs" />
-    <Compile Include="Screens\SelectLevelScreen.cs" />
+    <Compile Include="Screens\LevelsScreen.cs" />
     <Compile Include="Screens\StartScreen.cs" />
     <Compile Include="Components\SkeletonRenderer.cs" />
     <Compile Include="Skeletons.cs" />

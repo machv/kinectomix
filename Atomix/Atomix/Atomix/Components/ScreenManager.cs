@@ -58,6 +58,7 @@ namespace Atomix.Components
                 throw new ArgumentException("This game screen is already associated with any screen manager.");
 
             screen.ScreenManager = this;
+            screen.Initialize();
 
             _screens.Add(screen);
 

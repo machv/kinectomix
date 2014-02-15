@@ -21,6 +21,11 @@ namespace Atomix
         }
 
         /// <summary>
+        /// Prepare game screen.
+        /// </summary>
+        public virtual void Initialize() { }
+
+        /// <summary>
         /// Update logic for the game screen.
         /// </summary>
         /// <param name="gameTime">Game time.</param>
