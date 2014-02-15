@@ -28,6 +28,7 @@ namespace Atomix
         Skeletons _skeletons = new Skeletons();
         Texture2D _handTexture;
         SpriteFont font;
+        Texture2D _background;
 
         public AtomixGame()
         {
@@ -72,8 +73,8 @@ namespace Atomix
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
             _handTexture = Content.Load<Texture2D>("Images/Hand");
+            _background = Content.Load<Texture2D>("Background");
             font = Content.Load<SpriteFont>("Fonts/Normal");
 
             // Load level
@@ -354,7 +355,11 @@ namespace Atomix
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height), Color.White); 
+            spriteBatch.End();
 
             gameScreen.Draw(gameTime);
 
