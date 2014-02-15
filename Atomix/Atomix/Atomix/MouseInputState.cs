@@ -20,6 +20,11 @@ namespace Atomix
             get { return _state.Y; }
         }
 
+        public bool IsSelected
+        {
+            get { return _state.LeftButton == ButtonState.Pressed; }
+        }
+
         public MouseInputState(MouseState state)
         {
             _state = state;

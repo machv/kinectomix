@@ -29,6 +29,7 @@ namespace Atomix
         Texture2D _handTexture;
         SpriteFont font;
         Texture2D _background;
+        IInputProvider _input;
 
         public AtomixGame()
         {
@@ -39,6 +40,8 @@ namespace Atomix
             //graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
+
+            _input = new MouseInputProvider();
         }
 
         /// <summary>
@@ -81,7 +84,7 @@ namespace Atomix
             currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
 
             //gameScreen = new LevelScreen(this, currentLevel, spriteBatch);
-            gameScreen = new StartScreen(this, spriteBatch);
+            gameScreen = new StartScreen(this, spriteBatch, _input);
 
             gameScreen.LoadContent();
         }

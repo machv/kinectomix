@@ -10,5 +10,7 @@ namespace Atomix
         int X { get; }
 
         int Y { get; }
+
+        bool IsSelected { get; }
     }
 }
