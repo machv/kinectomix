@@ -21,12 +21,12 @@ namespace AtomixData
 
         public LevelDefinition SwitchToNextLevel()
         {
-            if (Levels.Length >= CurrentLevel + 1)
+            if (Levels.Length <= CurrentLevel + 1)
                 return null;
 
             CurrentLevel += 1;
 
-            return Levels[CurrentLevel + 1];
+            return Levels[CurrentLevel];
         }
 
         public LevelDefinition GetCurrentLevel()
