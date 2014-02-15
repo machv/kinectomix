@@ -30,6 +30,9 @@ namespace Atomix
         SpriteFont font;
         Texture2D _background;
         IInputProvider _input;
+        static GameState _state;
+
+        public static GameState State { get { return _state; } }
 
         public AtomixGame()
         {
@@ -42,6 +45,7 @@ namespace Atomix
             Content.RootDirectory = "Content";
 
             _input = new MouseInputProvider();
+            _state = new GameState();
         }
 
         /// <summary>
@@ -85,6 +89,8 @@ namespace Atomix
             _handTexture = Content.Load<Texture2D>("Images/Hand");
             _background = Content.Load<Texture2D>("Background");
             font = Content.Load<SpriteFont>("Fonts/Normal");
+
+            _state.Levels = Content.Load<LevelDefinition[]>("Levels");
         }
 
         /// <summary>
@@ -126,7 +132,7 @@ namespace Atomix
             // the right hand joint is being tracked
             if (rightHand.TrackingState == JointTrackingState.Tracked)
             {
-                _textToRender = rightShoulder.Position.Z - rightHand.Position.Z + " m"; 
+                _textToRender = rightShoulder.Position.Z - rightHand.Position.Z + " m";
 
                 // the hand is sufficiently in front of the shoulder
                 if (rightShoulder.Position.Z - rightHand.Position.Z > 0.2)
@@ -355,7 +361,7 @@ namespace Atomix
             GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height), Color.White); 
+            spriteBatch.Draw(_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height), Color.White);
             spriteBatch.End();
 
             if (cursorPosition != null)
@@ -371,7 +377,7 @@ namespace Atomix
                 Vector2 FontOrigin = font.MeasureString(_textToRender) / 2;
                 // Draw the string
                 spriteBatch.Begin();
-                spriteBatch.DrawString(font, _textToRender, new Vector2(500,20), Color.Red,
+                spriteBatch.DrawString(font, _textToRender, new Vector2(500, 20), Color.Red,
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
                 spriteBatch.End();
             }
