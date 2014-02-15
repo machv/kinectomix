@@ -30,11 +30,6 @@ namespace Atomix
         private SpriteBatch spriteBatch;
 
         /// <summary>
-        /// Gets the selected KinectSensor.
-        /// </summary>
-        public KinectSensor Sensor { get; private set; }
-
-        /// <summary>
         /// This method initializes necessary objects.
         /// </summary>
         public override void Initialize()
@@ -46,6 +41,11 @@ namespace Atomix
 
         private void DrawSkeleton(Vector2 resolutions)
         {
+            if (_chooser.Sensor == null)
+                return;
+
+            bool isSeated = _chooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated;
+
             Skeleton skeleton = _skeletons.TrackedSkeleton;
 
             if (skeleton != null)
@@ -57,7 +57,12 @@ namespace Atomix
                 DrawBone(skeleton.Joints, JointType.Head, JointType.ShoulderCenter);
                 DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderLeft);
                 DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderRight);
-                DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.Spine);
+                
+                if (!isSeated)
+                {
+                    DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.Spine);
+                }
+                
                 DrawBone(skeleton.Joints, JointType.Spine, JointType.HipCenter);
                 DrawBone(skeleton.Joints, JointType.HipCenter, JointType.HipLeft);
                 DrawBone(skeleton.Joints, JointType.HipCenter, JointType.HipRight);
@@ -70,14 +75,16 @@ namespace Atomix
                 DrawBone(skeleton.Joints, JointType.ElbowRight, JointType.WristRight);
                 DrawBone(skeleton.Joints, JointType.WristRight, JointType.HandRight);
 
-                DrawBone(skeleton.Joints, JointType.HipLeft, JointType.KneeLeft);
-                DrawBone(skeleton.Joints, JointType.KneeLeft, JointType.AnkleLeft);
-                DrawBone(skeleton.Joints, JointType.AnkleLeft, JointType.FootLeft);
+                if (!isSeated)
+                {
+                    DrawBone(skeleton.Joints, JointType.HipLeft, JointType.KneeLeft);
+                    DrawBone(skeleton.Joints, JointType.KneeLeft, JointType.AnkleLeft);
+                    DrawBone(skeleton.Joints, JointType.AnkleLeft, JointType.FootLeft);
 
-                DrawBone(skeleton.Joints, JointType.HipRight, JointType.KneeRight);
-                DrawBone(skeleton.Joints, JointType.KneeRight, JointType.AnkleRight);
-                DrawBone(skeleton.Joints, JointType.AnkleRight, JointType.FootRight);
-
+                    DrawBone(skeleton.Joints, JointType.HipRight, JointType.KneeRight);
+                    DrawBone(skeleton.Joints, JointType.KneeRight, JointType.AnkleRight);
+                    DrawBone(skeleton.Joints, JointType.AnkleRight, JointType.FootRight);
+                }
                 // Now draw the joints
                 foreach (Joint j in skeleton.Joints)
                 {
