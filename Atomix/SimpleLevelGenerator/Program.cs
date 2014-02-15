@@ -26,14 +26,14 @@ namespace SimpleLevelGenerator
                 for (int x = 0; x < level1.Board.ColumnsCount; x++)
                 {
                     BoardTile tile = new BoardTile();
-                    tile.Type = y == 0 || y == level1.Board.RowsCount - 1 || x == 0 || x == level1.Board.ColumnsCount - 1 ? 
+                    tile.Type = y == 0 || y == level1.Board.RowsCount - 1 || x == 0 || x == level1.Board.ColumnsCount - 1 ?
                         TileType.Wall : TileType.Empty;
 
                     level1.Board[y, x] = tile;
                 }
             }
 
-            List<Tuple<int, int>> walls = new List<Tuple<int,int>>();
+            List<Tuple<int, int>> walls = new List<Tuple<int, int>>();
             walls.Add(Tuple.Create<int, int>(1, 3));
             walls.Add(Tuple.Create<int, int>(2, 3));
             walls.Add(Tuple.Create<int, int>(3, 3));
@@ -51,7 +51,7 @@ namespace SimpleLevelGenerator
 
             walls.Add(Tuple.Create<int, int>(7, 6));
 
-            foreach(var wall in walls)
+            foreach (var wall in walls)
             {
                 level1.Board[wall.Item1, wall.Item2] = new BoardTile { Type = TileType.Wall };
             }
@@ -143,9 +143,9 @@ namespace SimpleLevelGenerator
 
             LevelDefinition[] levels = new LevelDefinition[3];
 
-            levels[0] = new LevelDefinition() { FileName = "Level1.xml", Name = "Level 1", LevelType = LevelDefinition.Type.Serialized };
-            levels[1] = new LevelDefinition() { FileName = "Level2.xml", Name = "Level 2", LevelType = LevelDefinition.Type.Serialized };
-            levels[2] = new LevelDefinition() { FileName = "Level4.xnb", Name = "Level 4", LevelType = LevelDefinition.Type.Compiled };
+            levels[0] = new LevelDefinition() { FileName = "Level1.xml", Name = "Level 1" };
+            levels[1] = new LevelDefinition() { FileName = "Level2.xml", Name = "Level 2" };
+            levels[2] = new LevelDefinition() { FileName = "Level4.xnb", Name = "Level 4" };
 
             using (XmlWriter writer = XmlWriter.Create("../../../Atomix/AtomixContent/Levels.xml", settings))
             {

@@ -8,7 +8,6 @@ namespace AtomixData
     [Serializable]
     public class GameState
     {
-        [NonSerialized]
         public LevelDefinition[] Levels { get; set; }
 
         public int CurrentLevel { get; set; }
@@ -28,6 +27,11 @@ namespace AtomixData
             CurrentLevel += 1;
 
             return Levels[CurrentLevel + 1];
+        }
+
+        public LevelDefinition GetCurrentLevel()
+        {
+            return Levels[CurrentLevel];
         }
     }
 }
