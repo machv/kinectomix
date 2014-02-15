@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using AtomixData;
 using System.Xml;
 using Microsoft.Kinect;
+using Atomix.Components;
 
 namespace Atomix
 {
@@ -21,9 +22,8 @@ namespace Atomix
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Level currentLevel;
-        IGameScreen gameScreen;
-        KinectChooser chooser;
+        ScreenManager _gameScreenManager;
+        KinectChooser _KinectChooser;
         SkeletonRenderer skeletonRenderer;
         Skeletons _skeletons = new Skeletons();
         Texture2D _handTexture;
@@ -56,11 +56,13 @@ namespace Atomix
 
             Vector2 offset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2);
 
-            chooser = new KinectChooser(this);
-            skeletonRenderer = new SkeletonRenderer(this, chooser, _skeletons, offset);
-            var videoStream = new VideoStreamComponent(this, chooser, graphics, offset);
+            _gameScreenManager = new ScreenManager(this);
+            _KinectChooser = new KinectChooser(this);
+            skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, offset);
+            var videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, offset);
 
-            Components.Add(chooser);
+            Components.Add(_gameScreenManager);
+            Components.Add(_KinectChooser);
             Components.Add(videoStream);
             Components.Add(skeletonRenderer);
 
@@ -76,17 +78,13 @@ namespace Atomix
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            GameScreen screen = new StartScreen(spriteBatch, _input);
+            _gameScreenManager.Add(screen);
+            _gameScreenManager.Activate(screen);
+
             _handTexture = Content.Load<Texture2D>("Images/Hand");
             _background = Content.Load<Texture2D>("Background");
             font = Content.Load<SpriteFont>("Fonts/Normal");
-
-            // Load level
-            currentLevel = Content.Load<AtomixData.Level>("Levels/Level1");
-
-            //gameScreen = new LevelScreen(this, currentLevel, spriteBatch);
-            gameScreen = new StartScreen(this, spriteBatch, _input);
-
-            gameScreen.LoadContent();
         }
 
         /// <summary>
@@ -95,7 +93,7 @@ namespace Atomix
         /// </summary>
         protected override void UnloadContent()
         {
-            gameScreen.UnloadContent();
+            base.UnloadContent();
         }
 
         Vector2 cursorPosition;
@@ -181,9 +179,9 @@ namespace Atomix
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (chooser.Sensor != null)
+            if (_KinectChooser.Sensor != null)
             {
-                using (SkeletonFrame skeletonFrame = chooser.Sensor.SkeletonStream.OpenNextFrame(0))
+                using (SkeletonFrame skeletonFrame = _KinectChooser.Sensor.SkeletonStream.OpenNextFrame(0))
                 {
                     if (skeletonFrame != null)
                     {
@@ -207,10 +205,10 @@ namespace Atomix
                             int width = GraphicsDevice.Viewport.Bounds.Width;
                             int height = GraphicsDevice.Viewport.Bounds.Height;
 
-                            var colorPt = chooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, chooser.Sensor.ColorStream.Format);
+                            var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
 
-                            double ratioX = (double)colorPt.X / chooser.Sensor.ColorStream.FrameWidth;
-                            double ratioY = (double)colorPt.Y / chooser.Sensor.ColorStream.FrameHeight;
+                            double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
+                            double ratioY = (double)colorPt.Y / _KinectChooser.Sensor.ColorStream.FrameHeight;
 
                             //http://stackoverflow.com/questions/13313005/kinect-sdk-1-6-and-joint-scaleto-method
                             double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * width;
@@ -227,7 +225,7 @@ namespace Atomix
                     }
                 }
 
-                using (DepthImageFrame depthFrame = chooser.Sensor.DepthStream.OpenNextFrame(0))
+                using (DepthImageFrame depthFrame = _KinectChooser.Sensor.DepthStream.OpenNextFrame(0))
                 {
                     if (depthFrame != null)
                     {
@@ -261,8 +259,8 @@ namespace Atomix
 
                 lastHandPosition = handPosition;
 
-                _handDepthPoint = chooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position, DepthImageFormat.Resolution640x480Fps30);
-                var wristDepthPoint = chooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position, DepthImageFormat.Resolution640x480Fps30);
+                _handDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position, DepthImageFormat.Resolution640x480Fps30);
+                var wristDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position, DepthImageFormat.Resolution640x480Fps30);
 
                 SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
                 SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position;
@@ -345,10 +343,6 @@ namespace Atomix
 
             // Hand trackign stop
 
-
-
-            gameScreen.Update(gameTime);
-
             base.Update(gameTime);
         }
 
@@ -363,8 +357,6 @@ namespace Atomix
             spriteBatch.Begin();
             spriteBatch.Draw(_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height), Color.White); 
             spriteBatch.End();
-
-            gameScreen.Draw(gameTime);
 
             if (cursorPosition != null)
             {
@@ -427,15 +419,6 @@ namespace Atomix
             texture.SetData(colors);
 
             return texture;
-        }
-
-        public void ChangeScreen(IGameScreen screen)
-        {
-            gameScreen.UnloadContent();
-
-            gameScreen = screen;
-
-            gameScreen.LoadContent();
         }
     }
 }

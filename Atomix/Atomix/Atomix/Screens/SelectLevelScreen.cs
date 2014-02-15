@@ -6,24 +6,24 @@ using System.Text;
 
 namespace Atomix.Screens
 {
-    public class SelectLevelScreen : IGameScreen
+    public class SelectLevelScreen : GameScreen
     {
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             
         }
 
-        public void LoadContent()
+        public override void LoadContent()
         {
             
         }
 
-        public void UnloadContent()
+        public override void UnloadContent()
         {
             
         }

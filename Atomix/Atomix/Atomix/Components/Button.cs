@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -59,9 +60,9 @@ namespace Atomix
             Content = content;
         }
 
-        public void LoadContent(Game game)
+        public void LoadContent(ContentManager content)
         {
-            _empty = game.Content.Load<Texture2D>("Empty");
+            _empty = content.Load<Texture2D>("Empty");
         }
 
         IInputState lastState;

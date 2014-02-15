@@ -1,6 +1,7 @@
 ﻿using AtomixData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -10,17 +11,15 @@ using System.Text;
 
 namespace Atomix
 {
-    public class LevelScreen : IGameScreen
+    public class LevelScreen : GameScreen
     {
         Level currentLevel;
         SpriteBatch spriteBatch;
-        AtomixGame game;
 
-        public LevelScreen(AtomixGame game, Level currentLevel, SpriteBatch spriteBatch)
+        public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
             this.currentLevel = currentLevel;
             this.spriteBatch = spriteBatch;
-            this.game = game;
 
             boardPosition = new Vector2(20, 60);
 
@@ -66,26 +65,34 @@ namespace Atomix
 
         bool isLevelFinished = false;
 
-        public void LoadContent()
+        ContentManager _content;
+
+        public override void LoadContent()
         {
-            wallTexture = game.Content.Load<Texture2D>("Board/Wall");
-            emptyTexture = game.Content.Load<Texture2D>("Board/Empty");
-            carbonTexture = game.Content.Load<Texture2D>("Board/Carbon");
-            carbonSelectedTexture = game.Content.Load<Texture2D>("Board/CarbonSelected");
-            hydrogenTexture = game.Content.Load<Texture2D>("Board/Hydrogen");
-            hydrogenSelectedTexture = game.Content.Load<Texture2D>("Board/HydrogenSelected");
-            oxygenTexture = game.Content.Load<Texture2D>("Board/Oxygen");
-            oxygenSelectedTexture = game.Content.Load<Texture2D>("Board/OxygenSelected");
-            arrowTexture = game.Content.Load<Texture2D>("Board/Up");
-            applause = game.Content.Load<SoundEffect>("Sounds/Applause");
-            normalFont = game.Content.Load<SpriteFont>("Fonts/Normal");
-            splashFont = game.Content.Load<SpriteFont>("Fonts/Splash");
-            idleTexture = game.Content.Load<Texture2D>("Idle");
+            if (_content == null)
+                _content = new ContentManager(ScreenManager.Game.Services, "Content");
+
+            wallTexture = _content.Load<Texture2D>("Board/Wall");
+            emptyTexture = _content.Load<Texture2D>("Board/Empty");
+            carbonTexture = _content.Load<Texture2D>("Board/Carbon");
+            carbonSelectedTexture = _content.Load<Texture2D>("Board/CarbonSelected");
+            hydrogenTexture = _content.Load<Texture2D>("Board/Hydrogen");
+            hydrogenSelectedTexture = _content.Load<Texture2D>("Board/HydrogenSelected");
+            oxygenTexture = _content.Load<Texture2D>("Board/Oxygen");
+            oxygenSelectedTexture = _content.Load<Texture2D>("Board/OxygenSelected");
+            arrowTexture = _content.Load<Texture2D>("Board/Up");
+            applause = _content.Load<SoundEffect>("Sounds/Applause");
+            normalFont = _content.Load<SpriteFont>("Fonts/Normal");
+            splashFont = _content.Load<SpriteFont>("Fonts/Splash");
+            idleTexture = _content.Load<Texture2D>("Idle");
         }
 
-        public void UnloadContent() { }
+        public override void UnloadContent() 
+        {
+            _content.Unload();
+        }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             bool clickOccurred = false;
 
@@ -107,11 +114,13 @@ namespace Atomix
                 if (clickOccurred)
                 {
                     // Load next level
-                    Level currentLevel = game.Content.Load<AtomixData.Level>("Levels/Level2");
-                    LevelScreen gameScreen = new LevelScreen(game, currentLevel, spriteBatch);
+                    Level currentLevel = _content.Load<AtomixData.Level>("Levels/Level2");
+                    LevelScreen gameScreen = new LevelScreen(currentLevel, spriteBatch);
 
-                    game.ChangeScreen(gameScreen);
+                    ScreenManager.Add(gameScreen);
+                    ScreenManager.Activate(gameScreen);
                 }
+
                 return;
             }
 
@@ -240,7 +249,7 @@ namespace Atomix
             }
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
 
@@ -258,18 +267,18 @@ namespace Atomix
 
             if (isLevelFinished)
             {
-                spriteBatch.Draw(idleTexture, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Bounds.Width, game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
-                spriteBatch.Draw(wallTexture, new Rectangle(0, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, game.GraphicsDevice.Viewport.Bounds.Width, 200), Color.Brown);
+                spriteBatch.Draw(idleTexture, new Rectangle(0, 0, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.GraphicsDevice.Viewport.Bounds.Height), Color.White);
+                spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 200), Color.Brown);
 
                 string name = "level completed";
                 Vector2 size = splashFont.MeasureString(name);
 
-                spriteBatch.DrawString(splashFont, name, new Vector2(game.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
+                spriteBatch.DrawString(splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
 
                 name = "click screen to load next level";
                 size = normalFont.MeasureString(name);
 
-                spriteBatch.DrawString(normalFont, name, new Vector2(game.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, game.GraphicsDevice.Viewport.Bounds.Height / 2 + 40), Color.White);
+                spriteBatch.DrawString(normalFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40), Color.White);
             }
 
             spriteBatch.End();

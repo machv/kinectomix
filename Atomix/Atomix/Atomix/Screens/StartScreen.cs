@@ -9,35 +9,33 @@ using System.Text;
 
 namespace Atomix
 {
-    public class StartScreen : IGameScreen
+    public class StartScreen : GameScreen
     {
-        AtomixGame game;
         SpriteFont splashFont;
         SpriteFont normalFont;
         SpriteBatch spriteBatch;
         IInputProvider input;
 
-        public StartScreen(AtomixGame game, SpriteBatch spriteBatch, IInputProvider input)
+        public StartScreen(SpriteBatch spriteBatch, IInputProvider input)
         {
-            this.game = game;
             this.spriteBatch = spriteBatch;
             this.input = input;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
-            _startButton.Position = new Vector2(game.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, game.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
+            _startButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
             _startButton.Update(gameTime, input);
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
 
             string name = "Kinectomix";
             Vector2 size = splashFont.MeasureString(name);
 
-            spriteBatch.DrawString(splashFont, name, new Vector2(game.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X/2, game.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.Black);
+            spriteBatch.DrawString(splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.Black);
 
             _startButton.Draw(gameTime);
 
@@ -46,26 +44,27 @@ namespace Atomix
 
         Button _startButton;
 
-        public void LoadContent()
+        public override void LoadContent()
         {
-            splashFont = game.Content.Load<SpriteFont>("Fonts/Splash");
-            normalFont = game.Content.Load<SpriteFont>("Fonts/Normal");
+            splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
+            normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
             _startButton = new Button(spriteBatch, "play game");
             _startButton.Font = normalFont;
-            _startButton.LoadContent(game);
+            _startButton.LoadContent(ScreenManager.Content);
             _startButton.Selected += _startButton_Selected;
         }
 
         void _startButton_Selected(object sender, EventArgs e)
         {
             // React to the click
-            Level currentLevel = game.Content.Load<AtomixData.Level>("Levels/Level1");
-            LevelScreen gameScreen = new LevelScreen(game, currentLevel, spriteBatch);
+            Level currentLevel = ScreenManager.Content.Load<AtomixData.Level>("Levels/Level1");
+            LevelScreen gameScreen = new LevelScreen(currentLevel, spriteBatch);
 
-            game.ChangeScreen(gameScreen);
+            ScreenManager.Add(gameScreen);
+            ScreenManager.Activate(gameScreen);
         }
 
-        public void UnloadContent() { }
+        public override void UnloadContent() { }
     }
 }
