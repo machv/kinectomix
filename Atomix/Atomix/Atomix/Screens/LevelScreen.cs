@@ -47,8 +47,8 @@ namespace Atomix
         SpriteFont normalFont;
         SpriteFont splashFont;
 
-        int TileWidth = 49;
-        int TileHeight = 49;
+        int TileWidth = 60;
+        int TileHeight = 60;
 
         // Animation stuff
         protected bool isMovementAnimation = false;
@@ -253,7 +253,7 @@ namespace Atomix
 
             if (isMovementAnimation)
             {
-                spriteBatch.Draw(GetTileTexture(atomToMove, true), atomPosition, Color.White);
+                spriteBatch.Draw(GetTileTexture(atomToMove, true), new Rectangle((int)atomPosition.X, (int)atomPosition.Y, TileWidth, TileHeight), Color.White);
             }
 
             if (isLevelFinished)
@@ -499,11 +499,11 @@ namespace Atomix
                     }
 
                     if (drawEmpty && drawEmptyTiles)
-                        spriteBatch.Draw(emptyTexture, board[i, j].RenderPosition, Color.White);
+                        spriteBatch.Draw(emptyTexture, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), Color.White);
 
                     if (tile != null)
                     {
-                        spriteBatch.Draw(tile, board[i, j].RenderPosition, null, Color.White, RotationAngle, origin, 1.0f, SpriteEffects.None, 0f);
+                        spriteBatch.Draw(tile, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), null, Color.White, RotationAngle, origin, SpriteEffects.None, 0f);
                     }
                 }
             }
