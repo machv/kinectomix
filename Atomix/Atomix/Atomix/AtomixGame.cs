@@ -60,7 +60,7 @@ namespace Atomix
 
             Vector2 offset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2);
 
-            _gameScreenManager = new ScreenManager(this);
+            _gameScreenManager = new ScreenManager(this, _input);
             _KinectChooser = new KinectChooser(this);
             skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, offset);
             var videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, offset);
@@ -82,7 +82,7 @@ namespace Atomix
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            GameScreen screen = new StartScreen(spriteBatch, _input);
+            GameScreen screen = new StartScreen(spriteBatch);
             _gameScreenManager.Add(screen);
             _gameScreenManager.Activate(screen);
 

@@ -113,9 +113,21 @@ namespace Atomix
             {
                 if (clickOccurred)
                 {
+                    GameScreen gameScreen = null;
+
                     // Load next level
-                    Level currentLevel = _content.Load<AtomixData.Level>("Levels/Level2");
-                    LevelScreen gameScreen = new LevelScreen(currentLevel, spriteBatch);
+                    LevelDefinition newLevelInfo = AtomixGame.State.SwitchToNextLevel();
+
+                    if (newLevelInfo == null)
+                    {
+                        // We are on last level -> go to main screen
+                        gameScreen = new StartScreen(spriteBatch);
+                    }
+                    else
+                    {
+                        Level newLevel = _content.Load<AtomixData.Level>("Levels/" + newLevelInfo.AssetName);
+                        gameScreen = new LevelScreen(newLevel, spriteBatch);
+                    }
 
                     ScreenManager.Add(gameScreen);
                     ScreenManager.Activate(gameScreen);

@@ -22,7 +22,7 @@ namespace AtomixData
         public LevelDefinition SwitchToNextLevel()
         {
             if (Levels.Length >= CurrentLevel + 1)
-                throw new InvalidOperationException("No more levels exist.");
+                return null;
 
             CurrentLevel += 1;
 

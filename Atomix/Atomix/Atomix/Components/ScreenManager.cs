@@ -13,14 +13,18 @@ namespace Atomix.Components
 
         GameScreen _activeScreen;
         ContentManager _content;
+        IInputProvider _input;
 
         public ContentManager Content { get { return _content; } }
 
-        public ScreenManager(Game game)
+        public IInputProvider InputProvider { get { return _input; } }
+
+        public ScreenManager(Game game, IInputProvider input)
             : base(game)
         {
             _screens = new List<GameScreen>();
             _content = game.Content;
+            _input = input;
         }
 
         protected override void UnloadContent()

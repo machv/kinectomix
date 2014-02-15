@@ -14,18 +14,16 @@ namespace Atomix
         SpriteFont splashFont;
         SpriteFont normalFont;
         SpriteBatch spriteBatch;
-        IInputProvider input;
 
-        public StartScreen(SpriteBatch spriteBatch, IInputProvider input)
+        public StartScreen(SpriteBatch spriteBatch)
         {
             this.spriteBatch = spriteBatch;
-            this.input = input;
         }
 
         public override void Update(GameTime gameTime)
         {
             _startButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-            _startButton.Update(gameTime, input);
+            _startButton.Update(gameTime, ScreenManager.InputProvider);
         }
 
         public override void Draw(GameTime gameTime)
