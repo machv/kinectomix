@@ -40,7 +40,7 @@ namespace Atomix
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
 
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -360,38 +360,30 @@ namespace Atomix
         {
             GraphicsDevice.Clear(Color.White);
 
+            base.Draw(gameTime);
+
             spriteBatch.Begin();
             spriteBatch.Draw(_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height), Color.White);
-            spriteBatch.End();
-
-            if (cursorPosition != null)
-            {
-                spriteBatch.Begin();
-                spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
-                spriteBatch.End();
-            }
 
             if (_textToRender != null)
             {
-                // Find the center of the string
                 Vector2 FontOrigin = font.MeasureString(_textToRender) / 2;
-                // Draw the string
-                spriteBatch.Begin();
+
                 spriteBatch.DrawString(font, _textToRender, new Vector2(500, 20), Color.Red,
-                    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
-                spriteBatch.End();
+                    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);   
             }
 
             if (_handRect != null)
             {
-                spriteBatch.Begin();
-                DrawBoudingBox(_handRect, Color.Red, 1);
-                //Texture2D SimpleTexture = CreateColorTexture(Color.Red);
-                //spriteBatch.Draw(SimpleTexture, _handRect, Color.Red * 0.5f);
-                spriteBatch.End();
+                DrawBoudingBox(_handRect, Color.Red, 1);   
             }
 
-            base.Draw(gameTime);
+            if (cursorPosition != null)
+            {
+                spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
+            }
+
+            spriteBatch.End();
         }
 
         // credits http://stackoverflow.com/questions/13893959/how-to-draw-the-border-of-a-square
