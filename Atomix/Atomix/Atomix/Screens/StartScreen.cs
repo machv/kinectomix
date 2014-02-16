@@ -17,6 +17,7 @@ namespace Atomix
 
         Button _startButton;
         Button _levelsButton;
+        Button _quitButton;
 
         public StartScreen(SpriteBatch spriteBatch)
         {
@@ -28,8 +29,11 @@ namespace Atomix
             _startButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 80);
             _startButton.Update(gameTime, ScreenManager.InputProvider);
 
-            _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 20 );
+            _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 20);
             _levelsButton.Update(gameTime, ScreenManager.InputProvider);
+
+            _quitButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _quitButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 50 + _quitButton.Height);
+            _quitButton.Update(gameTime, ScreenManager.InputProvider);
         }
 
         public override void Draw(GameTime gameTime)
@@ -43,6 +47,7 @@ namespace Atomix
 
             _startButton.Draw(gameTime);
             _levelsButton.Draw(gameTime);
+            _quitButton.Draw(gameTime);
 
             spriteBatch.End();
         }
@@ -61,6 +66,18 @@ namespace Atomix
             _levelsButton.Font = normalFont;
             _levelsButton.LoadContent(ScreenManager.Content);
             _levelsButton.Selected += _levelsButton_Selected;
+
+            _quitButton = new Button(spriteBatch, "quit game");
+            _quitButton.Font = normalFont;
+            _quitButton.LoadContent(ScreenManager.Content);
+            _quitButton.Selected += _quitButton_Selected;
+        }
+
+        void _quitButton_Selected(object sender, EventArgs e)
+        {
+            //TODO: Add confirmation
+
+            ScreenManager.Game.Exit();
         }
 
         void _levelsButton_Selected(object sender, EventArgs e)
