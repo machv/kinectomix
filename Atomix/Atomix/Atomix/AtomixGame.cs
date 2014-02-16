@@ -369,12 +369,12 @@ namespace Atomix
                 Vector2 FontOrigin = font.MeasureString(_textToRender) / 2;
 
                 spriteBatch.DrawString(font, _textToRender, new Vector2(500, 20), Color.Red,
-                    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);   
+                    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
             if (_handRect != null)
             {
-                DrawBoudingBox(_handRect, Color.Red, 1);   
+                DrawBoudingBox(_handRect, Color.Red, 1);
             }
 
             if (cursorPosition != null)
@@ -416,6 +416,14 @@ namespace Atomix
             texture.SetData(colors);
 
             return texture;
+        }
+
+        /// <summary>
+        /// Exit current game and terminate.
+        /// </summary>
+        public void Quit()
+        {
+            this.Exit();
         }
     }
 }
