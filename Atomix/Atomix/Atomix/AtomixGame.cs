@@ -28,7 +28,6 @@ namespace Atomix
         Skeletons _skeletons = new Skeletons();
         Texture2D _handTexture;
         SpriteFont font;
-        Texture2D _background;
         IInputProvider _input;
         static GameState _state;
 
@@ -40,7 +39,7 @@ namespace Atomix
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
 
-            graphics.IsFullScreen = true;
+            //graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -64,7 +63,9 @@ namespace Atomix
             _KinectChooser = new KinectChooser(this);
             skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, offset);
             var videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, offset);
+            var background = new Background(this);
 
+            Components.Add(background);
             Components.Add(_gameScreenManager);
             Components.Add(_KinectChooser);
             Components.Add(videoStream);
@@ -87,7 +88,6 @@ namespace Atomix
             _gameScreenManager.Activate(screen);
 
             _handTexture = Content.Load<Texture2D>("Images/Hand");
-            _background = Content.Load<Texture2D>("Background");
             font = Content.Load<SpriteFont>("Fonts/Normal");
 
             _state.Levels = Content.Load<LevelDefinition[]>("Levels");
@@ -363,7 +363,6 @@ namespace Atomix
             base.Draw(gameTime);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(_background, new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height), Color.White);
 
             if (_textToRender != null)
             {
