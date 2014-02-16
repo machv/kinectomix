@@ -417,13 +417,5 @@ namespace Atomix
 
             return texture;
         }
-
-        /// <summary>
-        /// Exit current game and terminate.
-        /// </summary>
-        public void Quit()
-        {
-            this.Exit();
-        }
     }
 }
