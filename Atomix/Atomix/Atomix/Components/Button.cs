@@ -33,6 +33,8 @@ namespace Atomix
 
         public SpriteFont Font { get; set; }
 
+        public object Tag { get; set; }
+
         public event EventHandler<EventArgs> Selected;
 
         protected internal void OnSelected()
@@ -51,6 +53,8 @@ namespace Atomix
             BorderThickness = 2;
             Width = 160;
             Height = 70;
+            Content = string.Empty;
+
             _spriteBatch = spriteBatch;
         }
 

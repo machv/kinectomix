@@ -33,5 +33,12 @@ namespace AtomixData
         {
             return Levels[CurrentLevel];
         }
+
+        public void SetLevelToCurrent(LevelDefinition level)
+        {
+            int i = Array.IndexOf(Levels, level);
+
+            CurrentLevel = i;
+        }
     }
 }
