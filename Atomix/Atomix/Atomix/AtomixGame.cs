@@ -30,7 +30,7 @@ namespace Atomix
         SpriteFont font;
         IInputProvider _input;
         static GameState _state;
-
+        Vector2 _kinectDebugOffset;
         public static GameState State { get { return _state; } }
 
         public AtomixGame()
@@ -57,12 +57,12 @@ namespace Atomix
         {
             this.IsMouseVisible = true;
 
-            Vector2 offset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2);
+            _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / 2);
 
             _gameScreenManager = new ScreenManager(this, _input);
             _KinectChooser = new KinectChooser(this);
-            skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, offset);
-            var videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, offset);
+            skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, _kinectDebugOffset);
+            var videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset);
             var background = new Background(this);
 
             Components.Add(background);
@@ -372,14 +372,26 @@ namespace Atomix
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
+            
+
             if (_handRect != null)
             {
-                DrawBoudingBox(_handRect, Color.Red, 1);
+                Rectangle translated = new Rectangle(_handRect.X + (int)_kinectDebugOffset.X, _handRect.Y + (int)_kinectDebugOffset.Y, _handRect.Width / 2, _handRect.Height / 2);
+
+                //spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, scale);
+
+                DrawBoudingBox(translated, Color.Red, 1);
+
+                //spriteBatch.End();
             }
 
             if (cursorPosition != null)
             {
+                //spriteBatch.Begin();
+
                 spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
+
+                //spriteBatch.End();
             }
 
             spriteBatch.End();
