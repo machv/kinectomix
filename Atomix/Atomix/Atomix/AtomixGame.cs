@@ -376,22 +376,14 @@ namespace Atomix
 
             if (_handRect != null)
             {
-                Rectangle translated = new Rectangle(_handRect.X + (int)_kinectDebugOffset.X, _handRect.Y + (int)_kinectDebugOffset.Y, _handRect.Width / 2, _handRect.Height / 2);
-
-                //spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, scale);
+                Rectangle translated = new Rectangle((_handRect.X / 2) + (int)_kinectDebugOffset.X, (_handRect.Y / 2) + (int)_kinectDebugOffset.Y, _handRect.Width / 2, _handRect.Height / 2);
 
                 DrawBoudingBox(translated, Color.Red, 1);
-
-                //spriteBatch.End();
             }
 
             if (cursorPosition != null)
             {
-                //spriteBatch.Begin();
-
                 spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
-
-                //spriteBatch.End();
             }
 
             spriteBatch.End();
