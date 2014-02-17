@@ -181,9 +181,7 @@ namespace Atomix
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            _textToRender = string.Empty;
 
             if (_KinectChooser.Sensor != null)
             {
