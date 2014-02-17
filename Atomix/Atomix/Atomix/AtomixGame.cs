@@ -32,6 +32,7 @@ namespace Atomix
         static GameState _state;
         Vector2 _kinectDebugOffset;
         public static GameState State { get { return _state; } }
+        bool leftHanded = false;
 
         public AtomixGame()
         {
@@ -167,7 +168,6 @@ namespace Atomix
         int[] _histogram;
         int _handRadius;
 
-        DepthImagePoint _handRectPoint;
         Rectangle _handRect;
         string _textToRender;
         short[] lastDepthFrameData = null;
@@ -265,11 +265,14 @@ namespace Atomix
 
                 lastHandPosition = handPosition;
 
-                _handDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position, DepthImageFormat.Resolution640x480Fps30);
-                var wristDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position, DepthImageFormat.Resolution640x480Fps30);
+                JointType handType = leftHanded ? JointType.HandLeft : JointType.HandRight;
+                JointType wristType = leftHanded ? JointType.WristLeft : JointType.WristRight;
 
-                SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
-                SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[JointType.WristLeft].Position;
+                _handDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[handType].Position, DepthImageFormat.Resolution640x480Fps30);
+                var wristDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[wristType].Position, DepthImageFormat.Resolution640x480Fps30);
+
+                SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[handType].Position;
+                SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[wristType].Position;
                 Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
                 Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
 
