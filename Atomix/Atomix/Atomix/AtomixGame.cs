@@ -199,28 +199,32 @@ namespace Atomix
 
                         if (_skeletons.TrackedSkeleton != null)
                         {
+                            int width = GraphicsDevice.Viewport.Bounds.Width;
+                            int height = GraphicsDevice.Viewport.Bounds.Height;
+
+                            // Relative mapping of cursor
+                            // Based on idea at http://stackoverflow.com/questions/13313005/kinect-sdk-1-6-and-joint-scaleto-method
                             Joint rightHand = _skeletons.TrackedSkeleton.Joints[JointType.HandRight];
                             Joint head = _skeletons.TrackedSkeleton.Joints[JointType.Head];
                             Joint leftShoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderLeft];
                             Joint rightShoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderRight];
                             Joint rightHip = _skeletons.TrackedSkeleton.Joints[JointType.HipRight];
-
-                            SkeletonPoint handPoint = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
-                            int width = GraphicsDevice.Viewport.Bounds.Width;
-                            int height = GraphicsDevice.Viewport.Bounds.Height;
-
-                            var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
-
-                            double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
-                            double ratioY = (double)colorPt.Y / _KinectChooser.Sensor.ColorStream.FrameHeight;
-
-                            //http://stackoverflow.com/questions/13313005/kinect-sdk-1-6-and-joint-scaleto-method
                             double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * width;
                             double yScaled = (rightHand.Position.Y - head.Position.Y) / (rightHip.Position.Y - head.Position.Y) * height;
 
                             cursorPosition = new Vector2();
                             cursorPosition.X = (int)xScaled; // (int)(width * ratioX);
                             cursorPosition.Y = (int)yScaled; // (int)(height * ratioY);
+
+                            //// Absolute mapping of cursor
+                            //SkeletonPoint handPoint = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
+                            //var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
+                            //double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
+                            //double ratioY = (double)colorPt.Y / _KinectChooser.Sensor.ColorStream.FrameHeight;
+                            //cursorPosition = new Vector2();
+                            //cursorPosition.X = (int)(width * ratioX);
+                            //cursorPosition.Y = (int)(height * ratioY);
+
 
                             TrackHandMovement(_skeletons.TrackedSkeleton);
                             cursorPosition.X = (int)RightHandX;
@@ -373,7 +377,7 @@ namespace Atomix
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
-            
+
 
             if (_handRect != null)
             {
