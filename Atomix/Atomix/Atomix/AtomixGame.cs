@@ -210,7 +210,17 @@ namespace Atomix
                             Joint rightShoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderRight];
                             Joint rightHip = _skeletons.TrackedSkeleton.Joints[JointType.HipRight];
                             double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * width;
-                            double yScaled = (rightHand.Position.Y - head.Position.Y) / (rightHip.Position.Y - head.Position.Y) * height;
+
+                            double yScaled;
+                            if (_KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated)
+                            {
+                                // In seated mode isn't hip tracked, so we have to replace this positions
+                                yScaled = (rightHand.Position.Y - head.Position.Y) / (rightHand.Position.X - leftShoulder.Position.X) * height;
+                            }
+                            else
+                            {
+                                yScaled = (rightHand.Position.Y - head.Position.Y) / (rightHip.Position.Y - head.Position.Y) * height;
+                            }
 
                             cursorPosition = new Vector2();
                             cursorPosition.X = (int)xScaled; // (int)(width * ratioX);
