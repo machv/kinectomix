@@ -302,6 +302,7 @@ namespace Atomix.Components
             Joint rightShoulder = skeleton.Joints[JointType.ShoulderRight];
 
             Joint rightHip = skeleton.Joints[JointType.HipRight];
+            Joint head = skeleton.Joints[JointType.Head];
 
             // the right hand joint is being tracked
             if (rightHand.TrackingState == JointTrackingState.Tracked)
@@ -312,7 +313,9 @@ namespace Atomix.Components
                 if (rightShoulder.Position.Z - rightHand.Position.Z > 0.2)
                 {
                     double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
-                    double yScaled = (rightHand.Position.Y - rightShoulder.Position.Y) / (rightHip.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
+                    double yScaled =  _KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated ?
+                        (rightHand.Position.Y - rightShoulder.Position.Y) / (head.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height :
+                        (rightHand.Position.Y - rightShoulder.Position.Y) / (rightHip.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
 
                     if (yScaled < 0) yScaled = 0;
                     if (yScaled > GraphicsDevice.Viewport.Bounds.Height) yScaled = GraphicsDevice.Viewport.Bounds.Height;
