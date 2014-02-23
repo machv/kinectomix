@@ -53,16 +53,25 @@ namespace Atomix
 
         public Skeleton GetAnyTrackedSkeleton()
         {
+            if (Items == null)
+                return null;
+
             return Items.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
         }
 
         public Skeleton GetNearestTrackedSkeleton()
         {
+            if (Items == null)
+                return null;
+
             return Items.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).OrderBy(s => s.Position.Z).FirstOrDefault();
         }
 
         public Skeleton GetSkeleton(int trackingId)
         {
+            if (Items == null)
+                return null;
+
             return Items.Where(s => s.TrackingId == trackedId).FirstOrDefault();
         }
     }

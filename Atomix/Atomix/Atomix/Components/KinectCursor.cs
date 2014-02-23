@@ -159,10 +159,11 @@ namespace Atomix.Components
 
 
                 float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
+                int handArea = 0;
                 if (realDepth > 0)
                 {
-                    float radius = 35000 / realDepth;
-
+                    float radius = 35000 / (float)realDepth;
+                    //radius = distance;
 
                     _handRadius = (int)(radius * 1.5);
                     if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
@@ -174,7 +175,8 @@ namespace Atomix.Components
                         //                byte intensity = (byte)(~(realDepth >> 4));
 
                         _histogram = new int[256];
-
+                        handArea = 0;
+                        
                         for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                         {
                             for (int x = _handRect.Left; x < _handRect.Right; x++)
@@ -183,7 +185,7 @@ namespace Atomix.Components
                                 if (i < frameData.Length && i >= 0)
                                 {
                                     int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
-                                    if (playerIndex > 0)
+                                    if (playerIndex > 0 && playerIndex == player)
                                     {
                                         int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
@@ -192,6 +194,8 @@ namespace Atomix.Components
                                         byte intensity = (byte)(~(realPixelDepth >> 4));
 
                                         _histogram[intensity]++;
+
+                                        handArea++;
                                     }
                                 }
                             }
@@ -204,7 +208,8 @@ namespace Atomix.Components
                         max = Math.Max(max, _histogram[i]);
                     }
 
-                    if (max > (_handRect.Width * _handRect.Height) / 3)
+                    //if (max > (_handRect.Width * _handRect.Height) / 3)
+                    if (handArea < (_handRect.Width * _handRect.Height) / 2)
                     {
                         _textToRender += "Open!";
                     }
@@ -213,7 +218,7 @@ namespace Atomix.Components
                         _textToRender += "Closed";
                     }
 
-                    _textToRender += string.Format(" [{0:P2}]", (double)max / (_handRect.Width * _handRect.Height));
+                    _textToRender += string.Format(" [{0:P2}]", Math.Round((double)max / (_handRect.Width * _handRect.Height), 2));
                 }
 
                 double depth = Math.Round(realDepth / 10f, 2);
