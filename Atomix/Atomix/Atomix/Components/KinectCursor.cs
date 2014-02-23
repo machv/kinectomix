@@ -92,17 +92,9 @@ namespace Atomix.Components
                             cursorPosition.X = (int)xScaled; // (int)(width * ratioX);
                             cursorPosition.Y = (int)yScaled; // (int)(height * ratioY);
 
-                            //// Absolute mapping of cursor
-                            //SkeletonPoint handPoint = _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position;
-                            //var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
-                            //double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
-                            //double ratioY = (double)colorPt.Y / _KinectChooser.Sensor.ColorStream.FrameHeight;
-                            //cursorPosition = new Vector2();
-                            //cursorPosition.X = (int)(width * ratioX);
-                            //cursorPosition.Y = (int)(height * ratioY);
+                            //Vector2 pos = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
 
-
-                            TrackHandMovement(_skeletons.TrackedSkeleton);
+                            TrackHandMovementRelative(_skeletons.TrackedSkeleton);
                             cursorPosition.X = (int)RightHandX;
                             cursorPosition.Y = (int)RightHandY;
                         }
@@ -231,6 +223,20 @@ namespace Atomix.Components
             base.Update(gameTime);
         }
 
+        private Vector2 TrackHandMovementAbsolute(Skeleton skeleton)
+        {
+            // Absolute mapping of cursor
+            SkeletonPoint handPoint = skeleton.Joints[JointType.HandLeft].Position;
+            var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
+            double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
+            double ratioY = (double)colorPt.Y / _KinectChooser.Sensor.ColorStream.FrameHeight;
+            cursorPosition = new Vector2();
+            cursorPosition.X = (int)(width * ratioX);
+            cursorPosition.Y = (int)(height * ratioY);
+
+            return cursorPosition;
+        }
+
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
@@ -293,7 +299,7 @@ namespace Atomix.Components
         /// </summary>
         /// <param name="skeleton"></param>
 
-        private void TrackHandMovement(Skeleton skeleton)
+        private void TrackHandMovementRelative(Skeleton skeleton)
         {
             Joint leftHand = skeleton.Joints[JointType.HandLeft];
             Joint rightHand = skeleton.Joints[JointType.HandRight];
