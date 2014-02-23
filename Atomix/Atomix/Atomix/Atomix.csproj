@@ -87,7 +87,7 @@
     <Compile Include="Components\VideoStreamComponent.cs" />
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IInputState.cs" />
-    <Compile Include="KinectChooser.cs" />
+    <Compile Include="Components\KinectChooser.cs" />
     <Compile Include="MouseInputProvider.cs" />
     <Compile Include="MouseInputState.cs" />
     <Compile Include="Screens\GameScreen.cs" />
