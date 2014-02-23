@@ -314,7 +314,7 @@ namespace Atomix.Components
                 {
                     double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
                     double yScaled =  _KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated ?
-                        (rightHand.Position.Y - rightShoulder.Position.Y) / (head.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height :
+                        (rightHand.Position.Y - rightShoulder.Position.Y) / ((rightShoulder.Position.Y - head.Position.Y) / 2) * GraphicsDevice.Viewport.Bounds.Height :
                         (rightHand.Position.Y - rightShoulder.Position.Y) / (rightHip.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
 
                     if (yScaled < 0) yScaled = 0;
