@@ -62,14 +62,14 @@ namespace Atomix
                         sensor.DepthStream.Enable();
                         sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
 
-                        sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
+                        //sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
                         sensor.SkeletonStream.EnableTrackingInNearRange = true;
 
                         sensor.Start();
 
-                        sensor.ElevationAngle = 10;
+                        //sensor.ElevationAngle = 10;
                         //sensor.ElevationAngle = -5;
-                        //sensor.ElevationAngle = 0;
+                        sensor.ElevationAngle = 0;
 
                         Sensor = sensor;
                     }

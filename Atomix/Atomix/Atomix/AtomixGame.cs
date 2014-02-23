@@ -118,7 +118,6 @@ namespace Atomix
                         skeletonFrame.CopySkeletonDataTo(skeletonData);
 
                         _skeletons.Items = skeletonData;
-                        _skeletons.TrackedSkeleton = _skeletons.Items.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
                     }
                 }
             }

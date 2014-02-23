@@ -61,7 +61,6 @@ namespace Atomix.Components
                         skeletonFrame.CopySkeletonDataTo(skeletonData);
 
                         _skeletons.Items = skeletonData;
-                        _skeletons.TrackedSkeleton = _skeletons.Items.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
 
                         if (_skeletons.TrackedSkeleton != null)
                         {
@@ -145,6 +144,7 @@ namespace Atomix.Components
                 SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[wristType].Position;
                 Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
                 Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
+                float distance = Vector2.Distance(handVector, wristVector);
 
                 // podivame se, v jake vzdalenosti bod je
                 // i kdyz prevadime body ze skeletonu do depth space, tak to vraci body i mimo ten obrazek, proto 
@@ -156,6 +156,7 @@ namespace Atomix.Components
 
                 int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                 int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
 
                 float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
                 if (realDepth > 0)
@@ -223,9 +224,11 @@ namespace Atomix.Components
             base.Update(gameTime);
         }
 
+        // Absolute mapping of cursor
         private Vector2 TrackHandMovementAbsolute(Skeleton skeleton)
         {
-            // Absolute mapping of cursor
+            int width = GraphicsDevice.Viewport.Bounds.Width;
+            int height = GraphicsDevice.Viewport.Bounds.Height;
             SkeletonPoint handPoint = skeleton.Joints[JointType.HandLeft].Position;
             var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
             double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
