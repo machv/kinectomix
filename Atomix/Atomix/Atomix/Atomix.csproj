@@ -68,6 +68,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Microsoft SDKs\Kinect\v1.8\Assemblies\Microsoft.Kinect.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Kinect.Toolkit.Interaction">
+      <HintPath>C:\Program Files\Microsoft SDKs\Kinect\Developer Toolkit v1.8.0\Assemblies\Microsoft.Kinect.Toolkit.Interaction.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
@@ -88,6 +91,7 @@
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IInputState.cs" />
     <Compile Include="Components\KinectChooser.cs" />
+    <Compile Include="KinectInteractionClient.cs" />
     <Compile Include="MouseInputProvider.cs" />
     <Compile Include="MouseInputState.cs" />
     <Compile Include="Screens\GameScreen.cs" />
@@ -104,6 +108,9 @@
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
+    </Content>
+    <Content Include="KinectInteraction180_32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit.Interaction;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -47,6 +48,8 @@ namespace Atomix
             this.DiscoverSensor();
         }
 
+        public InteractionStream Interactions { get; private set; }
+
         private void DiscoverSensor()
         {
             KinectSensor sensor = KinectSensor.KinectSensors.FirstOrDefault();
@@ -65,6 +68,10 @@ namespace Atomix
                         //sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
                         sensor.SkeletonStream.EnableTrackingInNearRange = true;
 
+                        KinectInteractionClient ic = new KinectInteractionClient();
+                        Interactions = new Microsoft.Kinect.Toolkit.Interaction.InteractionStream(sensor, ic);
+                        Interactions.InteractionFrameReady += Interactions_InteractionFrameReady;
+
                         sensor.Start();
 
                         //sensor.ElevationAngle = 10;
@@ -76,6 +83,11 @@ namespace Atomix
                     catch(Exception e) { Sensor = null; }
                 }
             }
+        }
+
+        void Interactions_InteractionFrameReady(object sender, InteractionFrameReadyEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

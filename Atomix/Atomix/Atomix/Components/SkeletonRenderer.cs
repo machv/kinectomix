@@ -59,12 +59,12 @@ namespace Atomix
                 DrawBone(skeleton.Joints, JointType.Head, JointType.ShoulderCenter);
                 DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderLeft);
                 DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.ShoulderRight);
-                
+
                 if (!isSeated)
                 {
                     DrawBone(skeleton.Joints, JointType.ShoulderCenter, JointType.Spine);
                 }
-                
+
                 DrawBone(skeleton.Joints, JointType.Spine, JointType.HipCenter);
                 DrawBone(skeleton.Joints, JointType.HipCenter, JointType.HipLeft);
                 DrawBone(skeleton.Joints, JointType.HipCenter, JointType.HipRight);
@@ -173,7 +173,7 @@ namespace Atomix
             {
                 // This is used to map a skeleton point to the color image location
                 var colorPt = _chooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(point, _chooser.Sensor.ColorStream.Format);
-                return new Vector2(colorPt.X/_scale, colorPt.Y/_scale);
+                return new Vector2(colorPt.X / _scale, colorPt.Y / _scale);
             }
 
             return Vector2.Zero;
@@ -183,49 +183,6 @@ namespace Atomix
 
         public override void Update(GameTime gameTime)
         {
-            //if (_skeletons.Items != null)
-            //{
-            //    foreach (Skeleton skel in _skeletons.Items)
-            //    {
-            //        if (skel.TrackingState == SkeletonTrackingState.Tracked)
-            //        {
-            //            skeleton = skel;
-            //        }
-            //    }
-            //}
-
-            //if (_kinect != null)
-            //{
-            //    try
-            //    {
-            //        using (SkeletonFrame skeletonFrame = _kinect.SkeletonStream.OpenNextFrame(0))
-            //        {
-            //            if (skeletonFrame != null)
-            //            {
-            //                Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-
-            //                //Copy the skeleton data to our array
-            //                skeletonFrame.CopySkeletonDataTo(skeletonData);
-
-            //                if (skeletonData != null)
-            //                {
-            //                    foreach (Skeleton skel in skeletonData)
-            //                    {
-            //                        if (skel.TrackingState == SkeletonTrackingState.Tracked)
-            //                        {
-            //                            skeleton = skel;
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        //Report an error message
-            //    }
-            //}
-
             base.Update(gameTime);
         }
 

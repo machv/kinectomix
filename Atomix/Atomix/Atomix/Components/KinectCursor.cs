@@ -1,4 +1,5 @@
 ﻿using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit.Interaction;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -121,6 +122,27 @@ namespace Atomix.Components
             }
 
             // Hand tracking START
+            if (_skeletons.TrackedSkeleton != null)
+            {
+                //using (InteractionFrame frame = _KinectChooser.Interactions.OpenNextFrame(0))
+                //{
+                //    if (frame == null)
+                //        return;
+
+
+                //    int id = _skeletons.TrackedSkeleton.TrackingId;
+
+                //    UserInfo[] usrInfo = new UserInfo[6];
+
+                //    frame.CopyInteractionDataTo(usrInfo);
+
+                //    UserInfo usr = usrInfo.Where(u => u.SkeletonTrackingId == id).FirstOrDefault();
+                //    if (usr != null)
+                //    {
+                //        bool f = true;
+                //    }
+                //}
+            }
 
             // check for hand
             if (cursorPosition != Vector2.Zero && _skeletons.TrackedSkeleton != null)
@@ -172,13 +194,16 @@ namespace Atomix.Components
                 int handArea = 0;
                 if (realDepth > 0)
                 {
+                    _histogram = new int[256];
+
                     float radius = 35000 / (float)realDepth;
                     radius = distance;
 
-                    _handRadius = (int)(radius * 1.5);
+                    radius = realDepth / 4 - 200;
 
-                    if (_handRadius == 0)
-                        _handRadius = 1;
+                    if (radius < 1) radius = 1;
+
+                    _handRadius = (int)(radius * 1.5);
 
                     if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
                     {
@@ -188,7 +213,7 @@ namespace Atomix.Components
                         // for display (we disregard information in most significant bit)
                         //                byte intensity = (byte)(~(realDepth >> 4));
 
-                        _histogram = new int[256];
+
                         handArea = 0;
 
                         for (int y = _handRect.Top; y < _handRect.Bottom; y++)
@@ -232,16 +257,14 @@ namespace Atomix.Components
                         _textToRender += "Closed";
                     }
 
-                    _textToRender += string.Format(" [{0:P2}]", Math.Round((double)max / (_handRect.Width * _handRect.Height), 2));
+                    _textToRender += string.Format(" [{0:P2}]", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2));
                 }
-
-                double depth = Math.Round(realDepth / 10f, 2);
-
-                //_textToRender = "Player's " + player + " hand at [" + _handDepthPoint.X + "x" + _handDepthPoint.Y + "] in depth " + depth + " cm, radius " + radius + ".";
             }
 
             base.Update(gameTime);
         }
+
+
 
         private float GetDistanceBetweenJoints(Skeleton skeleton, JointType join1, JointType join2)
         {
