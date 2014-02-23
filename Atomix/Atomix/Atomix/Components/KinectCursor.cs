@@ -15,14 +15,18 @@ namespace Atomix.Components
         SpriteBatch spriteBatch;
         bool leftHanded = false;
         Vector2 _kinectDebugOffset;
+        float _scale;
         Texture2D _handTexture;
         SpriteFont font;
 
-        public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset) : base(game)
+        public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
+            : base(game)
         {
             _KinectChooser = chooser;
             _skeletons = skeletons;
             _kinectDebugOffset = offset;
+            _scale = scale;
+
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
         }
 
@@ -144,7 +148,13 @@ namespace Atomix.Components
                 SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[wristType].Position;
                 Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
                 Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
-                float distance = Vector2.Distance(handVector, wristVector);
+                //float distance = Vector2.Distance(handVector, wristVector);
+
+                //float distance = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, JointType.Head, JointType.HipCenter);
+
+                var head = _skeletons.TrackedSkeleton.Joints[JointType.Head].Position;
+                var shoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderCenter].Position;
+                float distance = (head.Y - shoulder.Y) * 100; // in milimeters
 
                 // podivame se, v jake vzdalenosti bod je
                 // i kdyz prevadime body ze skeletonu do depth space, tak to vraci body i mimo ten obrazek, proto 
@@ -163,9 +173,13 @@ namespace Atomix.Components
                 if (realDepth > 0)
                 {
                     float radius = 35000 / (float)realDepth;
-                    //radius = distance;
+                    radius = distance;
 
                     _handRadius = (int)(radius * 1.5);
+
+                    if (_handRadius == 0)
+                        _handRadius = 1;
+
                     if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
                     {
                         _handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
@@ -176,7 +190,7 @@ namespace Atomix.Components
 
                         _histogram = new int[256];
                         handArea = 0;
-                        
+
                         for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                         {
                             for (int x = _handRect.Left; x < _handRect.Right; x++)
@@ -229,6 +243,17 @@ namespace Atomix.Components
             base.Update(gameTime);
         }
 
+        private float GetDistanceBetweenJoints(Skeleton skeleton, JointType join1, JointType join2)
+        {
+            var join1DepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[join1].Position, DepthImageFormat.Resolution640x480Fps30);
+            var join2DepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[join2].Position, DepthImageFormat.Resolution640x480Fps30);
+
+            Vector2 joint1Position = new Vector2(join1DepthPoint.X, join1DepthPoint.Y);
+            Vector2 joint2Position = new Vector2(join2DepthPoint.X, join2DepthPoint.Y);
+
+            return Vector2.Distance(joint1Position, joint1Position);
+        }
+
         // Absolute mapping of cursor
         private Vector2 TrackHandMovementAbsolute(Skeleton skeleton)
         {
@@ -259,7 +284,7 @@ namespace Atomix.Components
 
             if (_handRect != null)
             {
-                Rectangle translated = new Rectangle((_handRect.X / 2) + (int)_kinectDebugOffset.X, (_handRect.Y / 2) + (int)_kinectDebugOffset.Y, _handRect.Width / 2, _handRect.Height / 2);
+                Rectangle translated = new Rectangle((int)(_handRect.X / _scale) + (int)_kinectDebugOffset.X, (int)(_handRect.Y / _scale) + (int)_kinectDebugOffset.Y, (int)(_handRect.Width / _scale), (int)(_handRect.Height / _scale));
 
                 DrawBoudingBox(translated, Color.Red, 1);
             }
@@ -294,7 +319,7 @@ namespace Atomix.Components
 
         float xPrevious;
         float yPrevious;
-        int MoveThreshold = 0;
+        float MoveThreshold = 0.005f;
 
         double RightHandX;
         double RightHandY;
@@ -321,13 +346,11 @@ namespace Atomix.Components
             // the right hand joint is being tracked
             if (rightHand.TrackingState == JointTrackingState.Tracked)
             {
-                _textToRender = rightShoulder.Position.Z - rightHand.Position.Z + " m";
-
                 // the hand is sufficiently in front of the shoulder
                 if (rightShoulder.Position.Z - rightHand.Position.Z > 0.2)
                 {
                     double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
-                    double yScaled =  _KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated ?
+                    double yScaled = _KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated ?
                         (rightHand.Position.Y - rightShoulder.Position.Y) / ((rightShoulder.Position.Y - head.Position.Y) / 2) * GraphicsDevice.Viewport.Bounds.Height :
                         (rightHand.Position.Y - rightShoulder.Position.Y) / (rightHip.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
 

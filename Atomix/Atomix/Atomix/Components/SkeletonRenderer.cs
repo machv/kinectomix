@@ -13,8 +13,9 @@ namespace Atomix
         private KinectChooser _chooser;
         private Skeletons _skeletons;
         Vector2 _offset;
+        float _scale;
 
-        public SkeletonRenderer(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset)
+        public SkeletonRenderer(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
             : base(game)
         {
             _chooser = chooser;
@@ -22,6 +23,7 @@ namespace Atomix
 
             _mapMethod = SkeletonToColorMap;
             _offset = offset;
+            _scale = scale;
         }
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace Atomix
             {
                 // This is used to map a skeleton point to the color image location
                 var colorPt = _chooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(point, _chooser.Sensor.ColorStream.Format);
-                return new Vector2(colorPt.X/2, colorPt.Y/2);
+                return new Vector2(colorPt.X/_scale, colorPt.Y/_scale);
             }
 
             return Vector2.Zero;
@@ -256,7 +258,7 @@ namespace Atomix
             base.LoadContent();
 
             this.jointTexture = Game.Content.Load<Texture2D>("Images/Joint");
-            this.jointOrigin = new Vector2(this.jointTexture.Width / 2, this.jointTexture.Height / 2);
+            this.jointOrigin = new Vector2(this.jointTexture.Width / _scale, this.jointTexture.Height / _scale);
 
             this.boneTexture = Game.Content.Load<Texture2D>("Images/Bone");
             this.boneOrigin = new Vector2(0.5f, 0.0f);

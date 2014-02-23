@@ -20,16 +20,18 @@ namespace Atomix
     {
         private KinectChooser _chooser;
         Vector2 _offset;
+        float _scale;
         Game _game;
         GraphicsDeviceManager _graphics;
         Texture2D _colorVideo;
 
-        public VideoStreamComponent(Game game, KinectChooser chooser, GraphicsDeviceManager graphics, Vector2 offset)
+        public VideoStreamComponent(Game game, KinectChooser chooser, GraphicsDeviceManager graphics, Vector2 offset, float scale)
             : base(game)
         {
             _game = game;
             _chooser = chooser;
             _offset = offset;
+            _scale = scale;
             _graphics = graphics;
         }
 
@@ -85,8 +87,7 @@ namespace Atomix
             if (_colorVideo != null)
             {
                 spriteBatch.Begin();
-                int scale = 2;
-                spriteBatch.Draw(_colorVideo, new Rectangle((int)_offset.X, (int)_offset.Y, 640 / scale, 480 / scale), Color.White);
+                spriteBatch.Draw(_colorVideo, new Rectangle((int)_offset.X, (int)_offset.Y, (int)(640 / _scale), (int)(480 / _scale)), Color.White);
                 spriteBatch.End();
             }
 
