@@ -68,7 +68,7 @@ namespace Atomix
                         //sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
                         sensor.SkeletonStream.EnableTrackingInNearRange = true;
 
-                        KinectInteractionClient ic = new KinectInteractionClient();
+                        KinectInteractionClient ic = new KinectInteractionClient(Game.GraphicsDevice.Viewport.Bounds.Width, Game.GraphicsDevice.Viewport.Bounds.Height);
                         Interactions = new Microsoft.Kinect.Toolkit.Interaction.InteractionStream(sensor, ic);
                         Interactions.InteractionFrameReady += Interactions_InteractionFrameReady;
 
