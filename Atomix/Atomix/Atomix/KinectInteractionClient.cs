@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Atomix
 {
+    //http://blogs.msdn.com/b/k4wdev/archive/2013/05/01/using-kinect-interactionstream-outside-of-wpf.aspx
     class KinectInteractionClient : IInteractionClient
     {
         int _width;

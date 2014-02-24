@@ -65,6 +65,8 @@ namespace Atomix.Components
                         //Copy the skeleton data to our array
                         skeletonFrame.CopySkeletonDataTo(skeletonData);
 
+                        _KinectChooser.Interactions.ProcessSkeleton(skeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), skeletonFrame.Timestamp);
+
                         _skeletons.Items = skeletonData;
 
                         if (_skeletons.TrackedSkeleton != null)
@@ -111,7 +113,11 @@ namespace Atomix.Components
                     {
                         // Create array for pixel data and copy it from the image frame
                         short[] pixelData = new short[depthFrame.PixelDataLength];
+                        DepthImagePixel[] depthPixels = new DepthImagePixel[depthFrame.PixelDataLength];
                         depthFrame.CopyPixelDataTo(pixelData);
+                        depthFrame.CopyDepthImagePixelDataTo(depthPixels);
+
+                        _KinectChooser.Interactions.ProcessDepth(depthPixels, depthFrame.Timestamp);
 
                         //_colorVideo = new Texture2D(_graphics.GraphicsDevice, depthFrame.Width, depthFrame.Height);
                         //_colorVideo.SetData(ConvertDepthFrame(pixelData, depthFrame));

@@ -80,14 +80,31 @@ namespace Atomix
 
                         Sensor = sensor;
                     }
-                    catch(Exception e) { Sensor = null; }
+                    catch (Exception e) { Sensor = null; }
                 }
             }
         }
 
         void Interactions_InteractionFrameReady(object sender, InteractionFrameReadyEventArgs e)
         {
-            throw new NotImplementedException();
+            using (var frame = e.OpenInteractionFrame())
+            {
+                if (frame != null)
+                {
+                    UserInfo[] info = new UserInfo[6];
+                    frame.CopyInteractionDataTo(info);
+
+                    var usr = info.Where(i => i.SkeletonTrackingId > 0).FirstOrDefault();
+                    if (usr != null)
+                    {
+                        foreach (var interaction in usr.HandPointers)
+                        {
+                            var t = interaction.HandType;
+                        }
+                    }
+                }
+            }
+
         }
 
         /// <summary>
