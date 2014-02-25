@@ -70,7 +70,6 @@ namespace Atomix
 
                         KinectInteractionClient ic = new KinectInteractionClient(Game.GraphicsDevice.Viewport.Bounds.Width, Game.GraphicsDevice.Viewport.Bounds.Height);
                         Interactions = new Microsoft.Kinect.Toolkit.Interaction.InteractionStream(sensor, ic);
-                        Interactions.InteractionFrameReady += Interactions_InteractionFrameReady;
 
                         sensor.Start();
 
@@ -83,28 +82,6 @@ namespace Atomix
                     catch (Exception e) { Sensor = null; }
                 }
             }
-        }
-
-        void Interactions_InteractionFrameReady(object sender, InteractionFrameReadyEventArgs e)
-        {
-            using (var frame = e.OpenInteractionFrame())
-            {
-                if (frame != null)
-                {
-                    UserInfo[] info = new UserInfo[6];
-                    frame.CopyInteractionDataTo(info);
-
-                    var usr = info.Where(i => i.SkeletonTrackingId > 0).FirstOrDefault();
-                    if (usr != null)
-                    {
-                        foreach (var interaction in usr.HandPointers)
-                        {
-                            var t = interaction.HandType;
-                        }
-                    }
-                }
-            }
-
         }
 
         /// <summary>

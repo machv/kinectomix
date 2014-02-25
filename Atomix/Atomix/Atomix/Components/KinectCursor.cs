@@ -125,6 +125,24 @@ namespace Atomix.Components
                         lastDepthFrameData = pixelData;
                     }
                 }
+
+                using (InteractionFrame frame = _KinectChooser.Interactions.OpenNextFrame(0))
+                {
+                    if (frame != null)
+                    {
+                        UserInfo[] info = new UserInfo[6];
+                        frame.CopyInteractionDataTo(info);
+
+                        var usr = info.Where(i => i.SkeletonTrackingId > 0).FirstOrDefault();
+                        if (usr != null)
+                        {
+                            foreach (var interaction in usr.HandPointers)
+                            {
+                                var t = interaction.HandType;
+                            }
+                        }
+                    }
+                }
             }
 
             // Hand tracking START
