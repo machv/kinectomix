@@ -119,9 +119,6 @@ namespace Atomix.Components
 
                         _KinectChooser.Interactions.ProcessDepth(depthPixels, depthFrame.Timestamp);
 
-                        //_colorVideo = new Texture2D(_graphics.GraphicsDevice, depthFrame.Width, depthFrame.Height);
-                        //_colorVideo.SetData(ConvertDepthFrame(pixelData, depthFrame));
-
                         lastDepthFrameData = pixelData;
                     }
                 }
