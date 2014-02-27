@@ -136,7 +136,12 @@ namespace Atomix.Components
                             foreach (var interaction in usr.HandPointers)
                             {
                                 var t = interaction.HandType;
+                                if (interaction.HandEventType == InteractionHandEventType.Grip)
+                                {
+                                    bool closed = true;
+                                }
                             }
+
                         }
                     }
                 }
