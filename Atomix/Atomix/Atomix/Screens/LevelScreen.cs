@@ -1,4 +1,5 @@
-﻿using AtomixData;
+﻿using Atomix.Components;
+using AtomixData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -92,6 +93,8 @@ namespace Atomix
             _content.Unload();
         }
 
+        //bool lastHandClosedState;
+
         public override void Update(GameTime gameTime)
         {
             bool clickOccurred = false;
@@ -108,6 +111,8 @@ namespace Atomix
                 // React to the click
                 clickOccurred = true;
             }
+
+            KinectCursor cursor = ((AtomixGame)this.ScreenManager.Game).Cursor;
 
             if (isLevelFinished)
             {
@@ -174,9 +179,17 @@ namespace Atomix
                 return;
             }
 
-            if (clickOccurred)
+            if (clickOccurred || cursor.IsHandClosed)
             {
-                var mousePosition = new Point(mouseState.X, mouseState.Y);
+                Point mousePosition;
+                if (clickOccurred)
+                {
+                    mousePosition = new Point(mouseState.X, mouseState.Y);
+                }
+                else
+                {
+                    mousePosition = new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y);
+                }
 
                 // Find nearest point
                 Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);

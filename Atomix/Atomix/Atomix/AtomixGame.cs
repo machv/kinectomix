@@ -31,6 +31,9 @@ namespace Atomix
         Vector2 _kinectDebugOffset;
         float _scale = 1;
         public static GameState State { get { return _state; } }
+        KinectCursor _cursor;
+
+        public KinectCursor Cursor { get { return _cursor; } }
 
         public AtomixGame()
         {
@@ -61,16 +64,17 @@ namespace Atomix
             _gameScreenManager = new ScreenManager(this, _input);
             _KinectChooser = new KinectChooser(this);
             skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
+            _cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
             var videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale);
             var background = new Background(this);
-            var cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
+            
 
             Components.Add(background);
             Components.Add(_gameScreenManager);
             Components.Add(_KinectChooser);
             Components.Add(videoStream);
             Components.Add(skeletonRenderer);
-            Components.Add(cursor);
+            Components.Add(_cursor);
 
             base.Initialize();
         }

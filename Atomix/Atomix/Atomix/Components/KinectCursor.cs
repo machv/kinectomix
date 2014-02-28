@@ -51,7 +51,7 @@ namespace Atomix.Components
         short[] lastDepthFrameData = null;
 
         public bool IsHandClosed { get; set; }
-        public Vector2 HandPosition { get { return new Vector2(xPrevious, yPrevious); } }
+        public Vector2 HandPosition { get { return new Vector2((int)RightHandX, (int)RightHandY); } }
 
         public override void Update(GameTime gameTime)
         {
