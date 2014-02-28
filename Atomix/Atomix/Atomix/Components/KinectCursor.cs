@@ -50,6 +50,9 @@ namespace Atomix.Components
         string _textToRender;
         short[] lastDepthFrameData = null;
 
+        public bool IsHandClosed { get; set; }
+        public Vector2 HandPosition { get { return new Vector2(xPrevious, yPrevious); } }
+
         public override void Update(GameTime gameTime)
         {
             _textToRender = string.Empty;
@@ -136,9 +139,16 @@ namespace Atomix.Components
                             foreach (var interaction in usr.HandPointers)
                             {
                                 var t = interaction.HandType;
-                                if (interaction.HandEventType == InteractionHandEventType.Grip)
+                                if (interaction.HandType == InteractionHandType.Right)
                                 {
-                                    bool closed = true;
+                                    if (interaction.HandEventType == InteractionHandEventType.Grip)
+                                    {
+                                        IsHandClosed = true;
+                                    }
+                                    else
+                                    {
+                                        IsHandClosed = false;
+                                    }
                                 }
                             }
 
