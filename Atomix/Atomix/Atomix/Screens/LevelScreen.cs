@@ -46,6 +46,7 @@ namespace Atomix
         Vector2 boardPosition;
         SpriteFont normalFont;
         SpriteFont splashFont;
+        Point activeAtomIndex = new Point(-1, -1);
 
         int TileWidth = 60;
         int TileHeight = 60;
@@ -88,7 +89,7 @@ namespace Atomix
             idleTexture = _content.Load<Texture2D>("Idle");
         }
 
-        public override void UnloadContent() 
+        public override void UnloadContent()
         {
             _content.Unload();
         }
@@ -193,6 +194,9 @@ namespace Atomix
 
                 // Find nearest point
                 Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);
+                
+                // Reset active atom to none
+                activeAtomIndex = new Point(-1, -1);
 
                 for (int i = 0; i < currentLevel.Board.RowsCount; i++)
                 {
@@ -207,6 +211,7 @@ namespace Atomix
 
                                 currentLevel.Board[i, j].IsSelected = true;
                                 currentLevel.Board[i, j].Movements = Direction.None;
+                                activeAtomIndex = new Point(i, j);
 
                                 //zjistit jakymi smery se muze pohnout
                                 if (currentLevel.CanGoUp(i, j))
@@ -272,7 +277,48 @@ namespace Atomix
                     mPosition.Y += TileHeight;
                 }
             }
+
+            if (!isMovementAnimation && activeAtomIndex.X != -1 && activeAtomIndex.Y != -1)
+            {
+                // We have selected atom which is not moved -> Detect gestures
+
+                // Gestures will be recognized only when hand is closed
+                if (cursor.IsHandClosed)
+                {
+                    /// Detect Right
+                    
+                    // expect not
+                    isToRightGesture = false;
+
+                    if (Math.Abs(lastHandPosition.Y - cursor.HandPosition.Y) < 10)
+                    {
+                        gestureAccumulatedDistance += lastHandPosition.X - cursor.HandPosition.X;
+                    }
+                    else
+                    {
+                        // Reset acumulated info
+                        gestureAccumulatedDistance = 0;
+                    }
+                    if (gestureAccumulatedDistance > gestureThreshold)
+                    {
+                        isToRightGesture = true;
+                    }
+
+                    // Detect Left
+
+                    // Detect Top
+
+                    // Detect Down
+                }
+            }
         }
+
+        bool isToRightGesture = false;
+        float gestureAccumulatedDistance = 0;
+        float gestureAxeTolerance = 10;
+        float gestureThreshold = 20;
+        Direction gestureDirection;
+        Vector2 lastHandPosition;
 
         public override void Draw(GameTime gameTime)
         {
