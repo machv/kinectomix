@@ -285,24 +285,32 @@ namespace Atomix
                 // Gestures will be recognized only when hand is closed
                 if (cursor.IsHandClosed)
                 {
-                    /// Detect Right
+                    /// Detect Right/Left
                     
                     // expect not
                     isToRightGesture = false;
+                    isToLeftGesture = false;
 
                     if (Math.Abs(lastHandPosition.Y - cursor.HandPosition.Y) < 10)
                     {
-                        gestureAccumulatedDistance += lastHandPosition.X - cursor.HandPosition.X;
+                        gestureAccumulatedDistanceX += lastHandPosition.X - cursor.HandPosition.X;
                     }
                     else
                     {
                         // Reset acumulated info
-                        gestureAccumulatedDistance = 0;
+                        gestureAccumulatedDistanceX = 0;
                     }
-                    if (gestureAccumulatedDistance > gestureThreshold)
+
+                    if (gestureAccumulatedDistanceX > gestureThreshold)
                     {
                         isToRightGesture = true;
                     }
+
+                    if (gestureAccumulatedDistanceX < gestureThreshold * -1)
+                    {
+                        isToLeftGesture = true;
+                    }
+
 
                     // Detect Left
 
@@ -313,8 +321,9 @@ namespace Atomix
             }
         }
 
+        bool isToLeftGesture = false;
         bool isToRightGesture = false;
-        float gestureAccumulatedDistance = 0;
+        float gestureAccumulatedDistanceX = 0;
         float gestureAxeTolerance = 10;
         float gestureThreshold = 20;
         Direction gestureDirection;
