@@ -233,7 +233,7 @@ namespace Atomix.Components
                     _histogram = new int[256];
 
                     float radius = 35000 / (float)realDepth;
-                    radius = distance;
+                    //radius = distance;
 
                     radius = realDepth / 4 - 200;
 
@@ -378,7 +378,7 @@ namespace Atomix.Components
 
         float xPrevious;
         float yPrevious;
-        float MoveThreshold = 0.005f;
+        float MoveThreshold = 0; //0.005f;
 
         double RightHandX;
         double RightHandY;

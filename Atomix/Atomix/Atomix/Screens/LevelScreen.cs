@@ -311,9 +311,6 @@ namespace Atomix
                         isToLeftGesture = true;
                     }
 
-
-                    // Detect Left
-
                     // Detect Top
 
                     // Detect Down
