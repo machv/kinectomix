@@ -68,7 +68,7 @@ namespace Atomix
                         //sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
                         sensor.SkeletonStream.EnableTrackingInNearRange = true;
 
-                        KinectInteractionClient ic = new KinectInteractionClient(Game.GraphicsDevice.Viewport.Bounds.Width, Game.GraphicsDevice.Viewport.Bounds.Height);
+                        KinectInteractionClient ic = new KinectInteractionClient();
                         Interactions = new Microsoft.Kinect.Toolkit.Interaction.InteractionStream(sensor, ic);
 
                         sensor.Start();
@@ -95,6 +95,30 @@ namespace Atomix
             base.Initialize();
 
             this.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+        }
+
+        public Skeleton[] SkeletonData { get; set; }
+        public long SkeletonTimestamp { get; set; }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (Sensor.SkeletonStream.IsEnabled)
+            {
+                using (SkeletonFrame skeletonFrame = Sensor.SkeletonStream.OpenNextFrame(0))
+                {
+                    if (skeletonFrame != null)
+                    {
+                        SkeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+
+                        // Copy the skeleton data to our array
+                        skeletonFrame.CopySkeletonDataTo(SkeletonData);
+
+                        SkeletonTimestamp = skeletonFrame.Timestamp;
+                    }
+                }
+            }
+            
+            base.Update(gameTime);
         }
 
         /// <summary>

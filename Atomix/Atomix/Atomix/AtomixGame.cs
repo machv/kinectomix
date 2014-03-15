@@ -68,7 +68,7 @@ namespace Atomix
             _cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
             _videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale);
             var background = new Background(this);
-            
+
 
             Components.Add(background);
             Components.Add(_gameScreenManager);
@@ -134,21 +134,8 @@ namespace Atomix
             if (state.IsKeyDown(Keys.Subtract))
                 UpdateScale(_scale + 0.005f);
 
-            if (_KinectChooser.Sensor != null && _KinectChooser.Sensor.IsRunning)
-            {
-                using (SkeletonFrame skeletonFrame = _KinectChooser.Sensor.SkeletonStream.OpenNextFrame(0))
-                {
-                    if (skeletonFrame != null)
-                    {
-                        Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-
-                        //Copy the skeleton data to our array
-                        skeletonFrame.CopySkeletonDataTo(skeletonData);
-
-                        _skeletons.Items = skeletonData;
-                    }
-                }
-            }
+            if (_KinectChooser.Sensor != null && _KinectChooser.Sensor.IsRunning && _KinectChooser.SkeletonData != null)
+                    _skeletons.Items = _KinectChooser.SkeletonData;
 
             base.Update(gameTime);
         }

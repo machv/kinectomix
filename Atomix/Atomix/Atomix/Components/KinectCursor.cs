@@ -71,18 +71,11 @@ namespace Atomix.Components
 
             if (_KinectChooser.Sensor != null)
             {
-                using (SkeletonFrame skeletonFrame = _KinectChooser.Sensor.SkeletonStream.OpenNextFrame(0))
-                {
-                    if (skeletonFrame != null)
+                    if (_KinectChooser.SkeletonData != null)
                     {
-                        Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                        _KinectChooser.Interactions.ProcessSkeleton(_KinectChooser.SkeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), _KinectChooser.SkeletonTimestamp);
 
-                        //Copy the skeleton data to our array
-                        skeletonFrame.CopySkeletonDataTo(skeletonData);
-
-                        _KinectChooser.Interactions.ProcessSkeleton(skeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), skeletonFrame.Timestamp);
-
-                        _skeletons.Items = skeletonData;
+                        _skeletons.Items = _KinectChooser.SkeletonData;
 
                         if (_skeletons.TrackedSkeleton != null)
                         {
@@ -119,7 +112,6 @@ namespace Atomix.Components
                             cursorPosition.X = (int)RightHandX;
                             cursorPosition.Y = (int)RightHandY;
                         }
-                    }
                 }
 
                 using (DepthImageFrame depthFrame = _KinectChooser.Sensor.DepthStream.OpenNextFrame(0))
@@ -150,9 +142,10 @@ namespace Atomix.Components
                         {
                             foreach (var interaction in usr.HandPointers)
                             {
-                                var t = interaction.HandType;
                                 if (interaction.HandType == InteractionHandType.Right)
                                 {
+                                    //_textToRender = string.Format("Interaction: [{0}x{1}]", interaction.X, interaction.Y, _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.X, _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Y);
+
                                     if (interaction.HandEventType == InteractionHandEventType.Grip)
                                     {
                                         IsHandClosed = true;
