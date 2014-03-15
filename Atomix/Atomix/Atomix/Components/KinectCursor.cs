@@ -150,13 +150,16 @@ namespace Atomix.Components
                                     {
                                         IsHandClosed = true;
                                     }
-                                    else
+                                    else if (interaction.HandEventType == InteractionHandEventType.GripRelease) 
                                     {
                                         IsHandClosed = false;
                                     }
+
+                                    cursorPosition = new Vector2();
+                                    cursorPosition.X = (int)(interaction.X * GraphicsDevice.Viewport.Bounds.Width);
+                                    cursorPosition.Y = (int)(interaction.Y * GraphicsDevice.Viewport.Bounds.Height);
                                 }
                             }
-
                         }
                     }
                 }

@@ -75,7 +75,7 @@ namespace Atomix
 
                         //sensor.ElevationAngle = 10;
                         //sensor.ElevationAngle = -5;
-                        sensor.ElevationAngle = 0;
+                        //sensor.ElevationAngle = 0;
 
                         Sensor = sensor;
                     }
@@ -102,7 +102,7 @@ namespace Atomix
 
         public override void Update(GameTime gameTime)
         {
-            if (Sensor.SkeletonStream.IsEnabled)
+            if (Sensor != null && Sensor.SkeletonStream.IsEnabled)
             {
                 using (SkeletonFrame skeletonFrame = Sensor.SkeletonStream.OpenNextFrame(0))
                 {
