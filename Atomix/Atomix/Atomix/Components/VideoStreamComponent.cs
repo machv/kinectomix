@@ -35,6 +35,18 @@ namespace Atomix
             _graphics = graphics;
         }
 
+        public float Scale
+        {
+            get { return _scale; }
+            set { _scale = value; }
+        }
+
+        public Vector2 RenderOffset
+        {
+            get { return _offset; }
+            set { _offset = value; }
+        }
+
         /// <summary>
         /// The SpriteBatch used for rendering.
         /// </summary>

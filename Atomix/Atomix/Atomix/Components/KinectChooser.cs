@@ -79,7 +79,10 @@ namespace Atomix
 
                         Sensor = sensor;
                     }
-                    catch (Exception e) { Sensor = null; }
+                    catch (Exception e)
+                    {
+                        Sensor = null;
+                    }
                 }
             }
         }

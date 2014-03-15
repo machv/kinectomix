@@ -31,6 +31,18 @@ namespace Atomix.Components
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
         }
 
+        public float Scale
+        {
+            get { return _scale; }
+            set { _scale = value; }
+        }
+
+        public Vector2 RenderOffset
+        {
+            get { return _kinectDebugOffset; }
+            set { _kinectDebugOffset = value; }
+        }
+
         protected override void LoadContent()
         {
             _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
@@ -234,8 +246,7 @@ namespace Atomix.Components
 
                     float radius = 35000 / (float)realDepth;
                     //radius = distance;
-
-                    radius = realDepth / 4 - 200;
+                    //radius = realDepth / 4 - 200;
 
                     if (radius < 1) radius = 1;
 

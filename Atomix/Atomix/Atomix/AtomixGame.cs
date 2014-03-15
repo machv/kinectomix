@@ -16,7 +16,7 @@ using Atomix.Components;
 namespace Atomix
 {
     /// <summary>
-    /// This is the main type for your game
+    /// This is the main class for the Atomix game.
     /// </summary>
     public class AtomixGame : Microsoft.Xna.Framework.Game
     {
@@ -24,7 +24,8 @@ namespace Atomix
         SpriteBatch spriteBatch;
         ScreenManager _gameScreenManager;
         KinectChooser _KinectChooser;
-        SkeletonRenderer skeletonRenderer;
+        VideoStreamComponent _videoStream;
+        SkeletonRenderer _skeletonRenderer;
         Skeletons _skeletons = new Skeletons();
         IInputProvider _input;
         static GameState _state;
@@ -63,20 +64,35 @@ namespace Atomix
 
             _gameScreenManager = new ScreenManager(this, _input);
             _KinectChooser = new KinectChooser(this);
-            skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
+            _skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
             _cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
-            var videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale);
+            _videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale);
             var background = new Background(this);
             
 
             Components.Add(background);
             Components.Add(_gameScreenManager);
             Components.Add(_KinectChooser);
-            Components.Add(videoStream);
-            Components.Add(skeletonRenderer);
+            Components.Add(_videoStream);
+            Components.Add(_skeletonRenderer);
             Components.Add(_cursor);
 
             base.Initialize();
+        }
+
+        protected void UpdateScale(float scale)
+        {
+            _scale = scale;
+            _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / _scale);
+
+            _skeletonRenderer.Scale = _scale;
+            _skeletonRenderer.RenderOffset = _kinectDebugOffset;
+
+            _cursor.Scale = _scale;
+            _cursor.RenderOffset = _kinectDebugOffset;
+
+            _videoStream.Scale = _scale;
+            _videoStream.RenderOffset = _kinectDebugOffset;
         }
 
         /// <summary>
@@ -111,7 +127,14 @@ namespace Atomix
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (_KinectChooser.Sensor != null)
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Add))
+                UpdateScale(_scale - 0.005f);
+
+            if (state.IsKeyDown(Keys.Subtract))
+                UpdateScale(_scale + 0.005f);
+
+            if (_KinectChooser.Sensor != null && _KinectChooser.Sensor.IsRunning)
             {
                 using (SkeletonFrame skeletonFrame = _KinectChooser.Sensor.SkeletonStream.OpenNextFrame(0))
                 {
