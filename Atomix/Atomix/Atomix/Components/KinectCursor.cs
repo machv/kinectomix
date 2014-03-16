@@ -74,43 +74,12 @@ namespace Atomix.Components
                     if (_KinectChooser.SkeletonData != null)
                     {
                         _KinectChooser.Interactions.ProcessSkeleton(_KinectChooser.SkeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), _KinectChooser.SkeletonTimestamp);
-
                         _skeletons.Items = _KinectChooser.SkeletonData;
 
                         if (_skeletons.TrackedSkeleton != null)
                         {
-                            int width = GraphicsDevice.Viewport.Bounds.Width;
-                            int height = GraphicsDevice.Viewport.Bounds.Height;
-
-                            // Relative mapping of cursor
-                            // Based on idea at http://stackoverflow.com/questions/13313005/kinect-sdk-1-6-and-joint-scaleto-method
-                            Joint rightHand = _skeletons.TrackedSkeleton.Joints[JointType.HandRight];
-                            Joint head = _skeletons.TrackedSkeleton.Joints[JointType.Head];
-                            Joint leftShoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderLeft];
-                            Joint rightShoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderRight];
-                            Joint rightHip = _skeletons.TrackedSkeleton.Joints[JointType.HipRight];
-                            double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * width;
-
-                            double yScaled;
-                            if (_KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated)
-                            {
-                                // In seated mode isn't hip tracked, so we have to replace this positions
-                                yScaled = (rightHand.Position.Y - head.Position.Y) / (rightHand.Position.X - leftShoulder.Position.X) * height;
-                            }
-                            else
-                            {
-                                yScaled = (rightHand.Position.Y - head.Position.Y) / (rightHip.Position.Y - head.Position.Y) * height;
-                            }
-
-                            cursorPosition = new Vector2();
-                            cursorPosition.X = (int)xScaled; // (int)(width * ratioX);
-                            cursorPosition.Y = (int)yScaled; // (int)(height * ratioY);
-
-                            //Vector2 pos = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
-
-                            TrackHandMovementRelative(_skeletons.TrackedSkeleton);
-                            cursorPosition.X = (int)RightHandX;
-                            cursorPosition.Y = (int)RightHandY;
+                            //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
+                            cursorPosition = TrackHandMovementRelative(_skeletons.TrackedSkeleton);
                         }
                 }
 
@@ -155,9 +124,9 @@ namespace Atomix.Components
                                         IsHandClosed = false;
                                     }
 
-                                    cursorPosition = new Vector2();
-                                    cursorPosition.X = (int)(interaction.X * GraphicsDevice.Viewport.Bounds.Width);
-                                    cursorPosition.Y = (int)(interaction.Y * GraphicsDevice.Viewport.Bounds.Height);
+                                    cursorPositionInteraction = new Vector2();
+                                    cursorPositionInteraction.X = (int)(interaction.X * GraphicsDevice.Viewport.Bounds.Width);
+                                    cursorPositionInteraction.Y = (int)(interaction.Y * GraphicsDevice.Viewport.Bounds.Height);
                                 }
                             }
                         }
@@ -166,27 +135,6 @@ namespace Atomix.Components
             }
 
             // Hand tracking START
-            if (_skeletons.TrackedSkeleton != null)
-            {
-                //using (InteractionFrame frame = _KinectChooser.Interactions.OpenNextFrame(0))
-                //{
-                //    if (frame == null)
-                //        return;
-
-
-                //    int id = _skeletons.TrackedSkeleton.TrackingId;
-
-                //    UserInfo[] usrInfo = new UserInfo[6];
-
-                //    frame.CopyInteractionDataTo(usrInfo);
-
-                //    UserInfo usr = usrInfo.Where(u => u.SkeletonTrackingId == id).FirstOrDefault();
-                //    if (usr != null)
-                //    {
-                //        bool f = true;
-                //    }
-                //}
-            }
 
             // check for hand
             if (cursorPosition != Vector2.Zero && _skeletons.TrackedSkeleton != null)
@@ -233,7 +181,6 @@ namespace Atomix.Components
                 int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                 int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
-
                 float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
                 int handArea = 0;
                 if (realDepth > 0)
@@ -255,7 +202,6 @@ namespace Atomix.Components
                         // transform 13-bit depth information into an 8-bit intensity appropriate
                         // for display (we disregard information in most significant bit)
                         //                byte intensity = (byte)(~(realDepth >> 4));
-
 
                         handArea = 0;
 
@@ -306,8 +252,6 @@ namespace Atomix.Components
 
             base.Update(gameTime);
         }
-
-
 
         private float GetDistanceBetweenJoints(Skeleton skeleton, JointType join1, JointType join2)
         {
@@ -382,13 +326,14 @@ namespace Atomix.Components
         }
 
         Vector2 cursorPosition;
+        Vector2 cursorPositionInteraction;
 
         float xPrevious;
         float yPrevious;
         float MoveThreshold = 0; //0.005f;
 
-        double RightHandX;
-        double RightHandY;
+        float RightHandX;
+        float RightHandY;
 
         // http://stackoverflow.com/questions/12569706/how-to-use-skeletal-joint-to-act-as-cursor-using-bounds-no-gestures
         /// <summary>
@@ -397,8 +342,7 @@ namespace Atomix.Components
         /// Left Should = left most on screen
         /// </summary>
         /// <param name="skeleton"></param>
-
-        private void TrackHandMovementRelative(Skeleton skeleton)
+        private Vector2 TrackHandMovementRelative(Skeleton skeleton)
         {
             Joint leftHand = skeleton.Joints[JointType.HandLeft];
             Joint rightHand = skeleton.Joints[JointType.HandRight];
@@ -415,8 +359,8 @@ namespace Atomix.Components
                 // the hand is sufficiently in front of the shoulder
                 if (rightShoulder.Position.Z - rightHand.Position.Z > 0.2)
                 {
-                    double xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
-                    double yScaled = _KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated ?
+                    float xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
+                    float yScaled = _KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated ?
                         (rightHand.Position.Y - rightShoulder.Position.Y) / ((rightShoulder.Position.Y - head.Position.Y) / 2) * GraphicsDevice.Viewport.Bounds.Height :
                         (rightHand.Position.Y - rightShoulder.Position.Y) / (rightHip.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
 
@@ -434,9 +378,14 @@ namespace Atomix.Components
 
                         xPrevious = rightHand.Position.X;
                         yPrevious = rightHand.Position.Y;
+
+                        return new Vector2(RightHandX, RightHandY);
                     }
                 }
             }
+
+            // As fallback return zero position.
+            return new Vector2();
         }
     }
 }
