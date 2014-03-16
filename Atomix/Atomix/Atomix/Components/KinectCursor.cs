@@ -11,6 +11,7 @@ namespace Atomix.Components
 {
     public class KinectCursor : DrawableGameComponent
     {
+        const int CursorPositionsBufferLenth = 15;
         KinectChooser _KinectChooser;
         Skeletons _skeletons;
         SpriteBatch spriteBatch;
@@ -19,6 +20,8 @@ namespace Atomix.Components
         float _scale;
         Texture2D _handTexture;
         SpriteFont font;
+        Vector2[] cursorPositionsBuffer;
+        int cursorPositionsBufferIndex;
 
         public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
             : base(game)
@@ -29,6 +32,9 @@ namespace Atomix.Components
             _scale = scale;
 
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+
+            cursorPositionsBuffer = new Vector2[CursorPositionsBufferLenth];
+            cursorPositionsBufferIndex = -1;
         }
 
         public float Scale
@@ -71,16 +77,18 @@ namespace Atomix.Components
 
             if (_KinectChooser.Sensor != null)
             {
-                    if (_KinectChooser.SkeletonData != null)
-                    {
-                        _KinectChooser.Interactions.ProcessSkeleton(_KinectChooser.SkeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), _KinectChooser.SkeletonTimestamp);
-                        _skeletons.Items = _KinectChooser.SkeletonData;
+                if (_KinectChooser.SkeletonData != null)
+                {
+                    _KinectChooser.Interactions.ProcessSkeleton(_KinectChooser.SkeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), _KinectChooser.SkeletonTimestamp);
+                    _skeletons.Items = _KinectChooser.SkeletonData;
 
-                        if (_skeletons.TrackedSkeleton != null)
-                        {
-                            //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
-                            cursorPosition = TrackHandMovementRelative(_skeletons.TrackedSkeleton);
-                        }
+                    if (_skeletons.TrackedSkeleton != null)
+                    {
+                        //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
+                        var cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton);
+
+                        AddCursorPosition(cursor);
+                    }
                 }
 
                 using (DepthImageFrame depthFrame = _KinectChooser.Sensor.DepthStream.OpenNextFrame(0))
@@ -119,7 +127,7 @@ namespace Atomix.Components
                                     {
                                         IsHandClosed = true;
                                     }
-                                    else if (interaction.HandEventType == InteractionHandEventType.GripRelease) 
+                                    else if (interaction.HandEventType == InteractionHandEventType.GripRelease)
                                     {
                                         IsHandClosed = false;
                                     }
@@ -250,7 +258,43 @@ namespace Atomix.Components
                 }
             }
 
+            var cursorPos = GetHarmonizedCursorPosition();
+
+            // Avoid flickering
+            if (cursorPos != Vector2.Zero)
+                cursorPosition = cursorPos;
+
             base.Update(gameTime);
+        }
+
+        private void AddCursorPosition(Vector2 cursorPosition)
+        {
+            if (cursorPosition == Vector2.Zero)
+                return;
+
+            cursorPositionsBufferIndex = (cursorPositionsBufferIndex + 1) % cursorPositionsBuffer.Length;
+            cursorPositionsBuffer[cursorPositionsBufferIndex] = cursorPosition;
+        }
+
+        private Vector2 GetHarmonizedCursorPosition()
+        {
+            if (cursorPositionsBufferIndex < 0) return Vector2.Zero;
+
+            //return cursorPositions[cursorPositionsIndex];
+
+            float x;
+            float y;
+
+            var valuesX = cursorPositionsBuffer.Where(p => p != null).Select(p => p.X);
+
+            if (valuesX.Count() < 1) return Vector2.Zero;
+
+            x = valuesX.Sum() / valuesX.Count();
+
+            var valuesY = cursorPositionsBuffer.Where(p => p != null).Select(p => p.Y);
+            y = valuesY.Sum() / valuesY.Count();
+
+            return new Vector2(x, y);
         }
 
         private float GetDistanceBetweenJoints(Skeleton skeleton, JointType join1, JointType join2)
@@ -273,11 +317,12 @@ namespace Atomix.Components
             var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
             double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
             double ratioY = (double)colorPt.Y / _KinectChooser.Sensor.ColorStream.FrameHeight;
-            cursorPosition = new Vector2();
-            cursorPosition.X = (int)(width * ratioX);
-            cursorPosition.Y = (int)(height * ratioY);
 
-            return cursorPosition;
+            var cursor = new Vector2();
+            cursor.X = (int)(width * ratioX);
+            cursor.Y = (int)(height * ratioY);
+
+            return cursor;
         }
 
         public override void Draw(GameTime gameTime)
@@ -299,7 +344,7 @@ namespace Atomix.Components
                 DrawBoudingBox(translated, Color.Red, 1);
             }
 
-            if (cursorPosition != null)
+            if (cursorPosition != Vector2.Zero)
             {
                 spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
             }
@@ -385,7 +430,7 @@ namespace Atomix.Components
             }
 
             // As fallback return zero position.
-            return new Vector2();
+            return Vector2.Zero;
         }
     }
 }
