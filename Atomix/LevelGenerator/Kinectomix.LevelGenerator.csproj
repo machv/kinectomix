@@ -19,7 +19,7 @@
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -69,6 +69,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BoardTileCollectionControl.xaml.cs">
+      <DependentUpon>BoardTileCollectionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DummyServiceProvider.cs" />
+    <Compile Include="EnumHelper.cs" />
+    <Compile Include="TileSelectedEventArgs.cs" />
+    <Compile Include="ViewModel\BoardTileViewModel.cs" />
+    <Compile Include="ViewModel\BoardViewModel.cs" />
+    <Compile Include="ViewModel\LevelViewModel.cs" />
+    <Compile Include="ViewModel\MoleculeViewModel.cs" />
+    <Compile Include="View\EditorWindow.xaml.cs">
+      <DependentUpon>EditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EditorControl.xaml.cs">
+      <DependentUpon>EditorControl.xaml</DependentUpon>
+    </Compile>
+    <Page Include="BoardTileCollectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -82,8 +102,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\EditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mvvm\DelegateCommand.cs" />
+    <Compile Include="Mvvm\NotifyPropertyBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -123,6 +153,7 @@
     <Resource Include="Board\Hydrogen.png" />
     <Resource Include="Board\Oxygen.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
