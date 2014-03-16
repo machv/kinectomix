@@ -69,6 +69,10 @@ namespace Atomix
 
         ContentManager _content;
 
+        Button _levelsButton;
+        Button _repeatButton;
+        Button _nextButton;
+
         public override void LoadContent()
         {
             if (_content == null)
@@ -87,6 +91,64 @@ namespace Atomix
             normalFont = _content.Load<SpriteFont>("Fonts/Normal");
             splashFont = _content.Load<SpriteFont>("Fonts/Splash");
             idleTexture = _content.Load<Texture2D>("Idle");
+
+            _levelsButton = new Button(spriteBatch, "levels");
+            _levelsButton.Font = normalFont;
+            _levelsButton.LoadContent(ScreenManager.Content);
+            _levelsButton.Selected += _levelsButton_Selected;
+
+            _repeatButton = new Button(spriteBatch, "play again");
+            _repeatButton.Font = normalFont;
+            _repeatButton.LoadContent(ScreenManager.Content);
+            _repeatButton.Selected += _repeatButton_Selected;
+
+            _nextButton = new Button(spriteBatch, "continue");
+            _nextButton.Font = normalFont;
+            _nextButton.LoadContent(ScreenManager.Content);
+            _nextButton.Selected += _nextButton_Selected;
+        }
+
+        void _nextButton_Selected(object sender, EventArgs e)
+        {
+            GameScreen gameScreen = null;
+
+            // Load next level
+            LevelDefinition newLevelInfo = AtomixGame.State.SwitchToNextLevel();
+
+            if (newLevelInfo == null)
+            {
+                // We are on last level -> go to main screen
+                gameScreen = new StartScreen(spriteBatch);
+            }
+            else
+            {
+                Level newLevel = _content.Load<AtomixData.Level>("Levels/" + newLevelInfo.AssetName);
+                gameScreen = new LevelScreen(newLevel, spriteBatch);
+            }
+
+            ScreenManager.Add(gameScreen);
+            ScreenManager.Activate(gameScreen);
+        }
+
+        void _repeatButton_Selected(object sender, EventArgs e)
+        {
+            GameScreen gameScreen = null;
+
+            // Load current level again
+            LevelDefinition newLevelInfo = AtomixGame.State.GetCurrentLevel();
+            Level newLevel = _content.Load<AtomixData.Level>("Levels/" + newLevelInfo.AssetName);
+            gameScreen = new LevelScreen(newLevel, spriteBatch);
+
+            ScreenManager.Add(gameScreen);
+            ScreenManager.Activate(gameScreen);
+        }
+
+        void _levelsButton_Selected(object sender, EventArgs e)
+        {
+            GameScreen gameScreen = new LevelsScreen(spriteBatch);
+
+            ScreenManager.Add(gameScreen);
+            ScreenManager.Activate(gameScreen);
         }
 
         public override void UnloadContent()
@@ -117,27 +179,14 @@ namespace Atomix
 
             if (isLevelFinished)
             {
-                if (clickOccurred)
-                {
-                    GameScreen gameScreen = null;
+                _repeatButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 - _repeatButton.Width - 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
+                _repeatButton.Update(gameTime, ScreenManager.InputProvider);
 
-                    // Load next level
-                    LevelDefinition newLevelInfo = AtomixGame.State.SwitchToNextLevel();
+                _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
+                _levelsButton.Update(gameTime, ScreenManager.InputProvider);
 
-                    if (newLevelInfo == null)
-                    {
-                        // We are on last level -> go to main screen
-                        gameScreen = new StartScreen(spriteBatch);
-                    }
-                    else
-                    {
-                        Level newLevel = _content.Load<AtomixData.Level>("Levels/" + newLevelInfo.AssetName);
-                        gameScreen = new LevelScreen(newLevel, spriteBatch);
-                    }
-
-                    ScreenManager.Add(gameScreen);
-                    ScreenManager.Activate(gameScreen);
-                }
+                _nextButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 + _nextButton.Width + 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
+                _nextButton.Update(gameTime, ScreenManager.InputProvider);
 
                 return;
             }
@@ -194,7 +243,7 @@ namespace Atomix
 
                 // Find nearest point
                 Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);
-                
+
                 // Reset active atom to none
                 activeAtomIndex = new Point(-1, -1);
 
@@ -286,7 +335,7 @@ namespace Atomix
                 if (cursor.IsHandClosed)
                 {
                     /// Detect Right/Left
-                    
+
                     // expect not
                     isToRightGesture = false;
                     isToLeftGesture = false;
@@ -345,17 +394,16 @@ namespace Atomix
             if (isLevelFinished)
             {
                 spriteBatch.Draw(idleTexture, new Rectangle(0, 0, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.GraphicsDevice.Viewport.Bounds.Height), Color.White);
-                spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 200), Color.Brown);
+                spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 230), Color.Brown);
 
                 string name = "level completed";
                 Vector2 size = splashFont.MeasureString(name);
 
                 spriteBatch.DrawString(splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
 
-                name = "click screen to load next level";
-                size = normalFont.MeasureString(name);
-
-                spriteBatch.DrawString(normalFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40), Color.White);
+                _repeatButton.Draw(gameTime);
+                _levelsButton.Draw(gameTime);
+                _nextButton.Draw(gameTime);
             }
 
             spriteBatch.End();
