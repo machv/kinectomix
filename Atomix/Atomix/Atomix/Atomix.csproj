@@ -83,6 +83,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedTexture.cs" />
     <Compile Include="Components\Background.cs" />
     <Compile Include="Components\Button.cs" />
     <Compile Include="Components\KinectCursor.cs" />
@@ -91,6 +92,8 @@
     <Compile Include="IInputProvider.cs" />
     <Compile Include="IInputState.cs" />
     <Compile Include="Components\KinectChooser.cs" />
+    <Compile Include="KinectInputProvider.cs" />
+    <Compile Include="KinectInputState.cs" />
     <Compile Include="KinectInteractionClient.cs" />
     <Compile Include="MouseInputProvider.cs" />
     <Compile Include="MouseInputState.cs" />

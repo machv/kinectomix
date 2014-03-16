@@ -23,6 +23,15 @@ namespace Atomix.Components
         Vector2[] cursorPositionsBuffer;
         int cursorPositionsBufferIndex;
 
+
+
+
+        private AnimatedTexture SpriteTexture;
+        //private const float Scale = 2.0f;
+        private const float Depth = 0.5f;
+
+
+
         public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
             : base(game)
         {
@@ -35,6 +44,8 @@ namespace Atomix.Components
 
             cursorPositionsBuffer = new Vector2[CursorPositionsBufferLenth];
             cursorPositionsBufferIndex = -1;
+
+            SpriteTexture = new AnimatedTexture(Vector2.Zero, 0, 0.25f, Depth);
         }
 
         public float Scale
@@ -49,10 +60,22 @@ namespace Atomix.Components
             set { _kinectDebugOffset = value; }
         }
 
+
+        //private Viewport viewport;
+        //private Vector2 shipPos;
+        private const int Frames = 10;
+        private const int FramesPerSec = 4;
+
+
         protected override void LoadContent()
         {
             _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
             font = Game.Content.Load<SpriteFont>("Fonts/Normal");
+
+            // "shipanimated" is the name of the sprite asset in the project.
+            SpriteTexture.Load(Game.Content, "HandAnimation", Frames, FramesPerSec);
+            //viewport = Game.GraphicsDevice.Viewport;
+            //shipPos = new Vector2(viewport.Width / 3, viewport.Height / 3);
 
             base.LoadContent();
         }
@@ -68,8 +91,11 @@ namespace Atomix.Components
         string _textToRender;
         short[] lastDepthFrameData = null;
 
-        public bool IsHandClosed { get; set; }
-        public Vector2 HandPosition { get { return new Vector2((int)RightHandX, (int)RightHandY); } }
+        public bool IsHandClosed { get; private set; }
+
+        public bool IsHandPressed { get; private set; }
+
+        public Vector2 HandPosition { get { return new Vector2((int)cursorPosition.X, (int)cursorPosition.Y); } }
 
         public override void Update(GameTime gameTime)
         {
@@ -143,129 +169,158 @@ namespace Atomix.Components
             }
 
             // Hand tracking START
-
-            // check for hand
-            if (cursorPosition != Vector2.Zero && _skeletons.TrackedSkeleton != null)
+            if (_skeletons.TrackedSkeleton != null)
             {
-                Vector2 handPosition = cursorPosition; // SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
-
-                if (Vector2.Distance(handPosition, lastHandPosition) > 5)
+                // check for hand
+                if (cursorPosition != Vector2.Zero)
                 {
-                    lastHandTime = 0;
-                }
-                else
-                {
-                    lastHandTime += gameTime.ElapsedGameTime.TotalSeconds;
-                }
+                    Vector2 handPosition = cursorPosition; // SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
 
-                lastHandPosition = handPosition;
-
-                JointType handType = leftHanded ? JointType.HandLeft : JointType.HandRight;
-                JointType wristType = leftHanded ? JointType.WristLeft : JointType.WristRight;
-
-                _handDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[handType].Position, DepthImageFormat.Resolution640x480Fps30);
-                var wristDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[wristType].Position, DepthImageFormat.Resolution640x480Fps30);
-
-                SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[handType].Position;
-                SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[wristType].Position;
-                Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
-                Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
-                //float distance = Vector2.Distance(handVector, wristVector);
-
-                //float distance = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, JointType.Head, JointType.HipCenter);
-
-                var head = _skeletons.TrackedSkeleton.Joints[JointType.Head].Position;
-                var shoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderCenter].Position;
-                float distance = (head.Y - shoulder.Y) * 100; // in milimeters
-
-                // podivame se, v jake vzdalenosti bod je
-                // i kdyz prevadime body ze skeletonu do depth space, tak to vraci body i mimo ten obrazek, proto 
-                // je nutne takhle osetrit okrajove podminky pri cteni surovych dat
-                short[] frameData = lastDepthFrameData;
-                int stride = 640;
-                int index = (_handDepthPoint.Y > stride ? stride : _handDepthPoint.Y) * stride + _handDepthPoint.X;
-                if (index > frameData.Length) index = frameData.Length - 1;
-
-                int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
-                int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-
-                float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
-                int handArea = 0;
-                if (realDepth > 0)
-                {
-                    _histogram = new int[256];
-
-                    float radius = 35000 / (float)realDepth;
-                    //radius = distance;
-                    //radius = realDepth / 4 - 200;
-
-                    if (radius < 1) radius = 1;
-
-                    _handRadius = (int)(radius * 1.5);
-
-                    if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
+                    if (Vector2.Distance(handPosition, lastHandPosition) > 5)
                     {
-                        _handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
+                        lastHandTime = 0;
+                    }
+                    else
+                    {
+                        lastHandTime += gameTime.ElapsedGameTime.TotalSeconds;
+                    }
 
-                        // transform 13-bit depth information into an 8-bit intensity appropriate
-                        // for display (we disregard information in most significant bit)
-                        //                byte intensity = (byte)(~(realDepth >> 4));
+                    lastHandPosition = handPosition;
 
-                        handArea = 0;
+                    JointType handType = leftHanded ? JointType.HandLeft : JointType.HandRight;
+                    JointType wristType = leftHanded ? JointType.WristLeft : JointType.WristRight;
 
-                        for (int y = _handRect.Top; y < _handRect.Bottom; y++)
+                    _handDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[handType].Position, DepthImageFormat.Resolution640x480Fps30);
+                    var wristDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[wristType].Position, DepthImageFormat.Resolution640x480Fps30);
+
+                    SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[handType].Position;
+                    SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[wristType].Position;
+                    Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
+                    Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
+                    //float distance = Vector2.Distance(handVector, wristVector);
+
+                    //float distance = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, JointType.Head, JointType.HipCenter);
+
+                    var head = _skeletons.TrackedSkeleton.Joints[JointType.Head].Position;
+                    var shoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderCenter].Position;
+                    float distance = (head.Y - shoulder.Y) * 100; // in milimeters
+
+                    // podivame se, v jake vzdalenosti bod je
+                    // i kdyz prevadime body ze skeletonu do depth space, tak to vraci body i mimo ten obrazek, proto 
+                    // je nutne takhle osetrit okrajove podminky pri cteni surovych dat
+                    short[] frameData = lastDepthFrameData;
+                    int stride = 640;
+                    int index = (_handDepthPoint.Y > stride ? stride : _handDepthPoint.Y) * stride + _handDepthPoint.X;
+                    if (index > frameData.Length) index = frameData.Length - 1;
+
+                    int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
+                    int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                    float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
+                    int handArea = 0;
+                    if (realDepth > 0)
+                    {
+                        _histogram = new int[256];
+
+                        float radius = 35000 / (float)realDepth;
+                        //radius = distance;
+                        //radius = realDepth / 4 - 200;
+
+                        if (radius < 1) radius = 1;
+
+                        _handRadius = (int)(radius * 1.5);
+
+                        if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
                         {
-                            for (int x = _handRect.Left; x < _handRect.Right; x++)
+                            _handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
+
+                            // transform 13-bit depth information into an 8-bit intensity appropriate
+                            // for display (we disregard information in most significant bit)
+                            //                byte intensity = (byte)(~(realDepth >> 4));
+
+                            handArea = 0;
+
+                            for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
-                                int i = y * stride + x;
-                                if (i < frameData.Length && i >= 0)
+                                for (int x = _handRect.Left; x < _handRect.Right; x++)
                                 {
-                                    int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
-                                    if (playerIndex > 0 && playerIndex == player)
+                                    int i = y * stride + x;
+                                    if (i < frameData.Length && i >= 0)
                                     {
-                                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+                                        int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
+                                        if (playerIndex > 0 && playerIndex == player)
+                                        {
+                                            int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
-                                        // transform 13-bit depth information into an 8-bit intensity appropriate
-                                        // for display (we disregard information in most significant bit)
-                                        byte intensity = (byte)(~(realPixelDepth >> 4));
+                                            // transform 13-bit depth information into an 8-bit intensity appropriate
+                                            // for display (we disregard information in most significant bit)
+                                            byte intensity = (byte)(~(realPixelDepth >> 4));
 
-                                        _histogram[intensity]++;
+                                            _histogram[intensity]++;
 
-                                        handArea++;
+                                            handArea++;
+                                        }
                                     }
                                 }
                             }
                         }
+
+                        int max = 0;
+                        for (int i = 0; i < _histogram.Length; i++)
+                        {
+                            max = Math.Max(max, _histogram[i]);
+                        }
+
+                        //if (max > (_handRect.Width * _handRect.Height) / 3)
+                        if (handArea < (_handRect.Width * _handRect.Height) / 2)
+                        {
+                            _textToRender += "Open!";
+                        }
+                        else
+                        {
+                            _textToRender += "Closed";
+                        }
+
+                        _textToRender += string.Format(" [{0:P2}]", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2));
+                    }
+                }
+
+                var cursorPos = GetHarmonizedCursorPosition();
+
+                // Avoid flickering
+                if (cursorPos != Vector2.Zero)
+                {
+                    // animate only if on same place
+                    if (Vector2.Distance(cursorPosition, cursorPos) > distanceTolerance)
+                    {
+                        SpriteTexture.Reset();
+                        IsHandPressed = false;
                     }
 
-                    int max = 0;
-                    for (int i = 0; i < _histogram.Length; i++)
-                    {
-                        max = Math.Max(max, _histogram[i]);
-                    }
+                    cursorPosition = cursorPos;
+                }
 
-                    //if (max > (_handRect.Width * _handRect.Height) / 3)
-                    if (handArea < (_handRect.Width * _handRect.Height) / 2)
-                    {
-                        _textToRender += "Open!";
-                    }
-                    else
-                    {
-                        _textToRender += "Closed";
-                    }
 
-                    _textToRender += string.Format(" [{0:P2}]", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2));
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                SpriteTexture.UpdateFrame(elapsed);
+
+                if (SpriteTexture.Frame == Frames - 1)
+                {
+                    IsHandPressed = true;
+                    SpriteTexture.Pause();
                 }
             }
-
-            var cursorPos = GetHarmonizedCursorPosition();
-
-            // Avoid flickering
-            if (cursorPos != Vector2.Zero)
-                cursorPosition = cursorPos;
+            else
+            {
+                // No tracked skeleton is present so we hide cursor.
+                cursorPosition = Vector2.Zero;
+            }
 
             base.Update(gameTime);
         }
+
+        int frame = 0;
+        float distanceTolerance = 0.5f;
 
         private void AddCursorPosition(Vector2 cursorPosition)
         {
@@ -347,6 +402,8 @@ namespace Atomix.Components
             if (cursorPosition != Vector2.Zero)
             {
                 spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
+
+                SpriteTexture.DrawFrame(spriteBatch, cursorPosition);
             }
 
             spriteBatch.End();
