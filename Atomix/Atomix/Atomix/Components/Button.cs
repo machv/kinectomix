@@ -28,6 +28,8 @@ namespace Atomix
 
         public Color BorderColor { get; set; }
         public Color Background { get; set; }
+        
+        public Color ActiveBackground { get; set; }
 
         public Color Foreground { get; set; }
 
@@ -48,6 +50,7 @@ namespace Atomix
         public Button(SpriteBatch spriteBatch)
         {
             Background = Color.Gray;
+            ActiveBackground = Color.Silver;
             Foreground = Color.White;
             BorderColor = Color.Black;
             BorderThickness = 2;
@@ -72,20 +75,23 @@ namespace Atomix
         IInputState lastState;
         IInputState currState;
 
+        private Color currentBackground;
+
         public void Update(GameTime gameTime, IInputProvider input)
         {
             lastState = currState;
             currState = input.GetState();
-
-            if (lastState != null && lastState.IsSelected != currState.IsSelected)
-            {
-                if (currState.X >= Position.X &&
+            bool isOver = currState.X >= Position.X &&
                     currState.Y >= Position.Y &&
                     currState.X <= Position.X + Width &&
-                    currState.Y <= Position.Y + Height)
-                {
+                    currState.Y <= Position.Y + Height;
+
+            currentBackground = isOver ? ActiveBackground : Background;
+
+            if (lastState != null && lastState.IsSelected != currState.IsSelected && isOver)
+            {
                     OnSelected();
-                }
+                
             }
         }
 
@@ -100,7 +106,7 @@ namespace Atomix
                 Width,
                 Height);
 
-            _spriteBatch.Draw(_empty, buttonDimensions, Background);
+            _spriteBatch.Draw(_empty, buttonDimensions, currentBackground);
 
             _spriteBatch.Draw(
                 _empty,

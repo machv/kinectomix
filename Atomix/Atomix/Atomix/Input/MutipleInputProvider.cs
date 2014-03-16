@@ -31,6 +31,8 @@ namespace Atomix.Input
             if (providers.Count == 0)
                 return null;
 
+            List<IInputState> states = new List<IInputState>();
+            // Find first with active selection.
             foreach (var provider in providers)
             {
                 IInputState state = provider.GetState();
@@ -39,8 +41,21 @@ namespace Atomix.Input
 
                 if (state.IsSelected)
                     return state;
+
+                states.Add(state);
             }
 
+            // If no active, find first with non-zero position.
+            foreach (IInputState state in states)
+            {
+                if (state == null)
+                    continue;
+
+                if (state.X != 0 && state.Y != 0)
+                    return state;
+            }
+
+            // Fallback to first state.
             return providers[0].GetState();
         }
     }

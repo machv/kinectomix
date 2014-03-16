@@ -31,7 +31,7 @@ namespace Atomix
         IInputProvider _input;
         static GameState _state;
         Vector2 _kinectDebugOffset;
-        float _scale = 1;
+        float _scale = 3;
         public static GameState State { get { return _state; } }
         KinectCursor _cursor;
 

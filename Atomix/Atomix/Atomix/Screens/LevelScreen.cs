@@ -22,11 +22,6 @@ namespace Atomix
             this.currentLevel = currentLevel;
             this.spriteBatch = spriteBatch;
 
-            boardPosition = new Vector2(20, 60);
-
-            CalculateBoardTilePositions(boardPosition, currentLevel.Board);
-            CalculateBoardTilePositions(new Vector2(600, 20), currentLevel.Molecule);
-
             gameStarted = DateTime.Now;
         }
 
@@ -75,6 +70,18 @@ namespace Atomix
 
         public override void LoadContent()
         {
+            boardPosition = new Vector2(20, 60);
+
+            CalculateBoardTilePositions(boardPosition, currentLevel.Board);
+
+            int offset = (int)boardPosition.X + currentLevel.Board.ColumnsCount * TileWidth + TileWidth;
+            int moleculeWidth = currentLevel.Molecule.ColumnsCount * TileWidth;
+            int moleculeHeight = currentLevel.Molecule.RowsCount * TileHeight;
+            int posX = (ScreenManager.GraphicsDevice.Viewport.Bounds.Width - offset) / 2 - moleculeWidth / 2;
+            int posY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - moleculeHeight / 2;
+
+            CalculateBoardTilePositions(new Vector2(offset + posX, posY), currentLevel.Molecule);
+
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
