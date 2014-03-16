@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Atomix
 {
-    public class MouseInputState : IInputState
+    public struct MouseInputState : IInputState
     {
-        protected MouseState _state;
+        MouseState _state;
 
         public int X
         {

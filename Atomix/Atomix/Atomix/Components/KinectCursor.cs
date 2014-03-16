@@ -64,7 +64,7 @@ namespace Atomix.Components
         //private Viewport viewport;
         //private Vector2 shipPos;
         private const int Frames = 10;
-        private const int FramesPerSec = 4;
+        private const int FramesPerSec = 10;
 
 
         protected override void LoadContent()
@@ -294,6 +294,7 @@ namespace Atomix.Components
                     if (Vector2.Distance(cursorPosition, cursorPos) > distanceTolerance)
                     {
                         SpriteTexture.Reset();
+                        SpriteTexture.Play();
                         IsHandPressed = false;
                     }
 

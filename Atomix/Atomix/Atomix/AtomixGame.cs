@@ -12,6 +12,7 @@ using AtomixData;
 using System.Xml;
 using Microsoft.Kinect;
 using Atomix.Components;
+using Atomix.Input;
 
 namespace Atomix
 {
@@ -46,7 +47,6 @@ namespace Atomix
 
             Content.RootDirectory = "Content";
 
-            _input = new MouseInputProvider();
             _state = new GameState();
         }
 
@@ -62,13 +62,21 @@ namespace Atomix
 
             _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / _scale);
 
-            _gameScreenManager = new ScreenManager(this, _input);
             _KinectChooser = new KinectChooser(this);
             _skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
             _cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
             _videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale);
             var background = new Background(this);
 
+            // Input
+            var mouseInput = new MouseInputProvider();
+            var kinectInput = new KinectInputProvider(_cursor);
+            var multipleInput = new MutipleInputProvider();
+            multipleInput.AddProvider(kinectInput);
+            multipleInput.AddProvider(mouseInput);
+            _input = multipleInput;
+            
+            _gameScreenManager = new ScreenManager(this, _input);
 
             Components.Add(background);
             Components.Add(_gameScreenManager);
@@ -135,7 +143,7 @@ namespace Atomix
                 UpdateScale(_scale + 0.005f);
 
             if (_KinectChooser.Sensor != null && _KinectChooser.Sensor.IsRunning && _KinectChooser.SkeletonData != null)
-                    _skeletons.Items = _KinectChooser.SkeletonData;
+                _skeletons.Items = _KinectChooser.SkeletonData;
 
             base.Update(gameTime);
         }

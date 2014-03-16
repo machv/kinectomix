@@ -77,7 +77,7 @@ namespace Atomix
             lastState = currState;
             currState = input.GetState();
 
-            if (lastState != null && !lastState.IsSelected && currState.IsSelected)
+            if (lastState != null && lastState.IsSelected != currState.IsSelected)
             {
                 if (currState.X >= Position.X &&
                     currState.Y >= Position.Y &&
