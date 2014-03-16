@@ -180,6 +180,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Images\KinectIcon.png">
+      <Name>KinectIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Levels\Level4.xnb">
       <Name>Level4</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

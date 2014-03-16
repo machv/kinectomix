@@ -9,6 +9,9 @@ using System.Text;
 
 namespace Atomix
 {
+    /// <summary>
+    /// Kinect status for user.
+    /// </summary>
     public class KinectChooser : DrawableGameComponent
     {
         /// <summary>
@@ -20,6 +23,11 @@ namespace Atomix
         /// The font for rendering the state text.
         /// </summary>
         private SpriteFont font;
+
+        /// <summary>
+        /// Kinect Icon texture.
+        /// </summary>
+        private Texture2D icon;
 
         public KinectSensor Sensor { get; private set; }
 
@@ -133,44 +141,37 @@ namespace Atomix
                 Initialize();
             }
 
-            // If the background is not loaded, load it now
-            //if (this.chooserBackground == null)
-            //{
-            //    this.LoadContent();
-            //}
-
             // If we don't have a sensor, or the sensor we have is not connected
             // then we will display the information text
             if (this.Sensor == null || this.LastStatus != KinectStatus.Connected)
             {
                 this.spriteBatch.Begin();
 
-                // Render the background
-                //this.spriteBatch.Draw(
-                //    this.chooserBackground,
-                //    new Vector2(Game.GraphicsDevice.Viewport.Width / 2, Game.GraphicsDevice.Viewport.Height / 2),
-                //    null,
-                //    Color.White,
-                //    0,
-                //    new Vector2(this.chooserBackground.Width / 2, this.chooserBackground.Height / 2),
-                //    1,
-                //    SpriteEffects.None,
-                //    0);
+                float scale = 0.5f;
+                Vector2 position = new Vector2();
+                position.X = Game.GraphicsDevice.Viewport.Width - icon.Width - 20 + (icon.Width * scale / 2); // Centered
+                position.Y = 20;
+
+                spriteBatch.Draw(icon, position, null, Color.White, 0, new Vector2(), scale, SpriteEffects.None, 0);
+
+                position.X -= icon.Width * scale / 2;
+                position.Y += icon.Height * scale + 10;
 
                 // Determine the text
-                string txt = "Sensor not connected";
+                string txt = "please connect sensor";
+                Vector2 size = font.MeasureString(txt);
                 if (this.Sensor != null)
                 {
                     txt = LastStatus.ToString();
                 }
 
                 // Render the text
-                Vector2 size = this.font.MeasureString(txt);
                 this.spriteBatch.DrawString(
                     this.font,
                     txt,
-                    new Vector2((Game.GraphicsDevice.Viewport.Width - size.X) / 2, (Game.GraphicsDevice.Viewport.Height / 2) + size.Y),
-                    Color.White);
+                    position,
+                    Color.Black);
+
                 this.spriteBatch.End();
             }
 
@@ -186,6 +187,7 @@ namespace Atomix
 
             //this.chooserBackground = Game.Content.Load<Texture2D>("ChooserBackground");
             font = Game.Content.Load<SpriteFont>("Fonts/Normal");
+            icon = Game.Content.Load<Texture2D>("Images/KinectIcon");
         }
 
         /// <summary>
