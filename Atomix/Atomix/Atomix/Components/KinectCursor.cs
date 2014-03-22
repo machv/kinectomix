@@ -23,14 +23,8 @@ namespace Atomix.Components
         Vector2[] cursorPositionsBuffer;
         int cursorPositionsBufferIndex;
 
-
-
-
         private AnimatedTexture SpriteTexture;
-        //private const float Scale = 2.0f;
         private const float Depth = 0.5f;
-
-
 
         public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
             : base(game)
@@ -60,22 +54,15 @@ namespace Atomix.Components
             set { _kinectDebugOffset = value; }
         }
 
-
-        //private Viewport viewport;
-        //private Vector2 shipPos;
         private const int Frames = 10;
         private const int FramesPerSec = 10;
-
 
         protected override void LoadContent()
         {
             _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
             font = Game.Content.Load<SpriteFont>("Fonts/Normal");
 
-            // "shipanimated" is the name of the sprite asset in the project.
             SpriteTexture.Load(Game.Content, "HandAnimation", Frames, FramesPerSec);
-            //viewport = Game.GraphicsDevice.Viewport;
-            //shipPos = new Vector2(viewport.Width / 3, viewport.Height / 3);
 
             base.LoadContent();
         }
@@ -212,6 +199,7 @@ namespace Atomix.Components
                     int stride = 640;
                     int index = (_handDepthPoint.Y > stride ? stride : _handDepthPoint.Y) * stride + _handDepthPoint.X;
                     if (index > frameData.Length) index = frameData.Length - 1;
+                    if (index < 0) index = 0;
 
                     int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                     int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
