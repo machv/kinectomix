@@ -31,7 +31,7 @@ namespace Atomix
         IInputProvider _input;
         static GameState _state;
         Vector2 _kinectDebugOffset;
-        float _scale = 3;
+        float _scale = 1;
         public static GameState State { get { return _state; } }
         KinectCursor _cursor;
 
@@ -65,7 +65,7 @@ namespace Atomix
             _KinectChooser = new KinectChooser(this);
             _skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
             _cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
-            _videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale);
+            _videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
             var background = new Background(this);
 
             // Input

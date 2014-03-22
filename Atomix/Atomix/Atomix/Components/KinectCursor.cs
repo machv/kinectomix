@@ -206,13 +206,14 @@ namespace Atomix.Components
 
                     float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
                     int handArea = 0;
+                    int handWidth = 0;
+                    int handHeight = 0;
                     if (realDepth > 0)
                     {
                         _histogram = new int[256];
 
                         float radius = 35000 / (float)realDepth;
                         //radius = distance;
-                        //radius = realDepth / 4 - 200;
 
                         if (radius < 1) radius = 1;
 
@@ -227,6 +228,10 @@ namespace Atomix.Components
                             //                byte intensity = (byte)(~(realDepth >> 4));
 
                             handArea = 0;
+                            int handMinX = int.MaxValue;
+                            int handMaxX = int.MinValue;
+                            int handMinY = int.MaxValue;
+                            int handMaxY = int.MinValue;
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
@@ -247,10 +252,19 @@ namespace Atomix.Components
                                             _histogram[intensity]++;
 
                                             handArea++;
+
+                                            handMinX = Math.Min(handMinX, x);
+                                            handMaxX = Math.Max(handMaxX, x);
+
+                                            handMinY = Math.Min(handMinY, y);
+                                            handMaxY = Math.Max(handMaxY, y);
                                         }
                                     }
                                 }
                             }
+
+                            handWidth = handMaxX - handMinX;
+                            handHeight = handMaxY - handMinY;
                         }
 
                         int max = 0;
@@ -269,7 +283,7 @@ namespace Atomix.Components
                             _textToRender += "Closed";
                         }
 
-                        _textToRender += string.Format(" [{0:P2}]", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2));
+                        _textToRender += string.Format(" [{0:P2}], Width = {1} px, Height = {2} px", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2), handWidth, handHeight);
                     }
                 }
 
