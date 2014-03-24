@@ -70,7 +70,7 @@ namespace Atomix
                     try
                     {
                         sensor.SkeletonStream.Enable();
-                        sensor.DepthStream.Enable();
+                        sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                         sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
 
                         //sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;

@@ -117,6 +117,7 @@ namespace Atomix.Components
                         _KinectChooser.Interactions.ProcessDepth(depthPixels, depthFrame.Timestamp);
 
                         lastDepthFrameData = pixelData;
+                        lastDepthFrameDataLength = depthFrame.PixelDataLength;
                     }
                 }
 
@@ -204,6 +205,35 @@ namespace Atomix.Components
                     int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                     int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
+                    byte[] colorPixels = new byte[lastDepthFrameDataLength * sizeof(int)];
+
+                    // Convert the depth to BGRA
+                    int colorPixelIndex = 0;
+                    for (int i = 0; i < frameData.Length; ++i)
+                    {
+                        // Get the depth for this pixel
+                        int depth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                        // To convert to a byte, we're discarding the most-significant
+                        // rather than least-significant bits.
+                        // We're preserving detail, although the intensity will "wrap."
+                        // Values outside the reliable depth range are mapped to 0 (black).
+
+                        byte intensity = (byte)(~(depth >> 4));
+
+                        // Write out blue byte
+                        colorPixels[colorPixelIndex++] = intensity;
+
+                        // Write out green byte
+                        colorPixels[colorPixelIndex++] = intensity;
+
+                        // Write out red byte                        
+                        colorPixels[colorPixelIndex++] = intensity;
+
+                        // Write alpha byte
+                        colorPixels[colorPixelIndex++] = (Byte)255;
+                    }
+
                     float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
                     int handArea = 0;
                     int handWidth = 0;
@@ -232,6 +262,7 @@ namespace Atomix.Components
                             int handMaxX = int.MinValue;
                             int handMinY = int.MaxValue;
                             int handMaxY = int.MinValue;
+                            int tolerance = 30; // in milimeters
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
@@ -251,7 +282,41 @@ namespace Atomix.Components
 
                                             _histogram[intensity]++;
 
-                                            handArea++;
+                                            int colorOffset = i * 4;
+
+                                            // Skip pixels outside depth tolerance
+                                            if (realPixelDepth <= (realDepth - tolerance) || realPixelDepth >= (realDepth + tolerance))
+                                            {
+                                                //continue;
+
+                                                // Write out blue byte
+                                                colorPixels[colorOffset++] = (byte)255;
+
+                                                // Write out green byte
+                                                colorPixels[colorOffset++] = 0;
+
+                                                // Write out blue byte                        
+                                                colorPixels[colorOffset++] = 0;
+
+                                                // Alpha
+                                                colorPixels[colorOffset++] = (byte)255;
+                                            }
+                                            else
+                                            {
+                                                handArea++;
+
+                                                // Write out blue byte
+                                                colorPixels[colorOffset++] = 0;
+
+                                                // Write out green byte
+                                                colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)255 : (byte)0;
+
+                                                // Write out red byte                        
+                                                colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)0 : (byte)255;
+
+                                                // Alpha
+                                                colorPixels[colorOffset++] = (byte)255;
+                                            }
 
                                             handMinX = Math.Min(handMinX, x);
                                             handMaxX = Math.Max(handMaxX, x);
@@ -285,6 +350,9 @@ namespace Atomix.Components
 
                         _textToRender += string.Format(" [{0:P2}], Width = {1} px, Height = {2} px", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2), handWidth, handHeight);
                     }
+
+                    _colorVideo = new Texture2D(GraphicsDevice, 640, 480);
+                    _colorVideo.SetData(colorPixels);
                 }
 
                 var cursorPos = GetHarmonizedCursorPosition();
@@ -409,6 +477,11 @@ namespace Atomix.Components
                 SpriteTexture.DrawFrame(spriteBatch, cursorPosition);
             }
 
+            if (_colorVideo != null)
+            {
+                spriteBatch.Draw(_colorVideo, new Rectangle(0, 0, 640, 480), Color.White);
+            }
+
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -439,6 +512,8 @@ namespace Atomix.Components
 
         float RightHandX;
         float RightHandY;
+        private int lastDepthFrameDataLength;
+        private Texture2D _colorVideo;
 
         // http://stackoverflow.com/questions/12569706/how-to-use-skeletal-joint-to-act-as-cursor-using-bounds-no-gestures
         /// <summary>
