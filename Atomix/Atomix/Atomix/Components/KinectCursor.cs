@@ -263,6 +263,12 @@ namespace Atomix.Components
                             int handMinY = int.MaxValue;
                             int handMaxY = int.MinValue;
                             int tolerance = 30; // in milimeters
+                            int stepForLinesY = 30;
+
+                            int[] linesY = new int[(_handRect.Bottom - _handRect.Top) / stepForLinesY];
+                            int previousPixel = 0;
+                            int currentLineY = _handRect.Top + stepForLinesY; // Start on first offset
+                            int lineIndex = 0;
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
@@ -271,15 +277,25 @@ namespace Atomix.Components
                                     int i = y * stride + x;
                                     if (i < frameData.Length && i >= 0)
                                     {
+                                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                                        // transform 13-bit depth information into an 8-bit intensity appropriate
+                                        // for display (we disregard information in most significant bit)
+                                        byte intensity = (byte)(~(realPixelDepth >> 4));
+
                                         int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
+                                        
+                                        // Checking of convex for lines
+                                        if (playerIndex != previousPixel)
+                                        {
+                                            // Change, add to counter
+                                            linesY[lineIndex]++;
+                                        }
+
+                                        previousPixel = playerIndex;
+                                        
                                         if (playerIndex > 0 && playerIndex == player)
                                         {
-                                            int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-
-                                            // transform 13-bit depth information into an 8-bit intensity appropriate
-                                            // for display (we disregard information in most significant bit)
-                                            byte intensity = (byte)(~(realPixelDepth >> 4));
-
                                             _histogram[intensity]++;
 
                                             int colorOffset = i * 4;
@@ -304,7 +320,8 @@ namespace Atomix.Components
                                             }
                                             else
                                             {
-                                                // inside tolerance
+                                                // Inside tolerance
+
                                                 handArea++;
 
                                                 // Write out red byte
@@ -327,6 +344,13 @@ namespace Atomix.Components
                                             handMaxY = Math.Max(handMaxY, y);
                                         }
                                     }
+                                }
+
+                                if (y == currentLineY)
+                                {
+                                    // We finished current row -> prepare for next
+                                    currentLineY += stepForLinesY;
+                                    lineIndex++;
                                 }
                             }
 
