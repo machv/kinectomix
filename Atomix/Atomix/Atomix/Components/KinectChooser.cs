@@ -94,7 +94,7 @@ namespace Atomix
                 }
             }
         }
-
+            
         /// <summary>
         /// This method initializes necessary objects.
         /// </summary>

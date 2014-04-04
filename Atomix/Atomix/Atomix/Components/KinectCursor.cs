@@ -287,15 +287,16 @@ namespace Atomix.Components
                                             // Skip pixels outside depth tolerance
                                             if (realPixelDepth <= (realDepth - tolerance) || realPixelDepth >= (realDepth + tolerance))
                                             {
+                                                // ouside tolerance
                                                 //continue;
 
-                                                // Write out blue byte
+                                                // Write out red byte
                                                 colorPixels[colorOffset++] = (byte)255;
 
                                                 // Write out green byte
                                                 colorPixels[colorOffset++] = 0;
 
-                                                // Write out blue byte                        
+                                                // blue
                                                 colorPixels[colorOffset++] = 0;
 
                                                 // Alpha
@@ -303,9 +304,10 @@ namespace Atomix.Components
                                             }
                                             else
                                             {
+                                                // inside tolerance
                                                 handArea++;
 
-                                                // Write out blue byte
+                                                // Write out red byte
                                                 colorPixels[colorOffset++] = 0;
 
                                                 // Write out green byte
@@ -479,7 +481,7 @@ namespace Atomix.Components
 
             if (_colorVideo != null)
             {
-                spriteBatch.Draw(_colorVideo, new Rectangle(0, 0, 640, 480), Color.White);
+                spriteBatch.Draw(_colorVideo, new Rectangle(50, 50, 640, 480), Color.White);
             }
 
             spriteBatch.End();
