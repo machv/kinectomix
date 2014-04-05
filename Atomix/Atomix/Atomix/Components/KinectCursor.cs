@@ -265,7 +265,8 @@ namespace Atomix.Components
                             int tolerance = 30; // in milimeters
                             int stepForLinesY = 30;
 
-                            int[] linesY = new int[(_handRect.Bottom - _handRect.Top) / stepForLinesY];
+                            // Lines for checking
+                            int[] linesY = new int[(_handRect.Bottom - _handRect.Top - 1) / stepForLinesY + 1]; // Ceiling division 
                             int previousPixel = 0;
                             int currentLineY = _handRect.Top + stepForLinesY; // Start on first offset
                             int lineIndex = 0;
@@ -285,15 +286,17 @@ namespace Atomix.Components
 
                                         int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
                                         
-                                        // Checking of convex for lines
-                                        if (playerIndex != previousPixel)
+                                        // Checking of convex for lines only within tolerance
+                                        if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
                                         {
-                                            // Change, add to counter
-                                            linesY[lineIndex]++;
+                                            if (playerIndex != previousPixel)
+                                            {
+                                                // Change, add to counter
+                                                linesY[lineIndex]++;
+                                            }
+                                            previousPixel = playerIndex;
                                         }
 
-                                        previousPixel = playerIndex;
-                                        
                                         if (playerIndex > 0 && playerIndex == player)
                                         {
                                             _histogram[intensity]++;
@@ -301,7 +304,7 @@ namespace Atomix.Components
                                             int colorOffset = i * 4;
 
                                             // Skip pixels outside depth tolerance
-                                            if (realPixelDepth <= (realDepth - tolerance) || realPixelDepth >= (realDepth + tolerance))
+                                            if (realPixelDepth < (realDepth - tolerance) || realPixelDepth > (realDepth + tolerance))
                                             {
                                                 // ouside tolerance
                                                 //continue;
@@ -351,6 +354,16 @@ namespace Atomix.Components
                                     // We finished current row -> prepare for next
                                     currentLineY += stepForLinesY;
                                     lineIndex++;
+                                }
+                            }
+
+                            bool isOpen = false;
+                            foreach (int parts in linesY)
+                            {
+                                if (parts > 3) // ......--------...... = empty HAND empty = at least 3 parts
+                                {
+                                    // probably open hand?
+                                    isOpen = true;
                                 }
                             }
 
