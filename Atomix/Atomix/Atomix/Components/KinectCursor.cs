@@ -263,7 +263,7 @@ namespace Atomix.Components
                             int handMinY = int.MaxValue;
                             int handMaxY = int.MinValue;
                             int tolerance = 30; // in milimeters
-                            int stepForLinesY = 30;
+                            int stepForLinesY = 5;
 
                             // Lines for checking
                             int[] linesY = new int[(_handRect.Bottom - _handRect.Top - 1) / stepForLinesY + 1]; // Ceiling division 
@@ -273,11 +273,16 @@ namespace Atomix.Components
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
+                                previousPixel = 0;
+                                bool increasedCount = false;
+
                                 for (int x = _handRect.Left; x < _handRect.Right; x++)
                                 {
                                     int i = y * stride + x;
                                     if (i < frameData.Length && i >= 0)
                                     {
+                                        increasedCount = false;
+
                                         int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
                                         // transform 13-bit depth information into an 8-bit intensity appropriate
@@ -285,16 +290,20 @@ namespace Atomix.Components
                                         byte intensity = (byte)(~(realPixelDepth >> 4));
 
                                         int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
-                                        
-                                        // Checking of convex for lines only within tolerance
-                                        if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
+
+                                        if (y == currentLineY) // Check only on specified line
                                         {
-                                            if (playerIndex != previousPixel)
+                                            // Checking of convex for lines only within tolerance
+                                            if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
                                             {
-                                                // Change, add to counter
-                                                linesY[lineIndex]++;
+                                                if (playerIndex != previousPixel)
+                                                {
+                                                    // Change, add to counter
+                                                    linesY[lineIndex]++;
+                                                    increasedCount = true;
+                                                }
+                                                previousPixel = playerIndex;
                                             }
-                                            previousPixel = playerIndex;
                                         }
 
                                         if (playerIndex > 0 && playerIndex == player)
@@ -351,6 +360,9 @@ namespace Atomix.Components
 
                                 if (y == currentLineY)
                                 {
+                                    if (!increasedCount) // Last increase of parts (only if last iteration does not written any info)
+                                        linesY[lineIndex]++;
+
                                     // We finished current row -> prepare for next
                                     currentLineY += stepForLinesY;
                                     lineIndex++;
@@ -358,14 +370,19 @@ namespace Atomix.Components
                             }
 
                             bool isOpen = false;
+                            short matches = 0;
                             foreach (int parts in linesY)
                             {
                                 if (parts > 3) // ......--------...... = empty HAND empty = at least 3 parts
                                 {
                                     // probably open hand?
                                     isOpen = true;
+                                    matches++;
                                 }
                             }
+
+                            _textToRender = isOpen? "Open" : "Closed";
+                            _textToRender += string.Format(" ({0})", matches);
 
                             handWidth = handMaxX - handMinX;
                             handHeight = handMaxY - handMinY;
@@ -387,7 +404,7 @@ namespace Atomix.Components
                             _textToRender += "Closed";
                         }
 
-                        _textToRender += string.Format(" [{0:P2}], Width = {1} px, Height = {2} px", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2), handWidth, handHeight);
+                        //_textToRender += string.Format(" [{0:P2}], Width = {1} px, Height = {2} px", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2), handWidth, handHeight);
                     }
 
                     _colorVideo = new Texture2D(GraphicsDevice, 640, 480);
