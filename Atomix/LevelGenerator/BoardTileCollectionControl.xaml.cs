@@ -84,5 +84,13 @@ namespace Kinectomix.LevelGenerator
 
             RaiseTileSelectedEvent(tile);
         }
+
+        private void Button_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                AtomixData.BoardTile tile = ((ContentPresenter)ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource)).Content as AtomixData.BoardTile;
+            }
+        }
     }
 }
