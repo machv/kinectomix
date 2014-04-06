@@ -262,7 +262,7 @@ namespace Atomix.Components
                             int handMaxX = int.MinValue;
                             int handMinY = int.MaxValue;
                             int handMaxY = int.MinValue;
-                            int tolerance = 30; // in milimeters
+                            int tolerance = 40; // in milimeters
                             int stepForLinesY = 5;
 
                             // Lines for checking
