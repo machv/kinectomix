@@ -10,10 +10,12 @@ namespace Kinectomix.LevelGenerator
 {
     public class TileTypeToTexturePathConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object texturesPathParameter, CultureInfo culture)
         {
-            string tile = value.ToString();
-            return "Board/" + tile + ".png";
+            if (!(texturesPathParameter is string))
+                return null;
+
+            return string.Format("{0}{1}.png", (string)texturesPathParameter, value.ToString());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

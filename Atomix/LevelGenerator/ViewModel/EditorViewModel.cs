@@ -20,7 +20,20 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _availableTiles = value;
+
                 RaisePropertyChangedEvent("AvailableTiles");
+            }
+        }
+
+        private BoardTile _currentTileTemplate;
+        public BoardTile CurrentTileTemplate
+        {
+            get { return _currentTileTemplate; }
+            set
+            {
+                _currentTileTemplate = value;
+
+                RaisePropertyChangedEvent("CurrentTileTemplate");
             }
         }
 

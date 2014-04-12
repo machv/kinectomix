@@ -98,7 +98,7 @@
 
         <StackPanel Grid.Row="2">
             <TextBlock Text="Available tiles:" FontWeight="Bold" />
-            <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectionChanged="ListBox_SelectionChanged">
+            <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding CurrentTileTemplate}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>
@@ -112,7 +112,7 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
 
-                            <Image Grid.Row="0" Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" />
+                            <Image Grid.Row="0" Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}, ConverterParameter='../Board/'}" />
                             <TextBlock Grid.Row="1" Text="{Binding Type}" TextAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
