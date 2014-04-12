@@ -5,7 +5,7 @@
         xmlns:ViewModel="clr-namespace:Kinectomix.LevelGenerator.ViewModel"
         Title="Kinectomix Level Editor" Height="300" Width="300">
     <Window.DataContext>
-        <ViewModel:LevelViewModel/>
+        <ViewModel:EditorViewModel/>
     </Window.DataContext>
     <Grid>
         <View:EditorControl/>

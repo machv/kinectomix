@@ -156,7 +156,7 @@ namespace Kinectomix.LevelGenerator
             AvailableTiles = _boardTiles;
 
             // DEBUG load level
-            Load(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
+            //Load(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
         }
 
         void Load(string path)
