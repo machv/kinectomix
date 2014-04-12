@@ -7,19 +7,8 @@ using System.Threading.Tasks;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
-    public class MoleculeViewModel : Mvvm.NotifyPropertyBase
+    public class MoleculeViewModel : TilesViewModel
     {
-        ObservableCollection<BoardTileViewModel> _atoms = new ObservableCollection<BoardTileViewModel>();
 
-        public ObservableCollection<BoardTileViewModel> Atoms
-        {
-            get { return _atoms; }
-            set
-            {
-                _atoms = value;
-
-                RaisePropertyChangedEvent("Atoms");
-            }
-        }
     }
 }

@@ -31,7 +31,7 @@ namespace Kinectomix.LevelGenerator.Control
             DependencyProperty.Register("SelectedItem", typeof(AtomixData.BoardTile), typeof(BoardTilesControl), new PropertyMetadata(null));
 
 
-        public AtomixData.BoardTileCollection Tiles
+        public ICollection<AtomixData.BoardTile> Tiles
         {
             get { return (AtomixData.BoardTileCollection)GetValue(TilesProperty); }
             set { SetValue(TilesProperty, value); }

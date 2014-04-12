@@ -6,21 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinectomix.LevelGenerator
+namespace Kinectomix.LevelGenerator.ViewModel
 {
-    public class BoardViewModel : Mvvm.NotifyPropertyBase
+    public class BoardViewModel : TilesViewModel
     {
-        ObservableCollection<BoardTileViewModel> _tiles = new ObservableCollection<BoardTileViewModel>();
 
-        public ObservableCollection<BoardTileViewModel> Tiles
-        {
-            get { return _tiles; }
-            set
-            {
-                _tiles = value;
-
-                RaisePropertyChangedEvent("Tiles");
-            }
-        }
     }
 }

@@ -33,17 +33,17 @@
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="New level" Margin="5" Padding="3" />
                 <Button Content="Load level" Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
-                <Button Content="Save level" Margin="5" Padding="3" FontWeight="Bold" Click="Button_Save"/>
+                <Button Content="Save level" Margin="5" Padding="3" FontWeight="Bold" />
             </StackPanel>
 
         </Grid>
 
         <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}">
             <TabItem Header="Board" Tag="Board">
-                <Control:BoardTilesControl Tiles="{Binding Path=Level.Board.Tiles}" SelectedItem="{Binding SelectedTile}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
+                <Control:BoardTilesControl DataContext="{Binding Level.Board}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
             </TabItem>
             <TabItem Header="Molecule" Tag="Molecule">
-                <Control:BoardTilesControl Tiles="{Binding Path=Level.Molecule.Atoms}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
+                <Control:BoardTilesControl DataContext="{Binding Path=Level.Molecule}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
             </TabItem>
         </TabControl>
 

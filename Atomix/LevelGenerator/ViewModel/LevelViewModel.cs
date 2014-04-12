@@ -43,12 +43,16 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 BoardTileViewModel tileViewModel = new BoardTileViewModel(tile);
                 viewModel.Board.Tiles.Add(tileViewModel);
             }
+            viewModel.Board.ColumnsCount = level.Board.ColumnsCount;
+            viewModel.Board.RowsCount = level.Board.RowsCount;
 
             foreach (BoardTile atom in level.Molecule)
             {
                 BoardTileViewModel atomViewModel = new BoardTileViewModel(atom);
-                viewModel.Molecule.Atoms.Add(atomViewModel);
+                viewModel.Molecule.Tiles.Add(atomViewModel);
             }
+            viewModel.Molecule.ColumnsCount = level.Molecule.ColumnsCount;
+            viewModel.Molecule.RowsCount = level.Molecule.RowsCount;
 
             return viewModel;
         }
