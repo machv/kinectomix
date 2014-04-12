@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:l="clr-namespace:Kinectomix.LevelGenerator"
+             xmlns:Control="clr-namespace:Kinectomix.LevelGenerator.Control"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -28,76 +29,24 @@
                 <Button Content="Resize" Margin="5" Padding="3"/>
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="New level" Margin="5" Padding="3" Click="Button_Click_1" />
-                <Button Content="Load level" Margin="5" Padding="3" Click="Button_Click"/>
+                <Button Content="New level" Margin="5" Padding="3" />
+                <Button Content="Load level" Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
                 <Button Content="Save level" Margin="5" Padding="3" FontWeight="Bold" Click="Button_Save"/>
             </StackPanel>
 
         </Grid>
 
-        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged">
+        <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged" SelectedIndex="{Binding SelectedTab}">
             <TabItem Header="Board" Tag="Board">
-                <ItemsControl ItemsSource="{Binding Path=Level.Board}" Margin="3" ButtonBase.Click="handler">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button>
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Width="49"
-                                       Height="49"
-                                       Stretch="None" />
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="{Binding Path=Level.Board.ColumnsCount}"
-                                 Rows="{Binding Path=Level.Board.RowsCount}"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                <Control:BoardTilesControl Tiles="{Binding Path=Tiles}" SelectedItem="{Binding SelectedTile}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
             </TabItem>
             <TabItem Header="Molecule" Tag="Molecule">
-                <ItemsControl ItemsSource="{Binding Path=Level.Molecule}" Margin="3" ButtonBase.Click="handler">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button>
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Border BorderThickness="1" BorderBrush="Gray">
-                                            <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   Width="49"
-                                                   Height="49"
-                                                   Stretch="None" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="{Binding Path=Level.Molecule.ColumnsCount}"
-                                 Rows="{Binding Path=Level.Molecule.RowsCount}"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+                <Control:BoardTilesControl Tiles="{Binding Path=Tiles}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
             </TabItem>
         </TabControl>
 
         <StackPanel Grid.Row="2">
-            <TextBlock Text="Available tiles:" FontWeight="Bold" />
+            <TextBlock Text="Available tiles" FontWeight="Bold" />
             <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding CurrentTileTemplate}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>

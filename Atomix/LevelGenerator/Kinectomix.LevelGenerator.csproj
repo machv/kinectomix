@@ -69,12 +69,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BoardTileCollectionControl.xaml.cs">
+    <Compile Include="Control\BoardTileCollectionControl.xaml.cs">
       <DependentUpon>BoardTileCollectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="Model\OpenLevelFile.cs" />
     <Compile Include="Model\Tiles.cs" />
+    <Compile Include="Mvvm\IOpenFileService.cs" />
     <Compile Include="TileSelectedEventArgs.cs" />
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\BoardViewModel.cs" />
@@ -87,7 +89,7 @@
     <Compile Include="View\EditorControl.xaml.cs">
       <DependentUpon>EditorControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="BoardTileCollectionControl.xaml">
+    <Page Include="Control\BoardTileCollectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -99,7 +101,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converters\TileTypeToTexturePathConverter.cs" />
+    <Compile Include="Converter\TileTypeToTexturePathConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

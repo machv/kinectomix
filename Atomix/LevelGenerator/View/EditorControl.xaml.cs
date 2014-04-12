@@ -30,9 +30,14 @@ namespace Kinectomix.LevelGenerator.View
     /// </summary>
     public partial class EditorControl : UserControl
     {
+        public BoardTile SelectedTile { get; set; }
+
         public EditorControl()
         {
             InitializeComponent();
+
+            // DEBUG load level
+            Load(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
         }
 
         private ObservableCollection<BoardTile> _boardTiles = new ObservableCollection<BoardTile>();
@@ -57,6 +62,14 @@ namespace Kinectomix.LevelGenerator.View
                 _level = value;
                 //OnPropertyChanged("Level");
             }
+        }
+
+        private void Tiles_TileSelected(object sender, TileSelectedEventArgs e)
+        {
+            if (activeTile == null)
+                return;
+
+            e.Tile.Type = activeTile.Type;
         }
 
         void Load(string path)
@@ -87,15 +100,6 @@ namespace Kinectomix.LevelGenerator.View
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Atomix level (*.xnb, *.xml)|*.xnb;*.xml|All files|*.*";
-
-            if (dialog.ShowDialog() == true)
-                Load(dialog.FileName);
-        }
-
         private void handler(object sender, RoutedEventArgs e)
         {
             if (activeTile == null)
@@ -106,14 +110,6 @@ namespace Kinectomix.LevelGenerator.View
         }
 
         BoardTile activeTile;
-
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListBox box = sender as ListBox;
-            BoardTile tile = box.SelectedItem as BoardTile;
-
-            activeTile = tile;
-        }
 
         private void Button_Save(object sender, RoutedEventArgs e)
         {
@@ -155,14 +151,11 @@ namespace Kinectomix.LevelGenerator.View
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TabControl tabs = sender as TabControl;
+            if (tabs.SelectedItem == null) return;
+
             TabItem item = tabs.SelectedItem as TabItem;
             string tag = item.Tag as string;
 

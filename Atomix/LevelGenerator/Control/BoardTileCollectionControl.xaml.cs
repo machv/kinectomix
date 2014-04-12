@@ -13,13 +13,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Kinectomix.LevelGenerator
+namespace Kinectomix.LevelGenerator.Control
 {
     /// <summary>
     /// Interaction logic for BoardTileCollectionControl.xaml
     /// </summary>
     public partial class BoardTilesControl : UserControl
     {
+        public AtomixData.BoardTile SelectedItem
+        {
+            get { return (AtomixData.BoardTile)GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedItemProperty =
+            DependencyProperty.Register("SelectedItem", typeof(AtomixData.BoardTile), typeof(BoardTilesControl), new PropertyMetadata(null));
+
 
         public AtomixData.BoardTileCollection Tiles
         {
@@ -80,18 +90,20 @@ namespace Kinectomix.LevelGenerator
 
         private void Tile_MouseDown(object sender, MouseEventArgs e)
         {
-            FrameworkElement image = sender as FrameworkElement;
+            FrameworkElement element = sender as FrameworkElement;
 
-            RaiseTileSelectedEvent(image.DataContext as AtomixData.BoardTile);
+            SelectedItem = element.DataContext as AtomixData.BoardTile;
+            RaiseTileSelectedEvent(element.DataContext as AtomixData.BoardTile);
         }
 
         private void Tile_MouseEnter(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                FrameworkElement image = sender as FrameworkElement;
+                FrameworkElement element = sender as FrameworkElement;
 
-                RaiseTileSelectedEvent(image.DataContext as AtomixData.BoardTile);
+                SelectedItem = element.DataContext as AtomixData.BoardTile;
+                RaiseTileSelectedEvent(element.DataContext as AtomixData.BoardTile);
             }
         }
     }
