@@ -78,20 +78,20 @@ namespace Kinectomix.LevelGenerator
             InitializeComponent();
         }
 
-        private void handler(object sender, RoutedEventArgs e)
+        private void Tile_MouseDown(object sender, MouseEventArgs e)
         {
-            AtomixData.BoardTile tile = ((ContentPresenter)ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource)).Content as AtomixData.BoardTile;
+            Image image = sender as Image;
 
-            RaiseTileSelectedEvent(tile);
+            RaiseTileSelectedEvent(image.DataContext as AtomixData.BoardTile);
         }
 
-        private void Button_MouseEnter(object sender, MouseEventArgs e)
+        private void Tile_MouseEnter(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 Image image = sender as Image;
 
-                RaiseTileSelectedEvent(image.Tag as AtomixData.BoardTile);
+                RaiseTileSelectedEvent(image.DataContext as AtomixData.BoardTile);
             }
         }
     }

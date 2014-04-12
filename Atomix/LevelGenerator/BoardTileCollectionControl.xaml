@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <l:TileTypeToTexturePathConverter x:Key="TileTypeToTexturePathConverter" />
     </UserControl.Resources>
-    <ItemsControl ItemsSource="{Binding Path=Tiles}" Margin="3" Image.MouseDown="handler">
+    <ItemsControl ItemsSource="{Binding Path=Tiles}" Margin="3">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}}" 
@@ -17,8 +17,8 @@
                                        VerticalAlignment="Center"
                                        Width="{Binding Path=TileWidth}"
                                        Height="49"
-                       Tag="{Binding Path=.}"
-                       MouseEnter="Button_MouseEnter"
+                       MouseEnter="Tile_MouseEnter"
+                       MouseDown="Tile_MouseDown"
                                        Stretch="None" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
