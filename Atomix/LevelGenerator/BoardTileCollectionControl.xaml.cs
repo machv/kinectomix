@@ -83,6 +83,8 @@ namespace Kinectomix.LevelGenerator
             AtomixData.BoardTile tile = ((ContentPresenter)ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource)).Content as AtomixData.BoardTile;
 
             RaiseTileSelectedEvent(tile);
+
+            DragDrop.DoDragDrop((DependencyObject)e.OriginalSource, tile, DragDropEffects.Move);
         }
 
         private void Button_MouseEnter(object sender, MouseEventArgs e)

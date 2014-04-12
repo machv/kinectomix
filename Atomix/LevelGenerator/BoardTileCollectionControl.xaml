@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <l:TileTypeToTexturePathConverter x:Key="TileTypeToTexturePathConverter" />
     </UserControl.Resources>
-    <ItemsControl ItemsSource="{Binding Path=Tiles}" Margin="3" ButtonBase.Click="handler" ButtonBase.PreviewMouseEnter="Button_MouseEnter">
+    <ItemsControl ItemsSource="{Binding Path=Tiles}" Margin="3" ButtonBase.Click="handler" ButtonBase.MouseEnter="Button_MouseEnter">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <Button>
