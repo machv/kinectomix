@@ -80,7 +80,7 @@ namespace Kinectomix.LevelGenerator
 
         private void Tile_MouseDown(object sender, MouseEventArgs e)
         {
-            Image image = sender as Image;
+            FrameworkElement image = sender as FrameworkElement;
 
             RaiseTileSelectedEvent(image.DataContext as AtomixData.BoardTile);
         }
@@ -89,7 +89,7 @@ namespace Kinectomix.LevelGenerator
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                Image image = sender as Image;
+                FrameworkElement image = sender as FrameworkElement;
 
                 RaiseTileSelectedEvent(image.DataContext as AtomixData.BoardTile);
             }
