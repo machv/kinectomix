@@ -15,17 +15,12 @@ namespace Kinectomix.LevelGenerator
         public ObservableCollection<BoardTileViewModel> Tiles
         {
             get { return _tiles; }
-            set { _tiles = value; }
-        }
+            set
+            {
+                _tiles = value;
 
-        public BoardViewModel()
-        {
-
-        }
-
-        public BoardViewModel(Level level)
-        {
-
+                RaisePropertyChangedEvent("Tiles");
+            }
         }
     }
 }

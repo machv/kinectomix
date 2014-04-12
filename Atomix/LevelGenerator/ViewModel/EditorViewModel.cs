@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Kinectomix.LevelGenerator.ViewModel
@@ -46,6 +47,30 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
+        private LevelViewModel _level;
+        public LevelViewModel Level
+        {
+            get { return _level; }
+            set
+            {
+                _level = value;
+
+                RaisePropertyChangedEvent("Level");
+            }
+        }
+
+        private int _selectedTab = 0;
+        public int SelectedTab
+        {
+            get { return _selectedTab; }
+            set
+            {
+                _selectedTab = value;
+
+                RaisePropertyChangedEvent("SelectedTab");
+            }
+        }
+
         public EditorViewModel()
         {
             _tiles = new Tiles();
@@ -63,9 +88,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
         {
             if (_openFileService.OpenFileDialog())
             {
-                string path = _openFileService.FileName;
-                //TODO
-                //Load(dialog.FileName);
+                Level level = LevelFactory.Load(_openFileService.FileName);
+                Level = LevelViewModel.FromLevel(level);
             }
         }
     }

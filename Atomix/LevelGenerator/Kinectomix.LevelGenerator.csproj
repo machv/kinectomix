@@ -69,11 +69,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Control\BoardTileCollectionControl.xaml.cs">
-      <DependentUpon>BoardTileCollectionControl.xaml</DependentUpon>
+    <Compile Include="Control\BoardTilesControl.xaml.cs">
+      <DependentUpon>BoardTilesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="Model\LevelFactory.cs" />
     <Compile Include="Model\OpenLevelFile.cs" />
     <Compile Include="Model\Tiles.cs" />
     <Compile Include="Mvvm\IOpenFileService.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="View\EditorControl.xaml.cs">
       <DependentUpon>EditorControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="Control\BoardTileCollectionControl.xaml">
+    <Page Include="Control\BoardTilesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,6 +18,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _board = value;
+
                 RaisePropertyChangedEvent("Board");
             }
         }
@@ -28,6 +29,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _molecule = value;
+
                 RaisePropertyChangedEvent("Molecule");
             }
         }

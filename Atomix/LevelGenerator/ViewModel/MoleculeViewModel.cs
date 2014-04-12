@@ -14,12 +14,12 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public ObservableCollection<BoardTileViewModel> Atoms
         {
             get { return _atoms; }
-            set { _atoms = value; }
-        }
+            set
+            {
+                _atoms = value;
 
-        public MoleculeViewModel()
-        {
-
+                RaisePropertyChangedEvent("Atoms");
+            }
         }
     }
 }

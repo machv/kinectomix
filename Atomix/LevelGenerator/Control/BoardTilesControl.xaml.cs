@@ -38,7 +38,7 @@ namespace Kinectomix.LevelGenerator.Control
         }
 
         public static readonly DependencyProperty TilesProperty =
-            DependencyProperty.Register("Tiles", typeof(AtomixData.BoardTileCollection), typeof(BoardTilesControl), new PropertyMetadata(null));
+            DependencyProperty.Register("Tiles", typeof(ICollection<AtomixData.BoardTile>), typeof(BoardTilesControl), new PropertyMetadata(null));
 
         public int TileWidth
         {
@@ -86,6 +86,8 @@ namespace Kinectomix.LevelGenerator.Control
         public BoardTilesControl()
         {
             InitializeComponent();
+
+            DataContext = this;
         }
 
         private void Tile_MouseDown(object sender, MouseEventArgs e)
