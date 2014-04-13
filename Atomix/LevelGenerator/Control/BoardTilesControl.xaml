@@ -18,8 +18,8 @@
                 <Image Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}, ConverterParameter='../Board/'}" 
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       Width="{Binding Path=TileWidth, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                       Height="{Binding Path=TileHeight, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                       Width="{Binding Path=TileWidth}"
+                                       Height="{Binding Path=TileHeight}"
                        MouseEnter="Tile_MouseEnter"
                        MouseDown="Tile_MouseDown"
                                        Stretch="None" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,25 +21,23 @@ namespace Kinectomix.LevelGenerator.Control
     /// </summary>
     public partial class BoardTilesControl : UserControl
     {
+        public static readonly DependencyProperty SelectedTileProperty = DependencyProperty.Register("SelectedTile", typeof(AtomixData.BoardTile), typeof(BoardTilesControl), new PropertyMetadata(null));
+
         public AtomixData.BoardTile SelectedTile
         {
             get { return (AtomixData.BoardTile)GetValue(SelectedTileProperty); }
             set { SetValue(SelectedTileProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedTileProperty =
-            DependencyProperty.Register("SelectedTile", typeof(AtomixData.BoardTile), typeof(BoardTilesControl), new PropertyMetadata(null));
+        public static readonly DependencyProperty TilesSourceProperty = DependencyProperty.Register("TilesSource", typeof(IEnumerable), typeof(BoardTilesControl), new PropertyMetadata(null));
 
-
-        public IEnumerable<AtomixData.BoardTile> TilesSource
+        public IEnumerable TilesSource
         {
             get { return (AtomixData.BoardTileCollection)GetValue(TilesSourceProperty); }
             set { SetValue(TilesSourceProperty, value); }
         }
 
-        public static readonly DependencyProperty TilesSourceProperty =
-            DependencyProperty.Register("TilesSource", typeof(IEnumerable<AtomixData.BoardTile>), typeof(BoardTilesControl), new PropertyMetadata(null));
+        public static readonly DependencyProperty RowsProperty = DependencyProperty.Register("Rows", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(0));
 
         public int Rows
         {
@@ -46,9 +45,7 @@ namespace Kinectomix.LevelGenerator.Control
             set { SetValue(RowsProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Rows.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty RowsProperty =
-            DependencyProperty.Register("Rows", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(0));
+        public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(0));
 
         public int Columns
         {
@@ -56,9 +53,7 @@ namespace Kinectomix.LevelGenerator.Control
             set { SetValue(ColumnsProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Columns.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ColumnsProperty =
-            DependencyProperty.Register("Columns", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(0));
+        public static readonly DependencyProperty TileWidthProperty = DependencyProperty.Register("TileWidth", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(49));
 
         public int TileWidth
         {
@@ -66,20 +61,13 @@ namespace Kinectomix.LevelGenerator.Control
             set { SetValue(TileWidthProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for TileWidth.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TileWidthProperty =
-            DependencyProperty.Register("TileWidth", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(49));
-
+        public static readonly DependencyProperty TileHeightProperty = DependencyProperty.Register("TileHeight", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(49));
 
         public int TileHeight
         {
             get { return (int)GetValue(TileHeightProperty); }
             set { SetValue(TileHeightProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for TileHeight.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TileHeightProperty =
-            DependencyProperty.Register("TileHeight", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(49));
 
         // Based on http://msdn.microsoft.com/en-us/library/ms752288(v=vs.110).aspx
 
