@@ -9,7 +9,9 @@
     <UserControl.Resources>
         <l:TileTypeToTexturePathConverter x:Key="TileTypeToTexturePathConverter" />
     </UserControl.Resources>
-    <ItemsControl ItemsSource="{Binding Tiles}" Margin="3">
+    <ItemsControl DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" 
+                  ItemsSource="{Binding TilesSource}" 
+                  Margin="3">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <!-- Width="{Binding Path=TileWidth, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" -->
@@ -25,8 +27,8 @@
         </ItemsControl.ItemTemplate>
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <UniformGrid Columns="{Binding Path=ColumnsCount}"
-                                 Rows="{Binding Path=RowsCount}"
+                <UniformGrid Columns="{Binding Path=Columns}"
+                                 Rows="{Binding Path=Rows}"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Center"/>
             </ItemsPanelTemplate>

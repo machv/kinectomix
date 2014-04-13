@@ -47,6 +47,18 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
+        private BoardTile _currentTile;
+        public BoardTile CurrentTile
+        {
+            get { return _currentTile; }
+            set
+            {
+                _currentTile = value;
+
+                RaisePropertyChangedEvent("CurrentTile");
+            }
+        }
+
         private LevelViewModel _level;
         public LevelViewModel Level
         {
@@ -67,7 +79,21 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _selectedTab = value;
 
+                UpdateAvailableTiles(_selectedTab);
                 RaisePropertyChangedEvent("SelectedTab");
+            }
+        }
+
+        private void UpdateAvailableTiles(int selectedTab)
+        {
+            switch (selectedTab)
+            {
+                case 0:
+                    AvailableTiles = _tiles.Board;
+                    break;
+                case 1:
+                    AvailableTiles = _tiles.Molecule;
+                    break;
             }
         }
 

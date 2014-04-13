@@ -98,20 +98,5 @@ namespace Kinectomix.LevelGenerator.View
         //        }
         //    }
         //}
-
-        //private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    TabControl tabs = sender as TabControl;
-        //    if (tabs.SelectedItem == null) return;
-
-        //    TabItem item = tabs.SelectedItem as TabItem;
-        //    string tag = item.Tag as string;
-
-        //    //if (tag == "Board")
-        //    //    AvailableTiles = _boardTiles;
-
-        //    //if (tag == "Molecule")
-        //    //    AvailableTiles = _moleculeTiles;
-        //}
     }
 }

@@ -40,10 +40,15 @@
 
         <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}">
             <TabItem Header="Board" Tag="Board">
-                <Control:BoardTilesControl DataContext="{Binding Level.Board}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
+                <Control:BoardTilesControl TilesSource="{Binding Level.Board.Tiles}" 
+                                           SelectedTile="{Binding CurrentTile}" 
+                                           Rows="{Binding Level.Board.RowsCount}"
+                                           Columns="{Binding Level.Board.ColumnsCount}"
+                                           TileHeight="49" 
+                                           TileWidth="49" />
             </TabItem>
             <TabItem Header="Molecule" Tag="Molecule">
-                <Control:BoardTilesControl DataContext="{Binding Path=Level.Molecule}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
+                <Control:BoardTilesControl DataContext="{Binding Path=Level.Molecule}" TileHeight="49" TileWidth="49" />
             </TabItem>
         </TabControl>
 

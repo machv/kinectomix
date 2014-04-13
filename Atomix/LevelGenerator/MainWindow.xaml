@@ -35,10 +35,10 @@
 
         <TabControl Grid.Row="1" SelectionChanged="TabControl_SelectionChanged" SelectedIndex="{Binding SelectedTab}">
             <TabItem Header="Board" Tag="Board">
-                <Control:BoardTilesControl Tiles="{Binding Path=Tiles}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
+                <Control:BoardTilesControl TilesSource="{Binding Path=Tiles}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
             </TabItem>
             <TabItem Header="Molecule" Tag="Molecule">
-                <Control:BoardTilesControl Tiles="{Binding Path=Tiles}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
+                <Control:BoardTilesControl TilesSource="{Binding Path=Tiles}" TileSelected="Tiles_TileSelected" TileHeight="49" TileWidth="49" />
             </TabItem>
         </TabControl>
 

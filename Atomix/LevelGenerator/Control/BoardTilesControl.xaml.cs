@@ -20,25 +20,45 @@ namespace Kinectomix.LevelGenerator.Control
     /// </summary>
     public partial class BoardTilesControl : UserControl
     {
-        public AtomixData.BoardTile SelectedItem
+        public AtomixData.BoardTile SelectedTile
         {
-            get { return (AtomixData.BoardTile)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
+            get { return (AtomixData.BoardTile)GetValue(SelectedTileProperty); }
+            set { SetValue(SelectedTileProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register("SelectedItem", typeof(AtomixData.BoardTile), typeof(BoardTilesControl), new PropertyMetadata(null));
+        public static readonly DependencyProperty SelectedTileProperty =
+            DependencyProperty.Register("SelectedTile", typeof(AtomixData.BoardTile), typeof(BoardTilesControl), new PropertyMetadata(null));
 
 
-        public ICollection<AtomixData.BoardTile> Tiles
+        public IEnumerable<AtomixData.BoardTile> TilesSource
         {
-            get { return (AtomixData.BoardTileCollection)GetValue(TilesProperty); }
-            set { SetValue(TilesProperty, value); }
+            get { return (AtomixData.BoardTileCollection)GetValue(TilesSourceProperty); }
+            set { SetValue(TilesSourceProperty, value); }
         }
 
-        public static readonly DependencyProperty TilesProperty =
-            DependencyProperty.Register("Tiles", typeof(ICollection<AtomixData.BoardTile>), typeof(BoardTilesControl), new PropertyMetadata(null));
+        public static readonly DependencyProperty TilesSourceProperty =
+            DependencyProperty.Register("TilesSource", typeof(IEnumerable<AtomixData.BoardTile>), typeof(BoardTilesControl), new PropertyMetadata(null));
+
+        public int Rows
+        {
+            get { return (int)GetValue(RowsProperty); }
+            set { SetValue(RowsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Rows.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RowsProperty =
+            DependencyProperty.Register("Rows", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(0));
+
+        public int Columns
+        {
+            get { return (int)GetValue(ColumnsProperty); }
+            set { SetValue(ColumnsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Columns.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ColumnsProperty =
+            DependencyProperty.Register("Columns", typeof(int), typeof(BoardTilesControl), new PropertyMetadata(0));
 
         public int TileWidth
         {
@@ -86,15 +106,13 @@ namespace Kinectomix.LevelGenerator.Control
         public BoardTilesControl()
         {
             InitializeComponent();
-
-            DataContext = this;
         }
 
         private void Tile_MouseDown(object sender, MouseEventArgs e)
         {
             FrameworkElement element = sender as FrameworkElement;
 
-            SelectedItem = element.DataContext as AtomixData.BoardTile;
+            SelectedTile = element.DataContext as AtomixData.BoardTile;
             RaiseTileSelectedEvent(element.DataContext as AtomixData.BoardTile);
         }
 
@@ -104,7 +122,7 @@ namespace Kinectomix.LevelGenerator.Control
             {
                 FrameworkElement element = sender as FrameworkElement;
 
-                SelectedItem = element.DataContext as AtomixData.BoardTile;
+                SelectedTile = element.DataContext as AtomixData.BoardTile;
                 RaiseTileSelectedEvent(element.DataContext as AtomixData.BoardTile);
             }
         }
