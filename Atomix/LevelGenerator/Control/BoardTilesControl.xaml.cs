@@ -21,11 +21,11 @@ namespace Kinectomix.LevelGenerator.Control
     /// </summary>
     public partial class BoardTilesControl : UserControl
     {
-        public static readonly DependencyProperty SelectedTileProperty = DependencyProperty.Register("SelectedTile", typeof(AtomixData.BoardTile), typeof(BoardTilesControl), new PropertyMetadata(null));
+        public static readonly DependencyProperty SelectedTileProperty = DependencyProperty.Register("SelectedTile", typeof(BoardTileViewModel), typeof(BoardTilesControl), new PropertyMetadata(null));
 
-        public AtomixData.BoardTile SelectedTile
+        public BoardTileViewModel SelectedTile
         {
-            get { return (AtomixData.BoardTile)GetValue(SelectedTileProperty); }
+            get { return (BoardTileViewModel)GetValue(SelectedTileProperty); }
             set { SetValue(SelectedTileProperty, value); }
         }
 
@@ -85,7 +85,7 @@ namespace Kinectomix.LevelGenerator.Control
         }
 
         // This method raises the Tap event 
-        void RaiseTileSelectedEvent(AtomixData.BoardTile tile)
+        void RaiseTileSelectedEvent(BoardTileViewModel tile)
         {
             RoutedEventArgs newEventArgs = new TileSelectedEventArgs(BoardTilesControl.TileSelectedEvent, tile);
             RaiseEvent(newEventArgs);
@@ -100,8 +100,8 @@ namespace Kinectomix.LevelGenerator.Control
         {
             FrameworkElement element = sender as FrameworkElement;
 
-            SelectedTile = element.DataContext as AtomixData.BoardTile;
-            RaiseTileSelectedEvent(element.DataContext as AtomixData.BoardTile);
+            SelectedTile = element.DataContext as BoardTileViewModel;
+            RaiseTileSelectedEvent(element.DataContext as BoardTileViewModel);
         }
 
         private void Tile_MouseEnter(object sender, MouseEventArgs e)
@@ -110,8 +110,8 @@ namespace Kinectomix.LevelGenerator.Control
             {
                 FrameworkElement element = sender as FrameworkElement;
 
-                SelectedTile = element.DataContext as AtomixData.BoardTile;
-                RaiseTileSelectedEvent(element.DataContext as AtomixData.BoardTile);
+                SelectedTile = element.DataContext as BoardTileViewModel;
+                RaiseTileSelectedEvent(element.DataContext as BoardTileViewModel);
             }
         }
     }

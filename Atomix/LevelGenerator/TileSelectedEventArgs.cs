@@ -9,11 +9,11 @@ namespace Kinectomix.LevelGenerator
 {
     public class TileSelectedEventArgs : RoutedEventArgs
     {
-        public AtomixData.BoardTile Tile { get; protected set; }
+        public BoardTileViewModel Tile { get; protected set; }
 
         public TileSelectedEventArgs() : base() { }
         
-        public TileSelectedEventArgs(RoutedEvent routedEvent, AtomixData.BoardTile tile)
+        public TileSelectedEventArgs(RoutedEvent routedEvent, BoardTileViewModel tile)
             : base(routedEvent)
         {
             Tile = tile;
