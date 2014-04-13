@@ -35,8 +35,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private BoardTile _currentTileTemplate;
-        public BoardTile CurrentTileTemplate
+        private BoardTileViewModel _currentTileTemplate;
+        public BoardTileViewModel CurrentTileTemplate
         {
             get { return _currentTileTemplate; }
             set
