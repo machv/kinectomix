@@ -51,7 +51,11 @@ namespace AtomixData
             _tiles.CopyTo(array, arrayIndex);
         }
 
-        public void Add(BoardTile item) { }
+        int addingIndex = 0;
+        public void Add(BoardTile item)
+        {
+            _tiles[addingIndex++] = item;
+        }
 
         public int Count
         {

@@ -75,9 +75,9 @@
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Model\LevelFactory.cs" />
-    <Compile Include="Model\OpenLevelFile.cs" />
+    <Compile Include="Model\LevelFileDialog.cs" />
     <Compile Include="Model\Tiles.cs" />
-    <Compile Include="Mvvm\IOpenFileService.cs" />
+    <Compile Include="Mvvm\IFileDialogService.cs" />
     <Compile Include="TileSelectedEventArgs.cs" />
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\BoardViewModel.cs" />

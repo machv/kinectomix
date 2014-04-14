@@ -36,48 +36,7 @@ namespace Kinectomix.LevelGenerator.View
         {
             InitializeComponent();
 
-            // DEBUG load level
             //Load(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
         }
-
-        //private void Button_Save(object sender, RoutedEventArgs e)
-        //{
-        //    SaveFileDialog dialog = new SaveFileDialog();
-        //    dialog.Filter = "Atomix level (*.xml)|*.xml|Atomix binary level (*.xnb)|*.xnb";
-        //    dialog.Title = "Save Kinectomix level definition";
-        //    if (dialog.ShowDialog() == true)
-        //    {
-        //        if (dialog.FileName == "")
-        //            return;
-
-        //        using (Stream stream = dialog.OpenFile())
-        //        {
-
-        //            switch (dialog.FilterIndex)
-        //            {
-        //                case 1:
-        //                    // Save definition
-        //                    XmlWriterSettings settings = new XmlWriterSettings();
-        //                    settings.Indent = true;
-
-        //                    using (XmlWriter writer = XmlWriter.Create(stream, settings))
-        //                    {
-        //                        IntermediateSerializer.Serialize(writer, Level, null);
-        //                    }
-        //                    break;
-        //                case 2:
-        //                    // http://stackoverflow.com/questions/8856528/serialize-texture2d-programatically-in-xna
-        //                    Type compilerType = typeof(ContentCompiler);
-        //                    ContentCompiler cc = compilerType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0].Invoke(null) as ContentCompiler;
-        //                    var compileMethod = compilerType.GetMethod("Compile", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        //                    compileMethod.Invoke(cc, new object[]{
-        //                      stream, Level, TargetPlatform.Windows, GraphicsProfile.Reach, false/*true*/, dialog.FileName, dialog.FileName
-        //                      });
-        //                    break;
-        //            }
-        //        }
-        //    }
-        //}
     }
 }

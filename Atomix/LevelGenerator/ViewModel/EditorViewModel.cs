@@ -4,6 +4,7 @@ using Kinectomix.LevelGenerator.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,12 +16,12 @@ namespace Kinectomix.LevelGenerator.ViewModel
     public class EditorViewModel : NotifyPropertyBase
     {
         private Tiles _tiles;
-        
-        private IOpenFileService _openFileService;
-        public IOpenFileService OpenFileService
+
+        private IFileDialogService _levelFileDialog;
+        public IFileDialogService LevelFileDialog
         {
-            get { return _openFileService; }
-            set { _openFileService = value; }
+            get { return _levelFileDialog; }
+            set { _levelFileDialog = value; }
         }
 
         private IEnumerable<BoardTile> _availableTiles;
@@ -110,7 +111,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public EditorViewModel()
         {
             _tiles = new Tiles();
-            _openFileService = new OpenLevelFile();
+            _levelFileDialog = new LevelFileDialog();
 
             _availableTiles = _tiles.Board;
         }
@@ -120,11 +121,37 @@ namespace Kinectomix.LevelGenerator.ViewModel
             get { return new DelegateCommand(LoadLevel); }
         }
 
+        public ICommand SaveLevelCommand
+        {
+            get { return new DelegateCommand(SaveLevel); }
+        }
+
+        private void SaveLevel()
+        {
+            Level level = Level.ToLevel();
+
+            if (_levelFileDialog.SaveFileDialog())
+            {
+                using (Stream stream = File.Open(_levelFileDialog.FileName, FileMode.OpenOrCreate))
+                {
+                    switch (_levelFileDialog.FilterIndex)
+                    {
+                        case 1: // XML
+                            LevelFactory.SaveLevelDefinition(level, stream);
+                            break;
+                        case 2: // Compiled
+                            LevelFactory.SaveLevelCompiled(level, stream, _levelFileDialog.FileName);
+                            break;
+                    }
+                }
+            }
+        }
+
         private void LoadLevel()
         {
-            if (_openFileService.OpenFileDialog())
+            if (_levelFileDialog.OpenFileDialog())
             {
-                Level level = LevelFactory.Load(_openFileService.FileName);
+                Level level = LevelFactory.Load(_levelFileDialog.FileName);
                 Level = LevelViewModel.FromLevel(level);
             }
         }

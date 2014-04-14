@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Kinectomix.LevelGenerator.Mvvm
 {
-    // http://stackoverflow.com/questions/1619505/wpf-openfiledialog-with-the-mvvm-pattern
-    public interface IOpenFileService
+    public interface IFileDialogService
     {
         string FileName { get; }
+        int FilterIndex { get; }
+        bool SaveFileDialog();
         bool OpenFileDialog();
     }
 }

@@ -56,5 +56,31 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
             return viewModel;
         }
+
+        public static Level ToLevel(LevelViewModel levelViewModel)
+        {
+            Level level = new Level(levelViewModel.Board.RowsCount, levelViewModel.Board.ColumnsCount);
+
+            level.Board = new BoardTileCollection(levelViewModel.Board.RowsCount, levelViewModel.Board.ColumnsCount);
+            foreach (BoardTileViewModel tileViewModel in levelViewModel.Board.Tiles)
+            {
+                BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, IsSelected = tileViewModel.IsSelected, Type = tileViewModel.Type };
+                level.Board.Add(tile);
+            }
+
+            level.Molecule = new BoardTileCollection(levelViewModel.Molecule.RowsCount, levelViewModel.Molecule.ColumnsCount);
+            foreach (BoardTileViewModel tileViewModel in levelViewModel.Molecule.Tiles)
+            {
+                BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, IsSelected = tileViewModel.IsSelected, Type = tileViewModel.Type };
+                level.Molecule.Add(tile);
+            }
+
+            return level;
+        }
+
+        public Level ToLevel()
+        {
+            return LevelViewModel.ToLevel(this);
+        }
     }
 }
