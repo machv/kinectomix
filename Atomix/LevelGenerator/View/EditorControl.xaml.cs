@@ -40,25 +40,6 @@ namespace Kinectomix.LevelGenerator.View
             //Load(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
         }
 
-        private void Tiles_TileSelected(object sender, TileSelectedEventArgs e)
-        {
-            //if (activeTile == null)
-            //    return;
-
-            //e.Tile.Type = activeTile.Type;
-        }
-
-        //private void handler(object sender, RoutedEventArgs e)
-        //{
-        //    if (activeTile == null)
-        //        return;
-
-        //    BoardTile tile = ((ContentPresenter)ItemsControl.ContainerFromElement((ItemsControl)sender, (DependencyObject)e.OriginalSource)).Content as BoardTile;
-        //    tile.Type = activeTile.Type;
-        //}
-
-        //BoardTile activeTile;
-
         //private void Button_Save(object sender, RoutedEventArgs e)
         //{
         //    SaveFileDialog dialog = new SaveFileDialog();
