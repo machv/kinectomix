@@ -41,7 +41,7 @@
         <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}">
             <TabItem Header="Board" Tag="Board">
                 <Control:BoardTilesControl TilesSource="{Binding Level.Board.Tiles}" 
-                                           SelectedTile="{Binding CurrentTile}" 
+                                           SelectedTile="{Binding CurrentTile, Mode=TwoWay}" 
                                            Rows="{Binding Level.Board.RowsCount}"
                                            Columns="{Binding Level.Board.ColumnsCount}"
                                            TileHeight="49" 

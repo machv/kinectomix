@@ -35,8 +35,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private BoardTileViewModel _currentTileTemplate;
-        public BoardTileViewModel CurrentTileTemplate
+        private BoardTile _currentTileTemplate;
+        public BoardTile CurrentTileTemplate
         {
             get { return _currentTileTemplate; }
             set
@@ -47,8 +47,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private BoardTile _currentTile;
-        public BoardTile CurrentTile
+        private BoardTileViewModel _currentTile;
+        public BoardTileViewModel CurrentTile
         {
             get { return _currentTile; }
             set
@@ -56,7 +56,17 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 _currentTile = value;
 
                 RaisePropertyChangedEvent("CurrentTile");
+
+                UpdateCurrentTileByTemplate(CurrentTile);
             }
+        }
+
+        private void UpdateCurrentTileByTemplate(BoardTileViewModel _currentTile)
+        {
+            if (CurrentTileTemplate == null)
+                return;
+
+            _currentTile.Type = CurrentTileTemplate.Type;
         }
 
         private LevelViewModel _level;

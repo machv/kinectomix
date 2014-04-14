@@ -26,7 +26,10 @@ namespace Kinectomix.LevelGenerator.Control
         public BoardTileViewModel SelectedTile
         {
             get { return (BoardTileViewModel)GetValue(SelectedTileProperty); }
-            set { SetValue(SelectedTileProperty, value); }
+            set
+            {
+                SetValue(SelectedTileProperty, value);
+            }
         }
 
         public static readonly DependencyProperty TilesSourceProperty = DependencyProperty.Register("TilesSource", typeof(IEnumerable), typeof(BoardTilesControl), new PropertyMetadata(null));
