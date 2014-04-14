@@ -10,7 +10,8 @@
     <UserControl.Resources>
         <l:TileTypeToTexturePathConverter x:Key="TileTypeToTexturePathConverter" />
     </UserControl.Resources>
-    <Grid Margin="3">
+    <Grid Margin="3"
+          AllowDrop="True" DragOver="OnFileDragOver" Drop="OnFileDrop">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>

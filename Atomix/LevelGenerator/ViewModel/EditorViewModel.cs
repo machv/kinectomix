@@ -118,7 +118,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public ICommand LoadLevelCommand
         {
-            get { return new DelegateCommand(LoadLevel); }
+            get { return new DelegateCommand(LoadLevelDialog); }
         }
 
         public ICommand SaveLevelCommand
@@ -147,13 +147,18 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private void LoadLevel()
+        private void LoadLevelDialog()
         {
             if (_levelFileDialog.OpenFileDialog())
             {
-                Level level = LevelFactory.Load(_levelFileDialog.FileName);
-                Level = LevelViewModel.FromLevel(level);
+                LoadLevel(_levelFileDialog.FileName);
             }
+        }
+
+        public void LoadLevel(string path)
+        {
+            Level level = LevelFactory.Load(path);
+            Level = LevelViewModel.FromLevel(level);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AtomixData;
+using Kinectomix.LevelGenerator.ViewModel;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
@@ -37,6 +38,23 @@ namespace Kinectomix.LevelGenerator.View
             InitializeComponent();
 
             //Load(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
+        }
+
+        private void OnFileDragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.None;
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, true))
+                e.Effects = DragDropEffects.Copy;
+        }
+        private void OnFileDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, true))
+            {
+                string[] paths = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                (DataContext as EditorViewModel).LoadLevel(paths[0]);
+            }
         }
     }
 }
