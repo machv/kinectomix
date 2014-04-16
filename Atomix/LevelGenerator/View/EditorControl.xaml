@@ -9,20 +9,48 @@
              d:DesignHeight="400" d:DesignWidth="400">
     <UserControl.Resources>
         <l:TileTypeToTexturePathConverter x:Key="TileTypeToTexturePathConverter" />
+        <l:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
     </UserControl.Resources>
-    <Grid Margin="3"
-          AllowDrop="True" DragOver="OnFileDragOver" Drop="OnFileDrop">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <!--
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="_Load..." Margin="5" Padding="3" Command="{Binding LoadLevelsCommand}" />
+                <Button Content="_Save as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsCommand}" FontWeight="Bold" />
+            </StackPanel>
+            <ListBox Grid.Row="1">
+                <ListBoxItem>Level 1</ListBoxItem>
+                <ListBoxItem>Level 2</ListBoxItem>
+                <ListBoxItem>Level 3</ListBoxItem>
+            </ListBox>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" BorderBrush="Silver" BorderThickness="1,0" />
+
+        <Grid Grid.Column="2" Margin="3" AllowDrop="True" DragOver="OnFileDragOver" Drop="OnFileDrop">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <!--
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock Text="Rows:" Margin="5" Padding="3"/>
                 <TextBox Margin="5" Width="50" Padding="3" Text="{Binding Rows}" />
@@ -31,52 +59,52 @@
                 <Button Content="Resize" Margin="5" Padding="3"/>
             </StackPanel>
             -->
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="_New level" Margin="5" Padding="3" />
-                <Button Content="_Load..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
-                <Button Content="_Save as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" FontWeight="Bold" />
-            </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="_New level" Margin="5" Padding="3" />
+                    <Button Content="_Load..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
+                    <Button Content="_Save as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" FontWeight="Bold" />
+                </StackPanel>
 
-        </Grid>
+            </Grid>
 
-        <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}">
-            <TabItem Header="Board" Tag="Board">
-                <Control:BoardTilesControl TilesSource="{Binding Level.Board.Tiles}" 
+            <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
+                <TabItem Header="Board" Tag="Board">
+                    <Control:BoardTilesControl TilesSource="{Binding Level.Board.Tiles}" 
                                            SelectedTile="{Binding CurrentTile, Mode=TwoWay}" 
                                            Rows="{Binding Level.Board.RowsCount}"
                                            Columns="{Binding Level.Board.ColumnsCount}"
                                            TileHeight="49" 
                                            TileWidth="49" />
-            </TabItem>
-            <TabItem Header="Molecule" Tag="Molecule">
-                <Control:BoardTilesControl DataContext="{Binding Path=Level.Molecule}" TileHeight="49" TileWidth="49" />
-            </TabItem>
-        </TabControl>
+                </TabItem>
+                <TabItem Header="Molecule" Tag="Molecule">
+                    <Control:BoardTilesControl DataContext="{Binding Path=Level.Molecule}" TileHeight="49" TileWidth="49" />
+                </TabItem>
+            </TabControl>
 
-        <StackPanel Grid.Row="2">
-            <TextBlock Text="Available tiles" FontWeight="Bold" />
-            <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding CurrentTileTemplate}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="Available tiles" FontWeight="Bold" />
+                <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding CurrentTileTemplate}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
 
-                            <Image Grid.Row="0" Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}, ConverterParameter='../Board/'}" />
-                            <TextBlock Grid.Row="1" Text="{Binding Type}" TextAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
+                                <Image Grid.Row="0" Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}, ConverterParameter='../Board/'}" />
+                                <TextBlock Grid.Row="1" Text="{Binding Type}" TextAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
 
+        </Grid>
     </Grid>
-
 </UserControl>

@@ -72,7 +72,7 @@
     <Compile Include="Control\BoardTilesControl.xaml.cs">
       <DependentUpon>BoardTilesControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converter\NotNullToBooleanConverter.cs" />
+    <Compile Include="Converter\NotNullToVisibilityConverter.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Model\LevelFactory.cs" />
@@ -83,6 +83,7 @@
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\BoardViewModel.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
+    <Compile Include="ViewModel\LevelsViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
     <Compile Include="ViewModel\MoleculeViewModel.cs" />
     <Compile Include="ViewModel\TilesViewModel.cs" />
