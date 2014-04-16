@@ -10,10 +10,30 @@ namespace Kinectomix.LevelGenerator.Mvvm
     public class DelegateCommand : ICommand
     {
         private readonly Action _action;
+        private readonly ICommandOnCanExecute _canExecute;
+
+        //public delegate void ICommandOnExecute(object parameter);
+        public delegate bool ICommandOnCanExecute(object parameter);
 
         public DelegateCommand(Action action)
         {
             _action = action;
+        }
+
+        public DelegateCommand(Action action, ICommandOnCanExecute canExecute)
+        {
+            _action = action;
+            _canExecute = canExecute;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            if (_canExecute == null)
+            {
+                return true;
+            }
+
+            return _canExecute(parameter);
         }
 
         public void Execute(object parameter)
@@ -21,13 +41,16 @@ namespace Kinectomix.LevelGenerator.Mvvm
             _action();
         }
 
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        #pragma warning disable 67
+#pragma warning disable 67
         public event EventHandler CanExecuteChanged;
-        #pragma warning restore 67
+
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+            {
+                CanExecuteChanged(this, EventArgs.Empty);
+            }
+        }
+#pragma warning restore 67
     }
 }

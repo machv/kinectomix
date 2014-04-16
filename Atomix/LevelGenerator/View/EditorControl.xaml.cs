@@ -37,7 +37,7 @@ namespace Kinectomix.LevelGenerator.View
         {
             InitializeComponent();
 
-            //Load(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
+            //(DataContext as EditorViewModel).LoadLevel(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
         }
 
         private void OnFileDragOver(object sender, DragEventArgs e)

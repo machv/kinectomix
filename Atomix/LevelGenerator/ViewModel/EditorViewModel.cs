@@ -114,6 +114,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
             _levelFileDialog = new LevelFileDialog();
 
             _availableTiles = _tiles.Board;
+
+            _saveAsLevelCommand = new DelegateCommand(SaveAsLevel, CanExecuteSaveAs);
         }
 
         public ICommand LoadLevelCommand
@@ -121,12 +123,18 @@ namespace Kinectomix.LevelGenerator.ViewModel
             get { return new DelegateCommand(LoadLevelDialog); }
         }
 
-        public ICommand SaveLevelCommand
+        private DelegateCommand _saveAsLevelCommand;
+        public ICommand SaveAsLevelCommand
         {
-            get { return new DelegateCommand(SaveLevel); }
+            get { return _saveAsLevelCommand; }
         }
 
-        private void SaveLevel()
+        private bool CanExecuteSaveAs(object parameter)
+        {
+            return Level != null;
+        }
+
+        private void SaveAsLevel()
         {
             Level level = Level.ToLevel();
 
@@ -159,6 +167,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
         {
             Level level = LevelFactory.Load(path);
             Level = LevelViewModel.FromLevel(level);
+
+            _saveAsLevelCommand.RaiseCanExecuteChanged();
         }
     }
 }
