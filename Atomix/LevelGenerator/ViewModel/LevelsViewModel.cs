@@ -9,5 +9,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
 {
     public class LevelsViewModel : NotifyPropertyBase
     {
+
     }
 }

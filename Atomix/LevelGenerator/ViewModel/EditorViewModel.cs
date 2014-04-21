@@ -134,6 +134,16 @@ namespace Kinectomix.LevelGenerator.ViewModel
             return Level != null;
         }
 
+        public ICommand LoadLevelsCommand
+        {
+            get { return new DelegateCommand(LoadLevels); }
+        }
+
+        private void LoadLevels()
+        {
+            LevelsViewModel levels = new LevelsViewModel();
+        }
+
         private void SaveAsLevel()
         {
             Level level = Level.ToLevel();

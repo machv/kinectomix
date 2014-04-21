@@ -8,8 +8,5 @@ using System.Threading.Tasks;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
-    public class BoardViewModel : TilesViewModel
-    {
-
-    }
+    public class BoardViewModel : TilesViewModel { }
 }
