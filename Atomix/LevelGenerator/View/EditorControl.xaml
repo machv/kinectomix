@@ -22,15 +22,18 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="13">Game levels</TextBlock>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="_Load..." Margin="5" Padding="3" Command="{Binding LoadLevelsCommand}" />
                 <Button Content="_Save as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsCommand}" FontWeight="Bold" />
             </StackPanel>
-            <ListBox Grid.Row="1">
+            
+            <ListBox Grid.Row="2">
                 <ListBoxItem>Level 1</ListBoxItem>
                 <ListBoxItem>Level 2</ListBoxItem>
                 <ListBoxItem>Level 3</ListBoxItem>
@@ -42,10 +45,12 @@
         <Grid Grid.Column="2" Margin="3" AllowDrop="True" DragOver="OnFileDragOver" Drop="OnFileDrop">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+            <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="13">Level</TextBlock>
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -59,15 +64,15 @@
                 <Button Content="Resize" Margin="5" Padding="3"/>
             </StackPanel>
             -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="_New level" Margin="5" Padding="3" />
-                    <Button Content="_Load..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
-                    <Button Content="_Save as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" FontWeight="Bold" />
+                    <Button Content="_Load level..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
+                    <Button Content="_Save level as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" FontWeight="Bold" />
                 </StackPanel>
 
             </Grid>
 
-            <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
+            <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
                 <TabItem Header="Board" Tag="Board">
                     <Control:BoardTilesControl TilesSource="{Binding Level.Board.Tiles}" 
                                            SelectedTile="{Binding CurrentTile, Mode=TwoWay}" 
@@ -81,7 +86,7 @@
                 </TabItem>
             </TabControl>
 
-            <StackPanel Grid.Row="2">
+            <StackPanel Grid.Row="3">
                 <TextBlock Text="Available tiles" FontWeight="Bold" />
                 <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding CurrentTileTemplate}">
                     <ListBox.ItemsPanel>
