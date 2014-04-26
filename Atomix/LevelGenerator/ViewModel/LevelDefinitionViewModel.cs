@@ -18,7 +18,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _levelDefinition.Name = value;
-                RaisePropertyChangedEvent("Name");
+                RaisePropertyChangedEvent();
             }
         }
 
@@ -28,7 +28,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _levelDefinition.FileName = value;
-                RaisePropertyChangedEvent("FileName");
+                RaisePropertyChangedEvent();
             }
         }
 

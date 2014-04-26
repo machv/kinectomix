@@ -23,7 +23,7 @@ namespace Kinectomix.LevelGenerator
             set
             {
                 _tile.Type = value;
-                RaisePropertyChangedEvent("Type");
+                RaisePropertyChangedEvent();
             }
         }
 
@@ -33,7 +33,7 @@ namespace Kinectomix.LevelGenerator
             set
             {
                 _tile.IsFixed = value;
-                RaisePropertyChangedEvent("IsFixed");
+                RaisePropertyChangedEvent();
             }
         }
 

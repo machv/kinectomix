@@ -30,7 +30,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _atoms = value;
 
-                RaisePropertyChangedEvent("Tiles");
+                RaisePropertyChangedEvent();
             }
         }
     }

@@ -1,14 +1,8 @@
 ﻿using AtomixData;
 using Kinectomix.LevelGenerator.Model;
 using Kinectomix.LevelGenerator.Mvvm;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Kinectomix.LevelGenerator.ViewModel
@@ -32,7 +26,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _availableTiles = value;
 
-                RaisePropertyChangedEvent("AvailableTiles");
+                RaisePropertyChangedEvent();
             }
         }
 
@@ -44,7 +38,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _currentTileTemplate = value;
 
-                RaisePropertyChangedEvent("CurrentTileTemplate");
+                RaisePropertyChangedEvent();
             }
         }
 
@@ -56,7 +50,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _currentTile = value;
 
-                RaisePropertyChangedEvent("CurrentTile");
+                RaisePropertyChangedEvent();
 
                 UpdateCurrentTileByTemplate(CurrentTile);
             }
@@ -78,7 +72,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _level = value;
 
-                RaisePropertyChangedEvent("Level");
+                RaisePropertyChangedEvent();
             }
         }
 
@@ -91,7 +85,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 _selectedTab = value;
 
                 UpdateAvailableTiles(_selectedTab);
-                RaisePropertyChangedEvent("SelectedTab");
+                RaisePropertyChangedEvent();
             }
         }
 
