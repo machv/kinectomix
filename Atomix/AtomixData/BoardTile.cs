@@ -31,19 +31,6 @@ namespace AtomixData
         /// </summary>
         /// <returns>True if tile cannot be moved.</returns>
         public bool IsFixed { get; set; }
-        /// <summary>
-        /// Indicates if this tile is currently active in the game.
-        /// </summary>
-        /// <returns>True if is selected.</returns>
-        public bool IsSelected { get; set; }
-        /// <summary>
-        /// Flag indicating in which directions can be this tile moved on the board.
-        /// </summary>
-        public Direction Movements;
-        /// <summary>
-        /// Render position of this tile on the board.
-        /// </summary>
-        public Vector2 RenderPosition;
 
         /// <summary>
         /// Constructs new instance of BoardTile class where tile is fixed by default.

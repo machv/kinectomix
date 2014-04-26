@@ -37,16 +37,6 @@ namespace Kinectomix.LevelGenerator
             }
         }
 
-        public bool IsSelected
-        {
-            get { return _tile.IsSelected; }
-            set
-            {
-                _tile.IsSelected = value;
-                RaisePropertyChangedEvent("IsSelected");
-            }
-        }
-
         public BoardTileViewModel(BoardTile tile)
         {
             _tile = tile;

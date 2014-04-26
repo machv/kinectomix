@@ -1,4 +1,5 @@
 ﻿using Atomix.Components;
+using Atomix.ViewModel;
 using AtomixData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -14,12 +15,12 @@ namespace Atomix
 {
     public class LevelScreen : GameScreen
     {
-        Level currentLevel;
+        LevelViewModel currentLevel;
         SpriteBatch spriteBatch;
 
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
-            this.currentLevel = currentLevel;
+            this.currentLevel = LevelFactory.ToViewModel(currentLevel);
             this.spriteBatch = spriteBatch;
 
             gameStarted = DateTime.Now;
@@ -300,7 +301,7 @@ namespace Atomix
                                 Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Type);
                                 Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Type);
 
-                                BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
+                                BoardTileViewModel atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
 
                                 // start animation
                                 isMovementAnimation = true;
@@ -417,7 +418,7 @@ namespace Atomix
         }
 
 
-        private void CalculateBoardTilePositions(Vector2 startPosition, BoardCollection<BoardTile> board)
+        private void CalculateBoardTilePositions(Vector2 startPosition, BoardCollection<BoardTileViewModel> board)
         {
             Vector2 mPosition = new Vector2(startPosition.X, startPosition.Y);
 
@@ -605,7 +606,7 @@ namespace Atomix
             return tile;
         }
 
-        private void DrawBoard(SpriteBatch spriteBach, BoardCollection<BoardTile> board, bool drawEmptyTiles = false)
+        private void DrawBoard(SpriteBatch spriteBach, BoardCollection<BoardTileViewModel> board, bool drawEmptyTiles = false)
         {
             bool drawEmpty = false;
 
