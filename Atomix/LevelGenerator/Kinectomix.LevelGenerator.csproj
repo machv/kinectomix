@@ -149,13 +149,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Board\Wall.png" />
-    <Resource Include="Board\Carbon.png" />
     <Resource Include="Board\Empty.png" />
-    <Resource Include="Board\Hydrogen.png" />
-    <Resource Include="Board\Oxygen.png" />
+    <Content Include="Tiles\Hydrogen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tiles\Oxygen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Tiles\Carbon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

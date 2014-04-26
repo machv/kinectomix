@@ -5,12 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Kinectomix.LevelGenerator
 {
     public class BoardTileViewModel : Mvvm.NotifyPropertyBase
     {
+        protected static ImageSourceConverter SourceConverter = new ImageSourceConverter();
+
         BoardTile _tile;
+        string _assetDirectory;
 
         public BoardTile Tile
         {
@@ -62,6 +66,13 @@ namespace Kinectomix.LevelGenerator
         public BoardTileViewModel(BoardTile tile)
         {
             _tile = tile;
+        }
+
+        public BoardTileViewModel(BoardTile tile, string assetDirectory)
+        {
+            _tile = tile;
+            _assetDirectory = assetDirectory;
+            _assetSource = (ImageSource)(SourceConverter.ConvertFromString(string.Format("{0}/{1}.png", assetDirectory, tile.Asset)));
         }
     }
 }

@@ -9,11 +9,11 @@ namespace Kinectomix.LevelGenerator.Model
 {
     public class Tiles
     {
-        private List<BoardTile> _boardTiles = new List<BoardTile>();
-        private List<BoardTile> _moleculeTiles = new List<BoardTile>();
+        private List<BoardTileViewModel> _boardTiles = new List<BoardTileViewModel>();
+        private List<BoardTileViewModel> _moleculeTiles = new List<BoardTileViewModel>();
 
-        public IEnumerable<BoardTile> Board { get { return _boardTiles; } }
+        public List<BoardTileViewModel> Board { get { return _boardTiles; } }
 
-        public IEnumerable<BoardTile> Molecule { get { return _moleculeTiles; } }
+        public List<BoardTileViewModel> Molecule { get { return _moleculeTiles; } }
     }
 }

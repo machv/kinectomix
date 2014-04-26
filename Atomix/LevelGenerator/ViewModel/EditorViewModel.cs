@@ -1,9 +1,13 @@
 ﻿using AtomixData;
 using Kinectomix.LevelGenerator.Model;
 using Kinectomix.LevelGenerator.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
@@ -18,8 +22,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set { _levelFileDialog = value; }
         }
 
-        private IEnumerable<BoardTile> _availableTiles;
-        public IEnumerable<BoardTile> AvailableTiles
+        private IEnumerable<BoardTileViewModel> _availableTiles;
+        public IEnumerable<BoardTileViewModel> AvailableTiles
         {
             get { return _availableTiles; }
             set
@@ -30,8 +34,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private BoardTile _currentTileTemplate;
-        public BoardTile CurrentTileTemplate
+        private BoardTileViewModel _currentTileTemplate;
+        public BoardTileViewModel CurrentTileTemplate
         {
             get { return _currentTileTemplate; }
             set
@@ -104,11 +108,30 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public EditorViewModel()
         {
+            BoardTile tile;
+
             _tiles = new Tiles();
+
+            tile = new BoardTile() { IsFixed = true, IsEmpty = true, Asset = "Empty" };
+            _tiles.Board.Add(new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) });
+            _tiles.Molecule.Add(new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) });
+
+            tile = new BoardTile() { IsFixed = true, IsEmpty = false, Asset = "Wall" };
+            _tiles.Board.Add(new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) });
+
+            string absolute = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.TilesDirectory);
+            string[] tiles = Directory.GetFiles(absolute, "*.png");
+            foreach (string tilePath in tiles)
+            {
+                string tileName = Path.GetFileNameWithoutExtension(tilePath);
+
+                tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = tileName };
+                _tiles.Board.Add(new BoardTileViewModel(tile, Path.GetDirectoryName(tilePath)));
+                _tiles.Molecule.Add(new BoardTileViewModel(tile, Path.GetDirectoryName(tilePath)));
+            }
+
             _levelFileDialog = new LevelFileDialog();
-
             _availableTiles = _tiles.Board;
-
             _saveAsLevelCommand = new DelegateCommand(SaveAsLevel, CanExecuteSaveAs);
         }
 

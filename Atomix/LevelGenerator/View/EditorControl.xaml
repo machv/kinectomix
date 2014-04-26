@@ -103,8 +103,8 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
 
-                                <Image Grid.Row="0" Source="{Binding Path=Type, Converter={StaticResource TileTypeToTexturePathConverter}, ConverterParameter='../Board/'}" />
-                                <TextBlock Grid.Row="1" Text="{Binding Type}" TextAlignment="Center"/>
+                                <Image Grid.Row="0" Source="{Binding AssetSource}" />
+                                <TextBlock Grid.Row="1" Text="{Binding Asset}" TextAlignment="Center"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
