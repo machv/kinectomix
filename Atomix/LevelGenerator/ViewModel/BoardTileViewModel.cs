@@ -14,7 +14,9 @@ namespace Kinectomix.LevelGenerator
         protected static ImageSourceConverter SourceConverter = new ImageSourceConverter();
 
         BoardTile _tile;
-        string _assetDirectory;
+        string _assetFile;
+
+        internal string AssetFile { get { return _assetFile; } }
 
         public BoardTile Tile
         {
@@ -68,11 +70,11 @@ namespace Kinectomix.LevelGenerator
             _tile = tile;
         }
 
-        public BoardTileViewModel(BoardTile tile, string assetDirectory)
+        public BoardTileViewModel(BoardTile tile, string assetFile)
         {
             _tile = tile;
-            _assetDirectory = assetDirectory;
-            _assetSource = (ImageSource)(SourceConverter.ConvertFromString(string.Format("{0}/{1}.png", assetDirectory, tile.Asset)));
+            _assetFile = assetFile;
+            _assetSource = (ImageSource)(SourceConverter.ConvertFromString(assetFile));
         }
     }
 }

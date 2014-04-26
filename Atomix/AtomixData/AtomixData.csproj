@@ -67,6 +67,7 @@
     <Compile Include="BoardTileCollection.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="LevelAsset.cs" />
     <Compile Include="LevelDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TileAttribute.cs" />

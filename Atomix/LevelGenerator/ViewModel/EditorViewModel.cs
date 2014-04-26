@@ -126,8 +126,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 string tileName = Path.GetFileNameWithoutExtension(tilePath);
 
                 tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = tileName };
-                _tiles.Board.Add(new BoardTileViewModel(tile, Path.GetDirectoryName(tilePath)));
-                _tiles.Molecule.Add(new BoardTileViewModel(tile, Path.GetDirectoryName(tilePath)));
+                _tiles.Board.Add(new BoardTileViewModel(tile, tilePath));
+                _tiles.Molecule.Add(new BoardTileViewModel(tile, tilePath));
             }
 
             _levelFileDialog = new LevelFileDialog();
@@ -149,6 +149,22 @@ namespace Kinectomix.LevelGenerator.ViewModel
         private bool CanExecuteSaveAs(object parameter)
         {
             return Level != null;
+        }
+
+        public ICommand NewLevelCommand
+        {
+            get { return new DelegateCommand(NewLevel); }
+        }
+
+        private void NewLevel()
+        {
+            View.NewLevelWindow newLevelWindow = new View.NewLevelWindow();
+
+            bool? result = newLevelWindow.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                
+            }
         }
 
         public ICommand LoadLevelsCommand

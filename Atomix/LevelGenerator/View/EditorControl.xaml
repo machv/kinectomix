@@ -65,7 +65,7 @@
             </StackPanel>
             -->
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="_New level" Margin="5" Padding="3" />
+                    <Button Content="_New level" Margin="5" Padding="3" Command="{Binding NewLevelCommand}" />
                     <Button Content="_Load level..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
                     <Button Content="_Save level as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" FontWeight="Bold" />
                 </StackPanel>

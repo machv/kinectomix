@@ -75,6 +75,7 @@
     <Compile Include="Converter\NotNullToVisibilityConverter.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="Libraries\DialogCloser.cs" />
     <Compile Include="Model\LevelFactory.cs" />
     <Compile Include="Model\LevelFileDialog.cs" />
     <Compile Include="Model\Tiles.cs" />
@@ -87,12 +88,19 @@
     <Compile Include="ViewModel\LevelsViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
     <Compile Include="ViewModel\MoleculeViewModel.cs" />
+    <Compile Include="ViewModel\NewLevelViewModel.cs" />
     <Compile Include="ViewModel\TilesViewModel.cs" />
     <Compile Include="View\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EditorControl.xaml.cs">
       <DependentUpon>EditorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewLevelControl.xaml.cs">
+      <DependentUpon>NewLevelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\NewLevelWindow.xaml.cs">
+      <DependentUpon>NewLevelWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Control\BoardTilesControl.xaml">
       <SubType>Designer</SubType>
@@ -108,6 +116,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\EditorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewLevelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\NewLevelWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
