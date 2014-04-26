@@ -4,19 +4,6 @@ using System;
 namespace AtomixData
 {
     /// <summary>
-    /// Flag indicating in which directions can be tile moved on the board.
-    /// </summary>
-    [Flags]
-    public enum Direction
-    {
-        None = 0,
-        Up = 1,
-        Right = 2,
-        Down = 4,
-        Left = 8,
-    }
-
-    /// <summary>
     /// Represents one tile on the game's board.
     /// </summary>
     public class BoardTile

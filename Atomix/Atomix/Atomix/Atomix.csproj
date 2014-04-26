@@ -109,6 +109,7 @@
     <Compile Include="Components\SkeletonRenderer.cs" />
     <Compile Include="Skeletons.cs" />
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
+    <Compile Include="ViewModel\Direction.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
