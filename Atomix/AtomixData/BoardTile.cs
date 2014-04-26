@@ -1,12 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 
 namespace AtomixData
 {
+    /// <summary>
+    /// Flag indicating in which directions can be tile moved on the board.
+    /// </summary>
     [Flags]
     public enum Direction
     {
@@ -17,38 +16,38 @@ namespace AtomixData
         Left = 8,
     }
 
-    public class BoardTile : INotifyPropertyChanged
+    /// <summary>
+    /// Represents one tile on the game's board.
+    /// </summary>
+    public class BoardTile
     {
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            // zjistíme, zda je někdo k události přihlášen
-            // musí existovat nějaký delegát, který bude event zpracovávat
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        #endregion
-
-        private TileType type;
-        public TileType Type
-        {
-            get { return type; }
-            set
-            {
-                type = value; OnPropertyChanged("Type");
-            }
-        }
+        /// <summary>
+        /// Type of tile.
+        /// </summary>
+        /// <returns>TileType enumeration value.</returns>
+        public TileType Type { get; set; }
+        /// <summary>
+        /// Indicates if this tile is fixed (eg. wall) and cannot be moved during game.
+        /// </summary>
+        /// <returns>True if tile cannot be moved.</returns>
         public bool IsFixed { get; set; }
+        /// <summary>
+        /// Indicates if this tile is currently active in the game.
+        /// </summary>
+        /// <returns>True if is selected.</returns>
         public bool IsSelected { get; set; }
+        /// <summary>
+        /// Flag indicating in which directions can be this tile moved on the board.
+        /// </summary>
         public Direction Movements;
+        /// <summary>
+        /// Render position of this tile on the board.
+        /// </summary>
         public Vector2 RenderPosition;
 
+        /// <summary>
+        /// Constructs new instance of BoardTile class where tile is fixed by default.
+        /// </summary>
         public BoardTile()
         {
             IsFixed = true;
