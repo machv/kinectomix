@@ -17,14 +17,14 @@ namespace AtomixData
     {
         public string Name { get; set; }
 
-        public BoardTileCollection Board { get; set; }
-        public BoardTileCollection Molecule { get; set; }
+        public BoardCollection<BoardTile> Board { get; set; }
+        public BoardCollection<BoardTile> Molecule { get; set; }
 
         public Level() { }
 
         public Level(int rows, int columns)
         {
-            Board = new BoardTileCollection(rows, columns);
+            Board = new BoardCollection<BoardTile>(rows, columns);
         }
 
         public bool CanGoUp(int x, int y)

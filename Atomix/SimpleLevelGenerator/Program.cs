@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using AtomixData;
@@ -66,7 +63,7 @@ namespace SimpleLevelGenerator
             level1.Name = "Water";
 
             // Molecule
-            BoardTileCollection molecule = new BoardTileCollection(1, 3);
+            BoardCollection<BoardTile> molecule = new BoardCollection<BoardTile>(1, 3);
             molecule[0, 0] = new BoardTile() { Type = TileType.Hydrogen };
             molecule[0, 1] = new BoardTile() { Type = TileType.Oxygen };
             molecule[0, 2] = new BoardTile() { Type = TileType.Hydrogen };

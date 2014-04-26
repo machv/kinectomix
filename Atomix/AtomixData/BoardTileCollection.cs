@@ -2,18 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
 
 namespace AtomixData
 {
-    public class BoardTileCollection : ICollection<BoardTile>
+    public class BoardCollection<T> : ICollection<T>
     {
         public int RowsCount { get; set; }
         public int ColumnsCount { get; set; }
 
         [ContentSerializer]
-        protected BoardTile[] _tiles;
+        protected T[] _tiles;
 
         protected int GetIndex(int row, int column)
         {
@@ -21,38 +19,38 @@ namespace AtomixData
         }
 
         [ContentSerializerIgnore]
-        public BoardTile this[int row, int column]
+        public T this[int row, int column]
         {
             get { return _tiles[GetIndex(row, column)]; }
             set { _tiles[GetIndex(row, column)] = value; }
         }
 
-        public BoardTileCollection() { }
-        public BoardTileCollection(int rows, int columns)
+        public BoardCollection() { }
+        public BoardCollection(int rows, int columns)
         {
             RowsCount = rows;
             ColumnsCount = columns;
 
-            _tiles = new BoardTile[rows * columns];
+            _tiles = new T[rows * columns];
         }
 
         public void Clear()
         {
-            _tiles = new BoardTile[RowsCount * ColumnsCount];
+            _tiles = new T[RowsCount * ColumnsCount];
         }
 
-        public bool Contains(BoardTile item)
+        public bool Contains(T item)
         {
             return _tiles.Contains(item);
         }
 
-        public void CopyTo(BoardTile[] array, int arrayIndex)
+        public void CopyTo(T[] array, int arrayIndex)
         {
             _tiles.CopyTo(array, arrayIndex);
         }
 
         int addingIndex = 0;
-        public void Add(BoardTile item)
+        public void Add(T item)
         {
             _tiles[addingIndex++] = item;
         }
@@ -68,20 +66,20 @@ namespace AtomixData
             get { return true; }
         }
 
-        public bool Remove(BoardTile item)
+        public bool Remove(T item)
         {
             throw new NotSupportedException("This Method is not valid for this implementation.");
         }
 
-        public IEnumerator<BoardTile> GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
-            foreach (BoardTile tile in _tiles)
+            foreach (T tile in _tiles)
                 yield return tile;
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            foreach (BoardTile tile in _tiles)
+            foreach (T tile in _tiles)
                 yield return tile;
         }
     }

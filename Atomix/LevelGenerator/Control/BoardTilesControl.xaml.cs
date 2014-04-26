@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AtomixData;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace Kinectomix.LevelGenerator.Control
 
         public IEnumerable TilesSource
         {
-            get { return (AtomixData.BoardTileCollection)GetValue(TilesSourceProperty); }
+            get { return (AtomixData.BoardCollection<BoardTile>)GetValue(TilesSourceProperty); }
             set { SetValue(TilesSourceProperty, value); }
         }
 
