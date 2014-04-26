@@ -23,8 +23,8 @@ namespace SimpleLevelGenerator
                 for (int x = 0; x < level1.Board.ColumnsCount; x++)
                 {
                     BoardTile tile = new BoardTile();
-                    tile.Type = y == 0 || y == level1.Board.RowsCount - 1 || x == 0 || x == level1.Board.ColumnsCount - 1 ?
-                        TileType.Wall : TileType.Empty;
+                    tile.Asset = y == 0 || y == level1.Board.RowsCount - 1 || x == 0 || x == level1.Board.ColumnsCount - 1 ?
+                        "Wall" : "Empty";
 
                     level1.Board[y, x] = tile;
                 }
@@ -50,23 +50,23 @@ namespace SimpleLevelGenerator
 
             foreach (var wall in walls)
             {
-                level1.Board[wall.Item1, wall.Item2] = new BoardTile { Type = TileType.Wall };
+                level1.Board[wall.Item1, wall.Item2] = new BoardTile { Asset = "Wall" };
             }
 
-            //level.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            //level.Board[7, 1] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            //level.Board[5, 7] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
-            level1.Board[1, 4] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level1.Board[1, 9] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level1.Board[1, 5] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
+            //level.Board[2, 2] = new BoardTile() { Asset = "Hydrogen", IsFixed = false };
+            //level.Board[7, 1] = new BoardTile() { Asset = "Hydrogen", IsFixed = false };
+            //level.Board[5, 7] = new BoardTile() { Asset = "Oxygen", IsFixed = false };
+            level1.Board[1, 4] = new BoardTile() { Asset = "Hydrogen", IsFixed = false };
+            level1.Board[1, 9] = new BoardTile() { Asset = "Hydrogen", IsFixed = false };
+            level1.Board[1, 5] = new BoardTile() { Asset = "Oxygen", IsFixed = false };
 
             level1.Name = "Water";
 
             // Molecule
             BoardCollection<BoardTile> molecule = new BoardCollection<BoardTile>(1, 3);
-            molecule[0, 0] = new BoardTile() { Type = TileType.Hydrogen };
-            molecule[0, 1] = new BoardTile() { Type = TileType.Oxygen };
-            molecule[0, 2] = new BoardTile() { Type = TileType.Hydrogen };
+            molecule[0, 0] = new BoardTile() { Asset = "Hydrogen" };
+            molecule[0, 1] = new BoardTile() { Asset = "Oxygen" };
+            molecule[0, 2] = new BoardTile() { Asset = "Hydrogen" };
 
             level1.Molecule = molecule;
 
@@ -87,16 +87,16 @@ namespace SimpleLevelGenerator
                 for (int x = 0; x < level2.Board.ColumnsCount; x++)
                 {
                     BoardTile tile = new BoardTile();
-                    tile.Type = y == 0 || y == level2.Board.RowsCount - 1 || x == 0 || x == level2.Board.ColumnsCount - 1 ?
-                        TileType.Wall : TileType.Empty;
+                    tile.Asset = y == 0 || y == level2.Board.RowsCount - 1 || x == 0 || x == level2.Board.ColumnsCount - 1 ?
+                        "Wall" : "Empty";
 
                     level2.Board[y, x] = tile;
                 }
             }
 
-            level2.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level2.Board[7, 1] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level2.Board[5, 7] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
+            level2.Board[2, 2] = new BoardTile() { Asset = "Hydrogen", IsFixed = false };
+            level2.Board[7, 1] = new BoardTile() { Asset = "Hydrogen", IsFixed = false };
+            level2.Board[5, 7] = new BoardTile() { Asset = "Oxygen", IsFixed = false };
 
             level2.Molecule = molecule;
 
@@ -113,23 +113,23 @@ namespace SimpleLevelGenerator
                 for (int x = 0; x < level4.Board.ColumnsCount; x++)
                 {
                     BoardTile tile = new BoardTile();
-                    tile.Type = y == 0 || y == level4.Board.RowsCount - 1 || x == 0 || x == level4.Board.ColumnsCount - 1 ?
-                        TileType.Wall : TileType.Empty;
+                    tile.Asset = y == 0 || y == level4.Board.RowsCount - 1 || x == 0 || x == level4.Board.ColumnsCount - 1 ?
+                        "Wall" : "Empty";
 
                     level4.Board[y, x] = tile;
                 }
             }
 
-            level4.Board[2, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level4.Board[4, 2] = new BoardTile() { Type = TileType.Hydrogen, IsFixed = false };
-            level4.Board[2, 3] = new BoardTile() { Type = TileType.Oxygen, IsFixed = false };
+            level4.Board[2, 2] = new BoardTile() { Asset = "Hydrogen", IsFixed = false };
+            level4.Board[4, 2] = new BoardTile() { Asset = "Hydrogen", IsFixed = false };
+            level4.Board[2, 3] = new BoardTile() { Asset = "Oxygen", IsFixed = false };
 
             level4.Molecule = molecule;
 
             // http://stackoverflow.com/questions/8856528/serialize-texture2d-programatically-in-xna
-            Type compilerType = typeof(ContentCompiler);
-            ContentCompiler cc = compilerType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0].Invoke(null) as ContentCompiler;
-            var compileMethod = compilerType.GetMethod("Compile", BindingFlags.NonPublic | BindingFlags.Instance);
+            Type compilerAsset = typeof(ContentCompiler);
+            ContentCompiler cc = compilerAsset.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0].Invoke(null) as ContentCompiler;
+            var compileMethod = compilerAsset.GetMethod("Compile", BindingFlags.NonPublic | BindingFlags.Instance);
             string fullPath = "../../../Atomix/AtomixContent/Levels/Level4.xnb"; //Path.Combine(@"d:\", "Level.xnb");
             using (FileStream fs = File.Create(fullPath))
             {

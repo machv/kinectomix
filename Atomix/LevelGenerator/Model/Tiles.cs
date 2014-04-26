@@ -15,30 +15,5 @@ namespace Kinectomix.LevelGenerator.Model
         public IEnumerable<BoardTile> Board { get { return _boardTiles; } }
 
         public IEnumerable<BoardTile> Molecule { get { return _moleculeTiles; } }
-
-        public Tiles()
-        {
-            foreach (var type in Enum.GetValues(typeof(TileType)).Cast<TileType>())
-            {
-                TilePropertiesAttribute properties = type.GetAttributeOfType<TilePropertiesAttribute>();
-                bool isFixed = properties != null ? properties.IsFixed : false;
-
-                if (properties != null && !properties.ShowInBoardEditor)
-                    continue;
-
-                _boardTiles.Add(new BoardTile() { Type = type, IsFixed = isFixed });
-            }
-
-            foreach (var type in Enum.GetValues(typeof(TileType)).Cast<TileType>())
-            {
-                TilePropertiesAttribute properties = type.GetAttributeOfType<TilePropertiesAttribute>();
-                bool isFixed = properties != null ? properties.IsFixed : false;
-
-                if (properties != null && !properties.ShowInMoleculeEditor)
-                    continue;
-
-                _moleculeTiles.Add(new BoardTile() { Type = type, IsFixed = isFixed });
-            }
-        }
     }
 }

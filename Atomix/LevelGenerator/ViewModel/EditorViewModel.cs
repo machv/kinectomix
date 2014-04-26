@@ -61,7 +61,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             if (CurrentTileTemplate == null)
                 return;
 
-            _currentTile.Type = CurrentTileTemplate.Type;
+            _currentTile.Asset = CurrentTileTemplate.Asset;
         }
 
         private LevelViewModel _level;

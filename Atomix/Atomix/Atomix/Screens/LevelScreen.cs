@@ -52,8 +52,8 @@ namespace Atomix
         protected Vector2 atomPosition;
         protected Vector2 finalPosition;
         Point destination;
-        TileType atomToMove;
-        TileType moveDirection;
+        string atomToMove;
+        Direction moveDirection;
         float atomSpeed = 400f;
 
         // Scoring
@@ -209,13 +209,13 @@ namespace Atomix
 
                 if (atomPosition.X == destinationPosition.X)
                 {
-                    int direction = moveDirection == TileType.Up ? -1 : 1;
+                    int direction = moveDirection == Direction.Up ? -1 : 1;
                     atomPosition.Y += direction * atomSpeed * elapsed;
                 }
 
                 if (atomPosition.Y == destinationPosition.Y)
                 {
-                    int direction = moveDirection == TileType.Left ? -1 : 1;
+                    int direction = moveDirection == Direction.Left ? -1 : 1;
                     atomPosition.X += direction * atomSpeed * elapsed;
                 }
 
@@ -223,7 +223,7 @@ namespace Atomix
                 if (tile.Contains((int)atomPosition.X, (int)atomPosition.Y))
                 {
                     isMovementAnimation = false;
-                    currentLevel.Board[destination.X, destination.Y].Type = atomToMove;
+                    currentLevel.Board[destination.X, destination.Y].Asset = atomToMove;
 
                     // Animation finished -> check victory
                     bool isFinished = CheckFinish();
@@ -274,32 +274,32 @@ namespace Atomix
                                 if (currentLevel.CanGoUp(i, j))
                                 {
                                     currentLevel.Board[i, j].Movements |= Direction.Up;
-                                    currentLevel.Board[i - 1, j].Type = TileType.Up;
+                                    currentLevel.Board[i - 1, j].Asset = "Up";
                                 }
                                 if (currentLevel.CanGoDown(i, j))
                                 {
                                     currentLevel.Board[i, j].Movements |= Direction.Down;
-                                    currentLevel.Board[i + 1, j].Type = TileType.Down;
+                                    currentLevel.Board[i + 1, j].Asset = "Down";
                                 }
                                 if (currentLevel.CanGoLeft(i, j))
                                 {
                                     currentLevel.Board[i, j].Movements |= Direction.Left;
-                                    currentLevel.Board[i, j - 1].Type = TileType.Left;
+                                    currentLevel.Board[i, j - 1].Asset = "Left";
                                 }
                                 if (currentLevel.CanGoRight(i, j))
                                 {
                                     currentLevel.Board[i, j].Movements |= Direction.Right;
-                                    currentLevel.Board[i, j + 1].Type = TileType.Right;
+                                    currentLevel.Board[i, j + 1].Asset = "Right";
                                 }
                             }
-                            else if (currentLevel.Board[i, j].Type == TileType.Right ||
-                                     currentLevel.Board[i, j].Type == TileType.Left ||
-                                     currentLevel.Board[i, j].Type == TileType.Up ||
-                                     currentLevel.Board[i, j].Type == TileType.Down)
+                            else if (currentLevel.Board[i, j].Asset == "Right" ||
+                                     currentLevel.Board[i, j].Asset == "Left" ||
+                                     currentLevel.Board[i, j].Asset == "Up" ||
+                                     currentLevel.Board[i, j].Asset == "Down")
                             {
                                 Point coordinates = new Point(i, j);
-                                Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Type);
-                                Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Type);
+                                Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Movements);
+                                Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Movements);
 
                                 BoardTileViewModel atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
 
@@ -307,13 +307,13 @@ namespace Atomix
                                 isMovementAnimation = true;
                                 atomPosition = atom.RenderPosition;
                                 destination = newCoordinates;
-                                atomToMove = atom.Type;
-                                moveDirection = currentLevel.Board[i, j].Type;
+                                //atomToMove = atom.Type;
+                                moveDirection = currentLevel.Board[i, j].Movements;
 
                                 //instead of just switching do the animation
                                 currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
                                 currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
-                                currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type = TileType.Empty; // but now will be rendered as empty
+                                currentLevel.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true;// = TileType.Empty; // but now will be rendered as empty
 
                                 CalculateBoardTilePositions(boardPosition, currentLevel.Board);
 
@@ -450,10 +450,10 @@ namespace Atomix
                         for (int y = 0; y < currentLevel.Molecule.ColumnsCount; y++)
                         {
                             // If we have empty tile in definition it is like a wildcard that matches everything
-                            if (currentLevel.Molecule[x, y].Type == TileType.Empty)
+                            if (currentLevel.Molecule[x, y].IsEmpty)
                                 continue;
 
-                            if (currentLevel.Board[i + x, j + y].Type != currentLevel.Molecule[x, y].Type)
+                            if (currentLevel.Board[i + x, j + y].Asset != currentLevel.Molecule[x, y].Asset)
                             {
                                 isMatch = false;
                                 break;
@@ -474,22 +474,22 @@ namespace Atomix
             return false;
         }
 
-        private Point GetAtomPosition(Point directionTilePosition, TileType direction)
+        private Point GetAtomPosition(Point directionTilePosition, Direction direction)
         {
             Point atomPosition = directionTilePosition;
 
             switch (direction)
             {
-                case TileType.Right:
+                case Direction.Right:
                     atomPosition.Y -= 1;
                     break;
-                case TileType.Left:
+                case Direction.Left:
                     atomPosition.Y += 1;
                     break;
-                case TileType.Down:
+                case Direction.Down:
                     atomPosition.X -= 1;
                     break;
-                case TileType.Up:
+                case Direction.Up:
                     atomPosition.X += 1;
                     break;
             }
@@ -497,16 +497,16 @@ namespace Atomix
             return atomPosition;
         }
 
-        private Point NewPosition(Point coordinates, TileType direction)
+        private Point NewPosition(Point coordinates, Direction direction)
         {
             Point newCoordinates = coordinates;
 
             switch (direction)
             {
-                case TileType.Right:
+                case Direction.Right:
                     while (newCoordinates.Y < currentLevel.Board.ColumnsCount)
                     {
-                        if (currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Right && currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Empty)
+                        if (!currentLevel.Board[newCoordinates.X, newCoordinates.Y].IsEmpty)
                             break;
 
                         newCoordinates.Y++;
@@ -514,10 +514,10 @@ namespace Atomix
 
                     if (newCoordinates.Y != coordinates.Y) newCoordinates.Y--; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
-                case TileType.Left:
+                case Direction.Left:
                     while (newCoordinates.Y >= 0)
                     {
-                        if (currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Left && currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Empty)
+                        if (!currentLevel.Board[newCoordinates.X, newCoordinates.Y].IsEmpty)
                             break;
 
                         newCoordinates.Y--;
@@ -525,10 +525,10 @@ namespace Atomix
 
                     if (newCoordinates.Y != coordinates.Y) newCoordinates.Y++; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
-                case TileType.Down:
+                case Direction.Down:
                     while (newCoordinates.X < currentLevel.Board.RowsCount)
                     {
-                        if (currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Down && currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Empty)
+                        if (!currentLevel.Board[newCoordinates.X, newCoordinates.Y].IsEmpty)
                             break;
 
                         newCoordinates.X++;
@@ -536,10 +536,10 @@ namespace Atomix
 
                     if (newCoordinates.X != coordinates.X) newCoordinates.X--; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
-                case TileType.Up:
+                case Direction.Up:
                     while (newCoordinates.X >= 0)
                     {
-                        if (currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Up && currentLevel.Board[newCoordinates.X, newCoordinates.Y].Type != TileType.Empty)
+                        if (!currentLevel.Board[newCoordinates.X, newCoordinates.Y].IsEmpty)
                             break;
 
                         newCoordinates.X--;
@@ -558,15 +558,15 @@ namespace Atomix
             {
                 for (int y = 0; y < currentLevel.Board.ColumnsCount; y++)
                 {
-                    switch (currentLevel.Board[x, y].Type)
-                    {
-                        case TileType.Down:
-                        case TileType.Up:
-                        case TileType.Right:
-                        case TileType.Left:
-                            currentLevel.Board[x, y].Type = TileType.Empty;
-                            break;
-                    }
+                    //switch (currentLevel.Board[x, y].Type)
+                    //{
+                    //    case TileType.Down:
+                    //    case TileType.Up:
+                    //    case TileType.Right:
+                    //    case TileType.Left:
+                    //        currentLevel.Board[x, y].Type = TileType.Empty;
+                    //        break;
+                    //}
 
                     currentLevel.Board[x, y].IsSelected = false;
                     currentLevel.Board[x, y].Movements = Direction.None;
@@ -574,31 +574,31 @@ namespace Atomix
             }
         }
 
-        private Texture2D GetTileTexture(TileType tileType, bool isSelected)
+        private Texture2D GetTileTexture(string tileType, bool isSelected)
         {
             Texture2D tile = null;
 
             switch (tileType)
             {
-                case TileType.Wall:
+                case "Wall":
                     tile = wallTexture;
                     break;
-                case TileType.Empty:
+                case "Empty":
                     tile = emptyTexture;
                     break;
-                case TileType.Carbon:
+                case "Carbon":
                     tile = isSelected ? carbonSelectedTexture : carbonTexture;
                     break;
-                case TileType.Oxygen:
+                case "Oxygen":
                     tile = isSelected ? oxygenSelectedTexture : oxygenTexture;
                     break;
-                case TileType.Hydrogen:
+                case "Hydrogen":
                     tile = isSelected ? hydrogenSelectedTexture : hydrogenTexture;
                     break;
-                case TileType.Left:
-                case TileType.Right:
-                case TileType.Down:
-                case TileType.Up:
+                case "Left":
+                case "Right":
+                case "Down":
+                case "Up":
                     tile = arrowTexture;
                     break;
             }
@@ -614,27 +614,27 @@ namespace Atomix
             {
                 for (int j = 0; j < board.ColumnsCount; j++)
                 {
-                    Texture2D tile = GetTileTexture(board[i, j].Type, board[i, j].IsSelected);
+                    Texture2D tile = GetTileTexture(board[i, j].Asset, board[i, j].IsSelected);
                     drawEmpty = true;
                     float RotationAngle = 0;
                     Vector2 origin = new Vector2();
 
-                    switch (board[i, j].Type)
+                    switch (board[i, j].Movements)
                     {
-                        case TileType.Wall:
-                            drawEmpty = false;
-                            break;
-                        case TileType.Down:
+                        //case TileType.Wall:
+                        //    drawEmpty = false;
+                        //    break;
+                        case Direction.Down:
                             RotationAngle = MathHelper.Pi;
                             origin.X = tile.Width;
                             origin.Y = tile.Height;
                             break;
-                        case TileType.Left:
+                        case Direction.Left:
                             RotationAngle = -1 * MathHelper.Pi / 2;
                             origin.X = tile.Width;
                             origin.Y = 0;
                             break;
-                        case TileType.Right:
+                        case Direction.Right:
                             RotationAngle = MathHelper.Pi / 2;
                             origin.Y = tile.Height;
                             break;

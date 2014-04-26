@@ -467,13 +467,13 @@ namespace Atomix.Components
             float x;
             float y;
 
-            var valuesX = cursorPositionsBuffer.Where(p => p != null).Select(p => p.X);
+            var valuesX = cursorPositionsBuffer.Select(p => p.X);
 
             if (valuesX.Count() < 1) return Vector2.Zero;
 
             x = valuesX.Sum() / valuesX.Count();
 
-            var valuesY = cursorPositionsBuffer.Where(p => p != null).Select(p => p.Y);
+            var valuesY = cursorPositionsBuffer.Select(p => p.Y);
             y = valuesY.Sum() / valuesY.Count();
 
             return new Vector2(x, y);
@@ -533,10 +533,10 @@ namespace Atomix.Components
                 SpriteTexture.DrawFrame(spriteBatch, cursorPosition);
             }
 
-            if (_colorVideo != null)
-            {
-                spriteBatch.Draw(_colorVideo, new Rectangle(50, 50, 640, 480), Color.White);
-            }
+            //if (_colorVideo != null)
+            //{
+            //    spriteBatch.Draw(_colorVideo, new Rectangle(50, 50, 640, 480), Color.White);
+            //}
 
             spriteBatch.End();
 

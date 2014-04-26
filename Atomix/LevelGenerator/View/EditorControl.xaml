@@ -88,6 +88,7 @@
 
             <StackPanel Grid.Row="3">
                 <TextBlock Text="Available tiles" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal">
                 <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding CurrentTileTemplate}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -108,6 +109,18 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                    <Button Command="{Binding AddTileCommand}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Image Grid.Row="0" Source="../Icons/Add.png" />
+                            <TextBlock Grid.Row="1" Text="Add new tile" TextAlignment="Center" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
             </StackPanel>
 
         </Grid>
