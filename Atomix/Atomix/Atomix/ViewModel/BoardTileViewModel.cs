@@ -13,16 +13,22 @@ namespace Atomix.ViewModel
             set { _tile = value; }
         }
 
-        public TileType Type
+        public string Asset
         {
-            get { return _tile.Type; }
-            set { _tile.Type = value; }
+            get { return _tile.Asset; }
+            set { _tile.Asset = value; }
         }
 
         public bool IsFixed
         {
             get { return _tile.IsFixed; }
             set { _tile.IsFixed = value; }
+        }
+
+        public bool IsEmpty
+        {
+            get { return _tile.IsEmpty; }
+            set { _tile.IsEmpty = value; }
         }
 
         /// <summary>

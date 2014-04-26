@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Kinectomix.LevelGenerator
 {
@@ -17,12 +18,12 @@ namespace Kinectomix.LevelGenerator
             set { _tile = value; }
         }
 
-        public TileType Type
+        public string Asset
         {
-            get { return _tile.Type; }
+            get { return _tile.Asset; }
             set
             {
-                _tile.Type = value;
+                _tile.Asset = value;
                 RaisePropertyChangedEvent();
             }
         }
@@ -33,6 +34,27 @@ namespace Kinectomix.LevelGenerator
             set
             {
                 _tile.IsFixed = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+
+        public bool IsEmpty
+        {
+            get { return _tile.IsEmpty; }
+            set
+            {
+                _tile.IsEmpty = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+
+        private ImageSource _assetSource;
+        public ImageSource AssetSource
+        {
+            get { return _assetSource; }
+            set
+            {
+                _assetSource = value;
                 RaisePropertyChangedEvent();
             }
         }
