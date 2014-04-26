@@ -65,7 +65,7 @@ namespace Atomix
             _KinectChooser = new KinectChooser(this);
             _skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
             _cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
-            //_videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
+            _videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
             var background = new Background(this);
 
             // Input
@@ -81,7 +81,7 @@ namespace Atomix
             Components.Add(background);
             Components.Add(_gameScreenManager);
             Components.Add(_KinectChooser);
-            //Components.Add(_videoStream);
+            Components.Add(_videoStream);
             Components.Add(_skeletonRenderer);
             Components.Add(_cursor);
 
