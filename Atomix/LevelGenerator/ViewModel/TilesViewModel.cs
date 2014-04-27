@@ -41,7 +41,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             RowsCount = rowsCount;
         }
 
-        public void PopulateEmptyTiles()
+        public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)
         {
             _atoms.Clear();
 
@@ -49,7 +49,9 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 for (int j = 0; j < ColumnsCount; j++)
                 {
-                    BoardTileViewModel tile = new BoardTileViewModel(new AtomixData.BoardTile() { IsEmpty = true, Asset = "Empty" });
+                    BoardTileViewModel tile = new BoardTileViewModel(new AtomixData.BoardTile() { IsEmpty = emptyTileTemplate.IsEmpty, Asset = emptyTileTemplate.Asset, IsFixed = emptyTileTemplate.IsFixed });
+                    tile.AssetSource = emptyTileTemplate.AssetSource;
+                    tile.AssetFile = emptyTileTemplate.AssetFile;
                     _atoms.Add(tile);
                 }
             }

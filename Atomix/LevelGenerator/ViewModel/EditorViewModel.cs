@@ -117,15 +117,18 @@ namespace Kinectomix.LevelGenerator.ViewModel
         private void LoadDefaultAssets()
         {
             BoardTile tile;
+            BoardTileViewModel tileVm;
 
             _tiles = new Tiles();
 
             tile = new BoardTile() { IsFixed = true, IsEmpty = true, Asset = "Empty" };
-            _tiles.Board.Add(new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) });
-            _tiles.Molecule.Add(new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) });
+            tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) };
+            _tiles.Add(tileVm, Tiles.TileType.Board);
+            _tiles.Add(tileVm, Tiles.TileType.Molecule);
 
             tile = new BoardTile() { IsFixed = true, IsEmpty = false, Asset = "Wall" };
-            _tiles.Board.Add(new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) });
+            tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) };
+            _tiles.Add(tileVm, Tiles.TileType.Board);
 
             string absolute = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.TilesDirectory);
             string[] tiles = Directory.GetFiles(absolute, "*.png");
@@ -134,8 +137,9 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 string tileName = Path.GetFileNameWithoutExtension(tilePath);
 
                 tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = tileName };
-                _tiles.Board.Add(new BoardTileViewModel(tile, tilePath));
-                _tiles.Molecule.Add(new BoardTileViewModel(tile, tilePath));
+                tileVm = new BoardTileViewModel(tile, tilePath);
+                _tiles.Add(tileVm, Tiles.TileType.Board);
+                _tiles.Add(tileVm, Tiles.TileType.Molecule);
             }
         }
 
@@ -171,14 +175,15 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
                 LevelViewModel level = new LevelViewModel();
                 level.Board = new BoardViewModel() { ColumnsCount = newLevelVm.BoardColumns, RowsCount = newLevelVm.BoardRows };
-                level.Board.PopulateEmptyTiles();
+                level.Board.PopulateEmptyTiles(_tiles["Empty"]);
 
                 level.Molecule = new MoleculeViewModel() { ColumnsCount = newLevelVm.MoleculeColumns, RowsCount = newLevelVm.MoleculeRows };
-                level.Molecule.PopulateEmptyTiles();
+                level.Molecule.PopulateEmptyTiles(_tiles["Empty"]);
 
                 LoadDefaultAssets();
 
                 Level = level;
+                SelectedTab = 0; // Reset to Board tab
 
                 _saveAsLevelCommand.RaiseCanExecuteChanged();
             }

@@ -75,6 +75,7 @@
     <Compile Include="Converter\NotNullToVisibilityConverter.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="Model\TileAsset.cs" />
     <Compile Include="Libraries\DialogCloser.cs" />
     <Compile Include="Model\LevelFactory.cs" />
     <Compile Include="Model\LevelFileDialog.cs" />

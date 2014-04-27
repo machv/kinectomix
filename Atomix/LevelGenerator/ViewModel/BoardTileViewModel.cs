@@ -16,7 +16,11 @@ namespace Kinectomix.LevelGenerator
         BoardTile _tile;
         string _assetFile;
 
-        internal string AssetFile { get { return _assetFile; } }
+        internal string AssetFile
+        {
+            get { return _assetFile; }
+            set { _assetFile = value; }
+        }
 
         public BoardTile Tile
         {
