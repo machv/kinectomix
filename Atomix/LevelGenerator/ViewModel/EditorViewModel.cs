@@ -66,6 +66,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 return;
 
             _currentTile.Asset = CurrentTileTemplate.Asset;
+            _currentTile.AssetSource = CurrentTileTemplate.AssetSource;
+            _currentTile.AssetFile = CurrentTileTemplate.AssetFile;
         }
 
         private LevelViewModel _level;
