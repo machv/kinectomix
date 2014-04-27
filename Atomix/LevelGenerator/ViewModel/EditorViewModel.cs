@@ -217,6 +217,9 @@ namespace Kinectomix.LevelGenerator.ViewModel
                         case 2: // Compiled
                             LevelFactory.SaveLevelCompiled(level, stream, _levelFileDialog.FileName);
                             break;
+                        case 3: // Custom binary
+                            LevelFactory.SaveLevelBinary(level, stream);
+                            break;
                     }
                 }
             }

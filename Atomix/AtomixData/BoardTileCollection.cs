@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace AtomixData
 {
+    [Serializable]
     public class BoardCollection<T> : ICollection<T>
     {
         public int RowsCount { get; set; }

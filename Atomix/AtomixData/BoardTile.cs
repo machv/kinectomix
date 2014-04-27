@@ -3,6 +3,7 @@ using System;
 
 namespace AtomixData
 {
+    [Serializable]
     /// <summary>
     /// Represents one tile on the game's board.
     /// </summary>

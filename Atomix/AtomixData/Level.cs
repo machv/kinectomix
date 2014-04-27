@@ -13,6 +13,7 @@ using System.ComponentModel;
 
 namespace AtomixData
 {
+    [Serializable]
     public class Level
     {
         public List<LevelAsset> Assets { get; set; }

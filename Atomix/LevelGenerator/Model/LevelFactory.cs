@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -22,8 +23,18 @@ namespace Kinectomix.LevelGenerator.Model
                 return LoadFromCompiled(path);
             else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
                 return LoadFromDefinition(path);
+            else if (System.IO.Path.GetExtension(path).ToLower() == ".atb")
+                return LoadFromBinary(path);
             else
                 throw new ArgumentException("Unexpected file definition extension.");
+        }
+
+        public static Level LoadFromBinary(string path)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+
+            using (Stream stream = System.IO.File.Open(path, FileMode.Open))
+                return bf.Deserialize(stream) as Level;
         }
 
         public static Level LoadFromDefinition(string path)
@@ -61,6 +72,12 @@ namespace Kinectomix.LevelGenerator.Model
             compileMethod.Invoke(cc, new object[]{
                                           stream, level, TargetPlatform.Windows, GraphicsProfile.Reach, false/*true*/, fileName, fileName
                                           });
+        }
+
+        public static void SaveLevelBinary(Level level, Stream stream)
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(stream, level);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace AtomixData
 {
+    [Serializable]
     public class LevelAsset
     {
         public string AssetName { get;set; }
