@@ -5,12 +5,97 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <StackPanel>
-            <TextBlock>Level name</TextBlock>
-            <TextBox Text="{Binding Name}"/>
-            <Button IsDefault="True" Command="{Binding CreateLevelCommand}" Content="_Create level"/>
-            <Button Width="100" Content="Cancel" IsCancel="True"/>
-        </StackPanel>  
-    </Grid>
+    <DockPanel>
+        <Border DockPanel.Dock="Bottom"  Background="WhiteSmoke" BorderBrush="Silver" BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                <Button Padding="8,3" MinWidth="80" Margin="5" IsDefault="True" Command="{Binding CreateLevelCommand}">_Create...</Button>
+                <Button Padding="8,3" MinWidth="80" Margin="5" IsCancel="True">C_ancel</Button>
+            </StackPanel>
+        </Border>
+        <Grid Margin="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" 
+                       Grid.Column="0" 
+                       FontWeight="Bold"
+                       Margin="3"
+                       Text="Name:"/>
+            <TextBox Grid.Row="0"  
+                     Grid.Column="1"
+                     Grid.ColumnSpan="2"
+                     Margin="3"
+                     Text="{Binding Name, Mode=TwoWay}"/>
+
+            <TextBlock Grid.Row="1" 
+                       Grid.Column="0" 
+                       FontSize="18"
+                       Margin="3"
+                       Text="Board"/>
+
+            <TextBlock Grid.Row="2" 
+                       Grid.Column="1" 
+                       FontWeight="Bold"
+                       Margin="3"
+                       TextAlignment="Right"
+                       Text="Rows:"/>
+            <TextBox Grid.Row="2"  
+                     Grid.Column="2"
+                     Margin="3"
+                     Text="{Binding BoardRows, Mode=TwoWay}"/>
+
+            <TextBlock Grid.Row="3" 
+                       Grid.Column="1" 
+                       FontWeight="Bold"
+                       Margin="3"
+                       TextAlignment="Right"
+                       Text="Columns:"/>
+            <TextBox Grid.Row="3"  
+                     Grid.Column="2"
+                     Margin="3"
+                     Text="{Binding BoardColumns, Mode=TwoWay}"/>
+
+
+            <TextBlock Grid.Row="4" 
+                       Grid.Column="0" 
+                       FontSize="18"
+                       Margin="3"
+                       Text="Molecule"/>
+
+            <TextBlock Grid.Row="5" 
+                       Grid.Column="1" 
+                       FontWeight="Bold"
+                       Margin="3"
+                       TextAlignment="Right"
+                       Text="Rows:"/>
+            <TextBox Grid.Row="5"  
+                     Grid.Column="2"
+                     Margin="3"
+                     Text="{Binding MoleculeRows, Mode=TwoWay}"/>
+
+            <TextBlock Grid.Row="6" 
+                       Grid.Column="1" 
+                       FontWeight="Bold"
+                       Margin="3"
+                       TextAlignment="Right"
+                       Text="Columns:"/>
+            <TextBox Grid.Row="6"  
+                     Grid.Column="2"
+                     Margin="3"
+                     Text="{Binding MoleculeColumns, Mode=TwoWay}"/>
+
+        </Grid>
+    </DockPanel>
 </UserControl>

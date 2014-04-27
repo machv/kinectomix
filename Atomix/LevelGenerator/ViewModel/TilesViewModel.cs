@@ -33,5 +33,26 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 RaisePropertyChangedEvent();
             }
         }
+
+        public TilesViewModel()        {        }
+        public TilesViewModel(int rowsCount, int columnsCount)
+        {
+            ColumnsCount = columnsCount;
+            RowsCount = rowsCount;
+        }
+
+        public void PopulateEmptyTiles()
+        {
+            _atoms.Clear();
+
+            for (int i = 0; i < RowsCount; i++)
+            {
+                for (int j = 0; j < ColumnsCount; j++)
+                {
+                    BoardTileViewModel tile = new BoardTileViewModel(new AtomixData.BoardTile() { IsEmpty = true, Asset = "Empty" });
+                    _atoms.Add(tile);
+                }
+            }
+        }
     }
 }

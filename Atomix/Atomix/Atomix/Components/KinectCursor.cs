@@ -519,12 +519,12 @@ namespace Atomix.Components
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
-            if (_handRect != null)
-            {
+            //if (_handRect != null)
+            //{
                 Rectangle translated = new Rectangle((int)(_handRect.X / _scale) + (int)_kinectDebugOffset.X, (int)(_handRect.Y / _scale) + (int)_kinectDebugOffset.Y, (int)(_handRect.Width / _scale), (int)(_handRect.Height / _scale));
 
                 DrawBoudingBox(translated, Color.Red, 1);
-            }
+            //}
 
             if (cursorPosition != Vector2.Zero)
             {

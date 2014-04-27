@@ -163,7 +163,18 @@ namespace Kinectomix.LevelGenerator.ViewModel
             bool? result = newLevelWindow.ShowDialog();
             if (result.HasValue && result.Value)
             {
-                
+                NewLevelViewModel newLevelVm = newLevelWindow.DataContext as NewLevelViewModel;
+
+                LevelViewModel level = new LevelViewModel();
+                level.Board = new BoardViewModel() { ColumnsCount = newLevelVm.BoardColumns, RowsCount = newLevelVm.BoardRows };
+                level.Board.PopulateEmptyTiles();
+
+                level.Molecule = new MoleculeViewModel() { ColumnsCount = newLevelVm.MoleculeColumns, RowsCount = newLevelVm.MoleculeRows };
+                level.Molecule.PopulateEmptyTiles();
+
+                Level = level;
+
+                _saveAsLevelCommand.RaiseCanExecuteChanged();
             }
         }
 
