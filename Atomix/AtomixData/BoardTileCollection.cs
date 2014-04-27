@@ -2,13 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace AtomixData
 {
     [Serializable]
-    public class BoardCollection<T> : ICollection<T>
+    public class BoardCollection<T> : ICollection<T>, IXmlSerializable where T : new()
     {
+        [XmlAttribute]
         public int RowsCount { get; set; }
+        [XmlAttribute]
         public int ColumnsCount { get; set; }
 
         [ContentSerializer]
@@ -83,5 +89,92 @@ namespace AtomixData
             foreach (T tile in _tiles)
                 yield return tile;
         }
+
+        // inspired by http://social.msdn.microsoft.com/Forums/en-US/0d94c4f8-767a-4d0f-8c95-f4797cd0ab8e/xmlserializer-doesnt-serialize-attribute-on-listt-subclass?forum=asmxandxml
+        #region IXmlSerializable Members
+        public XmlSchema GetSchema()
+        {
+            // A little too complicated for my taste
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(reader);
+            XmlElement docElem = doc.DocumentElement;
+
+            // Reflect the [XmlAttribute]'s
+            PropertyInfo[] props = this.GetType().GetProperties();
+            foreach (PropertyInfo prop in props)
+            {
+                object[] attrs = prop.GetCustomAttributes(typeof(XmlAttributeAttribute), false);
+                if (attrs != null && attrs.Length == 1)
+                {
+                    string name = (attrs[0] as XmlAttributeAttribute).AttributeName ?? prop.Name;
+
+                    if (docElem.Attributes[name] != null)
+                        prop.GetSetMethod().Invoke(this, new object[] { docElem.Attributes[name].Value });
+                }
+            }
+
+            // Deserialize the collection members
+            XmlNodeList nodes = docElem.SelectNodes("./*");
+            foreach (XmlNode node in nodes)
+            {
+                // Make sure it isn't a text node or something
+                if (node is XmlElement)
+                {
+                    XmlElement elem = doc.CreateElement(typeof(T).Name);
+                    elem.InnerXml = node.InnerXml;
+                    foreach (XmlAttribute xmlAttr in (node as XmlElement).Attributes)
+                    {
+                        XmlAttribute newAttr = doc.CreateAttribute(xmlAttr.Name);
+                        newAttr.Value = xmlAttr.Value;
+                        elem.Attributes.Append(newAttr);
+                    }
+
+                    this.Add(Serializer.Deserialize<T>(elem));
+                }
+            }
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            // Reflect the [XmlAttribute]'s
+            PropertyInfo[] props = this.GetType().GetProperties();
+            foreach (PropertyInfo prop in props)
+            {
+                object[] attrs = prop.GetCustomAttributes(typeof(XmlAttributeAttribute), false);
+                if (attrs != null && attrs.Length == 1)
+                {
+                    string name = (attrs[0] as XmlAttributeAttribute).AttributeName;
+                    if (string.IsNullOrEmpty(name))
+                        name = prop.Name;
+
+                    object value = prop.GetGetMethod().Invoke(this, null);
+                    if (value != null)
+                        writer.WriteAttributeString(name, value.ToString());
+                }
+            }
+
+            // Serialize the collection members
+            foreach (T item in this)
+            {
+                string itemName = typeof(T).Name;
+
+                XmlElement serializedItem = Serializer.Serialize<T>(item);
+                writer.WriteStartElement(itemName);
+                foreach (XmlAttribute xmlAttr in serializedItem.Attributes)
+                {
+                    // We don't want to write the xsd/xsi namespace attributes
+                    if (!(xmlAttr.Name.StartsWith("xmlns:xsd") || xmlAttr.Name.StartsWith("xmlns:xsi")))
+                        writer.WriteAttributeString(xmlAttr.Name, xmlAttr.Value);
+                }
+                writer.WriteRaw(serializedItem.InnerXml);
+                writer.WriteEndElement();
+            }
+        }
+        #endregion
     }
 }

@@ -207,7 +207,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
             if (_levelFileDialog.SaveFileDialog())
             {
-                using (Stream stream = File.Open(_levelFileDialog.FileName, FileMode.OpenOrCreate))
+                FileMode mode = File.Exists(_levelFileDialog.FileName) ? FileMode.Truncate : FileMode.OpenOrCreate;
+                using (Stream stream = File.Open(_levelFileDialog.FileName, mode))
                 {
                     switch (_levelFileDialog.FilterIndex)
                     {
@@ -219,6 +220,9 @@ namespace Kinectomix.LevelGenerator.ViewModel
                             break;
                         case 3: // Custom binary
                             LevelFactory.SaveLevelBinary(level, stream);
+                            break;
+                        case 4: // Custom xml serialized
+                            LevelFactory.SaveLevelXmlSerialized(level, stream);
                             break;
                     }
                 }

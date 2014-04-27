@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Kinectomix.LevelGenerator.Model
 {
@@ -25,8 +26,18 @@ namespace Kinectomix.LevelGenerator.Model
                 return LoadFromDefinition(path);
             else if (System.IO.Path.GetExtension(path).ToLower() == ".atb")
                 return LoadFromBinary(path);
+            else if (System.IO.Path.GetExtension(path).ToLower() == ".atx")
+                return LoadFromXmlSerialized(path);
             else
                 throw new ArgumentException("Unexpected file definition extension.");
+        }
+
+        private static Level LoadFromXmlSerialized(string path)
+        {
+            XmlSerializer seralizer = new XmlSerializer(typeof(Level));
+
+            using (Stream stream = System.IO.File.Open(path, FileMode.Open))
+                return seralizer.Deserialize(stream) as Level;
         }
 
         public static Level LoadFromBinary(string path)
@@ -78,6 +89,12 @@ namespace Kinectomix.LevelGenerator.Model
         {
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(stream, level);
+        }
+
+        public static void SaveLevelXmlSerialized(Level level, Stream stream)
+        {
+            XmlSerializer seralizer = new XmlSerializer(typeof(Level));
+            seralizer.Serialize(stream, level);
         }
     }
 }
