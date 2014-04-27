@@ -1,4 +1,5 @@
 ﻿using AtomixData;
+using Kinectomix.LevelGenerator.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,8 +58,10 @@ namespace Kinectomix.LevelGenerator.ViewModel
             return viewModel;
         }
 
-        public static Level ToLevel(LevelViewModel levelViewModel)
+        public static Level ToLevel(LevelViewModel levelViewModel, Tiles tiles)
         {
+            List<string> requiredAssets = new List<string>();
+
             Level level = new Level();
 
             level.Board = new BoardCollection<BoardTile>(levelViewModel.Board.RowsCount, levelViewModel.Board.ColumnsCount);
@@ -66,6 +69,9 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, Asset = tileViewModel.Asset };
                 level.Board.Add(tile);
+
+                if (!requiredAssets.Contains(tile.Asset))
+                    requiredAssets.Add(tile.Asset);
             }
 
             level.Molecule = new BoardCollection<BoardTile>(levelViewModel.Molecule.RowsCount, levelViewModel.Molecule.ColumnsCount);
@@ -73,14 +79,31 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, Asset = tileViewModel.Asset };
                 level.Molecule.Add(tile);
+
+                if (!requiredAssets.Contains(tile.Asset))
+                    requiredAssets.Add(tile.Asset);
+            }
+
+            foreach (string asset in requiredAssets)
+            {
+                BoardTileViewModel tile = tiles[asset];
+                if (!string.IsNullOrEmpty(tile.AssetFile))
+                {
+                    LevelAsset levelAsset = new LevelAsset();
+                    levelAsset.AssetName = asset;
+                    levelAsset.AssetContent = System.Convert.ToBase64String(System.IO.File.ReadAllBytes(tile.AssetFile));
+                    level.Assets.Add(levelAsset);
+
+                    //TODO: Zkontrolovat poměr stran a velikost assetu
+                }
             }
 
             return level;
         }
 
-        public Level ToLevel()
+        public Level ToLevel(Tiles tiles)
         {
-            return ToLevel(this);
+            return ToLevel(this, tiles);
         }
     }
 }

@@ -203,7 +203,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         private void SaveAsLevel()
         {
-            Level level = Level.ToLevel();
+            Level level = Level.ToLevel(_tiles);
 
             if (_levelFileDialog.SaveFileDialog())
             {
