@@ -100,9 +100,12 @@ namespace AtomixData
 
         public void ReadXml(XmlReader reader)
         {
+            XmlReader inner = reader.ReadSubtree();
+
             XmlDocument doc = new XmlDocument();
-            doc.Load(reader);
+            doc.Load(inner);
             XmlElement docElem = doc.DocumentElement;
+
 
             // Reflect the [XmlAttribute]'s
             PropertyInfo[] props = this.GetType().GetProperties();
@@ -111,8 +114,10 @@ namespace AtomixData
                 object[] attrs = prop.GetCustomAttributes(typeof(XmlAttributeAttribute), false);
                 if (attrs != null && attrs.Length == 1)
                 {
-                    string name = (attrs[0] as XmlAttributeAttribute).AttributeName ?? prop.Name;
+                    string attr = (attrs[0] as XmlAttributeAttribute).AttributeName;
+                    string name = !string.IsNullOrEmpty(attr) ? attr : prop.Name;
 
+                    //TODO Additional information: Object of type 'System.String' cannot be converted to type 'System.Int32'.
                     if (docElem.Attributes[name] != null)
                         prop.GetSetMethod().Invoke(this, new object[] { docElem.Attributes[name].Value });
                 }

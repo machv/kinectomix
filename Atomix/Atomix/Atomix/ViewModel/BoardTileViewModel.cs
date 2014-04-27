@@ -50,5 +50,7 @@ namespace Atomix.ViewModel
         {
             _tile = tile;
         }
+
+        public BoardTileViewModel() { }
     }
 }
