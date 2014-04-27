@@ -26,11 +26,5 @@ namespace AtomixData
         {
             Assets = new List<LevelAsset>();
         }
-
-        public Level(int rows, int columns) : this()
-        {
-            Board = new BoardCollection<BoardTile>(rows, columns);
-
-        }
     }
 }

@@ -16,7 +16,8 @@ namespace SimpleLevelGenerator
         static void Main(string[] args)
         {
 
-            Level level1 = new Level(9, 11);
+            Level level1 = new Level();
+            level1.Board = new BoardCollection<BoardTile>(9, 11);
 
             for (int y = 0; y < level1.Board.RowsCount; y++)
             {
@@ -80,7 +81,8 @@ namespace SimpleLevelGenerator
             }
 
             // Second level
-            Level level2 = new Level(9, 11);
+            Level level2 = new Level();
+            level2.Board = new BoardCollection<BoardTile>(9, 11);
 
             for (int y = 0; y < level2.Board.RowsCount; y++)
             {
@@ -106,7 +108,8 @@ namespace SimpleLevelGenerator
             }
 
             // Level 4
-            Level level4 = new Level(5, 5);
+            Level level4 = new Level();
+            level4.Board = new BoardCollection<BoardTile>(5, 5);
 
             for (int y = 0; y < level4.Board.RowsCount; y++)
             {

@@ -59,7 +59,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public static Level ToLevel(LevelViewModel levelViewModel)
         {
-            Level level = new Level(levelViewModel.Board.RowsCount, levelViewModel.Board.ColumnsCount);
+            Level level = new Level();
 
             level.Board = new BoardCollection<BoardTile>(levelViewModel.Board.RowsCount, levelViewModel.Board.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Board.Tiles)
