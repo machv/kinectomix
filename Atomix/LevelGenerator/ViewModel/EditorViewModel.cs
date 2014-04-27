@@ -108,6 +108,14 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public EditorViewModel()
         {
+            LoadDefaultAssets();
+
+            _levelFileDialog = new LevelFileDialog();
+            _saveAsLevelCommand = new DelegateCommand(SaveAsLevel, CanExecuteSaveAs);
+        }
+
+        private void LoadDefaultAssets()
+        {
             BoardTile tile;
 
             _tiles = new Tiles();
@@ -129,10 +137,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 _tiles.Board.Add(new BoardTileViewModel(tile, tilePath));
                 _tiles.Molecule.Add(new BoardTileViewModel(tile, tilePath));
             }
-
-            _levelFileDialog = new LevelFileDialog();
-            _availableTiles = _tiles.Board;
-            _saveAsLevelCommand = new DelegateCommand(SaveAsLevel, CanExecuteSaveAs);
         }
 
         public ICommand LoadLevelCommand
@@ -171,6 +175,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
                 level.Molecule = new MoleculeViewModel() { ColumnsCount = newLevelVm.MoleculeColumns, RowsCount = newLevelVm.MoleculeRows };
                 level.Molecule.PopulateEmptyTiles();
+
+                LoadDefaultAssets();
 
                 Level = level;
 
