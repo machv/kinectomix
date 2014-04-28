@@ -64,7 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoardTile.cs" />
-    <Compile Include="BoardTileCollection.cs" />
+    <Compile Include="BoardCollection.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LevelAsset.cs" />

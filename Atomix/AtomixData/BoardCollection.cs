@@ -122,6 +122,8 @@ namespace AtomixData
             doc.Load(inner);
             XmlElement docElem = doc.DocumentElement;
 
+            reader.Read(); // reads Endelement of current node
+
             // Reflect the [XmlAttribute]'s
             PropertyInfo[] props = this.GetType().GetProperties();
             foreach (PropertyInfo prop in props)
@@ -132,7 +134,6 @@ namespace AtomixData
                     string attr = (attrs[0] as XmlAttributeAttribute).AttributeName;
                     string name = !string.IsNullOrEmpty(attr) ? attr : prop.Name;
 
-                    //TODO Additional information: Object of type 'System.String' cannot be converted to type 'System.Int32'.
                     if (docElem.Attributes[name] != null)
                     {
                         object val = Convert(docElem.Attributes[name].Value, prop.PropertyType);
