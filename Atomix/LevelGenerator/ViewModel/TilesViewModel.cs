@@ -11,16 +11,28 @@ namespace Kinectomix.LevelGenerator.ViewModel
     {
         ObservableCollection<BoardTileViewModel> _atoms = new ObservableCollection<BoardTileViewModel>();
 
+        private int _columnsCount;
         public int ColumnsCount
         {
-            get;
-            set;
+            get { return _columnsCount; }
+            set
+            {
+                _columnsCount = value;
+
+                RaisePropertyChangedEvent();
+            }
         }
 
+        private int _rowsCount;
         public int RowsCount
         {
-            get;
-            set;
+            get { return _rowsCount; }
+            set
+            {
+                _rowsCount = value;
+
+                RaisePropertyChangedEvent();
+            }
         }
 
         public ObservableCollection<BoardTileViewModel> Tiles
@@ -34,7 +46,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        public TilesViewModel()        {        }
+        public TilesViewModel() { }
         public TilesViewModel(int rowsCount, int columnsCount)
         {
             ColumnsCount = columnsCount;

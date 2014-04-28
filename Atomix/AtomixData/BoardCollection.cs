@@ -80,14 +80,12 @@ namespace AtomixData
 
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (T tile in _tiles)
-                yield return tile;
+            return (IEnumerator<T>)_tiles.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            foreach (T tile in _tiles)
-                yield return tile;
+            return _tiles.GetEnumerator();
         }
 
         // inspired by http://social.msdn.microsoft.com/Forums/en-US/0d94c4f8-767a-4d0f-8c95-f4797cd0ab8e/xmlserializer-doesnt-serialize-attribute-on-listt-subclass?forum=asmxandxml
