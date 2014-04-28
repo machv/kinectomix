@@ -94,7 +94,6 @@ namespace AtomixData
         #region IXmlSerializable Members
         public XmlSchema GetSchema()
         {
-            // A little too complicated for my taste
             return null;
         }
 
@@ -123,7 +122,6 @@ namespace AtomixData
             doc.Load(inner);
             XmlElement docElem = doc.DocumentElement;
 
-
             // Reflect the [XmlAttribute]'s
             PropertyInfo[] props = this.GetType().GetProperties();
             foreach (PropertyInfo prop in props)
@@ -142,6 +140,8 @@ namespace AtomixData
                     }
                 }
             }
+
+            _tiles = new T[RowsCount * ColumnsCount];
 
             // Deserialize the collection members
             XmlNodeList nodes = docElem.SelectNodes("./*");
