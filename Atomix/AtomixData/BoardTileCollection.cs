@@ -102,23 +102,17 @@ namespace AtomixData
         private object Convert(object source, Type destinationType)
         {
             if (destinationType == null)
-            {
                 throw new ArgumentNullException("destinationType");
-            }
 
-            if (destinationType.IsGenericType &&
-                destinationType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            if (destinationType.IsGenericType && destinationType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
             {
                 if (source == null)
-                {
                     return null;
-                }
+
                 destinationType = Nullable.GetUnderlyingType(destinationType);
             }
 
             return System.Convert.ChangeType(source, destinationType);
-
-
         }
 
         public void ReadXml(XmlReader reader)
