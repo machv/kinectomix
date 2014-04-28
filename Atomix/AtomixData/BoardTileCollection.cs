@@ -98,6 +98,29 @@ namespace AtomixData
             return null;
         }
 
+        ///http://stackoverflow.com/questions/4038718/how-can-i-use-reflection-to-convert-from-int-to-decimal
+        private object Convert(object source, Type destinationType)
+        {
+            if (destinationType == null)
+            {
+                throw new ArgumentNullException("destinationType");
+            }
+
+            if (destinationType.IsGenericType &&
+                destinationType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                if (source == null)
+                {
+                    return null;
+                }
+                destinationType = Nullable.GetUnderlyingType(destinationType);
+            }
+
+            return System.Convert.ChangeType(source, destinationType);
+
+
+        }
+
         public void ReadXml(XmlReader reader)
         {
             XmlReader inner = reader.ReadSubtree();
@@ -119,7 +142,10 @@ namespace AtomixData
 
                     //TODO Additional information: Object of type 'System.String' cannot be converted to type 'System.Int32'.
                     if (docElem.Attributes[name] != null)
-                        prop.GetSetMethod().Invoke(this, new object[] { docElem.Attributes[name].Value });
+                    {
+                        object val = Convert(docElem.Attributes[name].Value, prop.PropertyType);
+                        prop.GetSetMethod().Invoke(this, new object[] { val });
+                    }
                 }
             }
 
