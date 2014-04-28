@@ -46,17 +46,31 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private BoardTileViewModel _currentTile;
-        public BoardTileViewModel CurrentTile
+        private BoardTileViewModel _currentBoardTile;
+        public BoardTileViewModel CurrentBoardTile
         {
-            get { return _currentTile; }
+            get { return _currentBoardTile; }
             set
             {
-                _currentTile = value;
+                _currentBoardTile = value;
 
                 RaisePropertyChangedEvent();
 
-                UpdateCurrentTileByTemplate(CurrentTile);
+                UpdateCurrentTileByTemplate(CurrentBoardTile);
+            }
+        }
+
+        private BoardTileViewModel _currentMoleculeTile;
+        public BoardTileViewModel CurrentMoleculeTile
+        {
+            get { return _currentMoleculeTile; }
+            set
+            {
+                _currentMoleculeTile = value;
+
+                RaisePropertyChangedEvent();
+
+                UpdateCurrentTileByTemplate(CurrentMoleculeTile);
             }
         }
 

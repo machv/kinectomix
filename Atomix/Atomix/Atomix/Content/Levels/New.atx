@@ -17,14 +17,14 @@
     <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
-    <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
-    <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
-    <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
-    <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
-    <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Hydrogen</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Hydrogen</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
+    <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
+    <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
+    <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
+    <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
+    <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
@@ -38,8 +38,8 @@
     <BoardTile><Asset>Wall</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
   </Board>
   <Molecule RowsCount="2" ColumnsCount="2">
-    <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
-    <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
+    <BoardTile><Asset>Hydrogen</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
+    <BoardTile><Asset>Hydrogen</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
     <BoardTile><Asset>Empty</Asset><IsFixed>true</IsFixed><IsEmpty>false</IsEmpty></BoardTile>
   </Molecule>
