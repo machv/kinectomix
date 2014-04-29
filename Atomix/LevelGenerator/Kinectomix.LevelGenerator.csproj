@@ -69,6 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behavior\TilePainter.cs" />
     <Compile Include="Control\BoardTilesControl.xaml.cs">
       <DependentUpon>BoardTilesControl.xaml</DependentUpon>
     </Compile>
@@ -76,7 +77,7 @@
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Model\TileAsset.cs" />
-    <Compile Include="Libraries\DialogCloser.cs" />
+    <Compile Include="Library\DialogCloser.cs" />
     <Compile Include="Model\LevelFactory.cs" />
     <Compile Include="Model\LevelFileDialog.cs" />
     <Compile Include="Model\Tiles.cs" />
@@ -175,7 +176,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\Add.png" />
+    <Resource Include="Icon\Add.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tiles\Carbon.png">
