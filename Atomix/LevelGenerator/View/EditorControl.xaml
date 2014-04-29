@@ -74,12 +74,13 @@
 
             <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
                 <TabItem Header="Board" Tag="Board">
-                    <Control:BoardTilesControl TilesSource="{Binding Level.Board.Tiles}" 
+                    <ContentPresenter Content="{Binding Level.Board}"/>
+                    <!--Control:BoardTilesControl TilesSource="{Binding Level.Board.Tiles}" 
                                                SelectedTile="{Binding CurrentBoardTile, Mode=TwoWay}" 
                                                Rows="{Binding Level.Board.RowsCount}"
                                                Columns="{Binding Level.Board.ColumnsCount}"
                                                TileWidth="49" 
-                                               TileHeight="49" />
+                                               TileHeight="49" /-->
                 </TabItem>
                 <TabItem Header="Molecule" Tag="Molecule">
                     <Control:BoardTilesControl TilesSource="{Binding Level.Molecule.Tiles}" 

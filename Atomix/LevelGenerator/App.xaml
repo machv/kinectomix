@@ -1,8 +1,36 @@
 ﻿<Application x:Class="LevelGenerator.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ViewModel="clr-namespace:Kinectomix.LevelGenerator.ViewModel"
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type ViewModel:TilesViewModel}">
+            <ItemsControl ItemsSource="{Binding Tiles}" 
+                          Margin="3">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding AssetSource}" 
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Width="49"
+                       Height="49"
+                       Stretch="None" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="{Binding Columns}"
+                             Rows="{Binding Rows}"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
     </Application.Resources>
 </Application>
+<!--
+                       MouseEnter="Tile_MouseEnter"
+                       MouseDown="Tile_MouseDown"
+
+    -->
