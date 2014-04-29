@@ -23,6 +23,18 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
+        private BoardTileViewModel _paintTile;
+        public BoardTileViewModel PaintTile
+        {
+            get { return _paintTile; }
+            set
+            {
+                _paintTile = value;
+
+                RaisePropertyChangedEvent();
+            }
+        }
+
         private int _rowsCount;
         public int RowsCount
         {

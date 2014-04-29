@@ -42,6 +42,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _currentTileTemplate = value;
 
+                Level.Board.PaintTile = value;
+
                 RaisePropertyChangedEvent();
             }
         }
