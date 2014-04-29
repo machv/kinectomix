@@ -62,7 +62,9 @@ namespace Kinectomix.LevelGenerator.Behavior
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
+                FrameworkElement element = sender as FrameworkElement;
 
+                PaintTile(element.DataContext as BoardTileViewModel);
             }
         }
 
@@ -70,8 +72,11 @@ namespace Kinectomix.LevelGenerator.Behavior
         {
             FrameworkElement element = sender as FrameworkElement;
 
-            var selectedTile = element.DataContext as BoardTileViewModel;
+            PaintTile(element.DataContext as BoardTileViewModel);
+        }
 
+        private static void PaintTile(BoardTileViewModel selectedTile)
+        {
             if (_paintTile != null)
             {
                 selectedTile.Asset = _paintTile.Asset;
