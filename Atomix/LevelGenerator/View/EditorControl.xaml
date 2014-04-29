@@ -75,20 +75,9 @@
             <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
                 <TabItem Header="Board" Tag="Board">
                     <ContentPresenter Content="{Binding Level.Board}"/>
-                    <!--Control:BoardTilesControl TilesSource="{Binding Level.Board.Tiles}" 
-                                               SelectedTile="{Binding CurrentBoardTile, Mode=TwoWay}" 
-                                               Rows="{Binding Level.Board.RowsCount}"
-                                               Columns="{Binding Level.Board.ColumnsCount}"
-                                               TileWidth="49" 
-                                               TileHeight="49" /-->
                 </TabItem>
                 <TabItem Header="Molecule" Tag="Molecule">
-                    <Control:BoardTilesControl TilesSource="{Binding Level.Molecule.Tiles}" 
-                                               SelectedTile="{Binding CurrentMoleculeTile, Mode=TwoWay}" 
-                                               Rows="{Binding Level.Molecule.RowsCount}"
-                                               Columns="{Binding Level.Molecule.ColumnsCount}"
-                                               TileWidth="49" 
-                                               TileHeight="49" />
+                    <ContentPresenter Content="{Binding Level.Molecule}"/>
                 </TabItem>
             </TabControl>
 

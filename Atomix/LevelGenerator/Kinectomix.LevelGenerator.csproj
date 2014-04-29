@@ -70,9 +70,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behavior\TilePainter.cs" />
-    <Compile Include="Control\BoardTilesControl.xaml.cs">
-      <DependentUpon>BoardTilesControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converter\NotNullToVisibilityConverter.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
@@ -104,10 +101,6 @@
     <Compile Include="View\NewLevelWindow.xaml.cs">
       <DependentUpon>NewLevelWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Control\BoardTilesControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
