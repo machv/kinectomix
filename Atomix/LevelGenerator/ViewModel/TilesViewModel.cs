@@ -12,8 +12,13 @@ namespace Kinectomix.LevelGenerator.ViewModel
     {
         public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(TilesViewModel));
         public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(TilesViewModel));
-        public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(ObservableCollection<BoardTileViewModel>), typeof(TilesViewModel));
         public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(TilesViewModel));
+
+        private ObservableCollection<BoardTileViewModel> _tiles = new ObservableCollection<BoardTileViewModel>();
+        public IEnumerable<BoardTileViewModel> Tiles
+        {
+            get { return new ReadOnlyObservableCollection<BoardTileViewModel>(_tiles); }
+        }
 
         public int RowsCount
         {
@@ -25,11 +30,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
             get { return (int)GetValue(ColumnsCountProperty); }
             set { SetValue(ColumnsCountProperty, value); }
         }
-        public ObservableCollection<BoardTileViewModel> Tiles
-        {
-            get { return (ObservableCollection<BoardTileViewModel>)GetValue(TilesProperty); }
-            set { SetValue(TilesProperty, value); }
-        }
         public BoardTileViewModel PaintTile
         {
             get { return (BoardTileViewModel)GetValue(PaintTileProperty); }
@@ -38,9 +38,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public TilesViewModel()
         {
-            Tiles = new ObservableCollection<BoardTileViewModel>();
         }
-        public TilesViewModel(int rowsCount, int columnsCount) :this()
+        public TilesViewModel(int rowsCount, int columnsCount) : this()
         {
             ColumnsCount = columnsCount;
             RowsCount = rowsCount;
@@ -48,7 +47,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)
         {
-            Tiles.Clear();
+            _tiles.Clear();
 
             for (int i = 0; i < RowsCount; i++)
             {
@@ -57,7 +56,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
                     BoardTileViewModel tile = new BoardTileViewModel(new AtomixData.BoardTile() { IsEmpty = emptyTileTemplate.IsEmpty, Asset = emptyTileTemplate.Asset, IsFixed = emptyTileTemplate.IsFixed });
                     tile.AssetSource = emptyTileTemplate.AssetSource;
                     tile.AssetFile = emptyTileTemplate.AssetFile;
-                    Tiles.Add(tile);
+                    _tiles.Add(tile);
                 }
             }
         }
