@@ -18,7 +18,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set { SetValue(PaintTileProperty, value); }
         }
 
-
         public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(TilesViewModel), new UIPropertyMetadata(0));
 
         public int RowsCount
