@@ -52,7 +52,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)
         {
-            _atoms.Clear();
+            Tiles.Clear();
 
             for (int i = 0; i < RowsCount; i++)
             {
