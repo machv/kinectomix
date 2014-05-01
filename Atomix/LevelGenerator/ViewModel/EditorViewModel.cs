@@ -48,6 +48,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
+
         private BoardTileViewModel _currentBoardTile;
         public BoardTileViewModel CurrentBoardTile
         {
