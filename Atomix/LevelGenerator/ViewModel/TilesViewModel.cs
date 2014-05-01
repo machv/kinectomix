@@ -4,58 +4,43 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
-    public class TilesViewModel : Mvvm.NotifyPropertyBase
+    public class TilesViewModel : DependencyObject
     {
-        ObservableCollection<BoardTileViewModel> _atoms = new ObservableCollection<BoardTileViewModel>();
+        public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(TilesViewModel), new UIPropertyMetadata(null));
 
-        private int _columnsCount;
-        public int ColumnsCount
-        {
-            get { return _columnsCount; }
-            set
-            {
-                _columnsCount = value;
-
-                RaisePropertyChangedEvent();
-            }
-        }
-
-        private BoardTileViewModel _paintTile;
         public BoardTileViewModel PaintTile
         {
-            get { return _paintTile; }
-            set
-            {
-                _paintTile = value;
-
-                RaisePropertyChangedEvent();
-            }
+            get { return (BoardTileViewModel)GetValue(PaintTileProperty); }
+            set { SetValue(PaintTileProperty, value); }
         }
 
-        private int _rowsCount;
+
+        public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(TilesViewModel), new UIPropertyMetadata(0));
+
         public int RowsCount
         {
-            get { return _rowsCount; }
-            set
-            {
-                _rowsCount = value;
-
-                RaisePropertyChangedEvent();
-            }
+            get { return (int)GetValue(RowsCountProperty); }
+            set { SetValue(RowsCountProperty, value); }
         }
+
+        public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(TilesViewModel), new UIPropertyMetadata(0));
+
+        public int ColumnsCount
+        {
+            get { return (int)GetValue(ColumnsCountProperty); }
+            set { SetValue(ColumnsCountProperty, value); }
+        }
+
+        public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(ObservableCollection<BoardTileViewModel>), typeof(TilesViewModel), new UIPropertyMetadata(null));
 
         public ObservableCollection<BoardTileViewModel> Tiles
         {
-            get { return _atoms; }
-            set
-            {
-                _atoms = value;
-
-                RaisePropertyChangedEvent();
-            }
+            get { return (ObservableCollection<BoardTileViewModel>)GetValue(TilesProperty); }
+            set { SetValue(TilesProperty, value); }
         }
 
         public TilesViewModel() { }
@@ -76,7 +61,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
                     BoardTileViewModel tile = new BoardTileViewModel(new AtomixData.BoardTile() { IsEmpty = emptyTileTemplate.IsEmpty, Asset = emptyTileTemplate.Asset, IsFixed = emptyTileTemplate.IsFixed });
                     tile.AssetSource = emptyTileTemplate.AssetSource;
                     tile.AssetFile = emptyTileTemplate.AssetFile;
-                    _atoms.Add(tile);
+                    Tiles.Add(tile);
                 }
             }
         }
