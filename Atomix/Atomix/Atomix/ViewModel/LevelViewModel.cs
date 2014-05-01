@@ -8,9 +8,9 @@ namespace Atomix.ViewModel
 {
     public class LevelViewModel
     {
-        public BoardCollection<BoardTileViewModel> Board { get; set; }
+        public TilesCollection<BoardTileViewModel> Board { get; set; }
 
-        public BoardCollection<BoardTileViewModel> Molecule { get; set; }
+        public TilesCollection<BoardTileViewModel> Molecule { get; set; }
 
         public bool CanGoUp(int x, int y)
         {

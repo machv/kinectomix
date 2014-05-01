@@ -20,8 +20,8 @@ namespace AtomixData
 
         public string Name { get; set; }
 
-        public BoardCollection<BoardTile> Board { get; set; }
-        public BoardCollection<BoardTile> Molecule { get; set; }
+        public TilesCollection<BoardTile> Board { get; set; }
+        public TilesCollection<BoardTile> Molecule { get; set; }
 
         public Level()
         {

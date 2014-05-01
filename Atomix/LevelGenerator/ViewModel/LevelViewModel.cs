@@ -50,7 +50,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
             Level level = new Level();
 
-            level.Board = new BoardCollection<BoardTile>(levelViewModel.Board.RowsCount, levelViewModel.Board.ColumnsCount);
+            level.Board = new TilesCollection<BoardTile>(levelViewModel.Board.RowsCount, levelViewModel.Board.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Board.Tiles)
             {
                 BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, Asset = tileViewModel.Asset };
@@ -60,7 +60,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
                     requiredAssets.Add(tile.Asset);
             }
 
-            level.Molecule = new BoardCollection<BoardTile>(levelViewModel.Molecule.RowsCount, levelViewModel.Molecule.ColumnsCount);
+            level.Molecule = new TilesCollection<BoardTile>(levelViewModel.Molecule.RowsCount, levelViewModel.Molecule.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Molecule.Tiles)
             {
                 BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, Asset = tileViewModel.Asset };

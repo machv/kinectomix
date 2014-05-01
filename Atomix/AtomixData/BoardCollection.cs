@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace AtomixData
 {
     [Serializable]
-    public class BoardCollection<T> : ICollection<T>, IXmlSerializable where T : new()
+    public class TilesCollection<T> : ICollection<T>, IXmlSerializable where T : new()
     {
         [XmlAttribute]
         public int RowsCount { get; set; }
@@ -32,8 +32,8 @@ namespace AtomixData
             set { _tiles[GetIndex(row, column)] = value; }
         }
 
-        public BoardCollection() { }
-        public BoardCollection(int rows, int columns)
+        public TilesCollection() { }
+        public TilesCollection(int rows, int columns)
         {
             RowsCount = rows;
             ColumnsCount = columns;

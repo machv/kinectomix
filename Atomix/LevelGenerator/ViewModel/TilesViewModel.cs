@@ -47,7 +47,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             RowsCount = rowsCount;
         }
 
-        public TilesViewModel(BoardCollection<BoardTile> board)
+        public TilesViewModel(TilesCollection<BoardTile> board)
         {
             ColumnsCount = board.ColumnsCount;
             RowsCount = board.RowsCount;

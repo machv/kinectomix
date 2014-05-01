@@ -418,7 +418,7 @@ namespace Atomix
         }
 
 
-        private void CalculateBoardTilePositions(Vector2 startPosition, BoardCollection<BoardTileViewModel> board)
+        private void CalculateBoardTilePositions(Vector2 startPosition, TilesCollection<BoardTileViewModel> board)
         {
             Vector2 mPosition = new Vector2(startPosition.X, startPosition.Y);
 
@@ -606,7 +606,7 @@ namespace Atomix
             return tile;
         }
 
-        private void DrawBoard(SpriteBatch spriteBach, BoardCollection<BoardTileViewModel> board, bool drawEmptyTiles = false)
+        private void DrawBoard(SpriteBatch spriteBach, TilesCollection<BoardTileViewModel> board, bool drawEmptyTiles = false)
         {
             bool drawEmpty = false;
 

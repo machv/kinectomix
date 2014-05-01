@@ -17,7 +17,7 @@ namespace SimpleLevelGenerator
         {
 
             Level level1 = new Level();
-            level1.Board = new BoardCollection<BoardTile>(9, 11);
+            level1.Board = new TilesCollection<BoardTile>(9, 11);
 
             for (int y = 0; y < level1.Board.RowsCount; y++)
             {
@@ -64,7 +64,7 @@ namespace SimpleLevelGenerator
             level1.Name = "Water";
 
             // Molecule
-            BoardCollection<BoardTile> molecule = new BoardCollection<BoardTile>(1, 3);
+            TilesCollection<BoardTile> molecule = new TilesCollection<BoardTile>(1, 3);
             molecule[0, 0] = new BoardTile() { Asset = "Hydrogen" };
             molecule[0, 1] = new BoardTile() { Asset = "Oxygen" };
             molecule[0, 2] = new BoardTile() { Asset = "Hydrogen" };
@@ -82,7 +82,7 @@ namespace SimpleLevelGenerator
 
             // Second level
             Level level2 = new Level();
-            level2.Board = new BoardCollection<BoardTile>(9, 11);
+            level2.Board = new TilesCollection<BoardTile>(9, 11);
 
             for (int y = 0; y < level2.Board.RowsCount; y++)
             {
@@ -109,7 +109,7 @@ namespace SimpleLevelGenerator
 
             // Level 4
             Level level4 = new Level();
-            level4.Board = new BoardCollection<BoardTile>(5, 5);
+            level4.Board = new TilesCollection<BoardTile>(5, 5);
 
             for (int y = 0; y < level4.Board.RowsCount; y++)
             {
