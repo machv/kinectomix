@@ -34,5 +34,29 @@ namespace Kinectomix.LevelGenerator.Properties {
                 this["TilesDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("49")]
+        public int TileWith {
+            get {
+                return ((int)(this["TileWith"]));
+            }
+            set {
+                this["TileWith"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("49")]
+        public int TileHeight {
+            get {
+                return ((int)(this["TileHeight"]));
+            }
+            set {
+                this["TileHeight"] = value;
+            }
+        }
     }
 }

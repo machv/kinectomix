@@ -5,5 +5,11 @@
     <Setting Name="TilesDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)">Tiles</Value>
     </Setting>
+    <Setting Name="TileWith" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">49</Value>
+    </Setting>
+    <Setting Name="TileHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">49</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

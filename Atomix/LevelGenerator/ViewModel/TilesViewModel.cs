@@ -35,7 +35,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set { SetValue(ColumnsCountProperty, value); }
         }
 
-        public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(ObservableCollection<BoardTileViewModel>), typeof(TilesViewModel), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(ObservableCollection<BoardTileViewModel>), typeof(TilesViewModel), new UIPropertyMetadata(new ObservableCollection<BoardTileViewModel>()));
 
         public ObservableCollection<BoardTileViewModel> Tiles
         {

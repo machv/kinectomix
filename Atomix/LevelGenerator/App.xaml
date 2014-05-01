@@ -12,7 +12,7 @@
                     <DataTemplate>
                         <Image Source="{Binding AssetSource}" 
                                Behavior:TilePainter.IsPaintEnabled="True"
-                               Behavior:TilePainter.PaintTile="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.PaintTile}"
+                               Behavior:TilePainter.PaintTile="{Binding Path=DataContext.PaintTile, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Width="49"
