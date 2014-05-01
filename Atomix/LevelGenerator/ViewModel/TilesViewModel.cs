@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using AtomixData;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
@@ -15,6 +16,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(TilesViewModel));
 
         private ObservableCollection<BoardTileViewModel> _tiles = new ObservableCollection<BoardTileViewModel>();
+
         public IEnumerable<BoardTileViewModel> Tiles
         {
             get { return new ReadOnlyObservableCollection<BoardTileViewModel>(_tiles); }
@@ -43,6 +45,18 @@ namespace Kinectomix.LevelGenerator.ViewModel
         {
             ColumnsCount = columnsCount;
             RowsCount = rowsCount;
+        }
+
+        public TilesViewModel(BoardCollection<BoardTile> board)
+        {
+            ColumnsCount = board.ColumnsCount;
+            RowsCount = board.RowsCount;
+
+            foreach (BoardTile tile in board)
+            {
+                BoardTileViewModel tileViewModel = new BoardTileViewModel(tile);
+                _tiles.Add(tileViewModel);
+            }
         }
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)

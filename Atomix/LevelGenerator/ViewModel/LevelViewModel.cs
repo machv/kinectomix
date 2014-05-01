@@ -38,22 +38,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public static LevelViewModel FromLevel(Level level)
         {
             LevelViewModel viewModel = new LevelViewModel();
-
-            foreach (BoardTile tile in level.Board)
-            {
-                BoardTileViewModel tileViewModel = new BoardTileViewModel(tile);
-                viewModel.Board.Tiles.Add(tileViewModel);
-            }
-            viewModel.Board.ColumnsCount = level.Board.ColumnsCount;
-            viewModel.Board.RowsCount = level.Board.RowsCount;
-
-            foreach (BoardTile atom in level.Molecule)
-            {
-                BoardTileViewModel atomViewModel = new BoardTileViewModel(atom);
-                viewModel.Molecule.Tiles.Add(atomViewModel);
-            }
-            viewModel.Molecule.ColumnsCount = level.Molecule.ColumnsCount;
-            viewModel.Molecule.RowsCount = level.Molecule.RowsCount;
+            viewModel.Board = new TilesViewModel(level.Board);
+            viewModel.Molecule = new TilesViewModel(level.Molecule);
 
             return viewModel;
         }
