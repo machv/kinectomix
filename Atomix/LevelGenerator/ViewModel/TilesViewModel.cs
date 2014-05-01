@@ -10,40 +10,37 @@ namespace Kinectomix.LevelGenerator.ViewModel
 {
     public class TilesViewModel : DependencyObject
     {
-        public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(TilesViewModel), new UIPropertyMetadata(null));
-
-        public BoardTileViewModel PaintTile
-        {
-            get { return (BoardTileViewModel)GetValue(PaintTileProperty); }
-            set { SetValue(PaintTileProperty, value); }
-        }
-
-        public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(TilesViewModel), new UIPropertyMetadata(0));
+        public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(TilesViewModel));
+        public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(TilesViewModel));
+        public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(ObservableCollection<BoardTileViewModel>), typeof(TilesViewModel));
+        public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(TilesViewModel));
 
         public int RowsCount
         {
             get { return (int)GetValue(RowsCountProperty); }
             set { SetValue(RowsCountProperty, value); }
         }
-
-        public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(TilesViewModel), new UIPropertyMetadata(0));
-
         public int ColumnsCount
         {
             get { return (int)GetValue(ColumnsCountProperty); }
             set { SetValue(ColumnsCountProperty, value); }
         }
-
-        public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(ObservableCollection<BoardTileViewModel>), typeof(TilesViewModel), new UIPropertyMetadata(new ObservableCollection<BoardTileViewModel>()));
-
         public ObservableCollection<BoardTileViewModel> Tiles
         {
             get { return (ObservableCollection<BoardTileViewModel>)GetValue(TilesProperty); }
             set { SetValue(TilesProperty, value); }
         }
+        public BoardTileViewModel PaintTile
+        {
+            get { return (BoardTileViewModel)GetValue(PaintTileProperty); }
+            set { SetValue(PaintTileProperty, value); }
+        }
 
-        public TilesViewModel() { }
-        public TilesViewModel(int rowsCount, int columnsCount)
+        public TilesViewModel()
+        {
+            Tiles = new ObservableCollection<BoardTileViewModel>();
+        }
+        public TilesViewModel(int rowsCount, int columnsCount) :this()
         {
             ColumnsCount = columnsCount;
             RowsCount = rowsCount;

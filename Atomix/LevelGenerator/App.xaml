@@ -22,8 +22,8 @@
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding Columns}"
-                             Rows="{Binding Rows}"
+                        <UniformGrid Columns="{Binding ColumnsCount}"
+                             Rows="{Binding RowsCount}"
                              VerticalAlignment="Center"
                              HorizontalAlignment="Center"/>
                     </ItemsPanelTemplate>
