@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -10,7 +11,7 @@ using System.Xml.Serialization;
 namespace AtomixData
 {
     [Serializable]
-    public class TilesCollection<T> : ICollection<T>, IXmlSerializable where T : new()
+    public class TilesCollection<T> : ICollection<T>, INotifyCollectionChanged, IXmlSerializable where T : new()
     {
         [XmlAttribute]
         public int RowsCount { get; set; }
@@ -29,7 +30,11 @@ namespace AtomixData
         public T this[int row, int column]
         {
             get { return _tiles[GetIndex(row, column)]; }
-            set { _tiles[GetIndex(row, column)] = value; }
+            set
+            {
+                _tiles[GetIndex(row, column)] = value;
+                OnCollectionChanged(NotifyCollectionChangedAction.Replace);
+            }
         }
 
         public TilesCollection() { }
@@ -50,6 +55,8 @@ namespace AtomixData
 
             _tiles = tiles;
             RowsCount += 1;
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Add);
         }
 
         public void RemoveRow()
@@ -61,6 +68,8 @@ namespace AtomixData
 
             _tiles = tiles;
             RowsCount -= 1;
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }
 
         public void AddColumn()
@@ -78,6 +87,8 @@ namespace AtomixData
 
             _tiles = tiles;
             ColumnsCount += 1;
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Add);
         }
 
         public void RemoveColumn()
@@ -95,11 +106,15 @@ namespace AtomixData
 
             _tiles = tiles;
             ColumnsCount -= 1;
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }
 
         public void Clear()
         {
             _tiles = new T[RowsCount * ColumnsCount];
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Reset);
         }
 
         public bool Contains(T item)
@@ -113,9 +128,20 @@ namespace AtomixData
         }
 
         int addingIndex = 0;
+
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        private void OnCollectionChanged(NotifyCollectionChangedAction action)
+        {
+            if (CollectionChanged != null)
+                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
         public void Add(T item)
         {
             _tiles[addingIndex++] = item;
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Add);
         }
 
         public int Count

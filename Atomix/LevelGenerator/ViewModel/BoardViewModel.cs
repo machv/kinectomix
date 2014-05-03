@@ -112,14 +112,22 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        public void AddRow()
+        public void AddRow(BoardTileViewModel emptyTileTemplate)
         {
             var tiles = Tiles;
             tiles.AddRow();
 
+            for (int i = 0; i < ColumnsCount; i++)
+            {
+                BoardTileViewModel tile = new BoardTileViewModel(new AtomixData.BoardTile() { IsEmpty = emptyTileTemplate.IsEmpty, Asset = emptyTileTemplate.Asset, IsFixed = emptyTileTemplate.IsFixed });
+                tile.AssetSource = emptyTileTemplate.AssetSource;
+                tile.AssetFile = emptyTileTemplate.AssetFile;
+
+                tiles[RowsCount, i] = tile;
+            }
+
             Tiles = null;
             Tiles = tiles;
-
             RowsCount += 1;
         }
 
