@@ -10,11 +10,11 @@ using Kinectomix.LevelGenerator.Model;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
-    public class BoardViewModel : DependencyObject
+    public class BoardViewModel : Mvvm.NotifyPropertyBase // DependencyObject
     {
-        public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(BoardViewModel));
-        public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(BoardViewModel));
-        public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(BoardViewModel));
+        //public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(BoardViewModel));
+        //public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(BoardViewModel));
+        //public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(BoardViewModel));
 
         //public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(TilesCollection<BoardTileViewModel>), typeof(BoardViewModel), new UIPropertyMetadata(null));
 
@@ -34,25 +34,39 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _tiles = value;
-                //RaisePropertyChangedEvent();
+                RaisePropertyChangedEvent();
             }
             //get { return new ReadOnlyObservableCollection<BoardTileViewModel>(_tiles); }
         }
 
         public int RowsCount
         {
-            get { return (int)GetValue(RowsCountProperty); }
-            set { SetValue(RowsCountProperty, value); }
+            get { return _tiles.RowsCount; }
+            set
+            {
+                _tiles.RowsCount = value;
+                RaisePropertyChangedEvent();
+            }
         }
         public int ColumnsCount
         {
-            get { return (int)GetValue(ColumnsCountProperty); }
-            set { SetValue(ColumnsCountProperty, value); }
+            get { return _tiles.ColumnsCount; }
+            set
+            {
+                _tiles.ColumnsCount = value;
+                RaisePropertyChangedEvent();
+            }
         }
+
+        private BoardTileViewModel _paintTile; 
         public BoardTileViewModel PaintTile
         {
-            get { return (BoardTileViewModel)GetValue(PaintTileProperty); }
-            set { SetValue(PaintTileProperty, value); }
+            get { return _paintTile; }
+            set
+            {
+                _paintTile = value;
+                RaisePropertyChangedEvent();
+            }
         }
 
         public BoardViewModel()
@@ -61,14 +75,11 @@ namespace Kinectomix.LevelGenerator.ViewModel
         }
         public BoardViewModel(int rowsCount, int columnsCount) : this()
         {
-            ColumnsCount = columnsCount;
-            RowsCount = rowsCount;
+            Tiles = new TilesCollection<BoardTileViewModel>(rowsCount, columnsCount);
         }
         public BoardViewModel(TilesCollection<BoardTile> board, Tiles tiles)
         {
-            ColumnsCount = board.ColumnsCount;
-            RowsCount = board.RowsCount;
-            Tiles = new TilesCollection<BoardTileViewModel>(RowsCount, ColumnsCount);
+            Tiles = new TilesCollection<BoardTileViewModel>(board.RowsCount, board.ColumnsCount);
 
             foreach (BoardTile tile in board)
             {
@@ -90,17 +101,16 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 tile.AssetSource = emptyTileTemplate.AssetSource;
                 tile.AssetFile = emptyTileTemplate.AssetFile;
 
-                tiles[RowsCount, i] = tile;
+                tiles[RowsCount - 1, i] = tile;
             }
 
             Tiles = null;
             Tiles = tiles;
-            RowsCount += 1;
+            RowsCount = _tiles.RowsCount;
         }
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)
         {
-            //_tiles.Clear();
             Tiles = new TilesCollection<BoardTileViewModel>(RowsCount, ColumnsCount);
 
             for (int i = 0; i < RowsCount; i++)
