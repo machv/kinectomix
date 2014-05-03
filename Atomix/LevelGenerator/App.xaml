@@ -5,7 +5,7 @@
              xmlns:Behavior="clr-namespace:Kinectomix.LevelGenerator.Behavior"
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type ViewModel:TilesViewModel}">
+        <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
             <ItemsControl ItemsSource="{Binding Tiles}" 
                           Margin="3">
                 <ItemsControl.ItemTemplate>

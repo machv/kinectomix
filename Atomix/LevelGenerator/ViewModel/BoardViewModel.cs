@@ -9,11 +9,11 @@ using AtomixData;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
-    public class TilesViewModel : DependencyObject
+    public class BoardViewModel : DependencyObject
     {
-        public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(TilesViewModel));
-        public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(TilesViewModel));
-        public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(TilesViewModel));
+        public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(BoardViewModel));
+        public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(BoardViewModel));
+        public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(BoardViewModel));
 
         private ObservableCollection<BoardTileViewModel> _tiles = new ObservableCollection<BoardTileViewModel>();
 
@@ -38,16 +38,16 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set { SetValue(PaintTileProperty, value); }
         }
 
-        public TilesViewModel()
+        public BoardViewModel()
         {
         }
-        public TilesViewModel(int rowsCount, int columnsCount) : this()
+        public BoardViewModel(int rowsCount, int columnsCount) : this()
         {
             ColumnsCount = columnsCount;
             RowsCount = rowsCount;
         }
 
-        public TilesViewModel(TilesCollection<BoardTile> board)
+        public BoardViewModel(TilesCollection<BoardTile> board)
         {
             ColumnsCount = board.ColumnsCount;
             RowsCount = board.RowsCount;

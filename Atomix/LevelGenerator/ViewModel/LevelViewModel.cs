@@ -10,10 +10,10 @@ namespace Kinectomix.LevelGenerator.ViewModel
 {
     public class LevelViewModel : Mvvm.NotifyPropertyBase
     {
-        TilesViewModel _board = new TilesViewModel();
-        TilesViewModel _molecule = new TilesViewModel();
+        BoardViewModel _board = new BoardViewModel();
+        BoardViewModel _molecule = new BoardViewModel();
 
-        public TilesViewModel Board
+        public BoardViewModel Board
         {
             get { return _board; }
             set
@@ -24,7 +24,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        public TilesViewModel Molecule
+        public BoardViewModel Molecule
         {
             get { return _molecule; }
             set
@@ -38,8 +38,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public static LevelViewModel FromLevel(Level level)
         {
             LevelViewModel viewModel = new LevelViewModel();
-            viewModel.Board = new TilesViewModel(level.Board);
-            viewModel.Molecule = new TilesViewModel(level.Molecule);
+            viewModel.Board = new BoardViewModel(level.Board);
+            viewModel.Molecule = new BoardViewModel(level.Molecule);
 
             return viewModel;
         }

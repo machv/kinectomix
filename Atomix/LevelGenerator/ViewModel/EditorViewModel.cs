@@ -193,10 +193,10 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 NewLevelViewModel newLevelVm = newLevelWindow.DataContext as NewLevelViewModel;
 
                 LevelViewModel level = new LevelViewModel();
-                level.Board = new TilesViewModel() { ColumnsCount = newLevelVm.BoardColumns, RowsCount = newLevelVm.BoardRows };
+                level.Board = new BoardViewModel() { ColumnsCount = newLevelVm.BoardColumns, RowsCount = newLevelVm.BoardRows };
                 level.Board.PopulateEmptyTiles(_tiles["Empty"]);
 
-                level.Molecule = new TilesViewModel() { ColumnsCount = newLevelVm.MoleculeColumns, RowsCount = newLevelVm.MoleculeRows };
+                level.Molecule = new BoardViewModel() { ColumnsCount = newLevelVm.MoleculeColumns, RowsCount = newLevelVm.MoleculeRows };
                 level.Molecule.PopulateEmptyTiles(_tiles["Empty"]);
 
                 LoadDefaultAssets();

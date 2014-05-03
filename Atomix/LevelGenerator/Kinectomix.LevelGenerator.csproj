@@ -87,7 +87,7 @@
     <Compile Include="ViewModel\LevelsViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
     <Compile Include="ViewModel\NewLevelViewModel.cs" />
-    <Compile Include="ViewModel\TilesViewModel.cs" />
+    <Compile Include="ViewModel\BoardViewModel.cs" />
     <Compile Include="View\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
