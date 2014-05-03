@@ -1,6 +1,7 @@
 ﻿using AtomixData;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,13 @@ namespace Kinectomix.LevelGenerator.ViewModel
         {
             get { return _assetFile; }
             set { _assetFile = value; }
+        }
+
+        private LevelAsset _levelAsset;
+        internal LevelAsset LevelAsseet
+        {
+            get { return _levelAsset; }
+            set { _levelAsset = value; }
         }
 
         public BoardTile Tile
@@ -80,6 +88,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
+        public BoardTileViewModel() { }
+
         public BoardTileViewModel(BoardTile tile)
         {
             _tile = tile;
@@ -90,6 +100,25 @@ namespace Kinectomix.LevelGenerator.ViewModel
             _tile = tile;
             _assetFile = assetFile;
             _assetSource = (ImageSource)(SourceConverter.ConvertFromString(assetFile));
+        }
+
+        public BoardTileViewModel(BoardTile tile, LevelAsset asset)
+        {
+            _tile = tile;
+            _assetFile = null;
+            _levelAsset = asset;
+
+            using (MemoryStream memoryStream = new MemoryStream(_levelAsset.DecodedAssetContent))
+            {
+                BitmapImage bi = new BitmapImage();
+                bi.BeginInit();
+                bi.CreateOptions = BitmapCreateOptions.None;
+                bi.CacheOption = BitmapCacheOption.OnLoad;
+                bi.StreamSource = memoryStream;
+                bi.EndInit();
+
+                _assetSource = bi;
+            }
         }
     }
 }

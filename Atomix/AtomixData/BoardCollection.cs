@@ -41,6 +41,62 @@ namespace AtomixData
             _tiles = new T[rows * columns];
         }
 
+        public void AddRow()
+        {
+            T[] tiles = new T[(RowsCount + 1) * ColumnsCount];
+
+            for (int i = 0; i < _tiles.Length; i++)
+                tiles[i] = _tiles[i];
+
+            _tiles = tiles;
+            RowsCount += 1;
+        }
+
+        public void RemoveRow()
+        {
+            T[] tiles = new T[(RowsCount - 1) * ColumnsCount];
+
+            for (int i = 0; i < tiles.Length; i++)
+                tiles[i] = _tiles[i];
+
+            _tiles = tiles;
+            RowsCount -= 1;
+        }
+
+        public void AddColumn()
+        {
+            T[] tiles = new T[RowsCount * (ColumnsCount + 1)];
+
+            for (int row = 0; row < RowsCount; row++)
+            {
+                for (int column = 0; column < ColumnsCount; column++)
+                {
+                    int index = row * ColumnsCount + column;
+                    tiles[index] = _tiles[index];
+                }
+            }
+
+            _tiles = tiles;
+            ColumnsCount += 1;
+        }
+
+        public void RemoveColumn()
+        {
+            T[] tiles = new T[RowsCount * (ColumnsCount - 1)];
+
+            for (int row = 0; row < RowsCount; row++)
+            {
+                for (int column = 0; column < (ColumnsCount - 1); column++)
+                {
+                    int index = row * ColumnsCount + column;
+                    tiles[index] = _tiles[index];
+                }
+            }
+
+            _tiles = tiles;
+            ColumnsCount -= 1;
+        }
+
         public void Clear()
         {
             _tiles = new T[RowsCount * ColumnsCount];
@@ -80,7 +136,8 @@ namespace AtomixData
 
         public IEnumerator<T> GetEnumerator()
         {
-            return (IEnumerator<T>)_tiles.GetEnumerator();
+            foreach (T tile in _tiles)
+                yield return tile;
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()

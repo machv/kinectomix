@@ -28,7 +28,7 @@ namespace Kinectomix.LevelGenerator.Model
         public bool OpenFileDialog()
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Atomix level (*.xnb, *.xml, *.atb)|*.xnb;*.xml;*.atb|All files|*.*";
+            dialog.Filter = "Atomix level (*.xnb, *.xml, *.atb, *.atx)|*.xnb;*.xml;*.atb;*.atx|All files|*.*";
             dialog.Title = "Open Kinectomix level definition";
 
             if (dialog.ShowDialog() == true)

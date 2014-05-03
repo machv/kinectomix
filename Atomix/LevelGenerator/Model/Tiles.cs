@@ -80,9 +80,21 @@ namespace Kinectomix.LevelGenerator.Model
             foreach (string tilePath in tiles)
             {
                 string tileName = Path.GetFileNameWithoutExtension(tilePath);
-
                 BoardTile tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = tileName };
                 BoardTileViewModel tileVm = new BoardTileViewModel(tile, tilePath);
+
+                Add(tileVm, TileType.Board);
+                Add(tileVm, TileType.Molecule);
+            }
+        }
+
+        public void LoadLevelAssets(Level level)
+        {
+            foreach (LevelAsset asset in level.Assets)
+            {
+                BoardTile tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = asset.AssetName };
+                BoardTileViewModel tileVm = new BoardTileViewModel(tile, asset);
+
                 Add(tileVm, TileType.Board);
                 Add(tileVm, TileType.Molecule);
             }

@@ -192,7 +192,14 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public void LoadLevel(string path)
         {
             Level level = LevelFactory.Load(path);
-            Level = LevelViewModel.FromLevel(level);
+
+            _tiles.Clear();
+            _tiles.LoadSystemAssets();
+            _tiles.LoadLevelAssets(level);
+            _tiles.LoadUserAssets(_userAssetsPath);
+
+            Level = LevelViewModel.FromLevel(level, _tiles);
+            SelectedTab = 0;
 
             _saveAsLevelCommand.RaiseCanExecuteChanged();
         }

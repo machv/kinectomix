@@ -35,11 +35,11 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        public static LevelViewModel FromLevel(Level level)
+        public static LevelViewModel FromLevel(Level level, Tiles tiles)
         {
             LevelViewModel viewModel = new LevelViewModel();
-            viewModel.Board = new BoardViewModel(level.Board);
-            viewModel.Molecule = new BoardViewModel(level.Molecule);
+            viewModel.Board = new BoardViewModel(level.Board, tiles);
+            viewModel.Molecule = new BoardViewModel(level.Molecule, tiles);
 
             return viewModel;
         }
