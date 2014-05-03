@@ -1,4 +1,5 @@
-﻿using Kinectomix.LevelGenerator.ViewModel;
+﻿using AtomixData;
+using Kinectomix.LevelGenerator.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,19 +65,35 @@ namespace Kinectomix.LevelGenerator.Behavior
         private static void Tile_MouseLeave(object sender, MouseEventArgs e)
         {
             // Remove preview
-        }
-
-        private static void Tile_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (_originalTile != null)
             {
                 FrameworkElement element = sender as FrameworkElement;
 
-                PaintTile(element.DataContext as BoardTileViewModel);
+                PaintTile(_originalTile, element.DataContext as BoardTileViewModel, false);
+
+                _originalTile = null;
+            }
+        }
+
+        private static BoardTileViewModel _originalTile;
+        private static void Tile_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            FrameworkElement element = sender as FrameworkElement;
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                PaintTile(_paintTile, element.DataContext as BoardTileViewModel, false);
             }
             else
             {
                 // Just preview
+                BoardTileViewModel tile = element.DataContext as BoardTileViewModel;
+                _originalTile = new BoardTileViewModel(new BoardTile());
+                _originalTile.Asset = tile.Asset;
+                _originalTile.AssetSource = tile.AssetSource;
+                _originalTile.AssetFile = tile.AssetFile;
+
+                PaintTile(_paintTile, tile, true);
             }
         }
 
@@ -84,16 +101,20 @@ namespace Kinectomix.LevelGenerator.Behavior
         {
             FrameworkElement element = sender as FrameworkElement;
 
-            PaintTile(element.DataContext as BoardTileViewModel);
+            // As user clicked we can remove preview tile.
+            _originalTile = null;
+
+            PaintTile(_paintTile, element.DataContext as BoardTileViewModel, false);
         }
 
-        private static void PaintTile(BoardTileViewModel selectedTile)
+        private static void PaintTile(BoardTileViewModel template, BoardTileViewModel selectedTile, bool isPreview)
         {
             if (_paintTile != null)
             {
-                selectedTile.Asset = _paintTile.Asset;
-                selectedTile.AssetSource = _paintTile.AssetSource;
-                selectedTile.AssetFile = _paintTile.AssetFile;
+                selectedTile.Asset = template.Asset;
+                selectedTile.AssetSource = template.AssetSource;
+                selectedTile.AssetFile = template.AssetFile;
+                selectedTile.IsPreview = isPreview;
             }
         }
     }

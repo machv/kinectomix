@@ -58,6 +58,17 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
+        private bool _isPreview;
+        public bool IsPreview
+        {
+            get { return _isPreview; }
+            set
+            {
+                _isPreview = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+
         private ImageSource _assetSource;
         public ImageSource AssetSource
         {
