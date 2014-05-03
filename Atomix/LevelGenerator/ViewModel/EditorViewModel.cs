@@ -148,6 +148,16 @@ namespace Kinectomix.LevelGenerator.ViewModel
             get { return new DelegateCommand(LoadLevels); }
         }
 
+        public ICommand TestCommand
+        {
+            get { return new DelegateCommand(Test); }
+        }
+
+        public void Test()
+        {
+            Level.Board.AddRow(_tiles["Wall"]);
+        }
+
         private void LoadLevels()
         {
             LevelsViewModel levels = new LevelsViewModel();

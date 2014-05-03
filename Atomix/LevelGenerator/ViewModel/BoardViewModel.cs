@@ -10,11 +10,11 @@ using Kinectomix.LevelGenerator.Model;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
-    public class BoardViewModel : Mvvm.NotifyPropertyBase // DependencyObject
+    public class BoardViewModel : DependencyObject
     {
-        //public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(BoardViewModel));
-        //public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(BoardViewModel));
-        //public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(BoardViewModel));
+        public static readonly DependencyProperty RowsCountProperty = DependencyProperty.Register("RowsCount", typeof(int), typeof(BoardViewModel));
+        public static readonly DependencyProperty ColumnsCountProperty = DependencyProperty.Register("ColumnsCount", typeof(int), typeof(BoardViewModel));
+        public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(BoardViewModel));
 
         //public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(TilesCollection<BoardTileViewModel>), typeof(BoardViewModel), new UIPropertyMetadata(null));
 
@@ -34,59 +34,26 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _tiles = value;
-                RaisePropertyChangedEvent();
+                //RaisePropertyChangedEvent();
             }
             //get { return new ReadOnlyObservableCollection<BoardTileViewModel>(_tiles); }
         }
 
-        private int _rowsCount;
         public int RowsCount
         {
-            get { return _rowsCount; }
-            set
-            {
-                _rowsCount = value;
-                RaisePropertyChangedEvent();
-            }
+            get { return (int)GetValue(RowsCountProperty); }
+            set { SetValue(RowsCountProperty, value); }
         }
-
-        private int _columnsCount;
         public int ColumnsCount
         {
-            get { return _columnsCount; }
-            set
-            {
-                _columnsCount = value;
-                RaisePropertyChangedEvent();
-            }
+            get { return (int)GetValue(ColumnsCountProperty); }
+            set { SetValue(ColumnsCountProperty, value); }
         }
-
-        private BoardTileViewModel _paintTile;
         public BoardTileViewModel PaintTile
         {
-            get { return _paintTile; }
-            set
-            {
-                _paintTile = value;
-                RaisePropertyChangedEvent();
-            }
+            get { return (BoardTileViewModel)GetValue(PaintTileProperty); }
+            set { SetValue(PaintTileProperty, value); }
         }
-
-        //public int RowsCount
-        //{
-        //    get { return (int)GetValue(RowsCountProperty); }
-        //    set { SetValue(RowsCountProperty, value); }
-        //}
-        //public int ColumnsCount
-        //{
-        //    get { return (int)GetValue(ColumnsCountProperty); }
-        //    set { SetValue(ColumnsCountProperty, value); }
-        //}
-        //public BoardTileViewModel PaintTile
-        //{
-        //    get { return (BoardTileViewModel)GetValue(PaintTileProperty); }
-        //    set { SetValue(PaintTileProperty, value); }
-        //}
 
         public BoardViewModel()
         {
