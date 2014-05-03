@@ -81,6 +81,7 @@
     <Compile Include="Model\Tiles.cs" />
     <Compile Include="Mvvm\IFileDialogService.cs" />
     <Compile Include="TileSelectedEventArgs.cs" />
+    <Compile Include="ViewModel\AvailableTilesViewModel.cs" />
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\LevelDefinitionViewModel.cs" />

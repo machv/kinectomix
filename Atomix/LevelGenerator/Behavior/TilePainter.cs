@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kinectomix.LevelGenerator.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,12 +51,19 @@ namespace Kinectomix.LevelGenerator.Behavior
             {
                 tile.MouseDown += Tile_MouseDown;
                 tile.MouseEnter += Tile_MouseEnter;
+                tile.MouseLeave += Tile_MouseLeave;
             }
             else
             {
                 tile.MouseDown -= Tile_MouseDown;
                 tile.MouseEnter -= Tile_MouseEnter;
+                tile.MouseLeave -= Tile_MouseLeave;
             }
+        }
+
+        private static void Tile_MouseLeave(object sender, MouseEventArgs e)
+        {
+            // Remove preview
         }
 
         private static void Tile_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -65,6 +73,10 @@ namespace Kinectomix.LevelGenerator.Behavior
                 FrameworkElement element = sender as FrameworkElement;
 
                 PaintTile(element.DataContext as BoardTileViewModel);
+            }
+            else
+            {
+                // Just preview
             }
         }
 

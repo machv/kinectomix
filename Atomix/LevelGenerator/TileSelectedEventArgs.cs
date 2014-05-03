@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kinectomix.LevelGenerator.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,14 +8,14 @@ using System.Windows;
 
 namespace Kinectomix.LevelGenerator
 {
-    public class TileSelectedEventArgs : RoutedEventArgs
+    public class TileSelectedEventArgs : EventArgs
     {
         public BoardTileViewModel Tile { get; protected set; }
 
         public TileSelectedEventArgs() : base() { }
         
-        public TileSelectedEventArgs(RoutedEvent routedEvent, BoardTileViewModel tile)
-            : base(routedEvent)
+        public TileSelectedEventArgs(BoardTileViewModel tile)
+            : base()
         {
             Tile = tile;
         }

@@ -1,13 +1,10 @@
 ﻿using AtomixData;
 using Kinectomix.LevelGenerator.Model;
 using Kinectomix.LevelGenerator.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System;
+using System.Windows;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
@@ -22,69 +19,16 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set { _levelFileDialog = value; }
         }
 
-        private IEnumerable<BoardTileViewModel> _availableTiles;
-        public IEnumerable<BoardTileViewModel> AvailableTiles
+        private AvailableTilesViewModel _tileSelector;
+        public AvailableTilesViewModel TileSelector
         {
-            get { return _availableTiles; }
+            get { return _tileSelector; }
             set
             {
-                _availableTiles = value;
+                _tileSelector = value;
 
                 RaisePropertyChangedEvent();
             }
-        }
-
-        private BoardTileViewModel _currentTileTemplate;
-        public BoardTileViewModel CurrentTileTemplate
-        {
-            get { return _currentTileTemplate; }
-            set
-            {
-                _currentTileTemplate = value;
-
-                Level.Board.PaintTile = value;
-
-                RaisePropertyChangedEvent();
-            }
-        }
-
-
-        private BoardTileViewModel _currentBoardTile;
-        public BoardTileViewModel CurrentBoardTile
-        {
-            get { return _currentBoardTile; }
-            set
-            {
-                _currentBoardTile = value;
-
-                RaisePropertyChangedEvent();
-
-                UpdateCurrentTileByTemplate(CurrentBoardTile);
-            }
-        }
-
-        private BoardTileViewModel _currentMoleculeTile;
-        public BoardTileViewModel CurrentMoleculeTile
-        {
-            get { return _currentMoleculeTile; }
-            set
-            {
-                _currentMoleculeTile = value;
-
-                RaisePropertyChangedEvent();
-
-                UpdateCurrentTileByTemplate(CurrentMoleculeTile);
-            }
-        }
-
-        private void UpdateCurrentTileByTemplate(BoardTileViewModel _currentTile)
-        {
-            if (CurrentTileTemplate == null)
-                return;
-
-            _currentTile.Asset = CurrentTileTemplate.Asset;
-            _currentTile.AssetSource = CurrentTileTemplate.AssetSource;
-            _currentTile.AssetFile = CurrentTileTemplate.AssetFile;
         }
 
         private LevelViewModel _level;
@@ -99,67 +43,28 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private int _selectedTab = 0;
-        public int SelectedTab
-        {
-            get { return _selectedTab; }
-            set
-            {
-                _selectedTab = value;
-
-                UpdateAvailableTiles(_selectedTab);
-                RaisePropertyChangedEvent();
-            }
-        }
-
-        private void UpdateAvailableTiles(int selectedTab)
-        {
-            switch (selectedTab)
-            {
-                case 0:
-                    AvailableTiles = _tiles.Board;
-                    break;
-                case 1:
-                    AvailableTiles = _tiles.Molecule;
-                    break;
-            }
-        }
+        private string _userAssetsPath;
 
         public EditorViewModel()
         {
-            LoadDefaultAssets();
+            _userAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.TilesDirectory);
+            _tiles = new Tiles();
+            _tiles.LoadUserAssets(_userAssetsPath);
 
             _levelFileDialog = new LevelFileDialog();
             _saveAsLevelCommand = new DelegateCommand(SaveAsLevel, CanExecuteSaveAs);
+
+            _tileSelector = new AvailableTilesViewModel(_tiles);
+            _tileSelector.TileSelected += Selector_TileSelected;
         }
 
-        private void LoadDefaultAssets()
+        private void Selector_TileSelected(object sender, TileSelectedEventArgs e)
         {
-            BoardTile tile;
-            BoardTileViewModel tileVm;
+            if (Level.Board != null)
+                Level.Board.PaintTile = e.Tile;
 
-            _tiles = new Tiles();
-
-            tile = new BoardTile() { IsFixed = true, IsEmpty = true, Asset = "Empty" };
-            tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) };
-            _tiles.Add(tileVm, Tiles.TileType.Board);
-            _tiles.Add(tileVm, Tiles.TileType.Molecule);
-
-            tile = new BoardTile() { IsFixed = true, IsEmpty = false, Asset = "Wall" };
-            tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) };
-            _tiles.Add(tileVm, Tiles.TileType.Board);
-
-            string absolute = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.TilesDirectory);
-            string[] tiles = Directory.GetFiles(absolute, "*.png");
-            foreach (string tilePath in tiles)
-            {
-                string tileName = Path.GetFileNameWithoutExtension(tilePath);
-
-                tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = tileName };
-                tileVm = new BoardTileViewModel(tile, tilePath);
-                _tiles.Add(tileVm, Tiles.TileType.Board);
-                _tiles.Add(tileVm, Tiles.TileType.Molecule);
-            }
+            if (Level.Molecule != null)
+                Level.Molecule.PaintTile = e.Tile;
         }
 
         public ICommand LoadLevelCommand
@@ -199,12 +104,42 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 level.Molecule = new BoardViewModel() { ColumnsCount = newLevelVm.MoleculeColumns, RowsCount = newLevelVm.MoleculeRows };
                 level.Molecule.PopulateEmptyTiles(_tiles["Empty"]);
 
-                LoadDefaultAssets();
+                _tiles.Clear();
+                _tiles.LoadSystemAssets();
+                _tiles.LoadUserAssets(_userAssetsPath);
 
                 Level = level;
-                SelectedTab = 0; // Reset to Board tab
+
+                // Reset to Board tab
+                SelectedTab = 0;
 
                 _saveAsLevelCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private int _selectedTab = 0;
+        public int SelectedTab
+        {
+            get { return _selectedTab; }
+            set
+            {
+                _selectedTab = value;
+
+                UpdateAvailableTiles(_selectedTab);
+                //RaisePropertyChangedEvent();
+            }
+        }
+
+        private void UpdateAvailableTiles(int _selectedTab)
+        {
+            switch (_selectedTab)
+            {
+                case 0:
+                    _tileSelector.UpdateAvailableTiles(Tiles.TileType.Board);
+                    break;
+                case 1:
+                    _tileSelector.UpdateAvailableTiles(Tiles.TileType.Molecule);
+                    break;
             }
         }
 

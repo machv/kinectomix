@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Kinectomix.LevelGenerator
+namespace Kinectomix.LevelGenerator.ViewModel
 {
     public class BoardTileViewModel : Mvvm.NotifyPropertyBase
     {
