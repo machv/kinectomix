@@ -13,19 +13,19 @@ namespace AtomixData
     [Serializable]
     public class TilesCollection<T> : ICollection<T>, IXmlSerializable where T : new()
     {
-        protected int _rowsCount;
+        protected int _rowCount;
         [XmlAttribute]
         public virtual int RowsCount
         {
-            get { return _rowsCount; }
-            set { _rowsCount = value; }
+            get { return _rowCount; }
+            set { _rowCount = value; }
         }
-        protected int _columnsCount;
+        protected int _columnCount;
         [XmlAttribute]
         public virtual int ColumnsCount
         {
-            get { return _columnsCount; }
-            set { _rowsCount = value; }
+            get { return _columnCount; }
+            set { _columnCount = value; }
         }
 
         [ContentSerializer]
@@ -33,7 +33,7 @@ namespace AtomixData
 
         protected int GetIndex(int row, int column)
         {
-            return row * ColumnsCount + column;
+            return row * _columnCount + column;
         }
 
         [ContentSerializerIgnore]
@@ -44,12 +44,12 @@ namespace AtomixData
         }
 
         public TilesCollection() { }
-        public TilesCollection(int rows, int columns)
+        public TilesCollection(int rowCount, int columnCount)
         {
-            RowsCount = rows;
-            ColumnsCount = columns;
+            _rowCount = rowCount;
+            _columnCount = columnCount;
 
-            _tiles = new T[rows * columns];
+            _tiles = new T[rowCount * columnCount];
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace AtomixData
             Array.Copy(_tiles, index + ColumnsCount, newTiles, index, _tiles.Length - index);
 
             _tiles = newTiles;
-            RowsCount = newRowsCount;
+            _rowCount = newRowsCount;
         }
 
         public virtual void InsertColumn(int columnIndex)
@@ -116,7 +116,7 @@ namespace AtomixData
             }
 
             _tiles = newTiles;
-            ColumnsCount = newColumnsCount;
+            _columnCount = newColumnsCount;
         }
 
         public virtual void RemoveColumn(int columnIndex)
@@ -137,7 +137,7 @@ namespace AtomixData
             }
 
             _tiles = newTiles;
-            ColumnsCount = newColumnsCount;
+            _columnCount = newColumnsCount;
         }
 
         public void AppendColumn()
@@ -153,6 +153,7 @@ namespace AtomixData
         public virtual void Clear()
         {
             _tiles = new T[RowsCount * ColumnsCount];
+            _addingIndex = 0;
         }
 
         public bool Contains(T item)
@@ -165,11 +166,11 @@ namespace AtomixData
             _tiles.CopyTo(array, arrayIndex);
         }
 
-        int addingIndex = 0;
+        int _addingIndex = 0;
 
         public virtual void Add(T item)
         {
-            _tiles[addingIndex++] = item;
+            _tiles[_addingIndex++] = item;
         }
 
         public int Count

@@ -64,6 +64,11 @@ namespace Kinectomix.LevelGenerator.Model
                 OnCollectionChanged(e);
             }
         }
+
+
+        public ObservableTilesCollection() : base() { }
+        public ObservableTilesCollection(int rows, int columns) : base(rows, columns) { }
+
         public override void Add(T item)
         {
             base.Add(item);

@@ -32,8 +32,8 @@
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding ColumnsCount}"
-                             Rows="{Binding RowsCount}"
+                        <UniformGrid Columns="{Binding Tiles.ColumnsCount}"
+                             Rows="{Binding Tiles.RowsCount}"
                              VerticalAlignment="Center"
                              HorizontalAlignment="Center"/>
                     </ItemsPanelTemplate>
@@ -82,8 +82,3 @@
         </DataTemplate>
     </Application.Resources>
 </Application>
-<!--
-                       MouseEnter="Tile_MouseEnter"
-                       MouseDown="Tile_MouseDown"
-
-    -->
