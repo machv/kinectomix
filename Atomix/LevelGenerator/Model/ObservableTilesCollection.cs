@@ -88,6 +88,7 @@ namespace Kinectomix.LevelGenerator.Model
         {
             base.InsertColumn(columnIndex);
 
+            RaisePropertyChangedEvent("ColumnsCount");
             OnCollectionChanged();
         }
 
@@ -95,6 +96,7 @@ namespace Kinectomix.LevelGenerator.Model
         {
             base.InsertRow(rowIndex);
 
+            RaisePropertyChangedEvent("RowsCount");
             OnCollectionChanged();
         }
 
@@ -102,6 +104,7 @@ namespace Kinectomix.LevelGenerator.Model
         {
             base.RemoveColumn(columnIndex);
 
+            RaisePropertyChangedEvent("ColumnsCount");
             OnCollectionChanged();
         }
 
@@ -109,6 +112,7 @@ namespace Kinectomix.LevelGenerator.Model
         {
             base.RemoveRow(rowIndex);
 
+            RaisePropertyChangedEvent("RowsCount");
             OnCollectionChanged();
         }
     }

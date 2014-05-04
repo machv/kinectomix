@@ -68,9 +68,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public void AddRow(BoardTileViewModel emptyTileTemplate)
         {
-            var tiles = Tiles;
-            tiles.RemoveColumn(1);
-            //tiles.AppendRow();
+            Tiles.RemoveColumn(1);
 
             //for (int i = 0; i < ColumnsCount; i++)
             //{
@@ -80,9 +78,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
             //    tiles[RowsCount - 1, i] = tile;
             //}
-
-            Tiles = null;
-            Tiles = tiles;
         }
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)
