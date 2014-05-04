@@ -15,14 +15,14 @@ namespace AtomixData
     {
         protected int _rowsCount;
         [XmlAttribute]
-        public int RowsCount
+        public virtual int RowsCount
         {
             get { return _rowsCount; }
             set { _rowsCount = value; }
         }
         protected int _columnsCount;
         [XmlAttribute]
-        public int ColumnsCount
+        public virtual int ColumnsCount
         {
             get { return _columnsCount; }
             set { _rowsCount = value; }
@@ -37,7 +37,7 @@ namespace AtomixData
         }
 
         [ContentSerializerIgnore]
-        public T this[int row, int column]
+        public virtual T this[int row, int column]
         {
             get { return _tiles[GetIndex(row, column)]; }
             set { _tiles[GetIndex(row, column)] = value; }

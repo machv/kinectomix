@@ -74,6 +74,7 @@
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Model\DependencyPropertyCollection.cs" />
+    <Compile Include="Model\ObservableTilesCollection.cs" />
     <Compile Include="Model\TileAsset.cs" />
     <Compile Include="Library\DialogCloser.cs" />
     <Compile Include="Model\LevelFactory.cs" />
