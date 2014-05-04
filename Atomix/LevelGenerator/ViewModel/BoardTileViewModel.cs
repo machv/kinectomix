@@ -42,7 +42,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _tile.Asset = value;
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 
@@ -52,7 +52,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _tile.IsFixed = value;
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 
@@ -62,7 +62,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _tile.IsEmpty = value;
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 
@@ -73,7 +73,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _isPreview = value;
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 
@@ -84,7 +84,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _assetSource = value;
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 

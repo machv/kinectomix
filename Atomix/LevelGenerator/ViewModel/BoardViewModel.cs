@@ -30,7 +30,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _tiles = value;
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 
@@ -41,7 +41,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _paintTile = value;
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 

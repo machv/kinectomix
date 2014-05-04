@@ -27,7 +27,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _tileSelector = value;
 
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 
@@ -39,7 +39,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 _level = value;
 
-                RaisePropertyChangedEvent();
+                OnPropertyChanged();
             }
         }
 

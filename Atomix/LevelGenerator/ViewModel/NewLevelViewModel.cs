@@ -14,42 +14,42 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public string Name
         {
             get { return _name; }
-            set { _name = value; RaisePropertyChangedEvent(); }
+            set { _name = value; OnPropertyChanged(); }
         }
 
         private int _boardRows = 5;
         public int BoardRows
         {
             get { return _boardRows; }
-            set { _boardRows = value; RaisePropertyChangedEvent(); }
+            set { _boardRows = value; OnPropertyChanged(); }
         }
 
         private int _boardColumns = 5;
         public int BoardColumns
         {
             get { return _boardColumns; }
-            set { _boardColumns = value; RaisePropertyChangedEvent(); }
+            set { _boardColumns = value; OnPropertyChanged(); }
         }
 
         private int _moleculeRows = 2;
         public int MoleculeRows
         {
             get { return _moleculeRows; }
-            set { _moleculeRows = value; RaisePropertyChangedEvent(); }
+            set { _moleculeRows = value; OnPropertyChanged(); }
         }
 
         private int _moleculeColumns = 2;
         public int MoleculeColumns
         {
             get { return _moleculeColumns; }
-            set { _moleculeColumns = value; RaisePropertyChangedEvent(); }
+            set { _moleculeColumns = value; OnPropertyChanged(); }
         }
 
         private bool? _dialogResult;
         public bool? DialogResult
         {
             get { return _dialogResult; }
-            set { _dialogResult = value; RaisePropertyChangedEvent(); }
+            set { _dialogResult = value; OnPropertyChanged(); }
         }
 
         public ICommand CreateLevelCommand
