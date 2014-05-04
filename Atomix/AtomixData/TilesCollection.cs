@@ -11,12 +11,22 @@ using System.Xml.Serialization;
 namespace AtomixData
 {
     [Serializable]
-    public class TilesCollection<T> : ICollection<T>, INotifyCollectionChanged, IXmlSerializable where T : new()
+    public class TilesCollection<T> : ICollection<T>, IXmlSerializable
     {
+        protected int _rowsCount;
         [XmlAttribute]
-        public int RowsCount { get; set; }
+        public int RowsCount
+        {
+            get { return _rowsCount; }
+            set { _rowsCount = value; }
+        }
+        protected int _columnsCount;
         [XmlAttribute]
-        public int ColumnsCount { get; set; }
+        public int ColumnsCount
+        {
+            get { return _columnsCount; }
+            set { _rowsCount = value; }
+        }
 
         [ContentSerializer]
         protected T[] _tiles;
