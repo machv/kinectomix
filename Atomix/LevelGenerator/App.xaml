@@ -6,11 +6,53 @@
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
-            <ItemsControl ItemsSource="{Binding Tiles}" 
-                          Margin="3">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Image Source="{Binding AssetSource}" 
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Grid.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Width" Value="25" />
+                        <Setter Property="Height" Value="25" />
+                        <Setter Property="Margin" Value="3" />
+                    </Style>
+                </Grid.Resources>
+                
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
+                    <Button Content="+" />
+                    <Button Content="-" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal">
+                    <Button Content="+"/>
+                    <Button Content="-"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <Button Content="+"/>
+                    <Button Content="-"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Button Content="+"/>
+                    <Button Content="-"/>
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Tiles}" 
+                                  Grid.Row="1"
+                              Grid.Column="1"
+                              Margin="3">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding AssetSource}" 
                                Behavior:TilePainter.IsPaintEnabled="True"
                                Behavior:TilePainter.PaintTile="{Binding Path=DataContext.PaintTile, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                        HorizontalAlignment="Center"
@@ -18,27 +60,28 @@
                        Width="49"
                        Height="49"
                        Stretch="None">
-                            <Image.Style>
-                                <Style TargetType="Image">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsPreview}" Value="True">
-                                            <Setter Property="Opacity" Value="0.5"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Image.Style>
-                        </Image>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding Tiles.ColumnsCount}"
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPreview}" Value="True">
+                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="{Binding Tiles.ColumnsCount}"
                              Rows="{Binding Tiles.RowsCount}"
                              VerticalAlignment="Center"
                              HorizontalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+            </Grid>
         </DataTemplate>
         
         <DataTemplate DataType="{x:Type ViewModel:AvailableTilesViewModel}">
