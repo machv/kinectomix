@@ -142,42 +142,14 @@ namespace AtomixData
             OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }
 
-        public void AddColumn()
+        public void AppendColumn()
         {
-            T[] tiles = new T[RowsCount * (ColumnsCount + 1)];
-
-            for (int row = 0; row < RowsCount; row++)
-            {
-                for (int column = 0; column < ColumnsCount; column++)
-                {
-                    int index = row * ColumnsCount + column;
-                    tiles[index] = _tiles[index];
-                }
-            }
-
-            _tiles = tiles;
-            ColumnsCount += 1;
-
-            OnCollectionChanged(NotifyCollectionChangedAction.Add);
+            InsertColumn(ColumnsCount);
         }
 
-        public void RemoveColumn()
+        public void PrependColumn()
         {
-            T[] tiles = new T[RowsCount * (ColumnsCount - 1)];
-
-            for (int row = 0; row < RowsCount; row++)
-            {
-                for (int column = 0; column < (ColumnsCount - 1); column++)
-                {
-                    int index = row * ColumnsCount + column;
-                    tiles[index] = _tiles[index];
-                }
-            }
-
-            _tiles = tiles;
-            ColumnsCount -= 1;
-
-            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
+            InsertColumn(0);
         }
 
         public void Clear()
