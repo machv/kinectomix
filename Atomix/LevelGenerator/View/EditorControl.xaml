@@ -73,9 +73,13 @@
 
             <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
                 <TabItem Header="Board" Tag="Board">
+                    <!-- 
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                        <ContentPresenter Content="{Binding Level.Board}"/>
-                    </ScrollViewer>
+                    --> 
+                    <ContentPresenter Content="{Binding Level.Board}"/>
+                <!--     
+                </ScrollViewer>
+                    -->
                 </TabItem>
                 <TabItem Header="Molecule" Tag="Molecule">
                     <ContentPresenter Content="{Binding Level.Molecule}"/>
