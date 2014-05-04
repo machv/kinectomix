@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 namespace AtomixData
 {
     [Serializable]
-    public class TilesCollection<T> : ICollection<T>, IXmlSerializable
+    public class TilesCollection<T> : ICollection<T>, IXmlSerializable where T : new()
     {
         protected int _rowsCount;
         [XmlAttribute]
@@ -40,11 +40,7 @@ namespace AtomixData
         public T this[int row, int column]
         {
             get { return _tiles[GetIndex(row, column)]; }
-            set
-            {
-                _tiles[GetIndex(row, column)] = value;
-                OnCollectionChanged(NotifyCollectionChangedAction.Replace);
-            }
+            set { _tiles[GetIndex(row, column)] = value; }
         }
 
         public TilesCollection() { }
@@ -60,7 +56,7 @@ namespace AtomixData
         /// Add new empty row to the collection at specified index.
         /// </summary>
         /// <param name="rowIndex"></param>
-        public void InsertRow(int rowIndex)
+        public virtual void InsertRow(int rowIndex)
         {
             if (rowIndex < 0 || rowIndex >= RowsCount)
                 throw new ArgumentOutOfRangeException("rowIndex");
@@ -74,8 +70,6 @@ namespace AtomixData
 
             _tiles = newTiles;
             RowsCount = newRowsCount;
-
-            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }
 
         public void PreprendRow()
@@ -88,7 +82,7 @@ namespace AtomixData
             InsertRow(RowsCount);
         }
 
-        public void RemoveRow(int rowIndex)
+        public virtual void RemoveRow(int rowIndex)
         {
             if (rowIndex < 0 || rowIndex >= RowsCount)
                 throw new ArgumentOutOfRangeException("rowIndex");
@@ -102,11 +96,9 @@ namespace AtomixData
 
             _tiles = newTiles;
             RowsCount = newRowsCount;
-
-            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }
 
-        public void InsertColumn(int columnIndex)
+        public virtual void InsertColumn(int columnIndex)
         {
             if (columnIndex < 0 || columnIndex > ColumnsCount)
                 throw new ArgumentOutOfRangeException("columnIndex");
@@ -125,11 +117,9 @@ namespace AtomixData
 
             _tiles = newTiles;
             ColumnsCount = newColumnsCount;
-
-            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }
 
-        public void RemoveColumn(int columnIndex)
+        public virtual void RemoveColumn(int columnIndex)
         {
             if (columnIndex < 0 || columnIndex >= ColumnsCount)
                 throw new ArgumentOutOfRangeException("columnIndex");
@@ -148,8 +138,6 @@ namespace AtomixData
 
             _tiles = newTiles;
             ColumnsCount = newColumnsCount;
-
-            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }
 
         public void AppendColumn()
@@ -162,11 +150,9 @@ namespace AtomixData
             InsertColumn(0);
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             _tiles = new T[RowsCount * ColumnsCount];
-
-            OnCollectionChanged(NotifyCollectionChangedAction.Reset);
         }
 
         public bool Contains(T item)
@@ -181,19 +167,9 @@ namespace AtomixData
 
         int addingIndex = 0;
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-        private void OnCollectionChanged(NotifyCollectionChangedAction action)
-        {
-            if (CollectionChanged != null)
-                CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
-
-        public void Add(T item)
+        public virtual void Add(T item)
         {
             _tiles[addingIndex++] = item;
-
-            OnCollectionChanged(NotifyCollectionChangedAction.Add);
         }
 
         public int Count
