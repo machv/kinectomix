@@ -46,28 +46,66 @@ namespace AtomixData
             _tiles = new T[rows * columns];
         }
 
-        public void AddRow()
+        /// <summary>
+        /// Add new empty row to the collection at specified index.
+        /// </summary>
+        /// <param name="rowIndex"></param>
+        public void InsertRow(int rowIndex)
         {
-            T[] tiles = new T[(RowsCount + 1) * ColumnsCount];
+            if (rowIndex < 0 || rowIndex >= RowsCount)
+                throw new ArgumentOutOfRangeException("rowIndex");
 
-            for (int i = 0; i < _tiles.Length; i++)
-                tiles[i] = _tiles[i];
+            int newRowsCount = RowsCount + 1;
+            T[] newTiles = new T[ColumnsCount * newRowsCount];
 
-            _tiles = tiles;
-            RowsCount += 1;
+            int index = rowIndex * ColumnsCount;
+            Array.Copy(_tiles, 0, newTiles, 0, index);
+            Array.Copy(_tiles, index, newTiles, index + ColumnsCount, _tiles.Length - index);
 
-            OnCollectionChanged(NotifyCollectionChangedAction.Add);
+            _tiles = newTiles;
+            RowsCount = newRowsCount;
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }
 
-        public void RemoveRow()
+        public void PreprendRow()
         {
-            T[] tiles = new T[(RowsCount - 1) * ColumnsCount];
+            InsertRow(0);
+        }
 
-            for (int i = 0; i < tiles.Length; i++)
-                tiles[i] = _tiles[i];
+        public void AppendRow()
+        {
+            InsertRow(RowsCount);
+        }
 
-            _tiles = tiles;
-            RowsCount -= 1;
+        public void RemoveRow(int rowIndex)
+        {
+            if (rowIndex < 0 || rowIndex >= RowsCount)
+                throw new ArgumentOutOfRangeException("rowIndex");
+
+            int newRowsCount = RowsCount - 1;
+            T[] newTiles = new T[ColumnsCount * newRowsCount];
+
+            int index = rowIndex * ColumnsCount;
+            Array.Copy(_tiles, 0, newTiles, 0, index);
+            Array.Copy(_tiles, index + ColumnsCount, newTiles, index, _tiles.Length - index);
+
+            _tiles = newTiles;
+            RowsCount = newRowsCount;
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
+        }
+
+        public void InsertColumn(int columnIndex)
+        {
+            if (columnIndex < 0 || columnIndex > ColumnsCount)
+                throw new ArgumentOutOfRangeException("columnIndex");
+
+            int newColumnsCount = ColumnsCount + 1;
+            T[] newTiles = new T[newColumnsCount * RowsCount];
+
+            _tiles = newTiles;
+            ColumnsCount = newColumnsCount;
 
             OnCollectionChanged(NotifyCollectionChangedAction.Remove);
         }

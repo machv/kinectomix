@@ -93,7 +93,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public void AddRow(BoardTileViewModel emptyTileTemplate)
         {
             var tiles = Tiles;
-            tiles.AddRow();
+            tiles.AppendRow();
 
             for (int i = 0; i < ColumnsCount; i++)
             {
