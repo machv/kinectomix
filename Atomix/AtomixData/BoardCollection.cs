@@ -104,6 +104,38 @@ namespace AtomixData
             int newColumnsCount = ColumnsCount + 1;
             T[] newTiles = new T[newColumnsCount * RowsCount];
 
+            for (int row = 0; row < RowsCount; row++)
+            {
+                int index = row * ColumnsCount;
+                int newIndex = row * newColumnsCount;
+
+                Array.Copy(_tiles, index, newTiles, newIndex, columnIndex);
+                Array.Copy(_tiles, index + columnIndex, newTiles, newIndex + columnIndex + 1, ColumnsCount - columnIndex);
+            }
+
+            _tiles = newTiles;
+            ColumnsCount = newColumnsCount;
+
+            OnCollectionChanged(NotifyCollectionChangedAction.Remove);
+        }
+
+        public void RemoveColumn(int columnIndex)
+        {
+            if (columnIndex < 0 || columnIndex >= ColumnsCount)
+                throw new ArgumentOutOfRangeException("columnIndex");
+
+            int newColumnsCount = ColumnsCount - 1;
+            T[] newTiles = new T[newColumnsCount * RowsCount];
+
+            for (int row = 0; row < RowsCount; row++)
+            {
+                int index = row * ColumnsCount;
+                int newIndex = row * newColumnsCount;
+
+                Array.Copy(_tiles, index, newTiles, newIndex, columnIndex);
+                Array.Copy(_tiles, index + columnIndex + 1, newTiles, newIndex + columnIndex, newColumnsCount - columnIndex);
+            }
+
             _tiles = newTiles;
             ColumnsCount = newColumnsCount;
 
