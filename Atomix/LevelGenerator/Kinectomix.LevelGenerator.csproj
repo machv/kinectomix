@@ -80,6 +80,8 @@
     <Compile Include="Model\LevelFactory.cs" />
     <Compile Include="Model\LevelFileDialog.cs" />
     <Compile Include="Model\Tiles.cs" />
+    <Compile Include="Mvvm\DelegateCommandBase.cs" />
+    <Compile Include="Mvvm\DelegateCommandGeneric.cs" />
     <Compile Include="Mvvm\IFileDialogService.cs" />
     <Compile Include="TileSelectedEventArgs.cs" />
     <Compile Include="ViewModel\AvailableTilesViewModel.cs" />
