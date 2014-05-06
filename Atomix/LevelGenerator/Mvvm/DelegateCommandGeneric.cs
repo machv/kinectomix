@@ -41,6 +41,9 @@ namespace Kinectomix.LevelGenerator.Mvvm
 
         public bool CanExecute(object parameter)
         {
+            if (parameter == null)
+                return true;
+
             return _canExecute((T)parameter);
         }
 

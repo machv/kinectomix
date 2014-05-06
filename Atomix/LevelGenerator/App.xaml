@@ -28,13 +28,13 @@
                 </Grid.Resources>
                 
                 <StackPanel Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
-                    <Button Content="+" Command="{Binding ResizeBoardCommand}" CommandParameter="{x:Static ViewModel:ResizeMode.TopAdd}" />
-                    <Button Content="-" Command="{Binding ResizeBoardCommand}" CommandParameter="{x:Static ViewModel:ResizeMode.TopRemove}" />
+                    <Button Content="+" Command="{Binding InsertRowToTopCommand}" />
+                    <Button Content="-" Command="{Binding RemoveRowFromTopCommand}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal">
-                    <Button Content="+"/>
-                    <Button Content="-"/>
+                    <Button Content="+" Command="{Binding InsertRowToBottomCommand}" />
+                    <Button Content="-" Command="{Binding RemoveRowFromBottomCommand}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">

@@ -42,7 +42,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private BoardTileViewModel _paintTile; 
+        private BoardTileViewModel _paintTile;
         public BoardTileViewModel PaintTile
         {
             get { return _paintTile; }
@@ -57,7 +57,10 @@ namespace Kinectomix.LevelGenerator.ViewModel
         {
             Tiles = new ObservableTilesCollection<BoardTileViewModel>();
 
-            _resizeBoardCommand = new DelegateCommand<ResizeMode>(ResizeBoard, CanExecuteResizeBoard);
+            _insertRowToTopCommand = new DelegateCommand(InsertRowToTop, CanInsertRowToTop);
+            _insertRowToBottomCommand = new DelegateCommand(InsertRowToBottom, CanInsertRowToBottom);
+            _removeRowFromTopCommand = new DelegateCommand(RemoveRowFromTop, CanRemoveRowFromTop);
+            _removeRowFromBottomCommand = new DelegateCommand(RemoveRowFromBottom, CanRemoveRowFromBottom);
         }
         public BoardViewModel(int rowsCount, int columnsCount) : this()
         {
@@ -90,37 +93,78 @@ namespace Kinectomix.LevelGenerator.ViewModel
             //}
         }
 
-        private DelegateCommand<ResizeMode> _resizeBoardCommand;
-        public ICommand ResizeBoardCommand
+        private DelegateCommand _insertRowToTopCommand;
+        private DelegateCommand _insertRowToBottomCommand;
+        private DelegateCommand _removeRowFromTopCommand;
+        private DelegateCommand _removeRowFromBottomCommand;
+
+        public ICommand InsertRowToTopCommand
         {
-            get {
-                return _resizeBoardCommand;
-            }
+            get { return _insertRowToTopCommand; }
+        }
+        public ICommand InsertRowToBottomCommand
+        {
+            get { return _insertRowToBottomCommand; }
+        }
+        public ICommand RemoveRowFromTopCommand
+        {
+            get { return _removeRowFromTopCommand; }
+        }
+        public ICommand RemoveRowFromBottomCommand
+        {
+            get { return _removeRowFromBottomCommand; }
         }
 
-        protected void ResizeBoard(ResizeMode mode)
+        protected void InsertRowToTop()
         {
-            switch (mode)
-            {
-                case ResizeMode.TopAdd:
-                    break;
-                case ResizeMode.TopRemove:
-                    break;
-            }
+            Tiles.InsertRow(0);
+
+            RaiseChanged();
+        }
+        private bool CanInsertRowToTop(object parameter)
+        {
+            return true;
         }
 
-        private bool CanExecuteResizeBoard(ResizeMode mode)
+        protected void InsertRowToBottom()
         {
-            switch (mode)
-            {
-                case ResizeMode.TopAdd:
-                    return true;
-                    break;
-                case ResizeMode.TopRemove:
-                    break;
-            }
+            Tiles.InsertRow(Tiles.RowsCount);
 
-            return false;
+            RaiseChanged();
+        }
+        private bool CanInsertRowToBottom(object parameter)
+        {
+            return true;
+        }
+
+        protected void RemoveRowFromTop()
+        {
+            Tiles.RemoveRow(0);
+
+            RaiseChanged();
+        }
+        private bool CanRemoveRowFromTop(object parameter)
+        {
+            return Tiles.RowsCount > 1;
+        }
+
+        protected void RemoveRowFromBottom()
+        {
+            Tiles.RemoveRow(Tiles.RowsCount - 1);
+
+            RaiseChanged();
+        }
+        private bool CanRemoveRowFromBottom(object parameter)
+        {
+            return Tiles.RowsCount > 1;
+        }
+
+        private void RaiseChanged()
+        {
+            _removeRowFromTopCommand.RaiseCanExecuteChanged();
+            _removeRowFromBottomCommand.RaiseCanExecuteChanged();
+            _insertRowToTopCommand.RaiseCanExecuteChanged();
+            _insertRowToBottomCommand.RaiseCanExecuteChanged();
         }
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)

@@ -58,7 +58,7 @@ namespace AtomixData
         /// <param name="rowIndex"></param>
         public virtual void InsertRow(int rowIndex)
         {
-            if (rowIndex < 0 || rowIndex >= RowsCount)
+            if (rowIndex < 0 || rowIndex > _rowCount)
                 throw new ArgumentOutOfRangeException("rowIndex");
 
             int newRowsCount = RowsCount + 1;
@@ -92,7 +92,7 @@ namespace AtomixData
 
             int index = rowIndex * ColumnsCount;
             Array.Copy(_tiles, 0, newTiles, 0, index);
-            Array.Copy(_tiles, index + ColumnsCount, newTiles, index, _tiles.Length - index);
+            Array.Copy(_tiles, index + ColumnsCount, newTiles, index, _tiles.Length - index - _columnCount);
 
             _tiles = newTiles;
             _rowCount = newRowsCount;
