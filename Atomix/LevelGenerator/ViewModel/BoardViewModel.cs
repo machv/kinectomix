@@ -7,9 +7,17 @@ using System.Threading.Tasks;
 using System.Windows;
 using AtomixData;
 using Kinectomix.LevelGenerator.Model;
+using System.Windows.Input;
+using Kinectomix.LevelGenerator.Mvvm;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
+    public enum ResizeMode
+    {
+        TopAdd,
+        TopRemove,
+    }
+
     public class BoardViewModel : Mvvm.NotifyPropertyBase // DependencyObject
     {
         //public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(BoardViewModel));
@@ -48,6 +56,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public BoardViewModel()
         {
             Tiles = new ObservableTilesCollection<BoardTileViewModel>();
+
+            _resizeBoardCommand = new DelegateCommand<ResizeMode>(ResizeBoard, CanExecuteResizeBoard);
         }
         public BoardViewModel(int rowsCount, int columnsCount) : this()
         {
@@ -78,6 +88,39 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
             //    tiles[RowsCount - 1, i] = tile;
             //}
+        }
+
+        private DelegateCommand<ResizeMode> _resizeBoardCommand;
+        public ICommand ResizeBoardCommand
+        {
+            get {
+                return _resizeBoardCommand;
+            }
+        }
+
+        protected void ResizeBoard(ResizeMode mode)
+        {
+            switch (mode)
+            {
+                case ResizeMode.TopAdd:
+                    break;
+                case ResizeMode.TopRemove:
+                    break;
+            }
+        }
+
+        private bool CanExecuteResizeBoard(ResizeMode mode)
+        {
+            switch (mode)
+            {
+                case ResizeMode.TopAdd:
+                    return true;
+                    break;
+                case ResizeMode.TopRemove:
+                    break;
+            }
+
+            return false;
         }
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)

@@ -9,13 +9,13 @@
             
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
@@ -28,8 +28,8 @@
                 </Grid.Resources>
                 
                 <StackPanel Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
-                    <Button Content="+" />
-                    <Button Content="-" />
+                    <Button Content="+" Command="{Binding ResizeBoardCommand}" CommandParameter="{x:Static ViewModel:ResizeMode.TopAdd}" />
+                    <Button Content="-" Command="{Binding ResizeBoardCommand}" CommandParameter="{x:Static ViewModel:ResizeMode.TopRemove}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal">
