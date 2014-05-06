@@ -7,21 +7,17 @@ namespace Kinectomix.LevelGenerator.Mvvm
     {
         public DelegateCommand(Action<T> action)
         {
-            _action = new Action<object>(o => action((T)o)); 
+            _action = action;
         }
 
-        public DelegateCommand(Action<T> action, ICommandOnCanExecute canExecute)
+        public DelegateCommand(Action<T> action, Func<T, bool> canExecute)
         {
-            _action = new Action<object>(o => action((T)o));
+            _action = action;
             _canExecute = canExecute;
         }
 
-        private readonly Action<object> _action;
-        private readonly ICommandOnCanExecute _canExecute;
-
-        //public delegate void ICommandOnExecute(object parameter);
-        public delegate bool ICommandOnCanExecute(object parameter);
-
+        private readonly Action<T> _action;
+        private readonly Func<T, bool> _canExecute;
 
         public bool CanExecute(T parameter)
         {
@@ -40,12 +36,12 @@ namespace Kinectomix.LevelGenerator.Mvvm
 
         public void Execute(object parameter)
         {
-            _action(parameter);
+            _action((T)parameter);
         }
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute(parameter);
+            return _canExecute((T)parameter);
         }
 
 #pragma warning disable 67
