@@ -61,10 +61,10 @@ namespace Kinectomix.LevelGenerator.ViewModel
             _insertRowToBottomCommand = new DelegateCommand(InsertRowToBottom, CanInsertRowToBottom);
             _removeRowFromTopCommand = new DelegateCommand(RemoveRowFromTop, CanRemoveRowFromTop);
             _removeRowFromBottomCommand = new DelegateCommand(RemoveRowFromBottom, CanRemoveRowFromBottom);
-            _insertColumnToTopCommand = new DelegateCommand(InsertColumnToTop, CanInsertRowToTop);
-            _insertColumnToBottomCommand = new DelegateCommand(InsertColumnToBottom, CanInsertColumnToBottom);
-            _removeColumnFromTopCommand = new DelegateCommand(RemoveColumnFromTop, CanRemoveColumnFromTop);
-            _removeColumnFromBottomCommand = new DelegateCommand(RemoveColumnFromBottom, CanRemoveColumnFromBottom);
+            _insertColumnToLeftCommand = new DelegateCommand(InsertColumnToLeft, CanInsertColumnToLeft);
+            _insertColumnToRightCommand = new DelegateCommand(InsertColumnToRight, CanInsertColumnToRight);
+            _removeColumnFromLeftCommand = new DelegateCommand(RemoveColumnFromLeft, CanRemoveColumnFromLeft);
+            _removeColumnFromRightCommand = new DelegateCommand(RemoveColumnFromRight, CanRemoveColumnFromRight);
         }
         public BoardViewModel(int rowsCount, int columnsCount) : this()
         {
@@ -101,10 +101,10 @@ namespace Kinectomix.LevelGenerator.ViewModel
         private DelegateCommand _insertRowToBottomCommand;
         private DelegateCommand _removeRowFromTopCommand;
         private DelegateCommand _removeRowFromBottomCommand;
-        private DelegateCommand _insertColumnToTopCommand;
-        private DelegateCommand _insertColumnToBottomCommand;
-        private DelegateCommand _removeColumnFromTopCommand;
-        private DelegateCommand _removeColumnFromBottomCommand;
+        private DelegateCommand _insertColumnToLeftCommand;
+        private DelegateCommand _insertColumnToRightCommand;
+        private DelegateCommand _removeColumnFromLeftCommand;
+        private DelegateCommand _removeColumnFromRightCommand;
 
         public ICommand InsertRowToTopCommand
         {
@@ -122,21 +122,21 @@ namespace Kinectomix.LevelGenerator.ViewModel
         {
             get { return _removeRowFromBottomCommand; }
         }
-        public ICommand InsertColumnToTopCommand
+        public ICommand InsertColumnToLeftCommand
         {
-            get { return _insertColumnToTopCommand; }
+            get { return _insertColumnToLeftCommand; }
         }
-        public ICommand InsertColumnToBottomCommand
+        public ICommand InsertColumnToRightCommand
         {
-            get { return _insertColumnToBottomCommand; }
+            get { return _insertColumnToRightCommand; }
         }
-        public ICommand RemoveColumnFromTopCommand
+        public ICommand RemoveColumnFromLeftCommand
         {
-            get { return _removeColumnFromTopCommand; }
+            get { return _removeColumnFromLeftCommand; }
         }
-        public ICommand RemoveColumnFromBottomCommand
+        public ICommand RemoveColumnFromRightCommand
         {
-            get { return _removeColumnFromBottomCommand; }
+            get { return _removeColumnFromRightCommand; }
         }
 
         protected void InsertRowToTop()
@@ -182,46 +182,46 @@ namespace Kinectomix.LevelGenerator.ViewModel
         {
             return Tiles.RowsCount > 1;
         }
-        protected void InsertColumnToTop()
+        protected void InsertColumnToLeft()
         {
             Tiles.InsertRow(0);
 
             RaiseChanged();
         }
-        private bool CanInsertColumnToTop(object parameter)
+        private bool CanInsertColumnToLeft(object parameter)
         {
             return true;
         }
 
-        protected void InsertColumnToBottom()
+        protected void InsertColumnToRight()
         {
             Tiles.InsertColumn(Tiles.ColumnsCount);
 
             RaiseChanged();
         }
-        private bool CanInsertColumnToBottom(object parameter)
+        private bool CanInsertColumnToRight(object parameter)
         {
             return true;
         }
 
-        protected void RemoveColumnFromTop()
+        protected void RemoveColumnFromLeft()
         {
             Tiles.RemoveColumn(0);
 
             RaiseChanged();
         }
-        private bool CanRemoveColumnFromTop(object parameter)
+        private bool CanRemoveColumnFromLeft(object parameter)
         {
             return Tiles.ColumnsCount > 1;
         }
 
-        protected void RemoveColumnFromBottom()
+        protected void RemoveColumnFromRight()
         {
             Tiles.RemoveColumn(Tiles.ColumnsCount - 1);
 
             RaiseChanged();
         }
-        private bool CanRemoveColumnFromBottom(object parameter)
+        private bool CanRemoveColumnFromRight(object parameter)
         {
             return Tiles.ColumnsCount > 1;
         }
@@ -232,10 +232,10 @@ namespace Kinectomix.LevelGenerator.ViewModel
             _removeRowFromBottomCommand.RaiseCanExecuteChanged();
             _insertRowToTopCommand.RaiseCanExecuteChanged();
             _insertRowToBottomCommand.RaiseCanExecuteChanged();
-            _removeColumnFromTopCommand.RaiseCanExecuteChanged();
-            _removeColumnFromBottomCommand.RaiseCanExecuteChanged();
-            _insertColumnToTopCommand.RaiseCanExecuteChanged();
-            _insertColumnToBottomCommand.RaiseCanExecuteChanged();
+            _removeColumnFromLeftCommand.RaiseCanExecuteChanged();
+            _removeColumnFromRightCommand.RaiseCanExecuteChanged();
+            _insertColumnToLeftCommand.RaiseCanExecuteChanged();
+            _insertColumnToRightCommand.RaiseCanExecuteChanged();
         }
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)
