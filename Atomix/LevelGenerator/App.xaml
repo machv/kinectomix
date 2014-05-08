@@ -38,12 +38,12 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right">
-                    <Button Content="+" Command="{Binding AddColumnToLeftCommand}"/>
+                    <Button Content="+" Command="{Binding InsertColumnToLeftCommand}"/>
                     <Button Content="-" Command="{Binding RemoveColumnFromLeftCommand}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <Button Content="+" Command="{Binding AddColumnToRightCommand}" />
+                    <Button Content="+" Command="{Binding InsertColumnToRightCommand}" />
                     <Button Content="-" Command="{Binding RemoveColumnFromRightCommand}" />
                 </StackPanel>
 
