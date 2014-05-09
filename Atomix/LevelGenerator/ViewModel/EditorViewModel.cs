@@ -90,31 +90,25 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         private void NewLevel()
         {
-            View.NewLevelWindow newLevelWindow = new View.NewLevelWindow();
+            //TODO check if field changed? if yes, allow save before new.
 
-            bool? result = newLevelWindow.ShowDialog();
-            if (result.HasValue && result.Value)
-            {
-                NewLevelViewModel newLevelVm = newLevelWindow.DataContext as NewLevelViewModel;
+            LevelViewModel level = new LevelViewModel();
+            level.Board = new BoardViewModel(Properties.Settings.Default.DefaultBoardRows, Properties.Settings.Default.DefaultBoardColumns);
+            level.Board.PopulateEmptyTiles(_tiles["Empty"]);
 
-                LevelViewModel level = new LevelViewModel();
-                level.Board = new BoardViewModel(newLevelVm.BoardRows, newLevelVm.BoardColumns);
-                level.Board.PopulateEmptyTiles(_tiles["Empty"]);
+            level.Molecule = new BoardViewModel(Properties.Settings.Default.DefaultMoleculeRows, Properties.Settings.Default.DefaultMoleculeColumns);
+            level.Molecule.PopulateEmptyTiles(_tiles["Empty"]);
 
-                level.Molecule = new BoardViewModel(newLevelVm.MoleculeRows, newLevelVm.MoleculeColumns);
-                level.Molecule.PopulateEmptyTiles(_tiles["Empty"]);
+            _tiles.Clear();
+            _tiles.LoadSystemAssets();
+            _tiles.LoadUserAssets(_userAssetsPath);
 
-                _tiles.Clear();
-                _tiles.LoadSystemAssets();
-                _tiles.LoadUserAssets(_userAssetsPath);
+            Level = level;
 
-                Level = level;
+            // Reset to Board tab
+            SelectedTab = 0;
 
-                // Reset to Board tab
-                SelectedTab = 0;
-
-                _saveAsLevelCommand.RaiseCanExecuteChanged();
-            }
+            _saveAsLevelCommand.RaiseCanExecuteChanged();
         }
 
         private int _selectedTab = 0;

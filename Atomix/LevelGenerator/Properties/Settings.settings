@@ -11,5 +11,17 @@
     <Setting Name="TileHeight" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">49</Value>
     </Setting>
+    <Setting Name="DefaultBoardRows" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="DefaultBoardColumns" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="DefaultMoleculeRows" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="DefaultMoleculeColumns" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

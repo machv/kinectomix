@@ -58,5 +58,53 @@ namespace Kinectomix.LevelGenerator.Properties {
                 this["TileHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int DefaultBoardRows {
+            get {
+                return ((int)(this["DefaultBoardRows"]));
+            }
+            set {
+                this["DefaultBoardRows"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int DefaultBoardColumns {
+            get {
+                return ((int)(this["DefaultBoardColumns"]));
+            }
+            set {
+                this["DefaultBoardColumns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int DefaultMoleculeRows {
+            get {
+                return ((int)(this["DefaultMoleculeRows"]));
+            }
+            set {
+                this["DefaultMoleculeRows"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int DefaultMoleculeColumns {
+            get {
+                return ((int)(this["DefaultMoleculeColumns"]));
+            }
+            set {
+                this["DefaultMoleculeColumns"] = value;
+            }
+        }
     }
 }
