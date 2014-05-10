@@ -1,50 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AtomixData;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Kinectomix.LevelGenerator
 {
-    public class BondsVisualiser : Control
+    public class BondsVisualiser : FrameworkElement
     {
-        static BondsVisualiser()
+        public static readonly DependencyProperty TopLeftBondProperty = DependencyProperty.Register("TopLeftBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TopBondProperty = DependencyProperty.Register("TopBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TopRightBondProperty = DependencyProperty.Register("TopRightBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty RightBondProperty = DependencyProperty.Register("RightBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty BottomRightBondProperty = DependencyProperty.Register("BottomRightBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty BottomBondProperty = DependencyProperty.Register("BottomBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty BottomLeftBondProperty = DependencyProperty.Register("BottomLeftBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty LeftBondProperty = DependencyProperty.Register("LeftBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+
+        public BondArity TopBond
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(BondsVisualiser), new FrameworkPropertyMetadata(typeof(BondsVisualiser)));
+            get { return (BondArity)GetValue(TopBondProperty); }
+            set { SetValue(TopBondProperty, value); }
         }
 
-        protected override Size MeasureOverride(Size constraint)
+
+        public BondArity TopRightBond
         {
-            return base.MeasureOverride(constraint);
+            get { return (BondArity)GetValue(TopRightBondProperty); }
+            set { SetValue(TopRightBondProperty, value); }
+        }
+
+        public BondsVisualiser()
+        {
+            ClipToBounds = true;
+        }
+
+        private void RenderBond(DrawingContext drawingContext, int arity, int angle)
+        {
+            if (arity > 0)
+            {
+                int penWidth = 2;
+                int gap = 2;
+                Pen pen = new Pen(new SolidColorBrush(Colors.Black), penWidth);
+                Point center = new Point(ActualWidth / 2, ActualHeight / 2);
+                double rel = ActualWidth - Math.Sqrt(ActualWidth * ActualWidth + ActualHeight * ActualHeight);
+                double centerY = ActualHeight / 2;
+                double width = arity * penWidth + (arity - 1) * gap;
+                double start = ActualWidth / 2 - (width / 2);
+
+                for (int i = 0; i < arity; i++)
+                {
+                    Point point1 = RotatePoint(new Point(start, rel), center, angle);
+                    Point point2 = RotatePoint(new Point(start, centerY), center, angle);
+                    drawingContext.DrawLine(pen, point1, point2);
+
+                    start += penWidth + gap;
+                }
+            }
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            //Line line = new Line();
-            //Thickness thickness = new Thickness(101, -11, 362, 250);
-            //line.Margin = thickness;
-            //line.Visibility = System.Windows.Visibility.Visible;
-            //line.StrokeThickness = 4;
-            //line.Stroke = System.Windows.Media.Brushes.Black;
-            //line.X1 = 10;
-            //line.X2 = 40;
-            //line.Y1 = 70;
-            //line.Y2 = 70;
+            //drawingContext.PushClip(new RectangleGeometry(new Rect(new Size(ActualWidth, ActualHeight))));
 
-            Pen LinePen = new Pen(new SolidColorBrush(Colors.Green), 3.0d);
+            
 
-            drawingContext.DrawLine(LinePen, new Point(0, 0), new Point(20, 20));
+            RenderBond(drawingContext, (int)TopBond, 0);
+
+            //drawingContext.PushTransform(new RotateTransform(45));
+            RenderBond(drawingContext, (int)TopRightBond, 45);
+            //drawingContext.Pop();
+
+            //drawingContext.Pop();
 
             base.OnRender(drawingContext);
+        }
+
+        static Point RotatePoint(Point pointToRotate, Point centerPoint, double angleInDegrees)
+        {
+            double radians = angleInDegrees * (Math.PI / 180);
+            double cosTheta = Math.Cos(radians);
+            double sinTheta = Math.Sin(radians);
+            return new Point
+            {
+                X = (int)(cosTheta * (pointToRotate.X - centerPoint.X) - sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
+                Y = (int)(sinTheta * (pointToRotate.X - centerPoint.X) + cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y)
+            };
         }
     }
 }
