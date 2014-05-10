@@ -30,9 +30,9 @@ namespace Kinectomix.LevelGenerator
             set { SetValue(TopRightBondProperty, value); }
         }
 
-        public BondsVisualiser()
+        static BondsVisualiser()
         {
-            ClipToBounds = true;
+            ClipToBoundsProperty.OverrideMetadata(typeof(BondsVisualiser), new PropertyMetadata(true));
         }
 
         private void RenderBond(DrawingContext drawingContext, int arity, int angle)
