@@ -109,17 +109,10 @@
                                               RelativeSource={RelativeSource FindAncestor, 
                                               AncestorType={x:Type ListBoxItem}},
                                               Path=IsSelected}"
+                                              Background="Transparent"
+                                              Margin="0"
+                                              Padding="0"
                                               BorderThickness="0">
-                                    <ToggleButton.Style>
-                                        <Style TargetType="{x:Type ToggleButton}">
-                                            <Setter Property="Background" Value="Transparent"/>
-                                            <Style.Triggers>
-                                                <Trigger Property="IsChecked" Value="true">
-                                                    <Setter Property="Background" Value="Transparent"/>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ToggleButton.Style>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
@@ -128,7 +121,7 @@
 
                                         <Image Grid.Row="0" Source="{Binding AssetSource}" />
                                         <TextBlock Grid.Row="1" Text="{Binding Asset}" TextAlignment="Center"/>
-                                    </Grid>
+                                    </Grid> 
                                 </ToggleButton>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
