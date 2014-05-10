@@ -20,21 +20,47 @@ namespace Kinectomix.LevelGenerator.Behavior
         private static void OnIsBondingEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             FrameworkElement element = sender as FrameworkElement;
-            AdornerLayer parentAdorner = AdornerLayer.GetAdornerLayer(element);
 
             bool isEnabled = (bool)e.NewValue;
             if (isEnabled)
             {
-                parentAdorner.Add(new BondAdorner(element));
+                element.MouseEnter += Element_MouseEnter;
+                element.MouseLeave += Element_MouseLeave;
             }
-            else {
-                Adorner[] toRemoveArray = parentAdorner.GetAdorners(element);
-                if (toRemoveArray != null)
-                {
-                    for (int x = 0; x < toRemoveArray.Length; x++)
+            else
+            {
+                element.MouseEnter -= Element_MouseEnter;
+                element.MouseLeave -= Element_MouseLeave;
+            }
+        }
+
+        private static void AddBondAdorner(FrameworkElement element)
+        {
+            AdornerLayer parentAdorner = AdornerLayer.GetAdornerLayer(element);
+            parentAdorner.Add(new BondAdorner(element));
+        }
+
+        private static void RemoveBondAdorners(FrameworkElement element)
+        {
+            AdornerLayer parentAdorner = AdornerLayer.GetAdornerLayer(element);
+
+            Adorner[] toRemoveArray = parentAdorner.GetAdorners(element);
+            if (toRemoveArray != null)
+            {
+                for (int x = 0; x < toRemoveArray.Length; x++)
+                    if (toRemoveArray[x] is BondAdorner)
                         parentAdorner.Remove(toRemoveArray[x]);
-                }
             }
+        }
+
+        private static void Element_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            AddBondAdorner(sender as FrameworkElement);
+        }
+
+        private static void Element_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            RemoveBondAdorners(sender as FrameworkElement);
         }
     }
 }

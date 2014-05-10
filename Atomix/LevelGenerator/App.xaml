@@ -8,6 +8,7 @@
     <Application.Resources>
         <Converter:NegateConverter x:Key="NegateConverter" />
         <Converter:AllTrueConveter x:Key="AllTrueConveter" />
+        <Converter:NullToTrueConverter x:Key="NullToTrueConverter" />
         
         <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
 
@@ -73,8 +74,9 @@
                                        Stretch="None">
                                     <Behavior:TileBonds.IsBondingEnabled>
                                         <MultiBinding Converter="{StaticResource AllTrueConveter}">
-                                            <Binding Path="IsFixed" Converter="{StaticResource NegateConverter}"/>
-                                            <Binding Path="IsPreview" Converter="{StaticResource NegateConverter}"/>
+                                            <Binding Path="IsFixed" Converter="{StaticResource NegateConverter}" />
+                                            <Binding Path="IsPreview" Converter="{StaticResource NegateConverter}" />
+                                            <Binding Path="DataContext.PaintTile" RelativeSource="{RelativeSource AncestorType=ItemsControl}" Converter="{StaticResource NullToTrueConverter}" />
                                         </MultiBinding>
                                     </Behavior:TileBonds.IsBondingEnabled>
                                     <Image.Style>

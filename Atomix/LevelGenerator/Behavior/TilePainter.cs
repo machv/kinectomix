@@ -78,6 +78,9 @@ namespace Kinectomix.LevelGenerator.Behavior
         private static BoardTileViewModel _originalTile;
         private static void Tile_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            if (_paintTile == null)
+                return;
+
             FrameworkElement element = sender as FrameworkElement;
 
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -88,6 +91,11 @@ namespace Kinectomix.LevelGenerator.Behavior
             {
                 // Just preview
                 BoardTileViewModel tile = element.DataContext as BoardTileViewModel;
+
+                // Do not preview same drawing
+                if (_paintTile.Asset == tile.Asset && _paintTile.AssetSource == tile.AssetSource)
+                    return;
+
                 _originalTile = new BoardTileViewModel(new BoardTile());
                 _originalTile.Asset = tile.Asset;
                 _originalTile.AssetSource = tile.AssetSource;
