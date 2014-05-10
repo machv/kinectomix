@@ -4,6 +4,7 @@
              xmlns:ViewModel="clr-namespace:Kinectomix.LevelGenerator.ViewModel"
              xmlns:Behavior="clr-namespace:Kinectomix.LevelGenerator.Behavior"
              xmlns:Converter="clr-namespace:Kinectomix.LevelGenerator.Converter"
+             xmlns:l="clr-namespace:Kinectomix.LevelGenerator"
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
         <Converter:NegateConverter x:Key="NegateConverter" />
@@ -64,6 +65,8 @@
                               Margin="3">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
+                                <Grid>
+                                    <l:BondsVisualiser />
                                 <Image Source="{Binding AssetSource}" 
                                        Behavior:TilePainter.IsPaintEnabled="True"
                                        Behavior:TilePainter.PaintTile="{Binding Path=DataContext.PaintTile, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
@@ -89,6 +92,7 @@
                                         </Style>
                                     </Image.Style>
                                 </Image>
+                                </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsPanel>
