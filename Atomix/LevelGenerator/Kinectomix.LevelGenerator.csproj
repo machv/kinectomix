@@ -70,6 +70,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behavior\TilePainter.cs" />
+    <Compile Include="BondAdorner.cs" />
     <Compile Include="Converter\NotNullToVisibilityConverter.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="Model\DependencyPropertyCollection.cs" />

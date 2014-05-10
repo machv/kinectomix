@@ -6,7 +6,7 @@
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
-            
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -26,7 +26,7 @@
                         <Setter Property="Margin" Value="3" />
                     </Style>
                 </Grid.Resources>
-                
+
                 <StackPanel Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
                     <Button Content="+" Command="{Binding InsertRowToTopCommand}" />
                     <Button Content="-" Command="{Binding RemoveRowFromTopCommand}" />
@@ -90,9 +90,9 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>
-            
+
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type ViewModel:AvailableTilesViewModel}">
             <StackPanel>
                 <TextBlock Text="Available tiles" FontWeight="Bold" />
@@ -105,15 +105,31 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
+                                <ToggleButton IsChecked="{Binding 
+                                              RelativeSource={RelativeSource FindAncestor, 
+                                              AncestorType={x:Type ListBoxItem}},
+                                              Path=IsSelected}"
+                                              BorderThickness="0">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="{x:Type ToggleButton}">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsChecked" Value="true">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
 
-                                    <Image Grid.Row="0" Source="{Binding AssetSource}" />
-                                    <TextBlock Grid.Row="1" Text="{Binding Asset}" TextAlignment="Center"/>
-                                </Grid>
+                                        <Image Grid.Row="0" Source="{Binding AssetSource}" />
+                                        <TextBlock Grid.Row="1" Text="{Binding Asset}" TextAlignment="Center"/>
+                                    </Grid>
+                                </ToggleButton>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
