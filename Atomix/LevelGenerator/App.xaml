@@ -3,8 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ViewModel="clr-namespace:Kinectomix.LevelGenerator.ViewModel"
              xmlns:Behavior="clr-namespace:Kinectomix.LevelGenerator.Behavior"
+             xmlns:Converter="clr-namespace:Kinectomix.LevelGenerator.Converter"
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
+        <Converter:NegateConverter x:Key="NegateConverter" />
+        
         <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
 
             <Grid>
@@ -60,8 +63,9 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding AssetSource}" 
-                               Behavior:TilePainter.IsPaintEnabled="True"
-                               Behavior:TilePainter.PaintTile="{Binding Path=DataContext.PaintTile, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                       Behavior:TilePainter.IsPaintEnabled="True"
+                                       Behavior:TilePainter.PaintTile="{Binding Path=DataContext.PaintTile, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                       Behavior:TileBonds.IsBondingEnabled="{Binding IsFixed, Converter={StaticResource NegateConverter}}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Width="49"
@@ -103,6 +107,12 @@
                                 <StackPanel Orientation="Horizontal"/>
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                                <Setter Property="Margin" Value="1"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <ToggleButton IsChecked="{Binding 
@@ -111,9 +121,8 @@
                                               Path=IsSelected}"
                                               Background="Transparent"
                                               Margin="0"
-                                              Padding="0"
                                               BorderThickness="0">
-                                    <Grid>
+                                    <Grid Margin="3">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition />
