@@ -69,8 +69,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behavior\TileBonds.cs" />
     <Compile Include="Behavior\TilePainter.cs" />
     <Compile Include="BondAdorner.cs" />
+    <Compile Include="Converter\AllTrueConveter.cs" />
+    <Compile Include="Converter\NegateConverter.cs" />
     <Compile Include="Converter\NotNullToVisibilityConverter.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="Model\DependencyPropertyCollection.cs" />

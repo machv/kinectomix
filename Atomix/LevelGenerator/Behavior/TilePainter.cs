@@ -114,6 +114,7 @@ namespace Kinectomix.LevelGenerator.Behavior
                 selectedTile.Asset = template.Asset;
                 selectedTile.AssetSource = template.AssetSource;
                 selectedTile.AssetFile = template.AssetFile;
+                selectedTile.IsFixed = template.IsFixed;
                 selectedTile.IsPreview = isPreview;
             }
         }
