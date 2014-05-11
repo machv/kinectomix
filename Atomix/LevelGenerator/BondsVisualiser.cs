@@ -67,49 +67,45 @@ namespace Kinectomix.LevelGenerator
         {
             if (arity > 0)
             {
-                int penWidth = 2;
-                int gap = 2;
+                drawingContext.PushTransform(new RotateTransform(angle, RenderSize.Width / 2, RenderSize.Height / 2));
+
+                double penWidth = 2;
+                double gap = 2;
                 Pen pen = new Pen(new SolidColorBrush(Colors.Black), penWidth);
-                Point center = new Point(ActualWidth / 2, ActualHeight / 2);
-                double rel = ActualWidth - Math.Sqrt(ActualWidth * ActualWidth + ActualHeight * ActualHeight);
-                double centerY = ActualHeight / 2;
+                double rel = RenderSize.Width - RenderSize.Height * RenderSize.Width;
+                double centerY = RenderSize.Height / 2;
                 double width = arity * penWidth + (arity - 1) * gap;
-                double start = ActualWidth / 2 - (width / 2);
+                double start = RenderSize.Width / 2 - (width / 2);
 
                 for (int i = 0; i < arity; i++)
                 {
-                    Point point1 = RotatePoint(new Point(start, rel), center, angle);
-                    Point point2 = RotatePoint(new Point(start, centerY), center, angle);
+                    Point point1 = new Point(start, rel);
+                    Point point2 = new Point(start, centerY);
+                    if (angle > 90)
+                    {
+                        point1.X += penWidth;
+                        point2.X += penWidth;
+                    }
                     drawingContext.DrawLine(pen, point1, point2);
 
                     start += penWidth + gap;
                 }
+
+                drawingContext.Pop();
             }
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
             RenderBond(drawingContext, (int)TopBond, 0);
-
-            //drawingContext.PushTransform(new RotateTransform(45));
             RenderBond(drawingContext, (int)TopRightBond, 45);
-
+            RenderBond(drawingContext, (int)RightBond, 90);
+            RenderBond(drawingContext, (int)BottomRightBond, 135);
+            RenderBond(drawingContext, (int)BottomBond, 180);
             RenderBond(drawingContext, (int)BottomLeftBond, 225);
-            //drawingContext.Pop();
+            RenderBond(drawingContext, (int)LeftBond, 270);
 
             base.OnRender(drawingContext);
-        }
-
-        static Point RotatePoint(Point pointToRotate, Point centerPoint, double angleInDegrees)
-        {
-            double radians = angleInDegrees * (Math.PI / 180);
-            double cosTheta = Math.Cos(radians);
-            double sinTheta = Math.Sin(radians);
-            return new Point
-            {
-                X = (int)(cosTheta * (pointToRotate.X - centerPoint.X) - sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
-                Y = (int)(sinTheta * (pointToRotate.X - centerPoint.X) + cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y)
-            };
         }
     }
 }
