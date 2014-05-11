@@ -71,7 +71,7 @@ namespace Kinectomix.LevelGenerator
 
                 double penWidth = 2;
                 double gap = 2;
-                Pen pen = new Pen(new SolidColorBrush(Colors.Black), penWidth);
+                Pen pen = new Pen(new SolidColorBrush(Colors.DarkGray), penWidth);
                 double rel = RenderSize.Width - RenderSize.Height * RenderSize.Width;
                 double centerY = RenderSize.Height / 2;
                 double width = arity * penWidth + (arity - 1) * gap;
@@ -97,14 +97,6 @@ namespace Kinectomix.LevelGenerator
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            var m = new Matrix();
-            m.RotateAt(45, RenderSize.Width / 2, RenderSize.Height / 2);
-
-            var clip = new Rect(RenderSize);
-            clip.Transform(m);
-
-            drawingContext.PushClip(new RectangleGeometry(clip));
-
             RenderBond(drawingContext, (int)TopBond, 0);
             RenderBond(drawingContext, (int)TopRightBond, 45);
             RenderBond(drawingContext, (int)RightBond, 90);
@@ -112,8 +104,6 @@ namespace Kinectomix.LevelGenerator
             RenderBond(drawingContext, (int)BottomBond, 180);
             RenderBond(drawingContext, (int)BottomLeftBond, 225);
             RenderBond(drawingContext, (int)LeftBond, 270);
-
-            drawingContext.Pop();
 
             base.OnRender(drawingContext);
         }
