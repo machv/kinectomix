@@ -65,6 +65,78 @@ namespace Kinectomix.LevelGenerator.ViewModel
                 OnPropertyChanged();
             }
         }
+        public BondType TopLeftBond
+        {
+            get { return _tile.TopLeftBond; }
+            set
+            {
+                _tile.TopLeftBond = value;
+                OnPropertyChanged();
+            }
+        }
+        public BondType TopBond
+        {
+            get { return _tile.TopBond; }
+            set
+            {
+                _tile.TopBond = value;
+                OnPropertyChanged();
+            }
+        }
+        public BondType TopRightBond
+        {
+            get { return _tile.TopRightBond; }
+            set
+            {
+                _tile.TopRightBond = value;
+                OnPropertyChanged();
+            }
+        }
+        public BondType RightBond
+        {
+            get { return _tile.RightBond; }
+            set
+            {
+                _tile.RightBond = value;
+                OnPropertyChanged();
+            }
+        }
+        public BondType BottomRightBond
+        {
+            get { return _tile.BottomRightBond; }
+            set
+            {
+                _tile.BottomRightBond = value;
+                OnPropertyChanged();
+            }
+        }
+        public BondType BottomBond
+        {
+            get { return _tile.BottomBond; }
+            set
+            {
+                _tile.BottomBond = value;
+                OnPropertyChanged();
+            }
+        }
+        public BondType BottomLeftBond
+        {
+            get { return _tile.BottomLeftBond; }
+            set
+            {
+                _tile.BottomLeftBond = value;
+                OnPropertyChanged();
+            }
+        }
+        public BondType LeftBond
+        {
+            get { return _tile.LeftBond; }
+            set
+            {
+                _tile.LeftBond = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool _isPreview;
         public bool IsPreview

@@ -27,6 +27,15 @@ namespace AtomixData
         /// <summary>
         /// Constructs new instance of BoardTile class where tile is fixed by default.
         /// </summary>
+        public BondType TopLeftBond { get; set; }
+        public BondType TopBond { get; set; }
+        public BondType TopRightBond { get; set; }
+        public BondType RightBond { get; set; }
+        public BondType BottomRightBond { get; set; }
+        public BondType BottomBond { get; set; }
+        public BondType BottomLeftBond { get; set; }
+        public BondType LeftBond { get; set; }
+
         public BoardTile()
         {
             IsFixed = true;
