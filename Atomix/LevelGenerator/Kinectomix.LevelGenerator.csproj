@@ -69,10 +69,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FrameworkElementAdorner.cs" />
     <Compile Include="Behavior\TileBonds.cs" />
     <Compile Include="Behavior\TilePainter.cs" />
     <Compile Include="BondAdorner.cs" />
     <Compile Include="BondsVisualiser.cs" />
+    <Compile Include="ButtonsAdorner.cs" />
     <Compile Include="Converter\AllTrueConveter.cs" />
     <Compile Include="Converter\NegateConverter.cs" />
     <Compile Include="Converter\NotNullToVisibilityConverter.cs" />

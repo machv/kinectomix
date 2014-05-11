@@ -37,7 +37,7 @@ namespace Kinectomix.LevelGenerator.Behavior
         private static void AddBondAdorner(FrameworkElement element)
         {
             AdornerLayer parentAdorner = AdornerLayer.GetAdornerLayer(element);
-            parentAdorner.Add(new BondAdorner(element));
+            parentAdorner.Add(new ButtonsAdorner(element));
         }
 
         private static void RemoveBondAdorners(FrameworkElement element)
@@ -48,7 +48,7 @@ namespace Kinectomix.LevelGenerator.Behavior
             if (toRemoveArray != null)
             {
                 for (int x = 0; x < toRemoveArray.Length; x++)
-                    if (toRemoveArray[x] is BondAdorner)
+                    if (toRemoveArray[x] is ButtonsAdorner)
                         parentAdorner.Remove(toRemoveArray[x]);
             }
         }

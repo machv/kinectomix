@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -12,10 +13,15 @@ namespace Kinectomix.LevelGenerator
     // Adorners must subclass the abstract base class Adorner. 
     public class BondAdorner : Adorner
     {
+        List<FrameworkElement> _children;
+
         // Be sure to call the base class constructor. 
         public BondAdorner(UIElement adornedElement)
           : base(adornedElement)
         {
+            _children = new List<FrameworkElement>();
+
+            _children.Add(new Button());
         }
 
         // A common way to implement an adorner's rendering behavior is to override the OnRender 
@@ -29,6 +35,9 @@ namespace Kinectomix.LevelGenerator
             renderBrush.Opacity = 0.2;
             Pen renderPen = new Pen(new SolidColorBrush(Colors.Navy), 1.5);
             double renderRadius = 5.0;
+
+            //var btn = new Button();
+            //btn.rend
 
             // Draw a circle at each corner.
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopLeft, renderRadius, renderRadius);
