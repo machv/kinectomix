@@ -2,7 +2,7 @@
 {
 
     //http://en.wikipedia.org/wiki/Sextuple_bond
-    public enum BondArity
+    public enum BondType
     {
         None = 0,
         Single = 1,

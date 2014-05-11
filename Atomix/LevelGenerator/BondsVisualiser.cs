@@ -8,26 +8,54 @@ namespace Kinectomix.LevelGenerator
 {
     public class BondsVisualiser : FrameworkElement
     {
-        public static readonly DependencyProperty TopLeftBondProperty = DependencyProperty.Register("TopLeftBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty TopBondProperty = DependencyProperty.Register("TopBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty TopRightBondProperty = DependencyProperty.Register("TopRightBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty RightBondProperty = DependencyProperty.Register("RightBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty BottomRightBondProperty = DependencyProperty.Register("BottomRightBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty BottomBondProperty = DependencyProperty.Register("BottomBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty BottomLeftBondProperty = DependencyProperty.Register("BottomLeftBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty LeftBondProperty = DependencyProperty.Register("LeftBond", typeof(BondArity), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondArity.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TopLeftBondProperty = DependencyProperty.Register("TopLeftBond", typeof(BondType), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondType.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TopBondProperty = DependencyProperty.Register("TopBond", typeof(BondType), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondType.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TopRightBondProperty = DependencyProperty.Register("TopRightBond", typeof(BondType), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondType.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty RightBondProperty = DependencyProperty.Register("RightBond", typeof(BondType), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondType.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty BottomRightBondProperty = DependencyProperty.Register("BottomRightBond", typeof(BondType), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondType.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty BottomBondProperty = DependencyProperty.Register("BottomBond", typeof(BondType), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondType.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty BottomLeftBondProperty = DependencyProperty.Register("BottomLeftBond", typeof(BondType), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondType.None, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty LeftBondProperty = DependencyProperty.Register("LeftBond", typeof(BondType), typeof(BondsVisualiser), new FrameworkPropertyMetadata(BondType.None, FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public BondArity TopBond
+        public BondType TopLeftBond
         {
-            get { return (BondArity)GetValue(TopBondProperty); }
+            get { return (BondType)GetValue(TopLeftBondProperty); }
+            set { SetValue(TopLeftBondProperty, value); }
+        }
+        public BondType TopBond
+        {
+            get { return (BondType)GetValue(TopBondProperty); }
             set { SetValue(TopBondProperty, value); }
         }
-
-
-        public BondArity TopRightBond
+        public BondType TopRightBond
         {
-            get { return (BondArity)GetValue(TopRightBondProperty); }
+            get { return (BondType)GetValue(TopRightBondProperty); }
             set { SetValue(TopRightBondProperty, value); }
+        }
+        public BondType RightBond
+        {
+            get { return (BondType)GetValue(RightBondProperty); }
+            set { SetValue(RightBondProperty, value); }
+        }
+        public BondType BottomRightBond
+        {
+            get { return (BondType)GetValue(BottomRightBondProperty); }
+            set { SetValue(BottomRightBondProperty, value); }
+        }
+        public BondType BottomBond
+        {
+            get { return (BondType)GetValue(BottomBondProperty); }
+            set { SetValue(BottomBondProperty, value); }
+        }
+        public BondType BottomLeftBond
+        {
+            get { return (BondType)GetValue(BottomLeftBondProperty); }
+            set { SetValue(BottomLeftBondProperty, value); }
+        }
+        public BondType LeftBond
+        {
+            get { return (BondType)GetValue(LeftBondProperty); }
+            set { SetValue(LeftBondProperty, value); }
         }
 
         static BondsVisualiser()
@@ -61,16 +89,12 @@ namespace Kinectomix.LevelGenerator
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            //drawingContext.PushClip(new RectangleGeometry(new Rect(new Size(ActualWidth, ActualHeight))));
-
-            
-
             RenderBond(drawingContext, (int)TopBond, 0);
 
             //drawingContext.PushTransform(new RotateTransform(45));
             RenderBond(drawingContext, (int)TopRightBond, 45);
-            //drawingContext.Pop();
 
+            RenderBond(drawingContext, (int)BottomLeftBond, 225);
             //drawingContext.Pop();
 
             base.OnRender(drawingContext);

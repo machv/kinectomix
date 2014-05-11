@@ -66,7 +66,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <l:BondsVisualiser TopRightBond="Triple" />
+                                    <l:BondsVisualiser TopRightBond="Triple" BottomLeftBond="Triple" />
                                 <Image Source="{Binding AssetSource}" 
                                        Behavior:TilePainter.IsPaintEnabled="True"
                                        Behavior:TilePainter.PaintTile="{Binding Path=DataContext.PaintTile, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
