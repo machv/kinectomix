@@ -104,6 +104,7 @@ namespace Kinectomix.LevelGenerator
             RenderBond(drawingContext, (int)BottomBond, 180);
             RenderBond(drawingContext, (int)BottomLeftBond, 225);
             RenderBond(drawingContext, (int)LeftBond, 270);
+            RenderBond(drawingContext, (int)TopLeftBond, 315);
 
             base.OnRender(drawingContext);
         }
