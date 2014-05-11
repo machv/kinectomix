@@ -63,8 +63,9 @@ namespace Kinectomix.LevelGenerator
             ClipToBoundsProperty.OverrideMetadata(typeof(BondsVisualiser), new PropertyMetadata(true));
         }
 
-        private void RenderBond(DrawingContext drawingContext, int arity, int angle)
+        private void DrawBond(DrawingContext drawingContext, BondType type, int angle)
         {
+            int arity = (int)type;
             if (arity > 0)
             {
                 drawingContext.PushTransform(new RotateTransform(angle, RenderSize.Width / 2, RenderSize.Height / 2));
@@ -97,14 +98,14 @@ namespace Kinectomix.LevelGenerator
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            RenderBond(drawingContext, (int)TopBond, 0);
-            RenderBond(drawingContext, (int)TopRightBond, 45);
-            RenderBond(drawingContext, (int)RightBond, 90);
-            RenderBond(drawingContext, (int)BottomRightBond, 135);
-            RenderBond(drawingContext, (int)BottomBond, 180);
-            RenderBond(drawingContext, (int)BottomLeftBond, 225);
-            RenderBond(drawingContext, (int)LeftBond, 270);
-            RenderBond(drawingContext, (int)TopLeftBond, 315);
+            DrawBond(drawingContext, TopBond, 0);
+            DrawBond(drawingContext, TopRightBond, 45);
+            DrawBond(drawingContext, RightBond, 90);
+            DrawBond(drawingContext, BottomRightBond, 135);
+            DrawBond(drawingContext, BottomBond, 180);
+            DrawBond(drawingContext, BottomLeftBond, 225);
+            DrawBond(drawingContext, LeftBond, 270);
+            DrawBond(drawingContext, TopLeftBond, 315);
 
             base.OnRender(drawingContext);
         }
