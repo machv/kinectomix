@@ -1,7 +1,5 @@
 ﻿using AtomixData;
-using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Kinectomix.LevelGenerator
@@ -63,49 +61,16 @@ namespace Kinectomix.LevelGenerator
             ClipToBoundsProperty.OverrideMetadata(typeof(BondsVisualiser), new PropertyMetadata(true));
         }
 
-        private void DrawBond(DrawingContext drawingContext, BondType type, int angle)
-        {
-            int arity = (int)type;
-            if (arity > 0)
-            {
-                drawingContext.PushTransform(new RotateTransform(angle, RenderSize.Width / 2, RenderSize.Height / 2));
-
-                double penWidth = 2;
-                double gap = 2;
-                Pen pen = new Pen(new SolidColorBrush(Colors.DarkGray), penWidth);
-                double rel = RenderSize.Width - RenderSize.Height * RenderSize.Width;
-                double centerY = RenderSize.Height / 2;
-                double width = arity * penWidth + (arity - 1) * gap;
-                double start = RenderSize.Width / 2 - (width / 2);
-
-                for (int i = 0; i < arity; i++)
-                {
-                    Point point1 = new Point(start, rel);
-                    Point point2 = new Point(start, centerY);
-                    if (angle > 90)
-                    {
-                        point1.X += penWidth;
-                        point2.X += penWidth;
-                    }
-                    drawingContext.DrawLine(pen, point1, point2);
-
-                    start += penWidth + gap;
-                }
-
-                drawingContext.Pop();
-            }
-        }
-
         protected override void OnRender(DrawingContext drawingContext)
         {
-            DrawBond(drawingContext, TopBond, 0);
-            DrawBond(drawingContext, TopRightBond, 45);
-            DrawBond(drawingContext, RightBond, 90);
-            DrawBond(drawingContext, BottomRightBond, 135);
-            DrawBond(drawingContext, BottomBond, 180);
-            DrawBond(drawingContext, BottomLeftBond, 225);
-            DrawBond(drawingContext, LeftBond, 270);
-            DrawBond(drawingContext, TopLeftBond, 315);
+            drawingContext.DrawBond(RenderSize, TopBond, BondDirection.Top);
+            drawingContext.DrawBond(RenderSize, TopRightBond, BondDirection.TopRight);
+            drawingContext.DrawBond(RenderSize, RightBond, BondDirection.Right);
+            drawingContext.DrawBond(RenderSize, BottomRightBond, BondDirection.BottomRight);
+            drawingContext.DrawBond(RenderSize, BottomBond, BondDirection.Bottom);
+            drawingContext.DrawBond(RenderSize, BottomLeftBond, BondDirection.BottomLeft);
+            drawingContext.DrawBond(RenderSize, LeftBond, BondDirection.Left);
+            drawingContext.DrawBond(RenderSize, TopLeftBond, BondDirection.TopLeft);
 
             base.OnRender(drawingContext);
         }

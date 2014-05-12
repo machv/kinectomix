@@ -131,7 +131,14 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
                     DrawingVisual drawingVisual = new DrawingVisual();
                     DrawingContext drawingContext = drawingVisual.RenderOpen();
-                    DrawBond(drawingContext, dimensions, item.Value.BondsTemplate.TopBond, 0);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopBond, BondDirection.Top);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopRightBond, BondDirection.TopRight);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.RightBond, BondDirection.Right);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomRightBond, BondDirection.BottomRight);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomBond, BondDirection.Bottom);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomLeftBond, BondDirection.BottomLeft);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.LeftBond, BondDirection.Left);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopLeftBond, BondDirection.TopLeft);
                     drawingContext.DrawImage(item.Value.BondsTemplate.AssetSource, new Rect(0, 0, dimensions.Width, dimensions.Height));
                     drawingContext.Close();
 
@@ -148,39 +155,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
 
             return level;
-        }
-
-        private static void DrawBond(DrawingContext drawingContext, Size Dimensions, BondType type, int angle)
-        {
-            int arity = (int)type;
-            if (arity > 0)
-            {
-                drawingContext.PushTransform(new RotateTransform(angle, Dimensions.Width / 2, Dimensions.Height / 2));
-
-                double penWidth = 2;
-                double gap = 2;
-                Pen pen = new Pen(new SolidColorBrush(Colors.DarkGray), penWidth);
-                double rel = Dimensions.Width - Dimensions.Height * Dimensions.Width;
-                double centerY = Dimensions.Height / 2;
-                double width = arity * penWidth + (arity - 1) * gap;
-                double start = Dimensions.Width / 2 - (width / 2);
-
-                for (int i = 0; i < arity; i++)
-                {
-                    Point point1 = new Point(start, rel);
-                    Point point2 = new Point(start, centerY);
-                    if (angle > 90)
-                    {
-                        point1.X += penWidth;
-                        point2.X += penWidth;
-                    }
-                    drawingContext.DrawLine(pen, point1, point2);
-
-                    start += penWidth + gap;
-                }
-
-                drawingContext.Pop();
-            }
         }
 
         public Level ToLevel(Tiles tiles)
