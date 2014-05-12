@@ -1,5 +1,6 @@
 ﻿using AtomixData;
 using Kinectomix.LevelGenerator.Model;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -77,7 +78,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public static Level ToLevel(LevelViewModel levelViewModel, Tiles tiles)
         {
             Dictionary<string, BuildAsset> required = new Dictionary<string, BuildAsset>();
-            //List<string> requiredAssets = new List<string>();
 
             Level level = new Level();
 
@@ -86,9 +86,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
             {
                 BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, Asset = tileViewModel.Asset };
                 level.Board.Add(tile);
-
-                //if (!requiredAssets.Contains(tile.Asset))
-                //    requiredAssets.Add(tile.Asset);
 
                 if (!required.ContainsKey(tile.Asset))
                     required.Add(tile.Asset, new BuildAsset(tile.Asset));
@@ -148,9 +145,18 @@ namespace Kinectomix.LevelGenerator.ViewModel
                     PngBitmapEncoder encoder = new PngBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create(bmp));
 
-                    using (Stream outputStream = File.Open(@"D:\TEMP\test.png", System.IO.FileMode.OpenOrCreate))
-                        encoder.Save(outputStream);
+                    using (Stream stream = new MemoryStream())
+                    {
+                        encoder.Save(stream);
 
+                        byte[] bytes = new byte[stream.Length];
+                        stream.Read(bytes, 0, bytes.Length);
+
+                        LevelAsset levelAsset = new LevelAsset();
+                        levelAsset.AssetName = item.Value.AssetName;
+                        levelAsset.AssetContent = Convert.ToBase64String(bytes);
+                        level.Assets.Add(levelAsset);
+                    }
                 }
             }
 
