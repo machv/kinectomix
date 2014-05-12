@@ -127,13 +127,15 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
                 if (item.Value.BondsTemplate != null)
                 {
+                    Size dimensions = new Size(49, 49);
+
                     DrawingVisual drawingVisual = new DrawingVisual();
                     DrawingContext drawingContext = drawingVisual.RenderOpen();
-                    DrawBond(drawingContext, item.Value.BondsTemplate.TopBond, 0);
-                    drawingContext.DrawImage(item.Value.BondsTemplate.AssetSource, new Rect(0, 0, 49, 49));
+                    DrawBond(drawingContext, dimensions, item.Value.BondsTemplate.TopBond, 0);
+                    drawingContext.DrawImage(item.Value.BondsTemplate.AssetSource, new Rect(0, 0, dimensions.Width, dimensions.Height));
                     drawingContext.Close();
 
-                    RenderTargetBitmap bmp = new RenderTargetBitmap(49, 49, 96, 96, PixelFormats.Pbgra32);
+                    RenderTargetBitmap bmp = new RenderTargetBitmap((int)dimensions.Width, (int)dimensions.Height, 96, 96, PixelFormats.Pbgra32);
                     bmp.Render(drawingVisual);
 
                     PngBitmapEncoder encoder = new PngBitmapEncoder();
@@ -148,22 +150,20 @@ namespace Kinectomix.LevelGenerator.ViewModel
             return level;
         }
 
-        private static Size RenderSize = new Size(49, 49);
-
-        private static void DrawBond(DrawingContext drawingContext, BondType type, int angle)
+        private static void DrawBond(DrawingContext drawingContext, Size Dimensions, BondType type, int angle)
         {
             int arity = (int)type;
             if (arity > 0)
             {
-                drawingContext.PushTransform(new RotateTransform(angle, RenderSize.Width / 2, RenderSize.Height / 2));
+                drawingContext.PushTransform(new RotateTransform(angle, Dimensions.Width / 2, Dimensions.Height / 2));
 
                 double penWidth = 2;
                 double gap = 2;
                 Pen pen = new Pen(new SolidColorBrush(Colors.DarkGray), penWidth);
-                double rel = RenderSize.Width - RenderSize.Height * RenderSize.Width;
-                double centerY = RenderSize.Height / 2;
+                double rel = Dimensions.Width - Dimensions.Height * Dimensions.Width;
+                double centerY = Dimensions.Height / 2;
                 double width = arity * penWidth + (arity - 1) * gap;
-                double start = RenderSize.Width / 2 - (width / 2);
+                double start = Dimensions.Width / 2 - (width / 2);
 
                 for (int i = 0; i < arity; i++)
                 {
