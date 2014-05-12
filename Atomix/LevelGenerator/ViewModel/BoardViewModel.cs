@@ -1,35 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using AtomixData;
+﻿using AtomixData;
 using Kinectomix.LevelGenerator.Model;
 using System.Windows.Input;
 using Kinectomix.LevelGenerator.Mvvm;
 
 namespace Kinectomix.LevelGenerator.ViewModel
 {
-    public enum ResizeMode
+    public class BoardViewModel : Mvvm.NotifyPropertyBase
     {
-        TopAdd,
-        TopRemove,
-    }
-
-    public class BoardViewModel : Mvvm.NotifyPropertyBase // DependencyObject
-    {
-        //public static readonly DependencyProperty PaintTileProperty = DependencyProperty.Register("PaintTile", typeof(BoardTileViewModel), typeof(BoardViewModel));
-
-        //public static readonly DependencyProperty TilesProperty = DependencyProperty.Register("Tiles", typeof(TilesCollection<BoardTileViewModel>), typeof(BoardViewModel), new UIPropertyMetadata(null));
-
-        //public TilesCollection<BoardTileViewModel> Tiles
-        //{
-        //    get { return (TilesCollection<BoardTileViewModel>)GetValue(TilesProperty); }
-        //    set { SetValue(TilesProperty, value); }
-        //}
-
         private ObservableTilesCollection<BoardTileViewModel> _tiles = new ObservableTilesCollection<BoardTileViewModel>();
 
         public ObservableTilesCollection<BoardTileViewModel> Tiles
@@ -49,6 +26,17 @@ namespace Kinectomix.LevelGenerator.ViewModel
             set
             {
                 _paintTile = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private BoardTileViewModel _emptyTileTemplate;
+        public BoardTileViewModel EmptyTileTemplate
+        {
+            get { return _emptyTileTemplate; }
+            set
+            {
+                _emptyTileTemplate = value;
                 OnPropertyChanged();
             }
         }
@@ -83,19 +71,30 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        public void AddRow(BoardTileViewModel emptyTileTemplate)
+        private void FillColumn(int columnIndex, BoardTileViewModel tileTemplate)
         {
-            Tiles.RemoveColumn(1);
+            for (int i = 0; i < Tiles.RowsCount; i++)
+            {
+                BoardTileViewModel tile = new BoardTileViewModel(new BoardTile() { IsEmpty = tileTemplate.IsEmpty, Asset = tileTemplate.Asset, IsFixed = tileTemplate.IsFixed });
+                tile.AssetSource = tileTemplate.AssetSource;
+                tile.AssetFile = tileTemplate.AssetFile;
 
-            //for (int i = 0; i < ColumnsCount; i++)
-            //{
-            //    BoardTileViewModel tile = new BoardTileViewModel(new AtomixData.BoardTile() { IsEmpty = emptyTileTemplate.IsEmpty, Asset = emptyTileTemplate.Asset, IsFixed = emptyTileTemplate.IsFixed });
-            //    tile.AssetSource = emptyTileTemplate.AssetSource;
-            //    tile.AssetFile = emptyTileTemplate.AssetFile;
-
-            //    tiles[RowsCount - 1, i] = tile;
-            //}
+                Tiles[i, columnIndex] = tile;
+            }
         }
+
+        private void FillRow(int rowIndex, BoardTileViewModel tileTemplate)
+        {
+            for (int i = 0; i < Tiles.ColumnsCount; i++)
+            {
+                BoardTileViewModel tile = new BoardTileViewModel(new BoardTile() { IsEmpty = tileTemplate.IsEmpty, Asset = tileTemplate.Asset, IsFixed = tileTemplate.IsFixed });
+                tile.AssetSource = tileTemplate.AssetSource;
+                tile.AssetFile = tileTemplate.AssetFile;
+
+                Tiles[rowIndex, i] = tile;
+            }
+        }
+
 
         private DelegateCommand _insertRowToTopCommand;
         private DelegateCommand _insertRowToBottomCommand;
@@ -142,6 +141,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
         protected void InsertRowToTop()
         {
             Tiles.InsertRow(0);
+            FillRow(0, null);
 
             RaiseChanged();
         }
@@ -207,6 +207,11 @@ namespace Kinectomix.LevelGenerator.ViewModel
             _removeColumnFromRightCommand.RaiseCanExecuteChanged();
             _insertColumnToLeftCommand.RaiseCanExecuteChanged();
             _insertColumnToRightCommand.RaiseCanExecuteChanged();
+        }
+
+        public void PopulateEmptyTiles()
+        {
+            PopulateEmptyTiles(_emptyTileTemplate);
         }
 
         public void PopulateEmptyTiles(BoardTileViewModel emptyTileTemplate)

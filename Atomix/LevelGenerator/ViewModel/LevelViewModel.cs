@@ -11,8 +11,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
 {
     public class LevelViewModel : Mvvm.NotifyPropertyBase
     {
-        BoardViewModel _board = new BoardViewModel();
-        BoardViewModel _molecule = new BoardViewModel();
+        BoardViewModel _board;
+        BoardViewModel _molecule;
 
         public BoardViewModel Board
         {
@@ -39,8 +39,8 @@ namespace Kinectomix.LevelGenerator.ViewModel
         public static LevelViewModel FromLevel(Level level, Tiles tiles)
         {
             LevelViewModel viewModel = new LevelViewModel();
-            viewModel.Board = new BoardViewModel(level.Board, tiles);
-            viewModel.Molecule = new BoardViewModel(level.Molecule, tiles);
+            viewModel.Board = new BoardViewModel(level.Board, tiles) { EmptyTileTemplate = tiles["Empty"] };
+            viewModel.Molecule = new BoardViewModel(level.Molecule, tiles) { EmptyTileTemplate = tiles["Empty"] };
 
             return viewModel;
         }
@@ -84,29 +84,27 @@ namespace Kinectomix.LevelGenerator.ViewModel
             level.Board = new TilesCollection<BoardTile>(levelViewModel.Board.Tiles.RowsCount, levelViewModel.Board.Tiles.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Board.Tiles)
             {
-                BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, Asset = tileViewModel.Asset };
-                level.Board.Add(tile);
+                level.Board.Add(tileViewModel.Tile);
 
-                if (!required.ContainsKey(tile.Asset))
-                    required.Add(tile.Asset, new BuildAsset(tile.Asset));
+                if (!required.ContainsKey(tileViewModel.Tile.Asset))
+                    required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset));
 
                 string key = BuildAsset.GetTileAssetWithBondsName(tileViewModel);
                 if (!required.ContainsKey(key))
-                    required.Add(key, new BuildAsset(tile.Asset, tileViewModel));
+                    required.Add(key, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel));
             }
 
             level.Molecule = new TilesCollection<BoardTile>(levelViewModel.Molecule.Tiles.RowsCount, levelViewModel.Molecule.Tiles.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Molecule.Tiles)
             {
-                BoardTile tile = new BoardTile() { IsFixed = tileViewModel.IsFixed, Asset = tileViewModel.Asset };
-                level.Molecule.Add(tile);
+                level.Molecule.Add(tileViewModel.Tile);
 
-                if (!required.ContainsKey(tile.Asset))
-                    required.Add(tile.Asset, new BuildAsset(tile.Asset));
+                if (!required.ContainsKey(tileViewModel.Tile.Asset))
+                    required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset));
 
                 string key = BuildAsset.GetTileAssetWithBondsName(tileViewModel);
                 if (!required.ContainsKey(key))
-                    required.Add(key, new BuildAsset(tile.Asset, tileViewModel));
+                    required.Add(key, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel));
             }
 
             foreach (KeyValuePair<string, BuildAsset> item in required)

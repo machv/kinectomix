@@ -94,10 +94,12 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
             LevelViewModel level = new LevelViewModel();
             level.Board = new BoardViewModel(Properties.Settings.Default.DefaultBoardRows, Properties.Settings.Default.DefaultBoardColumns);
-            level.Board.PopulateEmptyTiles(_tiles["Empty"]);
+            level.Board.EmptyTileTemplate = _tiles["Empty"];
+            level.Board.PopulateEmptyTiles();
 
             level.Molecule = new BoardViewModel(Properties.Settings.Default.DefaultMoleculeRows, Properties.Settings.Default.DefaultMoleculeColumns);
-            level.Molecule.PopulateEmptyTiles(_tiles["Empty"]);
+            level.Molecule.EmptyTileTemplate = _tiles["Empty"];
+            level.Molecule.PopulateEmptyTiles();
 
             _tiles.Clear();
             _tiles.LoadSystemAssets();
@@ -149,7 +151,7 @@ namespace Kinectomix.LevelGenerator.ViewModel
 
         public void Test()
         {
-            Level.Board.AddRow(_tiles["Wall"]);
+
         }
 
         private void LoadLevels()
