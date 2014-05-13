@@ -71,31 +71,6 @@ namespace Kinectomix.LevelGenerator.ViewModel
             }
         }
 
-        private void FillColumn(int columnIndex, BoardTileViewModel tileTemplate)
-        {
-            for (int i = 0; i < Tiles.RowsCount; i++)
-            {
-                BoardTileViewModel tile = new BoardTileViewModel(new BoardTile() { IsEmpty = tileTemplate.IsEmpty, Asset = tileTemplate.Asset, IsFixed = tileTemplate.IsFixed });
-                tile.AssetSource = tileTemplate.AssetSource;
-                tile.AssetFile = tileTemplate.AssetFile;
-
-                Tiles[i, columnIndex] = tile;
-            }
-        }
-
-        private void FillRow(int rowIndex, BoardTileViewModel tileTemplate)
-        {
-            for (int i = 0; i < Tiles.ColumnsCount; i++)
-            {
-                BoardTileViewModel tile = new BoardTileViewModel(new BoardTile() { IsEmpty = tileTemplate.IsEmpty, Asset = tileTemplate.Asset, IsFixed = tileTemplate.IsFixed });
-                tile.AssetSource = tileTemplate.AssetSource;
-                tile.AssetFile = tileTemplate.AssetFile;
-
-                Tiles[rowIndex, i] = tile;
-            }
-        }
-
-
         private DelegateCommand _insertRowToTopCommand;
         private DelegateCommand _insertRowToBottomCommand;
         private DelegateCommand _removeRowFromTopCommand;
@@ -141,25 +116,27 @@ namespace Kinectomix.LevelGenerator.ViewModel
         protected void InsertRowToTop()
         {
             Tiles.InsertRow(0);
-            FillRow(0, null);
+            FillRow(0, _emptyTileTemplate);
 
             RaiseChanged();
         }
         protected void InsertRowToBottom()
         {
-            Tiles.InsertRow(Tiles.RowsCount);
-
-            RaiseChanged();
-        }
-        protected void RemoveRowFromTop()
-        {
-            Tiles.RemoveRow(0);
+            int rowIndex = Tiles.RowsCount;
+            Tiles.InsertRow(rowIndex);
+            FillRow(rowIndex, _emptyTileTemplate);
 
             RaiseChanged();
         }
         private bool CanRemoveRow(object parameter)
         {
             return Tiles.RowsCount > 1;
+        }
+        protected void RemoveRowFromTop()
+        {
+            Tiles.RemoveRow(0);
+
+            RaiseChanged();
         }
         protected void RemoveRowFromBottom()
         {
@@ -170,18 +147,15 @@ namespace Kinectomix.LevelGenerator.ViewModel
         protected void InsertColumnToLeft()
         {
             Tiles.InsertColumn(0);
+            FillColumn(0, _emptyTileTemplate);
 
             RaiseChanged();
         }
         protected void InsertColumnToRight()
         {
-            Tiles.InsertColumn(Tiles.ColumnsCount);
-
-            RaiseChanged();
-        }
-        protected void RemoveColumnFromLeft()
-        {
-            Tiles.RemoveColumn(0);
+            int columnIndex = Tiles.ColumnsCount;
+            Tiles.InsertColumn(columnIndex);
+            FillColumn(columnIndex, _emptyTileTemplate);
 
             RaiseChanged();
         }
@@ -189,7 +163,12 @@ namespace Kinectomix.LevelGenerator.ViewModel
         {
             return Tiles.ColumnsCount > 1;
         }
+        protected void RemoveColumnFromLeft()
+        {
+            Tiles.RemoveColumn(0);
 
+            RaiseChanged();
+        }
         protected void RemoveColumnFromRight()
         {
             Tiles.RemoveColumn(Tiles.ColumnsCount - 1);
@@ -219,15 +198,32 @@ namespace Kinectomix.LevelGenerator.ViewModel
             Tiles = new ObservableTilesCollection<BoardTileViewModel>(_tiles.RowsCount, _tiles.ColumnsCount);
 
             for (int i = 0; i < _tiles.RowsCount; i++)
+                FillRow(i, emptyTileTemplate);
+        }
+
+        private void FillColumn(int columnIndex, BoardTileViewModel tileTemplate)
+        {
+            for (int i = 0; i < Tiles.RowsCount; i++)
             {
-                for (int j = 0; j < _tiles.ColumnsCount; j++)
-                {
-                    BoardTileViewModel tile = new BoardTileViewModel(new BoardTile() { IsEmpty = emptyTileTemplate.IsEmpty, Asset = emptyTileTemplate.Asset, IsFixed = emptyTileTemplate.IsFixed });
-                    tile.AssetSource = emptyTileTemplate.AssetSource;
-                    tile.AssetFile = emptyTileTemplate.AssetFile;
-                    Tiles.Add(tile);
-                }
+                BoardTileViewModel tile = new BoardTileViewModel(new BoardTile() { IsEmpty = tileTemplate.IsEmpty, Asset = tileTemplate.Asset, IsFixed = tileTemplate.IsFixed });
+                tile.AssetSource = tileTemplate.AssetSource;
+                tile.AssetFile = tileTemplate.AssetFile;
+
+                Tiles[i, columnIndex] = tile;
             }
         }
+
+        private void FillRow(int rowIndex, BoardTileViewModel tileTemplate)
+        {
+            for (int i = 0; i < Tiles.ColumnsCount; i++)
+            {
+                BoardTileViewModel tile = new BoardTileViewModel(new BoardTile() { IsEmpty = tileTemplate.IsEmpty, Asset = tileTemplate.Asset, IsFixed = tileTemplate.IsFixed });
+                tile.AssetSource = tileTemplate.AssetSource;
+                tile.AssetFile = tileTemplate.AssetFile;
+
+                Tiles[rowIndex, i] = tile;
+            }
+        }
+
     }
 }

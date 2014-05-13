@@ -56,8 +56,11 @@ namespace Kinectomix.LevelGenerator.Model
 
             set
             {
+                T previousValue = base[row, column];
+                int index = row * ColumnsCount + column;
+
                 base[row, column] = value;
-                NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value);
+                NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, value, previousValue, index);
                 OnCollectionChanged(e);
             }
         }
