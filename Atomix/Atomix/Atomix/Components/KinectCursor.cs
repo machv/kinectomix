@@ -1,4 +1,5 @@
-﻿using Microsoft.Kinect;
+﻿using AtomixData;
+using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit.Interaction;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -270,6 +271,37 @@ namespace Atomix.Components
                             int previousPixel = 0;
                             int currentLineY = _handRect.Top + stepForLinesY; // Start on first offset
                             int lineIndex = 0;
+
+                            Point start = new Point(_handRect.Left, _handRect.Top);
+                            Point end = new Point(_handRect.Right, _handRect.Bottom);
+                            previousPixel = 0;
+                            Point[] points = Bresenham.GetLinePoints(start, end).ToArray();
+                            int changes = 0;
+                            foreach (Point point in points)
+                            {
+                                int i = point.Y * stride + point.X;
+                                if (i < frameData.Length && i >= 0)
+                                {
+                                    int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+
+                                    // transform 13-bit depth information into an 8-bit intensity appropriate
+                                    // for display (we disregard information in most significant bit)
+                                    byte intensity = (byte)(~(realPixelDepth >> 4));
+
+                                    int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
+                                    // Checking of convex for lines only within tolerance
+                                    if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
+                                    {
+                                        if (playerIndex != previousPixel)
+                                        {
+                                            // Change, add to counter
+                                            changes++;
+                                        }
+
+                                        previousPixel = playerIndex;
+                                    }
+                                }
+                            }
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {

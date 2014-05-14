@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent>
-  <Asset Type="AtomixData.LevelDefinition[]">
+  <Asset Type="Kinectomix.Logic.LevelDefinition[]">
     <Item>
       <Name>Level 1</Name>
       <FileName>New.atx</FileName>
