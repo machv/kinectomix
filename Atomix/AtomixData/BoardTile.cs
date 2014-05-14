@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-namespace KinectomixLogic
+namespace Kinectomix.Logic
 {
     [Serializable]
     /// <summary>

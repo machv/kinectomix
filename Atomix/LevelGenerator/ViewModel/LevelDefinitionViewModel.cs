@@ -1,4 +1,4 @@
-﻿using KinectomixLogic;
+﻿using Kinectomix.Logic;
 using Kinectomix.LevelGenerator.Mvvm;
 using System;
 using System.Collections.Generic;

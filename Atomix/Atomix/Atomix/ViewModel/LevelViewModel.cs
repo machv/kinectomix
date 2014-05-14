@@ -1,4 +1,4 @@
-﻿using KinectomixLogic;
+﻿using Kinectomix.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;

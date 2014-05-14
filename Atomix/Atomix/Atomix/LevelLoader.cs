@@ -1,4 +1,4 @@
-﻿using KinectomixLogic;
+﻿using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;

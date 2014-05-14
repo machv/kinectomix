@@ -1,4 +1,4 @@
-﻿namespace KinectomixLogic
+﻿namespace Kinectomix.Logic
 {
 
     //http://en.wikipedia.org/wiki/Sextuple_bond

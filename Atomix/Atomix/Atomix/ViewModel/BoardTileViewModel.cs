@@ -1,4 +1,4 @@
-﻿using KinectomixLogic;
+﻿using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 
 namespace Atomix.ViewModel

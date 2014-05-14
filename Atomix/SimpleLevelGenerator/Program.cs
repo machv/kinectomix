@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
-using KinectomixLogic;
+using Kinectomix.Logic;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using System.Reflection;
 using System.IO;

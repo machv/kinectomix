@@ -1,14 +1,13 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace KinectomixLogic
+namespace Kinectomix.Logic
 {
     [Serializable]
     public class TilesCollection<T> : ICollection<T>, IXmlSerializable where T : new()
