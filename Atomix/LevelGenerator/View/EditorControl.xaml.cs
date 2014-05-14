@@ -1,4 +1,4 @@
-﻿using AtomixData;
+﻿using KinectomixLogic;
 using Kinectomix.LevelGenerator.ViewModel;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline;

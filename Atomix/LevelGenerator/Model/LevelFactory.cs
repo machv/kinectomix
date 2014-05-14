@@ -1,4 +1,4 @@
-﻿using AtomixData;
+﻿using KinectomixLogic;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
@@ -51,15 +51,15 @@ namespace Kinectomix.LevelGenerator.Model
         public static Level LoadFromDefinition(string path)
         {
             using (XmlReader reader = XmlReader.Create(path))
-                return IntermediateSerializer.Deserialize<AtomixData.Level>(reader, null);
+                return IntermediateSerializer.Deserialize<KinectomixLogic.Level>(reader, null);
         }
 
         public static Level LoadFromCompiled(string path)
         {
-            Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new AtomixData.DummyServiceProvider());
+            Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new KinectomixLogic.DummyServiceProvider());
             cm.RootDirectory = System.IO.Path.GetDirectoryName(path);
 
-            return cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
+            return cm.Load<KinectomixLogic.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
         }
 
         public static void SaveLevelDefinition(Level level, Stream stream)

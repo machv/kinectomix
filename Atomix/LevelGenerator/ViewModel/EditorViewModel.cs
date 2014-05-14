@@ -1,4 +1,4 @@
-﻿using AtomixData;
+﻿using KinectomixLogic;
 using Kinectomix.LevelGenerator.Model;
 using Kinectomix.LevelGenerator.Mvvm;
 using System.IO;

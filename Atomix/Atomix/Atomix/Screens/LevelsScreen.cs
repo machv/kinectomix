@@ -1,4 +1,4 @@
-﻿using AtomixData;
+﻿using KinectomixLogic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -66,7 +66,7 @@ namespace Atomix
             Button button = sender as Button;
             LevelDefinition level = button.Tag as LevelDefinition;
 
-            Level currentLevel = ScreenManager.Content.Load<AtomixData.Level>("Levels/" + level.AssetName);
+            Level currentLevel = ScreenManager.Content.Load<KinectomixLogic.Level>("Levels/" + level.AssetName);
             LevelScreen gameScreen = new LevelScreen(currentLevel, _spriteBatch);
 
             AtomixGame.State.SetLevelToCurrent(level);

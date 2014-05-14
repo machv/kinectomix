@@ -1,6 +1,6 @@
 ﻿using Atomix.Components;
 using Atomix.ViewModel;
-using AtomixData;
+using KinectomixLogic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -130,7 +130,7 @@ namespace Atomix
             }
             else
             {
-                Level newLevel = _content.Load<AtomixData.Level>("Levels/" + newLevelInfo.AssetName);
+                Level newLevel = _content.Load<KinectomixLogic.Level>("Levels/" + newLevelInfo.AssetName);
                 gameScreen = new LevelScreen(newLevel, spriteBatch);
             }
 
@@ -144,7 +144,7 @@ namespace Atomix
 
             // Load current level again
             LevelDefinition newLevelInfo = AtomixGame.State.GetCurrentLevel();
-            Level newLevel = _content.Load<AtomixData.Level>("Levels/" + newLevelInfo.AssetName);
+            Level newLevel = _content.Load<KinectomixLogic.Level>("Levels/" + newLevelInfo.AssetName);
             gameScreen = new LevelScreen(newLevel, spriteBatch);
 
             ScreenManager.Add(gameScreen);

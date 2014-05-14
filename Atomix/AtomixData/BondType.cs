@@ -1,4 +1,4 @@
-﻿namespace AtomixData
+﻿namespace KinectomixLogic
 {
 
     //http://en.wikipedia.org/wiki/Sextuple_bond

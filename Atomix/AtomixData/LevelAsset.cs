@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace AtomixData
+namespace KinectomixLogic
 {
     [Serializable]
     public class LevelAsset

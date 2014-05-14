@@ -1,4 +1,4 @@
-﻿using AtomixData;
+﻿using KinectomixLogic;
 using Kinectomix.LevelGenerator.ViewModel;
 using System;
 using System.Collections.Generic;

@@ -8,7 +8,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace AtomixData
+namespace KinectomixLogic
 {
     [Serializable]
     public class TilesCollection<T> : ICollection<T>, IXmlSerializable where T : new()

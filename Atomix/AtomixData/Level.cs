@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using System.Xml.Serialization;
 using System.ComponentModel;
 
-namespace AtomixData
+namespace KinectomixLogic
 {
     [Serializable]
     public class Level

@@ -1,5 +1,5 @@
 ﻿using Atomix.ViewModel;
-using AtomixData;
+using KinectomixLogic;
 
 namespace Atomix
 {

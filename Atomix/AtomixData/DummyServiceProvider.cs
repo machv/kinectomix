@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AtomixData
+namespace KinectomixLogic
 {
 
     public class DummyServiceProvider : IServiceProvider
