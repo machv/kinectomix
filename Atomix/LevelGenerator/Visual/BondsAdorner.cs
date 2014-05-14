@@ -11,12 +11,12 @@ using System.Xml;
 
 namespace Kinectomix.LevelGenerator
 {
-    public class ButtonsAdorner : Adorner
+    public class BondsAdorner : Adorner
     {
         private VisualCollection _visualChildren;
         private FrameworkElement _content;
 
-        public ButtonsAdorner(UIElement adornedElement)
+        public BondsAdorner(UIElement adornedElement)
             : base(adornedElement)
         {
             string buttonTemplateXml =

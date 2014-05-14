@@ -56,7 +56,7 @@ namespace Kinectomix.LevelGenerator.Model
 
         public static Level LoadFromCompiled(string path)
         {
-            Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new Kinectomix.LevelGenerator.DummyServiceProvider());
+            Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new AtomixData.DummyServiceProvider());
             cm.RootDirectory = System.IO.Path.GetDirectoryName(path);
 
             return cm.Load<AtomixData.Level>(System.IO.Path.GetFileNameWithoutExtension(path));

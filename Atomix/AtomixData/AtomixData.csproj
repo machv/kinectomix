@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="BoardTile.cs" />
     <Compile Include="BondType.cs" />
+    <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="TilesCollection.cs" />
     <Compile Include="GameState.cs" />
