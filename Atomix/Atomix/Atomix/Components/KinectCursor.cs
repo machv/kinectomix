@@ -294,7 +294,7 @@ namespace Atomix.Components
                             }
 
                             int[] lineParts = new int[lines.Count];
-                            int index = 0;
+                            int indexOfLine = 0;
                             foreach (Tuple<Point, Point> line in lines)
                             {
                                 previousPixel = 0;
@@ -324,7 +324,7 @@ namespace Atomix.Components
                                     }
                                 }
 
-                                lineParts[index++] = changes;
+                                lineParts[indexOfLine++] = changes;
                             }
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
