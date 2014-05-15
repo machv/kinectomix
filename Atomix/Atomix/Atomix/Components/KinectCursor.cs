@@ -315,11 +315,9 @@ namespace Atomix.Components
                                         // Checking of convex for lines only within tolerance
                                         if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
                                         {
-                                            if (playerIndex != previousPixel)
-                                            {
-                                                // Change, add to counter
+                                            // Change, add to counter
+                                            if (playerIndex != previousPixel) 
                                                 changes++;
-                                            }
 
                                             previousPixel = playerIndex;
                                         }
