@@ -272,35 +272,61 @@ namespace Atomix.Components
                             int currentLineY = _handRect.Top + stepForLinesY; // Start on first offset
                             int lineIndex = 0;
 
-                            Point start = new Point(_handRect.Left, _handRect.Top);
-                            Point end = new Point(_handRect.Right, _handRect.Bottom);
-                            previousPixel = 0;
-                            Point[] points = Bresenham.GetLinePoints(start, end).ToArray();
-                            int changes = 0;
-                            foreach (Point point in points)
+                            List<Tuple<Point, Point>> lines = new List<Tuple<Point, Point>>();
+                            Random rand = new Random();
+
+                            // horizontal
+                            for (int i = 0; i < 10; i++)
                             {
-                                int i = point.Y * stride + point.X;
-                                if (i < frameData.Length && i >= 0)
+                                Point lineStart = new Point(_handRect.Left, rand.Next(_handRect.Bottom, _handRect.Top));
+                                Point lineEnd = new Point(_handRect.Right, rand.Next(_handRect.Bottom, _handRect.Top));
+
+                                lines.Add(Tuple.Create<Point, Point>(lineStart, lineEnd));
+                            }
+
+                            // vertical
+                            for (int i = 0; i < 10; i++)
+                            {
+                                Point lineStart = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Bottom);
+                                Point lineEnd = new Point(rand.Next(_handRect.Bottom, _handRect.Top), _handRect.Top);
+
+                                lines.Add(Tuple.Create<Point, Point>(lineStart, lineEnd));
+                            }
+
+                            int[] lineParts = new int[lines.Count];
+                            int index = 0;
+                            foreach (Tuple<Point, Point> line in lines)
+                            {
+                                previousPixel = 0;
+                                Point[] points = Bresenham.GetLinePoints(line.Item1, line.Item2).ToArray();
+                                int changes = 0;
+                                foreach (Point point in points)
                                 {
-                                    int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-
-                                    // transform 13-bit depth information into an 8-bit intensity appropriate
-                                    // for display (we disregard information in most significant bit)
-                                    byte intensity = (byte)(~(realPixelDepth >> 4));
-
-                                    int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
-                                    // Checking of convex for lines only within tolerance
-                                    if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
+                                    int i = point.Y * stride + point.X;
+                                    if (i < frameData.Length && i >= 0)
                                     {
-                                        if (playerIndex != previousPixel)
-                                        {
-                                            // Change, add to counter
-                                            changes++;
-                                        }
+                                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
-                                        previousPixel = playerIndex;
+                                        // transform 13-bit depth information into an 8-bit intensity appropriate
+                                        // for display (we disregard information in most significant bit)
+                                        byte intensity = (byte)(~(realPixelDepth >> 4));
+
+                                        int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
+                                        // Checking of convex for lines only within tolerance
+                                        if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
+                                        {
+                                            if (playerIndex != previousPixel)
+                                            {
+                                                // Change, add to counter
+                                                changes++;
+                                            }
+
+                                            previousPixel = playerIndex;
+                                        }
                                     }
                                 }
+
+                                lineParts[index++] = changes;
                             }
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
