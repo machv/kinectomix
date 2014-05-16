@@ -87,12 +87,10 @@ namespace Atomix.Components
         string _textToRender;
         short[] lastDepthFrameData = null;
 
-
-
-        int top = int.MaxValue;
-        int left = int.MaxValue;
-        int bottom = 0;
-        int right = 0;
+        int top;
+        int left;
+        int bottom;
+        int right;
 
         public override void Update(GameTime gameTime)
         {
@@ -102,7 +100,7 @@ namespace Atomix.Components
             {
                 if (_KinectChooser.SkeletonData != null)
                 {
-                    _KinectChooser.Interactions.ProcessSkeleton(_KinectChooser.SkeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), _KinectChooser.SkeletonTimestamp);
+                    //_KinectChooser.Interactions.ProcessSkeleton(_KinectChooser.SkeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), _KinectChooser.SkeletonTimestamp);
                     _skeletons.Items = _KinectChooser.SkeletonData;
 
                     if (_skeletons.TrackedSkeleton != null)
@@ -124,46 +122,46 @@ namespace Atomix.Components
                         depthFrame.CopyPixelDataTo(pixelData);
                         depthFrame.CopyDepthImagePixelDataTo(depthPixels);
 
-                        _KinectChooser.Interactions.ProcessDepth(depthPixels, depthFrame.Timestamp);
+                        //_KinectChooser.Interactions.ProcessDepth(depthPixels, depthFrame.Timestamp);
 
                         lastDepthFrameData = pixelData;
                         lastDepthFrameDataLength = depthFrame.PixelDataLength;
                     }
                 }
 
-                using (InteractionFrame frame = _KinectChooser.Interactions.OpenNextFrame(0))
-                {
-                    if (frame != null)
-                    {
-                        UserInfo[] info = new UserInfo[6];
-                        frame.CopyInteractionDataTo(info);
+                //using (InteractionFrame frame = _KinectChooser.Interactions.OpenNextFrame(0))
+                //{
+                //    if (frame != null)
+                //    {
+                //        UserInfo[] info = new UserInfo[6];
+                //        frame.CopyInteractionDataTo(info);
 
-                        var usr = info.Where(i => i.SkeletonTrackingId > 0).FirstOrDefault();
-                        if (usr != null)
-                        {
-                            foreach (var interaction in usr.HandPointers)
-                            {
-                                if (interaction.HandType == InteractionHandType.Right)
-                                {
-                                    //_textToRender = string.Format("Interaction: [{0}x{1}]", interaction.X, interaction.Y, _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.X, _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Y);
+                //        var usr = info.Where(i => i.SkeletonTrackingId > 0).FirstOrDefault();
+                //        if (usr != null)
+                //        {
+                //            foreach (var interaction in usr.HandPointers)
+                //            {
+                //                if (interaction.HandType == InteractionHandType.Right)
+                //                {
+                //                    //_textToRender = string.Format("Interaction: [{0}x{1}]", interaction.X, interaction.Y, _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.X, _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Y);
 
-                                    if (interaction.HandEventType == InteractionHandEventType.Grip)
-                                    {
-                                        IsHandClosed = true;
-                                    }
-                                    else if (interaction.HandEventType == InteractionHandEventType.GripRelease)
-                                    {
-                                        IsHandClosed = false;
-                                    }
+                //                    if (interaction.HandEventType == InteractionHandEventType.Grip)
+                //                    {
+                //                        IsHandClosed = true;
+                //                    }
+                //                    else if (interaction.HandEventType == InteractionHandEventType.GripRelease)
+                //                    {
+                //                        IsHandClosed = false;
+                //                    }
 
-                                    cursorPositionInteraction = new Vector2();
-                                    cursorPositionInteraction.X = (int)(interaction.X * GraphicsDevice.Viewport.Bounds.Width);
-                                    cursorPositionInteraction.Y = (int)(interaction.Y * GraphicsDevice.Viewport.Bounds.Height);
-                                }
-                            }
-                        }
-                    }
-                }
+                //                    cursorPositionInteraction = new Vector2();
+                //                    cursorPositionInteraction.X = (int)(interaction.X * GraphicsDevice.Viewport.Bounds.Width);
+                //                    cursorPositionInteraction.Y = (int)(interaction.Y * GraphicsDevice.Viewport.Bounds.Height);
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
             }
 
             // Hand tracking START
@@ -299,8 +297,6 @@ namespace Atomix.Components
                                     int i = y * stride + x;
                                     if (i < frameData.Length && i >= 0)
                                     {
-                                        increasedCount = false;
-
                                         int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
                                         // transform 13-bit depth information into an 8-bit intensity appropriate
@@ -417,6 +413,11 @@ namespace Atomix.Components
 
         private void CalculateHandDimensions(short[] frameData, int stride, int realDepth, int tolerance, out int width, out int height)
         {
+            top = int.MaxValue;
+            left = int.MaxValue;
+            bottom = 0;
+            right = 0;
+
             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
             {
                 for (int x = _handRect.Left; x < _handRect.Right; x++)
