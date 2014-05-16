@@ -62,6 +62,7 @@ namespace Atomix.Components
         {
             _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
             font = Game.Content.Load<SpriteFont>("Fonts/Normal");
+            dotTexture = Game.Content.Load<Texture2D>("Images/Dot");
 
             SpriteTexture.Load(Game.Content, "HandAnimation", Frames, FramesPerSec);
 
@@ -271,6 +272,7 @@ namespace Atomix.Components
                             int previousPixel = 0;
                             int currentLineY = _handRect.Top + stepForLinesY; // Start on first offset
                             int lineIndex = 0;
+                            _lines.Clear();
 
                             // Count parts for testing open/closed
                             List<int> changes = new List<int>();
@@ -278,7 +280,7 @@ namespace Atomix.Components
                             Random rand = new Random();
 
                             // horizontal uniform grid
-                            for (int i = _handRect.Left; i < _handRect.Right; i += step)
+                            for (int i = _handRect.Top; i < _handRect.Bottom; i += step)
                             {
                                 Point lineStart = new Point(_handRect.Left, i);
                                 Point lineEnd = new Point(_handRect.Right, i);
@@ -510,8 +512,12 @@ namespace Atomix.Components
         int frame = 0;
         float distanceTolerance = 0.5f;
 
+        List<Tuple<Point, Point>> _lines = new List<Tuple<Point, Point>>();
+
         private int GetLineParts(Point start, Point end, short[] frame, int stride, int realDepth, int tolerance)
         {
+            _lines.Add(Tuple.Create<Point, Point>(start, end));
+
             int changes = 0;
             int previousPixel = 0;
 
@@ -601,6 +607,8 @@ namespace Atomix.Components
             return cursor;
         }
 
+        private Texture2D dotTexture;
+
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
@@ -618,6 +626,22 @@ namespace Atomix.Components
             Rectangle translated = new Rectangle((int)(_handRect.X / _scale) + (int)_kinectDebugOffset.X, (int)(_handRect.Y / _scale) + (int)_kinectDebugOffset.Y, (int)(_handRect.Width / _scale), (int)(_handRect.Height / _scale));
 
             DrawBoudingBox(translated, Color.Red, 1);
+
+            // draw lines for grid
+            foreach (var line in _lines)
+            {
+                Vector2 start = new Vector2(line.Item1.X, line.Item1.Y);
+                Vector2 end = new Vector2(line.Item2.X, line.Item2.Y);
+                Vector2 diff = end - start;
+                Vector2 scale = new Vector2(1.0f, diff.Length() / this.dotTexture.Height);
+
+                float angle = (float)Math.Atan2(diff.Y, diff.X) - MathHelper.PiOver2;
+
+                Color color = Color.CornflowerBlue;
+
+                spriteBatch.Draw(this.dotTexture, start + _kinectDebugOffset, null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
+            }
+
             //}
 
             if (cursorPosition != Vector2.Zero)
