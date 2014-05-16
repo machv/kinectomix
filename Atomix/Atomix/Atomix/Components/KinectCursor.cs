@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Atomix.Components
 {
@@ -17,9 +16,10 @@ namespace Atomix.Components
         Skeletons _skeletons;
         SpriteBatch spriteBatch;
         bool leftHanded = false;
-        Vector2 _kinectDebugOffset;
+        Vector2 _renderOffset;
         float _scale;
         Texture2D _handTexture;
+        Texture2D _pointTextures;
         SpriteFont font;
         Vector2[] cursorPositionsBuffer;
         int cursorPositionsBufferIndex;
@@ -32,7 +32,7 @@ namespace Atomix.Components
         {
             _KinectChooser = chooser;
             _skeletons = skeletons;
-            _kinectDebugOffset = offset;
+            _renderOffset = offset;
             _scale = scale;
 
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
@@ -51,9 +51,15 @@ namespace Atomix.Components
 
         public Vector2 RenderOffset
         {
-            get { return _kinectDebugOffset; }
-            set { _kinectDebugOffset = value; }
+            get { return _renderOffset; }
+            set { _renderOffset = value; }
         }
+
+        public bool IsHandClosed { get; protected set; }
+
+        public bool IsHandPressed { get; protected set; }
+
+        public Vector2 HandPosition { get { return new Vector2((int)cursorPosition.X, (int)cursorPosition.Y); } }
 
         private const int Frames = 10;
         private const int FramesPerSec = 10;
@@ -63,6 +69,7 @@ namespace Atomix.Components
             _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
             font = Game.Content.Load<SpriteFont>("Fonts/Normal");
             dotTexture = Game.Content.Load<Texture2D>("Images/Dot");
+            _pointTextures = Game.Content.Load<Texture2D>("Images/Joint");
 
             SpriteTexture.Load(Game.Content, "HandAnimation", Frames, FramesPerSec);
 
@@ -80,11 +87,7 @@ namespace Atomix.Components
         string _textToRender;
         short[] lastDepthFrameData = null;
 
-        public bool IsHandClosed { get; private set; }
 
-        public bool IsHandPressed { get; private set; }
-
-        public Vector2 HandPosition { get { return new Vector2((int)cursorPosition.X, (int)cursorPosition.Y); } }
 
         int top = int.MaxValue;
         int left = int.MaxValue;
@@ -243,8 +246,6 @@ namespace Atomix.Components
 
                     float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
                     int handArea = 0;
-                    int handWidth = 0;
-                    int handHeight = 0;
                     if (realDepth > 0)
                     {
                         _histogram = new int[256];
@@ -265,64 +266,11 @@ namespace Atomix.Components
                             //                byte intensity = (byte)(~(realDepth >> 4));
 
                             handArea = 0;
-                            int handMinX = int.MaxValue;
-                            int handMaxX = int.MinValue;
-                            int handMinY = int.MaxValue;
-                            int handMaxY = int.MinValue;
+
                             int tolerance = 40; // in milimeters
-                            int stepForLinesY = 5;
 
                             // Lines for checking
-                            int[] linesY = new int[(_handRect.Bottom - _handRect.Top - 1) / stepForLinesY + 1]; // Ceiling division 
-                            int previousPixel = 0;
-                            int currentLineY = _handRect.Top + stepForLinesY; // Start on first offset
-                            int lineIndex = 0;
-                            _lines.Clear();
-
-                            // Count parts for testing open/closed
-                            List<int> changes = new List<int>();
-                            int step = 10;
-                            Random rand = new Random();
-
-                            // horizontal uniform grid
-                            for (int i = _handRect.Top; i < _handRect.Bottom; i += step)
-                            {
-                                Point lineStart = new Point(_handRect.Left, i);
-                                Point lineEnd = new Point(_handRect.Right, i);
-                                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                                changes.Add(parts);
-                            }
-
-                            // + some random horizontal lines
-                            for (int i = 0; i < 10; i++)
-                            {
-                                Point lineStart = new Point(_handRect.Left, rand.Next(_handRect.Top, _handRect.Bottom));
-                                Point lineEnd = new Point(_handRect.Right, rand.Next(_handRect.Top, _handRect.Bottom));
-                                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                                changes.Add(parts);
-                            }
-
-                            // vertical uniform grid
-                            for (int i = _handRect.Left; i < _handRect.Right; i += step)
-                            {
-                                Point lineStart = new Point(i, _handRect.Bottom);
-                                Point lineEnd = new Point(i, _handRect.Top);
-                                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                                changes.Add(parts);
-                            }
-
-                            // + some random vertical lines
-                            for (int i = 0; i < 10; i++)
-                            {
-                                Point lineStart = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Bottom);
-                                Point lineEnd = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Top);
-                                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                                changes.Add(parts);
-                            }
+                            List<int> changes = GetChangesList(frameData, stride, realDepth, tolerance);
 
                             bool isOpen = false;
                             short matches = 0;
@@ -339,44 +287,13 @@ namespace Atomix.Components
                             _textToRender = isOpen ? "Open" : "Closed";
                             _textToRender += string.Format(" ({0})", matches);
 
-                            // width/height
-                            //int top = int.MaxValue;
-                            //int left = int.MaxValue;
-                            //int bottom = 0;
-                            //int right = 0;
-
                             //TODO check only one person at time
-                            for (int y = _handRect.Top; y < _handRect.Bottom; y++)
-                            {
-                                for (int x = _handRect.Left; x < _handRect.Right; x++)
-                                {
-                                    int i = y * stride + x;
-                                    if (i < frameData.Length && i >= 0)
-                                    {
-                                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-                                        int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
-
-                                        // Checking only within tolerance
-                                        if (playerIndex > 0 && realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
-                                        {
-                                            top = Math.Min(top, y);
-                                            left = Math.Min(left, x);
-                                            bottom = Math.Max(bottom, y);
-                                            right = Math.Max(right, x);
-                                        }
-                                    }
-                                }
-                            }
-
-                            int width = right - left;
-                            int height = bottom - top;
+                            int width, height;
+                            CalculateHandDimensions(frameData, stride, realDepth, tolerance, out width, out height);
                             _textToRender += string.Format(" Width: {0}px, Height: {1}px", width, height);
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
-                                previousPixel = 0;
-                                bool increasedCount = false;
-
                                 for (int x = _handRect.Left; x < _handRect.Right; x++)
                                 {
                                     int i = y * stride + x;
@@ -392,21 +309,6 @@ namespace Atomix.Components
 
                                         int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
 
-                                        if (y == currentLineY) // Check only on specified line
-                                        {
-                                            // Checking of convex for lines only within tolerance
-                                            if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
-                                            {
-                                                if (playerIndex != previousPixel)
-                                                {
-                                                    // Change, add to counter
-                                                    linesY[lineIndex]++;
-                                                    increasedCount = true;
-                                                }
-                                                previousPixel = playerIndex;
-                                            }
-                                        }
-
                                         if (playerIndex > 0 && playerIndex == player)
                                         {
                                             _histogram[intensity]++;
@@ -420,7 +322,7 @@ namespace Atomix.Components
                                                 //continue;
 
                                                 // Write out red byte
-                                                colorPixels[colorOffset++] = (byte)255;
+                                                colorPixels[colorOffset++] = 255;
 
                                                 // Write out green byte
                                                 colorPixels[colorOffset++] = 0;
@@ -429,7 +331,7 @@ namespace Atomix.Components
                                                 colorPixels[colorOffset++] = 0;
 
                                                 // Alpha
-                                                colorPixels[colorOffset++] = (byte)255;
+                                                colorPixels[colorOffset++] = 255;
                                             }
                                             else
                                             {
@@ -447,46 +349,12 @@ namespace Atomix.Components
                                                 colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)0 : (byte)255;
 
                                                 // Alpha
-                                                colorPixels[colorOffset++] = (byte)255;
+                                                colorPixels[colorOffset++] = 255;
                                             }
-
-                                            handMinX = Math.Min(handMinX, x);
-                                            handMaxX = Math.Max(handMaxX, x);
-
-                                            handMinY = Math.Min(handMinY, y);
-                                            handMaxY = Math.Max(handMaxY, y);
                                         }
                                     }
                                 }
-
-                                if (y == currentLineY)
-                                {
-                                    if (!increasedCount) // Last increase of parts (only if last iteration does not written any info)
-                                        linesY[lineIndex]++;
-
-                                    // We finished current row -> prepare for next
-                                    currentLineY += stepForLinesY;
-                                    lineIndex++;
-                                }
                             }
-
-                            //bool isOpen = false;
-                            //short matches = 0;
-                            //foreach (int parts in linesY)
-                            //{
-                            //    if (parts > 3) // ......--------...... = empty HAND empty = at least 3 parts
-                            //    {
-                            //        // probably open hand?
-                            //        isOpen = true;
-                            //        matches++;
-                            //    }
-                            //}
-
-                            //_textToRender = isOpen? "Open" : "Closed";
-                            //_textToRender += string.Format(" ({0})", matches);
-
-                            handWidth = handMaxX - handMinX;
-                            handHeight = handMaxY - handMinY;
                         }
 
                         int max = 0;
@@ -547,6 +415,86 @@ namespace Atomix.Components
             base.Update(gameTime);
         }
 
+        private void CalculateHandDimensions(short[] frameData, int stride, int realDepth, int tolerance, out int width, out int height)
+        {
+            for (int y = _handRect.Top; y < _handRect.Bottom; y++)
+            {
+                for (int x = _handRect.Left; x < _handRect.Right; x++)
+                {
+                    int i = y * stride + x;
+                    if (i < frameData.Length && i >= 0)
+                    {
+                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+                        int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
+
+                        // Checking only within tolerance
+                        if (playerIndex > 0 && realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
+                        {
+                            top = Math.Min(top, y);
+                            left = Math.Min(left, x);
+                            bottom = Math.Max(bottom, y);
+                            right = Math.Max(right, x);
+                        }
+                    }
+                }
+            }
+            width = right - left;
+            height = bottom - top;
+        }
+
+        private List<int> GetChangesList(short[] frameData, int stride, int realDepth, int tolerance)
+        {
+            // Clear buffer for drawing
+            _lines.Clear();
+
+            // Count parts for testing open/closed
+            List<int> changes = new List<int>();
+            int step = 10;
+            Random rand = new Random();
+
+            // horizontal uniform grid
+            for (int i = _handRect.Top; i < _handRect.Bottom; i += step)
+            {
+                Point lineStart = new Point(_handRect.Left, i);
+                Point lineEnd = new Point(_handRect.Right, i);
+                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
+
+                changes.Add(parts);
+            }
+
+            // + some random horizontal lines
+            for (int i = 0; i < 10; i++)
+            {
+                Point lineStart = new Point(_handRect.Left, rand.Next(_handRect.Top, _handRect.Bottom));
+                Point lineEnd = new Point(_handRect.Right, rand.Next(_handRect.Top, _handRect.Bottom));
+                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
+
+                changes.Add(parts);
+            }
+
+            // vertical uniform grid
+            for (int i = _handRect.Left; i < _handRect.Right; i += step)
+            {
+                Point lineStart = new Point(i, _handRect.Bottom);
+                Point lineEnd = new Point(i, _handRect.Top);
+                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
+
+                changes.Add(parts);
+            }
+
+            // + some random vertical lines
+            for (int i = 0; i < 10; i++)
+            {
+                Point lineStart = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Bottom);
+                Point lineEnd = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Top);
+                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
+
+                changes.Add(parts);
+            }
+
+            return changes;
+        }
+
         int frame = 0;
         float distanceTolerance = 0.5f;
 
@@ -600,19 +548,14 @@ namespace Atomix.Components
         {
             if (cursorPositionsBufferIndex < 0) return Vector2.Zero;
 
-            //return cursorPositions[cursorPositionsIndex];
-
-            float x;
-            float y;
-
             var valuesX = cursorPositionsBuffer.Select(p => p.X);
 
             if (valuesX.Count() < 1) return Vector2.Zero;
 
-            x = valuesX.Sum() / valuesX.Count();
-
             var valuesY = cursorPositionsBuffer.Select(p => p.Y);
-            y = valuesY.Sum() / valuesY.Count();
+
+            float x = valuesX.Sum() / valuesX.Count();
+            float y = valuesY.Sum() / valuesY.Count();
 
             return new Vector2(x, y);
         }
@@ -661,7 +604,7 @@ namespace Atomix.Components
 
             //if (_handRect != null)
             //{
-            Rectangle translated = new Rectangle((int)(_handRect.X / _scale) + (int)_kinectDebugOffset.X, (int)(_handRect.Y / _scale) + (int)_kinectDebugOffset.Y, (int)(_handRect.Width / _scale), (int)(_handRect.Height / _scale));
+            Rectangle translated = new Rectangle((int)(_handRect.X / _scale) + (int)_renderOffset.X, (int)(_handRect.Y / _scale) + (int)_renderOffset.Y, (int)(_handRect.Width / _scale), (int)(_handRect.Height / _scale));
 
             DrawBoudingBox(translated, Color.Red, 1);
 
@@ -677,10 +620,10 @@ namespace Atomix.Components
 
                 Color color = Color.CornflowerBlue;
 
-                spriteBatch.Draw(this.dotTexture, start + _kinectDebugOffset, null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
+                spriteBatch.Draw(this.dotTexture, start + _renderOffset, null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
             }
 
-            spriteBatch.Draw(this.dotTexture, new Vector2(left,top) + _kinectDebugOffset, null, Color.Yellow, 0, new Vector2(0.5f, 0.0f), 2, SpriteEffects.None, 1.0f);
+            spriteBatch.Draw(_pointTextures, new Vector2(left, top) + _renderOffset, Color.Yellow);
 
             //}
 
@@ -691,10 +634,10 @@ namespace Atomix.Components
                 SpriteTexture.DrawFrame(spriteBatch, cursorPosition);
             }
 
-            //if (_colorVideo != null)
-            //{
-            //    spriteBatch.Draw(_colorVideo, new Rectangle(50, 50, 640, 480), Color.White);
-            //}
+            if (_colorVideo != null)
+            {
+                spriteBatch.Draw(_colorVideo, new Rectangle(50, 50, 640, 480), Color.White);
+            }
 
             spriteBatch.End();
 
