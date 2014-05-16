@@ -86,6 +86,11 @@ namespace Atomix.Components
 
         public Vector2 HandPosition { get { return new Vector2((int)cursorPosition.X, (int)cursorPosition.Y); } }
 
+        int top = int.MaxValue;
+        int left = int.MaxValue;
+        int bottom = 0;
+        int right = 0;
+
         public override void Update(GameTime gameTime)
         {
             _textToRender = string.Empty;
@@ -333,6 +338,39 @@ namespace Atomix.Components
 
                             _textToRender = isOpen ? "Open" : "Closed";
                             _textToRender += string.Format(" ({0})", matches);
+
+                            // width/height
+                            //int top = int.MaxValue;
+                            //int left = int.MaxValue;
+                            //int bottom = 0;
+                            //int right = 0;
+
+                            //TODO check only one person at time
+                            for (int y = _handRect.Top; y < _handRect.Bottom; y++)
+                            {
+                                for (int x = _handRect.Left; x < _handRect.Right; x++)
+                                {
+                                    int i = y * stride + x;
+                                    if (i < frameData.Length && i >= 0)
+                                    {
+                                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+                                        int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
+
+                                        // Checking only within tolerance
+                                        if (playerIndex > 0 && realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
+                                        {
+                                            top = Math.Min(top, y);
+                                            left = Math.Min(left, x);
+                                            bottom = Math.Max(bottom, y);
+                                            right = Math.Max(right, x);
+                                        }
+                                    }
+                                }
+                            }
+
+                            int width = right - left;
+                            int height = bottom - top;
+                            _textToRender += string.Format(" Width: {0}px, Height: {1}px", width, height);
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
@@ -641,6 +679,8 @@ namespace Atomix.Components
 
                 spriteBatch.Draw(this.dotTexture, start + _kinectDebugOffset, null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
             }
+
+            spriteBatch.Draw(this.dotTexture, new Vector2(left,top) + _kinectDebugOffset, null, Color.Yellow, 0, new Vector2(0.5f, 0.0f), 2, SpriteEffects.None, 1.0f);
 
             //}
 
