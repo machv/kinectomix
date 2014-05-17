@@ -67,6 +67,7 @@ namespace Atomix
             _cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
             _videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
             var background = new Background(this);
+            _cursor.VideoStreamData = _videoStream;
 
             // Input
             var mouseInput = new MouseInputProvider();

@@ -18,6 +18,11 @@ namespace Atomix
         GraphicsDeviceManager _graphics;
         Texture2D _colorVideo;
 
+        public Texture2D VideoFrame
+        {
+            get { return _colorVideo; }
+        }
+
         public VideoType Type { get; set; }
 
         public VideoStreamComponent(Game game, KinectChooser chooser, GraphicsDeviceManager graphics, Vector2 offset, float scale)

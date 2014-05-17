@@ -26,7 +26,7 @@ namespace Atomix.Components
 
         private AnimatedTexture SpriteTexture;
         private const float Depth = 0.5f;
-        private bool
+        public VideoStreamComponent VideoStreamData { get; set; }
 
         public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
             : base(game)
@@ -290,6 +290,13 @@ namespace Atomix.Components
                             CalculateHandDimensions(frameData, stride, realDepth, tolerance, out width, out height);
                             _textToRender += string.Format(" Width: {0}px, Height: {1}px", width, height);
 
+                            byte[] pixels = null;
+                            if (VideoStreamData != null && VideoStreamData.VideoFrame != null)
+                            {
+                                pixels = new byte[VideoStreamData.VideoFrame.Width * VideoStreamData.VideoFrame.Height * 4];
+                                VideoStreamData.VideoFrame.GetData(pixels);
+                            }
+
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
                                 for (int x = _handRect.Left; x < _handRect.Right; x++)
@@ -317,17 +324,20 @@ namespace Atomix.Components
                                                 // ouside tolerance
                                                 //continue;
 
-                                                // Write out red byte
-                                                //colorPixels[colorOffset++] = 255;
+                                                if (pixels != null)
+                                                {
+                                                    // Write out red byte
+                                                    pixels[colorOffset++] = 255;
 
-                                                //// Write out green byte
-                                                //colorPixels[colorOffset++] = 0;
+                                                    // Write out green byte
+                                                    pixels[colorOffset++] = 0;
 
-                                                //// blue
-                                                //colorPixels[colorOffset++] = 0;
+                                                    // blue
+                                                    pixels[colorOffset++] = 0;
 
-                                                //// Alpha
-                                                //colorPixels[colorOffset++] = 255;
+                                                    // Alpha
+                                                    pixels[colorOffset++] = 255;
+                                                }
                                             }
                                             else
                                             {
@@ -335,21 +345,29 @@ namespace Atomix.Components
 
                                                 handArea++;
 
-                                                // Write out red byte
-                                                //colorPixels[colorOffset++] = 0;
+                                                if (pixels != null)
+                                                {
+                                                    // Write out red byte
+                                                    pixels[colorOffset++] = 0;
 
-                                                //// Write out green byte
-                                                //colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)255 : (byte)0;
+                                                    // Write out green byte
+                                                    pixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)255 : (byte)0;
 
-                                                //// Write out red byte                        
-                                                //colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)0 : (byte)255;
+                                                    // Write out red byte                        
+                                                    pixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)0 : (byte)255;
 
-                                                //// Alpha
-                                                //colorPixels[colorOffset++] = 255;
+                                                    // Alpha
+                                                    pixels[colorOffset++] = 255;
+                                                }
                                             }
                                         }
                                     }
                                 }
+                            }
+
+                            if (pixels != null)
+                            {
+                                VideoStreamData.VideoFrame.SetData(pixels);
                             }
                         }
 
