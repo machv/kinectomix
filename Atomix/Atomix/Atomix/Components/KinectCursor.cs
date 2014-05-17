@@ -1,6 +1,5 @@
 ﻿using AtomixData;
 using Microsoft.Kinect;
-using Microsoft.Kinect.Toolkit.Interaction;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,8 +11,8 @@ namespace Atomix.Components
     public class KinectCursor : DrawableGameComponent
     {
         const int CursorPositionsBufferLenth = 15;
-        KinectChooser _KinectChooser;
-        Skeletons _skeletons;
+        protected KinectChooser _KinectChooser;
+        protected Skeletons _skeletons;
         SpriteBatch spriteBatch;
         bool leftHanded = false;
         Vector2 _renderOffset;
@@ -93,6 +92,8 @@ namespace Atomix.Components
         int bottom;
         int right;
 
+        protected DepthImageFrame lastDepthFrame;
+
         public override void Update(GameTime gameTime)
         {
             _textToRender = string.Empty;
@@ -119,14 +120,14 @@ namespace Atomix.Components
                     {
                         // Create array for pixel data and copy it from the image frame
                         short[] pixelData = new short[depthFrame.PixelDataLength];
-                        DepthImagePixel[] depthPixels = new DepthImagePixel[depthFrame.PixelDataLength];
                         depthFrame.CopyPixelDataTo(pixelData);
-                        depthFrame.CopyDepthImagePixelDataTo(depthPixels);
 
                         //_KinectChooser.Interactions.ProcessDepth(depthPixels, depthFrame.Timestamp);
 
                         lastDepthFrameData = pixelData;
                         lastDepthFrameDataLength = depthFrame.PixelDataLength;
+
+                        lastDepthFrame = depthFrame;
                     }
                 }
 
@@ -576,7 +577,7 @@ namespace Atomix.Components
             return changes;
         }
 
-        private void AddCursorPosition(Vector2 cursorPosition)
+        protected void AddCursorPosition(Vector2 cursorPosition)
         {
             if (cursorPosition == Vector2.Zero)
                 return;
