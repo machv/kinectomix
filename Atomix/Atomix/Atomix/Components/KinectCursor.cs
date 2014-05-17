@@ -26,6 +26,7 @@ namespace Atomix.Components
 
         private AnimatedTexture SpriteTexture;
         private const float Depth = 0.5f;
+        private bool
 
         public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
             : base(game)

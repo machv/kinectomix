@@ -1,15 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using Microsoft.Kinect;
-
 
 namespace Atomix
 {
@@ -81,17 +72,17 @@ namespace Atomix
                                 if (colorVideoFrame != null)
                                 {
                                     // Create array for pixel data and copy it from the image frame
-                                    Byte[] pixelData = new Byte[colorVideoFrame.PixelDataLength];
+                                    byte[] pixelData = new byte[colorVideoFrame.PixelDataLength];
                                     colorVideoFrame.CopyPixelDataTo(pixelData);
 
                                     // Convert RGBA to BGRA
-                                    Byte[] bgraPixelData = new Byte[colorVideoFrame.PixelDataLength];
+                                    byte[] bgraPixelData = new byte[colorVideoFrame.PixelDataLength];
                                     for (int i = 0; i < pixelData.Length; i += 4)
                                     {
                                         bgraPixelData[i] = pixelData[i + 2];
                                         bgraPixelData[i + 1] = pixelData[i + 1];
                                         bgraPixelData[i + 2] = pixelData[i];
-                                        bgraPixelData[i + 3] = (Byte)255; // The video comes with 0 alpha so it is transparent
+                                        bgraPixelData[i + 3] = 255; // The video comes with 0 alpha so it is transparent
                                     }
 
                                     _colorVideo = new Texture2D(_graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
@@ -145,7 +136,7 @@ namespace Atomix
                                         colorPixels[colorPixelIndex++] = intensity;
 
                                         // Write alpha byte
-                                        colorPixels[colorPixelIndex++] = (Byte)255;
+                                        colorPixels[colorPixelIndex++] = 255;
                                     }
 
                                     _colorVideo = new Texture2D(_graphics.GraphicsDevice, depthFrame.Width, depthFrame.Height);
