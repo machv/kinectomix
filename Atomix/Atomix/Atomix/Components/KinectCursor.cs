@@ -194,12 +194,14 @@ namespace Atomix.Components
                     Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
                     Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
                     //float distance = Vector2.Distance(handVector, wristVector);
+                    float distance = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, handType, wristType);
 
                     //float distance = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, JointType.Head, JointType.HipCenter);
 
-                    var head = _skeletons.TrackedSkeleton.Joints[JointType.Head].Position;
-                    var shoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderCenter].Position;
-                    float distance = (head.Y - shoulder.Y) * 100; // in milimeters
+                    //var head = _skeletons.TrackedSkeleton.Joints[JointType.Head].Position;
+                    //var shoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderCenter].Position;
+                    float distanceHead = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, JointType.Head, JointType.ShoulderCenter);
+                    //float distance1 = (head.Y - shoulder.Y) * 100; // in milimeters
 
                     // podivame se, v jake vzdalenosti bod je
                     // i kdyz prevadime body ze skeletonu do depth space, tak to vraci body i mimo ten obrazek, proto 
@@ -213,34 +215,34 @@ namespace Atomix.Components
                     int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                     int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
-                    byte[] colorPixels = new byte[lastDepthFrameDataLength * sizeof(int)];
+                    //byte[] colorPixels = new byte[lastDepthFrameDataLength * sizeof(int)];
 
-                    // Convert the depth to BGRA
-                    int colorPixelIndex = 0;
-                    for (int i = 0; i < frameData.Length; ++i)
-                    {
-                        // Get the depth for this pixel
-                        int depth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
+                    //// Convert the depth to BGRA
+                    //int colorPixelIndex = 0;
+                    //for (int i = 0; i < frameData.Length; ++i)
+                    //{
+                    //    // Get the depth for this pixel
+                    //    int depth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
-                        // To convert to a byte, we're discarding the most-significant
-                        // rather than least-significant bits.
-                        // We're preserving detail, although the intensity will "wrap."
-                        // Values outside the reliable depth range are mapped to 0 (black).
+                    //    // To convert to a byte, we're discarding the most-significant
+                    //    // rather than least-significant bits.
+                    //    // We're preserving detail, although the intensity will "wrap."
+                    //    // Values outside the reliable depth range are mapped to 0 (black).
 
-                        byte intensity = (byte)(~(depth >> 4));
+                    //    byte intensity = (byte)(~(depth >> 4));
 
-                        // Write out blue byte
-                        colorPixels[colorPixelIndex++] = intensity;
+                    //    // Write out blue byte
+                    //    colorPixels[colorPixelIndex++] = intensity;
 
-                        // Write out green byte
-                        colorPixels[colorPixelIndex++] = intensity;
+                    //    // Write out green byte
+                    //    colorPixels[colorPixelIndex++] = intensity;
 
-                        // Write out red byte                        
-                        colorPixels[colorPixelIndex++] = intensity;
+                    //    // Write out red byte                        
+                    //    colorPixels[colorPixelIndex++] = intensity;
 
-                        // Write alpha byte
-                        colorPixels[colorPixelIndex++] = (Byte)255;
-                    }
+                    //    // Write alpha byte
+                    //    colorPixels[colorPixelIndex++] = (Byte)255;
+                    //}
 
                     float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
                     int handArea = 0;
@@ -248,16 +250,15 @@ namespace Atomix.Components
                     {
                         _histogram = new int[256];
 
-                        float radius = 35000 / (float)realDepth;
-                        //radius = distance;
+                        //float radius = 35000 / (float)realDepth;
+                        //if (radius < 1) radius = 1;
 
-                        if (radius < 1) radius = 1;
-
-                        _handRadius = (int)(radius * 1.5);
+                        _handRadius = (int)(distanceHead);
 
                         if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
                         {
-                            _handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
+                            //_handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
+                            _handRect = new Rectangle(_handDepthPoint.X - _handRadius / 2, _handDepthPoint.Y - _handRadius / 2, _handRadius, _handRadius);
 
                             // transform 13-bit depth information into an 8-bit intensity appropriate
                             // for display (we disregard information in most significant bit)
@@ -270,20 +271,18 @@ namespace Atomix.Components
                             // Lines for checking
                             List<int> changes = GetChangesList(frameData, stride, realDepth, tolerance);
 
-                            bool isOpen = false;
-                            short matches = 0;
+                            short isOpenMatches = 0;
                             foreach (int parts in changes)
                             {
                                 if (parts > 3) // ......--------...... = empty HAND empty = at least 3 parts
                                 {
                                     // probably open hand?
-                                    isOpen = true;
-                                    matches++;
+                                    isOpenMatches++;
                                 }
                             }
 
-                            _textToRender = isOpen ? "Open" : "Closed";
-                            _textToRender += string.Format(" ({0})", matches);
+                            _textToRender = isOpenMatches > 2 ? "Open" : "Closed";
+                            _textToRender += string.Format(" ({0})", isOpenMatches);
 
                             //TODO check only one person at time
                             int width, height;
@@ -318,16 +317,16 @@ namespace Atomix.Components
                                                 //continue;
 
                                                 // Write out red byte
-                                                colorPixels[colorOffset++] = 255;
+                                                //colorPixels[colorOffset++] = 255;
 
-                                                // Write out green byte
-                                                colorPixels[colorOffset++] = 0;
+                                                //// Write out green byte
+                                                //colorPixels[colorOffset++] = 0;
 
-                                                // blue
-                                                colorPixels[colorOffset++] = 0;
+                                                //// blue
+                                                //colorPixels[colorOffset++] = 0;
 
-                                                // Alpha
-                                                colorPixels[colorOffset++] = 255;
+                                                //// Alpha
+                                                //colorPixels[colorOffset++] = 255;
                                             }
                                             else
                                             {
@@ -336,16 +335,16 @@ namespace Atomix.Components
                                                 handArea++;
 
                                                 // Write out red byte
-                                                colorPixels[colorOffset++] = 0;
+                                                //colorPixels[colorOffset++] = 0;
 
-                                                // Write out green byte
-                                                colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)255 : (byte)0;
+                                                //// Write out green byte
+                                                //colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)255 : (byte)0;
 
-                                                // Write out red byte                        
-                                                colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)0 : (byte)255;
+                                                //// Write out red byte                        
+                                                //colorPixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)0 : (byte)255;
 
-                                                // Alpha
-                                                colorPixels[colorOffset++] = 255;
+                                                //// Alpha
+                                                //colorPixels[colorOffset++] = 255;
                                             }
                                         }
                                     }
@@ -372,8 +371,8 @@ namespace Atomix.Components
                         //_textToRender += string.Format(" [{0:P2}], Width = {1} px, Height = {2} px", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2), handWidth, handHeight);
                     }
 
-                    _colorVideo = new Texture2D(GraphicsDevice, 640, 480);
-                    _colorVideo.SetData(colorPixels);
+                    //_colorVideo = new Texture2D(GraphicsDevice, 640, 480);
+                    //_colorVideo.SetData(colorPixels);
                 }
 
                 var cursorPos = GetHarmonizedCursorPosition();
@@ -463,16 +462,6 @@ namespace Atomix.Components
                 changes.Add(parts);
             }
 
-            // + some random horizontal lines
-            for (int i = 0; i < 10; i++)
-            {
-                Point lineStart = new Point(_handRect.Left, rand.Next(_handRect.Top, _handRect.Bottom));
-                Point lineEnd = new Point(_handRect.Right, rand.Next(_handRect.Top, _handRect.Bottom));
-                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                changes.Add(parts);
-            }
-
             // vertical uniform grid
             for (int i = _handRect.Left; i < _handRect.Right; i += step)
             {
@@ -483,8 +472,40 @@ namespace Atomix.Components
                 changes.Add(parts);
             }
 
+            // horizontal "cake"
+            for (int i = _handRect.Top; i < _handRect.Bottom; i += step)
+            {
+                int j = _handRect.Bottom - i + _handRect.Top;
+                Point lineStart = new Point(_handRect.Left, i);
+                Point lineEnd = new Point(_handRect.Right, j);
+                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
+
+                changes.Add(parts);
+            }
+
+            // vertical "cake"
+            for (int i = _handRect.Left; i < _handRect.Right; i += step)
+            {
+                int j = _handRect.Right - i + _handRect.Left;
+                Point lineStart = new Point(i, _handRect.Bottom);
+                Point lineEnd = new Point(j, _handRect.Top);
+                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
+
+                changes.Add(parts);
+            }
+
+            // + some random horizontal lines
+            for (int i = 0; i < 5; i++)
+            {
+                Point lineStart = new Point(_handRect.Left, rand.Next(_handRect.Top, _handRect.Bottom));
+                Point lineEnd = new Point(_handRect.Right, rand.Next(_handRect.Top, _handRect.Bottom));
+                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
+
+                changes.Add(parts);
+            }
+
             // + some random vertical lines
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Point lineStart = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Bottom);
                 Point lineEnd = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Top);
@@ -569,7 +590,7 @@ namespace Atomix.Components
             Vector2 joint1Position = new Vector2(join1DepthPoint.X, join1DepthPoint.Y);
             Vector2 joint2Position = new Vector2(join2DepthPoint.X, join2DepthPoint.Y);
 
-            return Vector2.Distance(joint1Position, joint1Position);
+            return Vector2.Distance(joint1Position, joint2Position);
         }
 
         // Absolute mapping of cursor
@@ -624,7 +645,7 @@ namespace Atomix.Components
                 spriteBatch.Draw(this.dotTexture, start + _renderOffset, null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
             }
 
-            spriteBatch.Draw(_pointTextures, new Vector2(left, top) + _renderOffset, Color.Yellow);
+            //spriteBatch.Draw(_pointTextures, new Vector2(left, top) + _renderOffset, Color.Yellow);
 
             //}
 
@@ -635,10 +656,10 @@ namespace Atomix.Components
                 SpriteTexture.DrawFrame(spriteBatch, cursorPosition);
             }
 
-            if (_colorVideo != null)
-            {
-                spriteBatch.Draw(_colorVideo, new Rectangle(50, 50, 640, 480), Color.White);
-            }
+            //if (_colorVideo != null)
+            //{
+            //    spriteBatch.Draw(_colorVideo, new Rectangle(50, 50, 640, 480), Color.White);
+            //}
 
             spriteBatch.End();
 
