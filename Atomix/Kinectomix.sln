@@ -3,37 +3,37 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atomix", "Atomix\Atomix\Atomix.csproj", "{50576933-926E-4951-92FD-9FE370386BC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game", "Atomix\Atomix\Kinectomix.Game.csproj", "{50576933-926E-4951-92FD-9FE370386BC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtomixContent", "Atomix\AtomixContent\AtomixContent.contentproj", "{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game.Content", "Atomix\AtomixContent\Kinectomix.Game.Content.contentproj", "{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleLevelGenerator", "SimpleLevelGenerator\SimpleLevelGenerator.csproj", "{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.SimpleLevelGenerator", "SimpleLevelGenerator\Kinectomix.SimpleLevelGenerator.csproj", "{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Logic", "AtomixData\Kinectomix.Logic.csproj", "{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelGenerator", "LevelGenerator\Kinectomix.LevelGenerator.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelEditor", "LevelGenerator\Kinectomix.LevelEditor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
-		SccProjectUniqueName0 = Atomix\\Atomix\\Atomix.csproj
-		SccProjectName0 = Atomix/Atomix
-		SccLocalPath0 = Atomix\\Atomix
-		SccProjectUniqueName1 = Atomix\\AtomixContent\\AtomixContent.contentproj
-		SccProjectName1 = Atomix/AtomixContent
-		SccLocalPath1 = Atomix\\AtomixContent
-		SccProjectUniqueName2 = SimpleLevelGenerator\\SimpleLevelGenerator.csproj
-		SccProjectName2 = SimpleLevelGenerator
-		SccLocalPath2 = SimpleLevelGenerator
-		SccProjectUniqueName3 = LevelGenerator\\Kinectomix.LevelGenerator.csproj
-		SccProjectName3 = LevelGenerator
-		SccLocalPath3 = LevelGenerator
-		SccProjectUniqueName4 = AtomixData\\Kinectomix.Logic.csproj
-		SccProjectName4 = AtomixData
-		SccLocalPath4 = AtomixData
-		SccLocalPath5 = .
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = AtomixData\\Kinectomix.Logic.csproj
+		SccProjectName1 = AtomixData
+		SccLocalPath1 = AtomixData
+		SccProjectUniqueName2 = LevelGenerator\\Kinectomix.LevelEditor.csproj
+		SccProjectName2 = LevelGenerator
+		SccLocalPath2 = LevelGenerator
+		SccProjectUniqueName3 = SimpleLevelGenerator\\Kinectomix.SimpleLevelGenerator.csproj
+		SccProjectName3 = SimpleLevelGenerator
+		SccLocalPath3 = SimpleLevelGenerator
+		SccProjectUniqueName4 = Atomix\\AtomixContent\\Kinectomix.Game.Content.contentproj
+		SccProjectName4 = Atomix/AtomixContent
+		SccLocalPath4 = Atomix\\AtomixContent
+		SccProjectUniqueName5 = Atomix\\Atomix\\Kinectomix.Game.csproj
+		SccProjectName5 = Atomix/Atomix
+		SccLocalPath5 = Atomix\\Atomix
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
