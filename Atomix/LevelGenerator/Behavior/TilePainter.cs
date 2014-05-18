@@ -100,12 +100,14 @@ namespace Kinectomix.LevelEditor.Behavior
                 _originalTile.Asset = tile.Asset;
                 _originalTile.AssetSource = tile.AssetSource;
                 _originalTile.AssetFile = tile.AssetFile;
+                _originalTile.IsFixed = tile.IsFixed;
+                _originalTile.IsEmpty = tile.IsEmpty;
 
                 PaintTile(_paintTile, tile, true);
             }
         }
 
-        private static void Tile_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static void Tile_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FrameworkElement element = sender as FrameworkElement;
 
@@ -123,6 +125,7 @@ namespace Kinectomix.LevelEditor.Behavior
                 selectedTile.AssetSource = template.AssetSource;
                 selectedTile.AssetFile = template.AssetFile;
                 selectedTile.IsFixed = template.IsFixed;
+                selectedTile.IsEmpty = template.IsEmpty;
                 selectedTile.IsPreview = isPreview;
             }
         }

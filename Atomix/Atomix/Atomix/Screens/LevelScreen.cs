@@ -225,6 +225,7 @@ namespace Atomix
                 {
                     isMovementAnimation = false;
                     currentLevel.Board[destination.X, destination.Y].Asset = atomToMove;
+                    currentLevel.Board[destination.X, destination.Y].IsEmpty = false;
 
                     // Animation finished -> check victory
                     bool isFinished = CheckFinish();
@@ -298,9 +299,10 @@ namespace Atomix
                                      currentLevel.Board[i, j].Asset == "Up" ||
                                      currentLevel.Board[i, j].Asset == "Down")
                             {
+                                Direction direction = GetDirectionFromAsset(currentLevel.Board[i, j].Asset);
                                 Point coordinates = new Point(i, j);
-                                Point newCoordinates = NewPosition(coordinates, currentLevel.Board[i, j].Movements);
-                                Point atomCoordinates = GetAtomPosition(coordinates, currentLevel.Board[i, j].Movements);
+                                Point newCoordinates = NewPosition(coordinates, direction);
+                                Point atomCoordinates = GetAtomPosition(coordinates, direction);
 
                                 BoardTileViewModel atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
 
@@ -309,12 +311,13 @@ namespace Atomix
                                 atomPosition = atom.RenderPosition;
                                 destination = newCoordinates;
                                 atomToMove = atom.Asset;
-                                moveDirection = currentLevel.Board[i, j].Movements;
+                                moveDirection = direction;
 
-                                //instead of just switching do the animation
+                                // instead of just switching do the animation
                                 currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
                                 currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
                                 currentLevel.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true;// = TileType.Empty; // but now will be rendered as empty
+                                currentLevel.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// = TileType.Empty; // but now will be rendered as empty
 
                                 CalculateBoardTilePositions(boardPosition, currentLevel.Board);
 
@@ -374,6 +377,23 @@ namespace Atomix
                     // Detect Down
                 }
             }
+        }
+
+        private Direction GetDirectionFromAsset(string asset)
+        {
+            switch (asset)
+            {
+                case "Right":
+                    return Direction.Right;
+                case "Left":
+                    return Direction.Left;
+                case "Up":
+                    return Direction.Up;
+                case "Down":
+                    return Direction.Down;
+            }
+
+            return Direction.None;
         }
 
         bool isToLeftGesture = false;
