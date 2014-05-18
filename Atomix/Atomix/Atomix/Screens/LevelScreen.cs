@@ -36,12 +36,6 @@ namespace Atomix
 
         Texture2D wallTexture;
         Texture2D emptyTexture;
-        //Texture2D carbonTexture;
-        //Texture2D carbonSelectedTexture;
-        //Texture2D hydrogenTexture;
-        //Texture2D hydrogenSelectedTexture;
-        //Texture2D oxygenTexture;
-        //Texture2D oxygenSelectedTexture;
         Texture2D arrowTexture;
         Texture2D idleTexture;
         MouseState mouseState;
@@ -603,7 +597,6 @@ namespace Atomix
             }
         }
 
-        //private Texture2D GetTileTexture(string tileType, bool isSelected)
         private Texture2D GetTileTexture(string asset)
         {
             Texture2D tileTexture = null;
