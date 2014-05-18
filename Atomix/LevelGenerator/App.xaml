@@ -63,6 +63,12 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
+                                    <Image Source="Board/Empty.png"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Width="49"
+                                           Height="49"
+                                           Stretch="None"/>
                                     <l:BondsVisualiser TopLeftBond="{Binding TopLeftBond}"
                                                        TopBond="{Binding TopBond}"
                                                        TopRightBond="{Binding TopRightBond}" 
@@ -115,13 +121,24 @@
         <DataTemplate DataType="{x:Type ViewModel:AvailableTilesViewModel}">
             <StackPanel>
                 <TextBlock Text="Available tiles" FontWeight="Bold" />
+                <!--
                 <StackPanel Orientation="Horizontal">
+                -->
                     <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding SelectedTile}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal"/>
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+                        <ListBox.Template>
+                            <ControlTemplate TargetType="ListBox">
+                                <Border>
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </ControlTemplate>
+                        </ListBox.Template>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
                                 <Setter Property="Padding" Value="0,0,0,0"/>
@@ -150,6 +167,7 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                <!--
                     <Button Command="{Binding AddTileCommand}">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -162,6 +180,7 @@
                         </Grid>
                     </Button>
                 </StackPanel>
+                -->
             </StackPanel>
 
         </DataTemplate>

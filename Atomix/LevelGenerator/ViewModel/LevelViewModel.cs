@@ -111,17 +111,18 @@ namespace Kinectomix.LevelEditor.ViewModel
                 if (item.Value.BondsTemplate != null)
                 {
                     Size dimensions = new Size(49, 49);
+                    int width = 4;
 
                     DrawingVisual drawingVisual = new DrawingVisual();
                     DrawingContext drawingContext = drawingVisual.RenderOpen();
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopBond, BondDirection.Top);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopRightBond, BondDirection.TopRight);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.RightBond, BondDirection.Right);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomRightBond, BondDirection.BottomRight);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomBond, BondDirection.Bottom);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomLeftBond, BondDirection.BottomLeft);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.LeftBond, BondDirection.Left);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopLeftBond, BondDirection.TopLeft);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopBond, BondDirection.Top, width);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopRightBond, BondDirection.TopRight, width);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.RightBond, BondDirection.Right, width);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomRightBond, BondDirection.BottomRight, width);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomBond, BondDirection.Bottom, width);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomLeftBond, BondDirection.BottomLeft, width);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.LeftBond, BondDirection.Left, width);
+                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopLeftBond, BondDirection.TopLeft, width);
                     drawingContext.DrawImage(item.Value.BondsTemplate.AssetSource, new Rect(0, 0, dimensions.Width, dimensions.Height));
                     drawingContext.Close();
 
