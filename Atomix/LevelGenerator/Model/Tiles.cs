@@ -90,7 +90,7 @@ namespace Kinectomix.LevelEditor.Model
 
         public void LoadLevelAssets(Level level)
         {
-            foreach (LevelAsset asset in level.Assets)
+            foreach (LevelAsset asset in level.Assets.Where(a => a.HasBonds == false))
             {
                 BoardTile tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = asset.AssetName };
                 BoardTileViewModel tileVm = new BoardTileViewModel(tile, asset);

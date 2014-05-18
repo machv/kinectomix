@@ -73,6 +73,9 @@ namespace Kinectomix.LevelEditor.ViewModel
             {
                 level.Board.Add(tileViewModel.Tile);
 
+                if (tileViewModel.IsEmpty)
+                    continue;
+
                 if (!required.ContainsKey(tileViewModel.Tile.Asset))
                     required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset));
 
@@ -85,6 +88,9 @@ namespace Kinectomix.LevelEditor.ViewModel
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Molecule.Tiles)
             {
                 level.Molecule.Add(tileViewModel.Tile);
+
+                if (tileViewModel.IsEmpty)
+                    continue;
 
                 if (!required.ContainsKey(tileViewModel.Tile.Asset))
                     required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset));

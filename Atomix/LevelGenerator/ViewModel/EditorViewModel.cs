@@ -3,8 +3,6 @@ using Kinectomix.LevelEditor.Model;
 using Kinectomix.LevelEditor.Mvvm;
 using System.IO;
 using System.Windows.Input;
-using System;
-using System.Windows;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
@@ -170,8 +168,8 @@ namespace Kinectomix.LevelEditor.ViewModel
                 {
                     switch (_levelFileDialog.FilterIndex)
                     {
-                        case 1: // XML
-                            LevelFactory.SaveLevelDefinition(level, stream);
+                        case 1: // Custom xml serialized
+                            LevelFactory.SaveLevelXmlSerialized(level, stream);
                             break;
                         case 2: // Compiled
                             LevelFactory.SaveLevelCompiled(level, stream, _levelFileDialog.FileName);
@@ -179,8 +177,8 @@ namespace Kinectomix.LevelEditor.ViewModel
                         case 3: // Custom binary
                             LevelFactory.SaveLevelBinary(level, stream);
                             break;
-                        case 4: // Custom xml serialized
-                            LevelFactory.SaveLevelXmlSerialized(level, stream);
+                        case 4: // XML
+                            LevelFactory.SaveLevelDefinition(level, stream);
                             break;
                     }
                 }
