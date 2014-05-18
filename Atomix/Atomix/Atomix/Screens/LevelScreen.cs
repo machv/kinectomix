@@ -144,7 +144,8 @@ namespace Atomix
 
             // Load current level again
             LevelDefinition newLevelInfo = AtomixGame.State.GetCurrentLevel();
-            Level newLevel = _content.Load<Kinectomix.Logic.Level>("Levels/" + newLevelInfo.AssetName);
+            Level newLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", newLevelInfo.AssetName));
+            //Level newLevel = _content.Load<Kinectomix.Logic.Level>("Levels/" + newLevelInfo.AssetName);
             gameScreen = new LevelScreen(newLevel, spriteBatch);
 
             ScreenManager.Add(gameScreen);
@@ -307,7 +308,7 @@ namespace Atomix
                                 isMovementAnimation = true;
                                 atomPosition = atom.RenderPosition;
                                 destination = newCoordinates;
-                                //atomToMove = atom.Type;
+                                atomToMove = atom.Asset;
                                 moveDirection = currentLevel.Board[i, j].Movements;
 
                                 //instead of just switching do the animation
@@ -578,7 +579,13 @@ namespace Atomix
         {
             Texture2D tile = null;
 
-            switch (tileType)
+            string type = tileType;
+            if (type.Contains('_'))
+            {
+                type = type.Substring(type.IndexOf('_') + 1);
+            }
+
+            switch (type)
             {
                 case "Wall":
                     tile = wallTexture;
