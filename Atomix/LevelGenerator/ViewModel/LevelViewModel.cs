@@ -96,8 +96,8 @@ namespace Kinectomix.LevelEditor.ViewModel
 
             foreach (KeyValuePair<string, BuildAsset> item in required)
             {
-                BoardTileViewModel tile = tiles[item.Value.AssetName];
-                if (!string.IsNullOrEmpty(tile.AssetFile))
+                BoardTileViewModel tile = tiles[item.Key];
+                if (tile != null && !string.IsNullOrEmpty(tile.AssetFile))
                 {
                     LevelAsset levelAsset = new LevelAsset();
                     levelAsset.AssetName = item.Value.AssetName;
@@ -131,20 +131,22 @@ namespace Kinectomix.LevelEditor.ViewModel
                     PngBitmapEncoder encoder = new PngBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create(bmp));
 
+                    byte[] bytes;
                     using (Stream stream = new MemoryStream())
                     {
                         encoder.Save(stream);
 
-                        byte[] bytes = new byte[stream.Length];
+                        bytes = new byte[stream.Length];
+                        stream.Seek(0, SeekOrigin.Begin);
                         stream.Read(bytes, 0, bytes.Length);
-
-                        LevelAsset levelAsset = new LevelAsset();
-                        levelAsset.AssetName = item.Value.AssetName;
-                        levelAsset.AssetCode = item.Key;
-                        levelAsset.HasBonds = item.Value.BondsTemplate.Tile.HasBonds;
-                        levelAsset.AssetContent = Convert.ToBase64String(bytes);
-                        level.Assets.Add(levelAsset);
                     }
+
+                    LevelAsset levelAsset = new LevelAsset();
+                    levelAsset.AssetName = item.Value.AssetName;
+                    levelAsset.AssetCode = item.Key;
+                    levelAsset.HasBonds = item.Value.BondsTemplate.Tile.HasBonds;
+                    levelAsset.AssetContent = Convert.ToBase64String(bytes);
+                    level.Assets.Add(levelAsset);
                 }
             }
 
