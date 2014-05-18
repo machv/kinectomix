@@ -36,6 +36,21 @@ namespace Kinectomix.Logic
         public BondType BottomLeftBond { get; set; }
         public BondType LeftBond { get; set; }
 
+        public bool HasBonds
+        {
+            get
+            {
+                return BottomBond > 0 ||
+                    BottomLeftBond > 0 ||
+                    BottomRightBond > 0 ||
+                    LeftBond > 0 ||
+                    RightBond > 0 ||
+                    TopBond > 0 ||
+                    TopLeftBond > 0 ||
+                    TopRightBond > 0;
+            }
+        }
+
         public BoardTile()
         {
             IsFixed = true;

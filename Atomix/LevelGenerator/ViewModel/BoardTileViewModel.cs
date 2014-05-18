@@ -192,5 +192,23 @@ namespace Kinectomix.LevelEditor.ViewModel
                 _assetSource = bi;
             }
         }
+
+        public string GetAssetCode()
+        {
+            return GetAssetCode(this);
+        }
+
+        public static string GetAssetCode(BoardTileViewModel tile)
+        {
+            return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", tile.Asset,
+                (int)tile.TopLeftBond,
+                (int)tile.TopBond,
+                (int)tile.TopRightBond,
+                (int)tile.RightBond,
+                (int)tile.BottomRightBond,
+                (int)tile.BottomBond,
+                (int)tile.BottomLeftBond,
+                (int)tile.LeftBond);
+        }
     }
 }

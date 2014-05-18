@@ -8,7 +8,11 @@ namespace Kinectomix.Logic
     {
         public string AssetName { get;set; }
 
+        public string AssetCode { get; set; }
+
         public string AssetContent { get;set; }
+
+        public bool HasBonds { get; set; }
 
         [XmlIgnore]
         public byte[] DecodedAssetContent

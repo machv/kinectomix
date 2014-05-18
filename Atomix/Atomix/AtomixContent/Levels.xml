@@ -3,7 +3,7 @@
   <Asset Type="Kinectomix.Logic.LevelDefinition[]">
     <Item>
       <Name>Level 1</Name>
-      <FileName>New.atx</FileName>
+      <FileName>test1.atx</FileName>
       <IsFinished>false</IsFinished>
       <Finished>0001-01-01T00:00:00</Finished>
     </Item>

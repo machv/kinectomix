@@ -31,6 +31,12 @@ namespace Atomix.ViewModel
             set { _tile.IsEmpty = value; }
         }
 
+        string _assetCode = string.Empty;
+        public string AssetCode
+        {
+            get { return _assetCode; }
+        }
+
         /// <summary>
         /// Indicates if this tile is currently active in the game.
         /// </summary>
@@ -49,8 +55,22 @@ namespace Atomix.ViewModel
         public BoardTileViewModel(BoardTile tile)
         {
             _tile = tile;
+            _assetCode = GetAssetCode(tile);
         }
 
         public BoardTileViewModel() { }
+
+        public static string GetAssetCode(BoardTile tile)
+        {
+            return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", tile.Asset,
+                (int)tile.TopLeftBond,
+                (int)tile.TopBond,
+                (int)tile.TopRightBond,
+                (int)tile.RightBond,
+                (int)tile.BottomRightBond,
+                (int)tile.BottomBond,
+                (int)tile.BottomLeftBond,
+                (int)tile.LeftBond);
+        }
     }
 }

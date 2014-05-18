@@ -60,19 +60,6 @@ namespace Kinectomix.LevelEditor.ViewModel
                 AssetName = asset;
                 BondsTemplate = tile;
             }
-
-            public static string GetTileAssetWithBondsName(BoardTileViewModel tile)
-            {
-                return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", tile.Asset,
-                    (int)tile.TopLeftBond,
-                    (int)tile.TopBond,
-                    (int)tile.TopRightBond,
-                    (int)tile.RightBond,
-                    (int)tile.BottomRightBond,
-                    (int)tile.BottomBond,
-                    (int)tile.BottomLeftBond,
-                    (int)tile.LeftBond);
-            }
         }
 
         public static Level ToLevel(LevelViewModel levelViewModel, Tiles tiles)
@@ -89,7 +76,7 @@ namespace Kinectomix.LevelEditor.ViewModel
                 if (!required.ContainsKey(tileViewModel.Tile.Asset))
                     required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset));
 
-                string key = BuildAsset.GetTileAssetWithBondsName(tileViewModel);
+                string key = tileViewModel.GetAssetCode();
                 if (!required.ContainsKey(key))
                     required.Add(key, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel));
             }
@@ -102,7 +89,7 @@ namespace Kinectomix.LevelEditor.ViewModel
                 if (!required.ContainsKey(tileViewModel.Tile.Asset))
                     required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset));
 
-                string key = BuildAsset.GetTileAssetWithBondsName(tileViewModel);
+                string key = tileViewModel.GetAssetCode();
                 if (!required.ContainsKey(key))
                     required.Add(key, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel));
             }
@@ -114,6 +101,7 @@ namespace Kinectomix.LevelEditor.ViewModel
                 {
                     LevelAsset levelAsset = new LevelAsset();
                     levelAsset.AssetName = item.Value.AssetName;
+                    levelAsset.HasBonds = false;
                     levelAsset.AssetContent = System.Convert.ToBase64String(System.IO.File.ReadAllBytes(tile.AssetFile));
                     level.Assets.Add(levelAsset);
 
@@ -152,6 +140,8 @@ namespace Kinectomix.LevelEditor.ViewModel
 
                         LevelAsset levelAsset = new LevelAsset();
                         levelAsset.AssetName = item.Value.AssetName;
+                        levelAsset.AssetCode = item.Key;
+                        levelAsset.HasBonds = item.Value.BondsTemplate.Tile.HasBonds;
                         levelAsset.AssetContent = Convert.ToBase64String(bytes);
                         level.Assets.Add(levelAsset);
                     }
