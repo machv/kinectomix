@@ -54,9 +54,9 @@ namespace Kinectomix.LevelEditor.Model
             }
         }
 
-        public BoardTileViewModel this[string name]
+        public BoardTileViewModel this[string code]
         {
-            get { return _tiles.Where(t => t.Asset == name).FirstOrDefault(); }
+            get { return _tiles.Where(t => t.Asset == code).FirstOrDefault(); }
         }
 
         public Tiles()
@@ -70,7 +70,7 @@ namespace Kinectomix.LevelEditor.Model
             BoardTileViewModel tileVm;
 
             // Add default system tiles
-            tile = new BoardTile() { IsFixed = true, IsEmpty = true, Asset = "Empty" };
+            tile = new BoardTile() { IsFixed = true, IsEmpty = true, Asset = "Empty", Name = "Empty" };
             tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) };
             Add(tileVm, TileType.Board);
             Add(tileVm, TileType.Molecule);
@@ -82,7 +82,7 @@ namespace Kinectomix.LevelEditor.Model
             foreach (string tilePath in tiles)
             {
                 string tileName = Path.GetFileNameWithoutExtension(tilePath);
-                BoardTile tile = new BoardTile() { IsFixed = type == AssetType.Fixed, IsEmpty = false, Asset = tileName };
+                BoardTile tile = new BoardTile() { IsFixed = type == AssetType.Fixed, IsEmpty = false, Asset = tileName, Name = tileName };
                 BoardTileViewModel tileVm = new BoardTileViewModel(tile, tilePath);
 
                 Add(tileVm, TileType.Board);
@@ -92,15 +92,21 @@ namespace Kinectomix.LevelEditor.Model
             }
         }
 
+        /// <summary>
+        /// Loads assets from level definition and skips assets with rendered bonds (as they will be generated during saving).
+        /// </summary>
+        /// <param name="level"></param>
         public void LoadLevelAssets(Level level)
         {
             foreach (LevelAsset asset in level.Assets.Where(a => a.HasBonds == false))
             {
-                BoardTile tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = asset.AssetName };
+                BoardTile tile = new BoardTile() { IsFixed = asset.IsFixed, IsEmpty = false, Asset = asset.AssetCode, Name = asset.AssetName };
                 BoardTileViewModel tileVm = new BoardTileViewModel(tile, asset);
 
                 Add(tileVm, TileType.Board);
-                Add(tileVm, TileType.Molecule);
+
+                if (!asset.IsFixed)
+                    Add(tileVm, TileType.Molecule);
             }
         }
 

@@ -10,7 +10,12 @@ namespace Kinectomix.Logic
     public class BoardTile
     {
         /// <summary>
-        /// Image asset representing this tile.
+        /// User friendly name of current tile. 
+        /// </summary>
+        /// <returns>Name of current tile.</returns>
+        public string Name { get; set; }
+        /// <summary>
+        /// Image asset representing this tile, this is key used to look up in the level assets.
         /// </summary>
         /// <returns>File name of asset.</returns>
         public string Asset { get; set; }

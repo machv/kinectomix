@@ -76,7 +76,7 @@ namespace Kinectomix.LevelEditor.Behavior
         }
 
         private static BoardTileViewModel _originalTile;
-        private static void Tile_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private static void Tile_MouseEnter(object sender, MouseEventArgs e)
         {
             if (_paintTile == null)
                 return;
@@ -98,6 +98,7 @@ namespace Kinectomix.LevelEditor.Behavior
 
                 _originalTile = new BoardTileViewModel(new BoardTile());
                 _originalTile.Asset = tile.Asset;
+                _originalTile.Name = tile.Name;
                 _originalTile.AssetSource = tile.AssetSource;
                 _originalTile.AssetFile = tile.AssetFile;
                 _originalTile.IsFixed = tile.IsFixed;
@@ -122,6 +123,7 @@ namespace Kinectomix.LevelEditor.Behavior
             if (_paintTile != null)
             {
                 selectedTile.Asset = template.Asset;
+                selectedTile.Name = template.Name;
                 selectedTile.AssetSource = template.AssetSource;
                 selectedTile.AssetFile = template.AssetFile;
                 selectedTile.IsFixed = template.IsFixed;

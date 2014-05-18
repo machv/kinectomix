@@ -68,17 +68,26 @@ namespace Kinectomix.LevelEditor.ViewModel
             level.Board = new TilesCollection<BoardTile>(levelViewModel.Board.Tiles.RowsCount, levelViewModel.Board.Tiles.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Board.Tiles)
             {
+                string code = tileViewModel.AssetSource.GetHashCode().ToString();
+                if (!tileViewModel.IsEmpty)
+                    tileViewModel.Asset = code;
+
                 level.Board.Add(tileViewModel.Tile);
 
-                AddAssetForBuild(required, tileViewModel);
+                AddAssetForBuild(required, code, tileViewModel);
             }
 
             level.Molecule = new TilesCollection<BoardTile>(levelViewModel.Molecule.Tiles.RowsCount, levelViewModel.Molecule.Tiles.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Molecule.Tiles)
             {
+
+                string code = tileViewModel.AssetSource.GetHashCode().ToString();
+                if (!tileViewModel.IsEmpty)
+                    tileViewModel.Asset = code;
+
                 level.Molecule.Add(tileViewModel.Tile);
 
-                AddAssetForBuild(required, tileViewModel);
+                AddAssetForBuild(required, code, tileViewModel);
             }
 
             foreach (KeyValuePair<string, BuildAsset> item in required)
@@ -133,19 +142,19 @@ namespace Kinectomix.LevelEditor.ViewModel
             return level;
         }
 
-        private static void AddAssetForBuild(Dictionary<string, BuildAsset> required, BoardTileViewModel tileViewModel)
+        private static void AddAssetForBuild(Dictionary<string, BuildAsset> required, string code, BoardTileViewModel tileViewModel)
         {
             if (tileViewModel.IsEmpty)
                 return;
 
-            if (!required.ContainsKey(tileViewModel.Tile.Asset))
-                required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel, false));
+            if (!required.ContainsKey(code))
+                required.Add(code, new BuildAsset(tileViewModel.Tile.Name, tileViewModel, false));
 
             if (tileViewModel.HasBonds)
             {
-                string key = tileViewModel.GetAssetCode();
+                string key = tileViewModel.GetAssetCode(code);
                 if (!required.ContainsKey(key))
-                    required.Add(key, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel, true));
+                    required.Add(key, new BuildAsset(tileViewModel.Tile.Name, tileViewModel, true));
             }
         }
 

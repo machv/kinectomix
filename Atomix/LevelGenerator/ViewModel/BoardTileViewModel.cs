@@ -46,6 +46,16 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
+        public string Name
+        {
+            get { return _tile.Name; }
+            set
+            {
+                _tile.Name = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsFixed
         {
             get { return _tile.IsFixed; }
@@ -195,14 +205,14 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
-        public string GetAssetCode()
+        public string GetAssetCode(string code)
         {
-            return GetAssetCode(this);
+            return GetAssetCode(this, code);
         }
 
-        public static string GetAssetCode(BoardTileViewModel tile)
+        public static string GetAssetCode(BoardTileViewModel tile, string code)
         {
-            return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", tile.Asset,
+            return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", code,
                 (int)tile.TopLeftBond,
                 (int)tile.TopBond,
                 (int)tile.TopRightBond,
