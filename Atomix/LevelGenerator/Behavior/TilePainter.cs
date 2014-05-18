@@ -1,5 +1,5 @@
 ﻿using Kinectomix.Logic;
-using Kinectomix.LevelGenerator.ViewModel;
+using Kinectomix.LevelEditor.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Kinectomix.LevelGenerator.Behavior
+namespace Kinectomix.LevelEditor.Behavior
 {
     public class TilePainter
     {

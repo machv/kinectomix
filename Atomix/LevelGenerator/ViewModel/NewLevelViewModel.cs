@@ -1,4 +1,4 @@
-﻿using Kinectomix.LevelGenerator.Mvvm;
+﻿using Kinectomix.LevelEditor.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Kinectomix.LevelGenerator.ViewModel
+namespace Kinectomix.LevelEditor.ViewModel
 {
     public class NewLevelViewModel : Mvvm.NotifyPropertyBase
     {

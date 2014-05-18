@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Kinectomix.LevelGenerator
+namespace Kinectomix.LevelEditor
 {
     public class NotNullToVisibilityConverter : IValueConverter
     {

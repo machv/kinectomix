@@ -1,4 +1,4 @@
-﻿using Kinectomix.LevelGenerator.Mvvm;
+﻿using Kinectomix.LevelEditor.Mvvm;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinectomix.LevelGenerator.Model
+namespace Kinectomix.LevelEditor.Model
 {
     public class LevelFileDialog : IFileDialogService
     {

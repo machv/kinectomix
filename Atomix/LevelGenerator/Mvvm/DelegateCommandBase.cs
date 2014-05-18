@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Kinectomix.LevelGenerator.Mvvm
+namespace Kinectomix.LevelEditor.Mvvm
 {
     public class DelegateCommandBase : ICommand
     {

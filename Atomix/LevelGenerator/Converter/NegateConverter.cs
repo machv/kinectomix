@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace Kinectomix.LevelGenerator.Converter
+namespace Kinectomix.LevelEditor.Converter
 {
     public class NegateConverter : IValueConverter
     {

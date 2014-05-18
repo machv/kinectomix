@@ -1,4 +1,4 @@
-﻿using Kinectomix.LevelGenerator.ViewModel;
+﻿using Kinectomix.LevelEditor.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Kinectomix.LevelGenerator
+namespace Kinectomix.LevelEditor
 {
     public class TileSelectedEventArgs : EventArgs
     {

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Kinectomix.LevelGenerator.Converter
+namespace Kinectomix.LevelEditor.Converter
 {
     public class NullToTrueConverter : IValueConverter
     {

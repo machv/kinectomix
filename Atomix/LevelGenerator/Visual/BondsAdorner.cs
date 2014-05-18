@@ -1,5 +1,5 @@
 ﻿using Kinectomix.Logic;
-using Kinectomix.LevelGenerator.ViewModel;
+using Kinectomix.LevelEditor.ViewModel;
 using System;
 using System.IO;
 using System.Windows;
@@ -9,7 +9,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml;
 
-namespace Kinectomix.LevelGenerator
+namespace Kinectomix.LevelEditor
 {
     public class BondsAdorner : Adorner
     {

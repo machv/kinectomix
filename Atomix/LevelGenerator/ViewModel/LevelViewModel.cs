@@ -1,5 +1,5 @@
 ﻿using Kinectomix.Logic;
-using Kinectomix.LevelGenerator.Model;
+using Kinectomix.LevelEditor.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Kinectomix.LevelGenerator.ViewModel
+namespace Kinectomix.LevelEditor.ViewModel
 {
     public class LevelViewModel : Mvvm.NotifyPropertyBase
     {

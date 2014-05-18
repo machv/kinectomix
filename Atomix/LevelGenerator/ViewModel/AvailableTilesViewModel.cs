@@ -1,5 +1,5 @@
 ﻿using Kinectomix.Logic;
-using Kinectomix.LevelGenerator.Model;
+using Kinectomix.LevelEditor.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Kinectomix.LevelGenerator.ViewModel
+namespace Kinectomix.LevelEditor.ViewModel
 {
     public class AvailableTilesViewModel : Mvvm.NotifyPropertyBase
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 
-namespace Kinectomix.LevelGenerator.Model
+namespace Kinectomix.LevelEditor.Model
 {
     public class DependencyPropertyCollection : Collection<DependencyProperty>
     {

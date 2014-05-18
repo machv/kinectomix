@@ -1,12 +1,12 @@
 ﻿using Kinectomix.Logic;
-using Kinectomix.LevelGenerator.Model;
-using Kinectomix.LevelGenerator.Mvvm;
+using Kinectomix.LevelEditor.Model;
+using Kinectomix.LevelEditor.Mvvm;
 using System.IO;
 using System.Windows.Input;
 using System;
 using System.Windows;
 
-namespace Kinectomix.LevelGenerator.ViewModel
+namespace Kinectomix.LevelEditor.ViewModel
 {
     public class EditorViewModel : NotifyPropertyBase
     {

@@ -1,10 +1,10 @@
-﻿<Application x:Class="LevelGenerator.App"
+﻿<Application x:Class="Kinectomix.LevelEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ViewModel="clr-namespace:Kinectomix.LevelGenerator.ViewModel"
-             xmlns:Behavior="clr-namespace:Kinectomix.LevelGenerator.Behavior"
-             xmlns:Converter="clr-namespace:Kinectomix.LevelGenerator.Converter"
-             xmlns:l="clr-namespace:Kinectomix.LevelGenerator"
+             xmlns:ViewModel="clr-namespace:Kinectomix.LevelEditor.ViewModel"
+             xmlns:Behavior="clr-namespace:Kinectomix.LevelEditor.Behavior"
+             xmlns:Converter="clr-namespace:Kinectomix.LevelEditor.Converter"
+             xmlns:l="clr-namespace:Kinectomix.LevelEditor"
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
         <Converter:NegateConverter x:Key="NegateConverter" />

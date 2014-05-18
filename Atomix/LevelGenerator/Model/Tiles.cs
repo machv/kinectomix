@@ -1,5 +1,5 @@
 ﻿using Kinectomix.Logic;
-using Kinectomix.LevelGenerator.ViewModel;
+using Kinectomix.LevelEditor.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
 
-namespace Kinectomix.LevelGenerator.Model
+namespace Kinectomix.LevelEditor.Model
 {
     public class Tiles
     {

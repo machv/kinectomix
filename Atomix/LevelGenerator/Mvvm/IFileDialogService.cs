@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinectomix.LevelGenerator.Mvvm
+namespace Kinectomix.LevelEditor.Mvvm
 {
     public interface IFileDialogService
     {

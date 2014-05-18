@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Kinectomix.LevelGenerator.View
+namespace Kinectomix.LevelEditor.View
 {
     /// <summary>
     /// Interaction logic for EditorWindow.xaml

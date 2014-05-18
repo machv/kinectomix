@@ -1,5 +1,5 @@
 ﻿using Kinectomix.Logic;
-using Kinectomix.LevelGenerator.ViewModel;
+using Kinectomix.LevelEditor.ViewModel;
 using Microsoft.Win32;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
@@ -24,7 +24,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 
-namespace Kinectomix.LevelGenerator.View
+namespace Kinectomix.LevelEditor.View
 {
     /// <summary>
     /// Interaction logic for LevelControl.xaml

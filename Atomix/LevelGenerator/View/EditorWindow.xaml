@@ -1,8 +1,8 @@
-﻿<Window x:Class="Kinectomix.LevelGenerator.View.EditorWindow"
+﻿<Window x:Class="Kinectomix.LevelEditor.View.EditorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:View="clr-namespace:Kinectomix.LevelGenerator.View"
-        xmlns:ViewModel="clr-namespace:Kinectomix.LevelGenerator.ViewModel"
+        xmlns:View="clr-namespace:Kinectomix.LevelEditor.View"
+        xmlns:ViewModel="clr-namespace:Kinectomix.LevelEditor.ViewModel"
         Title="Kinectomix Level Editor" Height="650" Width="625">
     <Window.DataContext>
         <ViewModel:EditorViewModel/>

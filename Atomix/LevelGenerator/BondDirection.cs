@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kinectomix.LevelGenerator
+namespace Kinectomix.LevelEditor
 {
     public class BondDirection
     {

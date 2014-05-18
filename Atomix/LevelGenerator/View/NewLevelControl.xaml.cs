@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Kinectomix.LevelGenerator.View
+namespace Kinectomix.LevelEditor.View
 {
     /// <summary>
     /// Interaction logic for NewLevelControl.xaml
