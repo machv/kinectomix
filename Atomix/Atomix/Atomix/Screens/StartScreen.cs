@@ -92,7 +92,7 @@ namespace Atomix
         {
             LevelDefinition levelInfo = AtomixGame.State.GetCurrentLevel();
 
-            Level currentLevel = LevelLoader.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
+            Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
 
             //Level currentLevel = ScreenManager.Content.Load<AtomixData.Level>("Levels/" + levelInfo.AssetName);
             LevelScreen gameScreen = new LevelScreen(currentLevel, spriteBatch);
