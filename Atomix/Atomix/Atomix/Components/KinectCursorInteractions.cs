@@ -10,6 +10,12 @@ namespace Atomix.Components
 {
     public class KinectCursorInteractions : KinectCursor
     {
+        public KinectCursorInteractions(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
+            :base (game, chooser, skeletons, offset, scale)
+        {
+
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);

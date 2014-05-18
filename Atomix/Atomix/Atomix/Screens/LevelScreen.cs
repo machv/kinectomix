@@ -558,15 +558,15 @@ namespace Atomix
             {
                 for (int y = 0; y < currentLevel.Board.ColumnsCount; y++)
                 {
-                    //switch (currentLevel.Board[x, y].Type)
-                    //{
-                    //    case TileType.Down:
-                    //    case TileType.Up:
-                    //    case TileType.Right:
-                    //    case TileType.Left:
-                    //        currentLevel.Board[x, y].Type = TileType.Empty;
-                    //        break;
-                    //}
+                    switch (currentLevel.Board[x, y].Asset)
+                    {
+                        case "Down":
+                        case "Up":
+                        case "Right":
+                        case "Left":
+                            currentLevel.Board[x, y].Asset = "Empty";
+                            break;
+                    }
 
                     currentLevel.Board[x, y].IsSelected = false;
                     currentLevel.Board[x, y].Movements = Direction.None;
@@ -619,22 +619,22 @@ namespace Atomix
                     float RotationAngle = 0;
                     Vector2 origin = new Vector2();
 
-                    switch (board[i, j].Movements)
+                    switch (board[i, j].Asset)
                     {
                         //case TileType.Wall:
                         //    drawEmpty = false;
                         //    break;
-                        case Direction.Down:
+                        case "Down":
                             RotationAngle = MathHelper.Pi;
                             origin.X = tile.Width;
                             origin.Y = tile.Height;
                             break;
-                        case Direction.Left:
+                        case "Left":
                             RotationAngle = -1 * MathHelper.Pi / 2;
                             origin.X = tile.Width;
                             origin.Y = 0;
                             break;
-                        case Direction.Right:
+                        case "Right":
                             RotationAngle = MathHelper.Pi / 2;
                             origin.Y = tile.Height;
                             break;
