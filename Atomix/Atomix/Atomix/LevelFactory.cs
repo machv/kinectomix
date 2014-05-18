@@ -1,6 +1,8 @@
 ﻿using Atomix.ViewModel;
 using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -16,7 +18,7 @@ namespace Atomix
                 return seralizer.Deserialize(stream) as Level;
         }
 
-        public static LevelViewModel ToViewModel(Level level)
+        public static LevelViewModel ToViewModel(Level level, GraphicsDevice graphicsDevice)
         {
             LevelViewModel levelVm = new LevelViewModel();
 
@@ -34,6 +36,19 @@ namespace Atomix
 
                 foreach (BoardTile tile in level.Molecule)
                     levelVm.Molecule.Add(new BoardTileViewModel(tile));
+            }
+
+            // Load assets
+            levelVm.Assets = new Dictionary<string, Texture2D>();
+            foreach (var asset in level.Assets)
+            {
+                using (Stream stream = new MemoryStream(asset.DecodedAssetContent))
+                {
+                    Texture2D texture = Texture2D.FromStream(graphicsDevice, stream);
+
+                    string key = asset.AssetCode != null ? asset.AssetCode : asset.AssetName;
+                    levelVm.Assets.Add(key, texture);
+                }
             }
 
             return levelVm;

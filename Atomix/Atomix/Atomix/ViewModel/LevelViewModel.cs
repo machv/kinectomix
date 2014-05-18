@@ -1,8 +1,6 @@
 ﻿using Kinectomix.Logic;
-using System;
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Atomix.ViewModel
 {
@@ -11,6 +9,8 @@ namespace Atomix.ViewModel
         public TilesCollection<BoardTileViewModel> Board { get; set; }
 
         public TilesCollection<BoardTileViewModel> Molecule { get; set; }
+
+        public Dictionary<string, Texture2D> Assets { get; set; }
 
         public bool CanGoUp(int x, int y)
         {

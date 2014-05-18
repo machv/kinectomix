@@ -10,13 +10,21 @@ namespace Atomix.ViewModel
         public BoardTile Tile
         {
             get { return _tile; }
-            set { _tile = value; }
+            set
+            {
+                _tile = value;
+                InvalidateAssetCode();
+            }
         }
 
         public string Asset
         {
             get { return _tile.Asset; }
-            set { _tile.Asset = value; }
+            set
+            {
+                _tile.Asset = value;
+                InvalidateAssetCode();
+            }
         }
 
         public bool IsFixed
@@ -55,13 +63,30 @@ namespace Atomix.ViewModel
         public BoardTileViewModel(BoardTile tile)
         {
             _tile = tile;
-            _assetCode = GetAssetCode(tile);
+            InvalidateAssetCode();
+        }
+
+        protected void InvalidateAssetCode()
+        {
+            _assetCode = GetAssetCode(_tile);
         }
 
         public BoardTileViewModel() { }
 
         public static string GetAssetCode(BoardTile tile)
         {
+            // System assets are unique
+            switch (tile.Asset)
+            {
+                case "Up":
+                case "Down":
+                case "Left":
+                case "Right":
+                case "Empty":
+                case "Wall":
+                    return tile.Asset;
+            }
+
             return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", tile.Asset,
                 (int)tile.TopLeftBond,
                 (int)tile.TopBond,

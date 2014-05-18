@@ -55,5 +55,18 @@ namespace Kinectomix.Logic
         {
             IsFixed = true;
         }
+
+        public string GetAssetCode()
+        {
+            return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", Asset,
+                (int)TopLeftBond,
+                (int)TopBond,
+                (int)TopRightBond,
+                (int)RightBond,
+                (int)BottomRightBond,
+                (int)BottomBond,
+                (int)BottomLeftBond,
+                (int)LeftBond);
+        }
     }
 }
