@@ -138,6 +138,11 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
+        public bool HasBonds
+        {
+            get { return Tile.HasBonds; }
+        }
+
         private bool _isPreview;
         public bool IsPreview
         {
@@ -180,16 +185,13 @@ namespace Kinectomix.LevelEditor.ViewModel
             _assetFile = null;
             _levelAsset = asset;
 
-            using (MemoryStream memoryStream = new MemoryStream(_levelAsset.DecodedAssetContent))
+            using (MemoryStream stream = new MemoryStream(_levelAsset.DecodedAssetContent))
             {
-                BitmapImage bi = new BitmapImage();
-                bi.BeginInit();
-                bi.CreateOptions = BitmapCreateOptions.None;
-                bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.StreamSource = memoryStream;
-                bi.EndInit();
+                BitmapDecoder decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+                BitmapFrame frame = decoder.Frames.First();
+                frame.Freeze();
 
-                _assetSource = bi;
+                _assetSource = frame;
             }
         }
 

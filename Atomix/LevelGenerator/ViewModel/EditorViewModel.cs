@@ -41,13 +41,16 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
-        private string _userAssetsPath;
+        private string _userAtomAssetsPath;
+        private string _userFixedAssetsPath;
 
         public EditorViewModel()
         {
-            _userAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.TilesDirectory);
+            _userAtomAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.AtomTilesDirectory);
+            _userFixedAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.FixedTilesDirectory);
             _tiles = new Tiles();
-            _tiles.LoadUserAssets(_userAssetsPath);
+            _tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
+            _tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
 
             _levelFileDialog = new LevelFileDialog();
             _saveAsLevelCommand = new DelegateCommand(SaveAsLevel, CanExecuteSaveAs);
@@ -101,7 +104,8 @@ namespace Kinectomix.LevelEditor.ViewModel
 
             _tiles.Clear();
             _tiles.LoadSystemAssets();
-            _tiles.LoadUserAssets(_userAssetsPath);
+            _tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
+            _tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
 
             Level = level;
 
@@ -200,7 +204,8 @@ namespace Kinectomix.LevelEditor.ViewModel
             _tiles.Clear();
             _tiles.LoadSystemAssets();
             _tiles.LoadLevelAssets(level);
-            _tiles.LoadUserAssets(_userAssetsPath);
+            _tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
+            _tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
 
             Level = LevelViewModel.FromLevel(level, _tiles);
             SelectedTab = 0;

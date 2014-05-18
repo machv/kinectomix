@@ -14,6 +14,8 @@ namespace Kinectomix.Logic
 
         public bool HasBonds { get; set; }
 
+        public bool IsFixed { get; set; }
+
         [XmlIgnore]
         public byte[] DecodedAssetContent
         {

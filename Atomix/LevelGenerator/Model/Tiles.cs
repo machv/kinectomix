@@ -17,6 +17,12 @@ namespace Kinectomix.LevelEditor.Model
             Molecule,
         }
 
+        public enum AssetType
+        {
+            Atom,
+            Fixed,
+        }
+
         private ObservableCollection<BoardTileViewModel> _tiles = new ObservableCollection<BoardTileViewModel>();
         private ObservableCollection<BoardTileViewModel> _boardTiles = new ObservableCollection<BoardTileViewModel>();
         private ObservableCollection<BoardTileViewModel> _moleculeTiles = new ObservableCollection<BoardTileViewModel>();
@@ -68,23 +74,21 @@ namespace Kinectomix.LevelEditor.Model
             tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) };
             Add(tileVm, TileType.Board);
             Add(tileVm, TileType.Molecule);
-
-            tile = new BoardTile() { IsFixed = true, IsEmpty = false, Asset = "Wall" };
-            tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) };
-            Add(tileVm, TileType.Board);
         }
 
-        public void LoadUserAssets(string path)
+        public void LoadUserAssets(AssetType type, string path)
         {
             string[] tiles = Directory.GetFiles(path, "*.png");
             foreach (string tilePath in tiles)
             {
                 string tileName = Path.GetFileNameWithoutExtension(tilePath);
-                BoardTile tile = new BoardTile() { IsFixed = false, IsEmpty = false, Asset = tileName };
+                BoardTile tile = new BoardTile() { IsFixed = type == AssetType.Fixed, IsEmpty = false, Asset = tileName };
                 BoardTileViewModel tileVm = new BoardTileViewModel(tile, tilePath);
 
                 Add(tileVm, TileType.Board);
-                Add(tileVm, TileType.Molecule);
+
+                if (type == AssetType.Atom)
+                    Add(tileVm, TileType.Molecule);
             }
         }
 

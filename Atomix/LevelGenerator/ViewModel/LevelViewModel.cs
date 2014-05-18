@@ -48,17 +48,14 @@ namespace Kinectomix.LevelEditor.ViewModel
         class BuildAsset
         {
             public string AssetName { get; set; }
-            public BoardTileViewModel BondsTemplate { get; set; }
+            public BoardTileViewModel Template { get; set; }
+            public bool RenderWithBonds { get; set; }
 
-            public BuildAsset(string asset)
+            public BuildAsset(string asset, BoardTileViewModel tile, bool renderWithBonds)
             {
                 AssetName = asset;
-            }
-
-            public BuildAsset(string asset, BoardTileViewModel tile)
-            {
-                AssetName = asset;
-                BondsTemplate = tile;
+                Template = tile;
+                RenderWithBonds = renderWithBonds;
             }
         }
 
@@ -73,15 +70,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             {
                 level.Board.Add(tileViewModel.Tile);
 
-                if (tileViewModel.IsEmpty)
-                    continue;
-
-                if (!required.ContainsKey(tileViewModel.Tile.Asset))
-                    required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset));
-
-                string key = tileViewModel.GetAssetCode();
-                if (!required.ContainsKey(key))
-                    required.Add(key, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel));
+                AddAssetForBuild(required, tileViewModel);
             }
 
             level.Molecule = new TilesCollection<BoardTile>(levelViewModel.Molecule.Tiles.RowsCount, levelViewModel.Molecule.Tiles.ColumnsCount);
@@ -89,47 +78,30 @@ namespace Kinectomix.LevelEditor.ViewModel
             {
                 level.Molecule.Add(tileViewModel.Tile);
 
-                if (tileViewModel.IsEmpty)
-                    continue;
-
-                if (!required.ContainsKey(tileViewModel.Tile.Asset))
-                    required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset));
-
-                string key = tileViewModel.GetAssetCode();
-                if (!required.ContainsKey(key))
-                    required.Add(key, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel));
+                AddAssetForBuild(required, tileViewModel);
             }
 
             foreach (KeyValuePair<string, BuildAsset> item in required)
             {
-                BoardTileViewModel tile = tiles[item.Key];
-                if (tile != null && !string.IsNullOrEmpty(tile.AssetFile))
-                {
-                    LevelAsset levelAsset = new LevelAsset();
-                    levelAsset.AssetName = item.Value.AssetName;
-                    levelAsset.HasBonds = false;
-                    levelAsset.AssetContent = System.Convert.ToBase64String(System.IO.File.ReadAllBytes(tile.AssetFile));
-                    level.Assets.Add(levelAsset);
-
-                    //TODO: Zkontrolovat poměr stran a velikost assetu
-                }
-
-                if (item.Value.BondsTemplate != null)
+                if (item.Value.Template != null)
                 {
                     Size dimensions = new Size(49, 49);
                     int width = 4;
 
                     DrawingVisual drawingVisual = new DrawingVisual();
                     DrawingContext drawingContext = drawingVisual.RenderOpen();
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopBond, BondDirection.Top, width);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopRightBond, BondDirection.TopRight, width);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.RightBond, BondDirection.Right, width);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomRightBond, BondDirection.BottomRight, width);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomBond, BondDirection.Bottom, width);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.BottomLeftBond, BondDirection.BottomLeft, width);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.LeftBond, BondDirection.Left, width);
-                    drawingContext.DrawBond(dimensions, item.Value.BondsTemplate.TopLeftBond, BondDirection.TopLeft, width);
-                    drawingContext.DrawImage(item.Value.BondsTemplate.AssetSource, new Rect(0, 0, dimensions.Width, dimensions.Height));
+                    if (item.Value.RenderWithBonds)
+                    {
+                        drawingContext.DrawBond(dimensions, item.Value.Template.TopBond, BondDirection.Top, width);
+                        drawingContext.DrawBond(dimensions, item.Value.Template.TopRightBond, BondDirection.TopRight, width);
+                        drawingContext.DrawBond(dimensions, item.Value.Template.RightBond, BondDirection.Right, width);
+                        drawingContext.DrawBond(dimensions, item.Value.Template.BottomRightBond, BondDirection.BottomRight, width);
+                        drawingContext.DrawBond(dimensions, item.Value.Template.BottomBond, BondDirection.Bottom, width);
+                        drawingContext.DrawBond(dimensions, item.Value.Template.BottomLeftBond, BondDirection.BottomLeft, width);
+                        drawingContext.DrawBond(dimensions, item.Value.Template.LeftBond, BondDirection.Left, width);
+                        drawingContext.DrawBond(dimensions, item.Value.Template.TopLeftBond, BondDirection.TopLeft, width);
+                    }
+                    drawingContext.DrawImage(item.Value.Template.AssetSource, new Rect(0, 0, dimensions.Width, dimensions.Height));
                     drawingContext.Close();
 
                     RenderTargetBitmap bmp = new RenderTargetBitmap((int)dimensions.Width, (int)dimensions.Height, 96, 96, PixelFormats.Pbgra32);
@@ -151,13 +123,30 @@ namespace Kinectomix.LevelEditor.ViewModel
                     LevelAsset levelAsset = new LevelAsset();
                     levelAsset.AssetName = item.Value.AssetName;
                     levelAsset.AssetCode = item.Key;
-                    levelAsset.HasBonds = item.Value.BondsTemplate.Tile.HasBonds;
+                    levelAsset.HasBonds = item.Value.RenderWithBonds ? item.Value.Template.Tile.HasBonds : false;
+                    levelAsset.IsFixed = item.Value.Template.IsFixed;
                     levelAsset.AssetContent = Convert.ToBase64String(bytes);
                     level.Assets.Add(levelAsset);
                 }
             }
 
             return level;
+        }
+
+        private static void AddAssetForBuild(Dictionary<string, BuildAsset> required, BoardTileViewModel tileViewModel)
+        {
+            if (tileViewModel.IsEmpty)
+                return;
+
+            if (!required.ContainsKey(tileViewModel.Tile.Asset))
+                required.Add(tileViewModel.Tile.Asset, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel, false));
+
+            if (tileViewModel.HasBonds)
+            {
+                string key = tileViewModel.GetAssetCode();
+                if (!required.ContainsKey(key))
+                    required.Add(key, new BuildAsset(tileViewModel.Tile.Asset, tileViewModel, true));
+            }
         }
 
         public Level ToLevel(Tiles tiles)

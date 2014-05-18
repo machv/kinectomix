@@ -2,8 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Kinectomix.LevelEditor.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="TilesDirectory" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Tiles</Value>
+    <Setting Name="AtomTilesDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Tile/Atom</Value>
     </Setting>
     <Setting Name="TileWith" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">49</Value>
@@ -22,6 +22,9 @@
     </Setting>
     <Setting Name="DefaultMoleculeColumns" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="FixedTilesDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Tile/Fixed</Value>
     </Setting>
   </Settings>
 </SettingsFile>

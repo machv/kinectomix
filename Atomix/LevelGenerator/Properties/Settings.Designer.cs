@@ -25,13 +25,13 @@ namespace Kinectomix.LevelEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Tiles")]
-        public string TilesDirectory {
+        [global::System.Configuration.DefaultSettingValueAttribute("Tile/Atom")]
+        public string AtomTilesDirectory {
             get {
-                return ((string)(this["TilesDirectory"]));
+                return ((string)(this["AtomTilesDirectory"]));
             }
             set {
-                this["TilesDirectory"] = value;
+                this["AtomTilesDirectory"] = value;
             }
         }
         
@@ -104,6 +104,18 @@ namespace Kinectomix.LevelEditor.Properties {
             }
             set {
                 this["DefaultMoleculeColumns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tile/Fixed")]
+        public string FixedTilesDirectory {
+            get {
+                return ((string)(this["FixedTilesDirectory"]));
+            }
+            set {
+                this["FixedTilesDirectory"] = value;
             }
         }
     }
