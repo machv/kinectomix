@@ -103,6 +103,7 @@ namespace Kinectomix.LevelEditor.Behavior
                 _originalTile.AssetFile = tile.AssetFile;
                 _originalTile.IsFixed = tile.IsFixed;
                 _originalTile.IsEmpty = tile.IsEmpty;
+                _originalTile.IsClear = tile.IsClear;
 
                 PaintTile(_paintTile, tile, true);
             }
@@ -128,6 +129,7 @@ namespace Kinectomix.LevelEditor.Behavior
                 selectedTile.AssetFile = template.AssetFile;
                 selectedTile.IsFixed = template.IsFixed;
                 selectedTile.IsEmpty = template.IsEmpty;
+                selectedTile.IsClear = template.IsClear;
                 selectedTile.IsPreview = isPreview;
             }
         }

@@ -260,6 +260,14 @@ namespace Kinectomix.Logic
                 // Make sure it isn't a text node or something
                 if (node is XmlElement)
                 {
+                    XmlAttributeCollection attributes = (node as XmlElement).Attributes;
+                    if (attributes["xsi:nil"] != null && attributes["xsi:nil"].Value.ToLower() == "true")
+                    {
+                        Add(default(T));
+
+                        continue;
+                    }
+
                     XmlElement elem = doc.CreateElement(typeof(T).Name);
                     elem.InnerXml = node.InnerXml;
                     foreach (XmlAttribute xmlAttr in (node as XmlElement).Attributes)
@@ -269,7 +277,7 @@ namespace Kinectomix.Logic
                         elem.Attributes.Append(newAttr);
                     }
 
-                    this.Add(Serializer.Deserialize<T>(elem));
+                    Add(Serializer.Deserialize<T>(elem));
                 }
             }
         }

@@ -68,6 +68,13 @@ namespace Kinectomix.LevelEditor.ViewModel
             level.Board = new TilesCollection<BoardTile>(levelViewModel.Board.Tiles.RowsCount, levelViewModel.Board.Tiles.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Board.Tiles)
             {
+                if (tileViewModel.IsClear)
+                {
+                    level.Board.Add(null);
+
+                    continue;
+                }
+
                 string code = tileViewModel.AssetSource.GetHashCode().ToString();
                 if (!tileViewModel.IsEmpty)
                     tileViewModel.Asset = code;
@@ -80,6 +87,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             level.Molecule = new TilesCollection<BoardTile>(levelViewModel.Molecule.Tiles.RowsCount, levelViewModel.Molecule.Tiles.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Molecule.Tiles)
             {
+                if (tileViewModel.IsClear)
+                {
+                    level.Molecule.Add(null);
+
+                    continue;
+                }
 
                 string code = tileViewModel.AssetSource.GetHashCode().ToString();
                 if (!tileViewModel.IsEmpty)

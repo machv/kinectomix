@@ -167,6 +167,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Board\Clean.png" />
     <Content Include="Tile\Fixed\Wall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

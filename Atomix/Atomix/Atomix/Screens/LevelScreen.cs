@@ -449,7 +449,8 @@ namespace Atomix
             {
                 for (int j = 0; j < board.ColumnsCount; j++)
                 {
-                    board[i, j].RenderPosition = mPosition;
+                    if(board[i, j] != null)
+                        board[i, j].RenderPosition = mPosition;
 
                     mPosition.X += TileWidth;
                 }
@@ -603,9 +604,6 @@ namespace Atomix
 
             switch (asset)
             {
-                case "Wall":
-                    tileTexture = wallTexture;
-                    break;
                 case "Empty":
                     tileTexture = emptyTexture;
                     break;
@@ -631,6 +629,9 @@ namespace Atomix
             {
                 for (int j = 0; j < board.ColumnsCount; j++)
                 {
+                    if (board[i, j] == null)
+                        continue;
+
                     Texture2D tile = GetTileTexture(board[i, j].AssetCode);
                     drawEmpty = true;
                     float RotationAngle = 0;
@@ -655,6 +656,12 @@ namespace Atomix
                             RotationAngle = MathHelper.Pi / 2;
                             origin.Y = tile.Height;
                             break;
+                    }
+
+                    if (!drawEmptyTiles && board[i, j].IsEmpty)
+                    {
+                        drawEmpty = false;
+                        tile = null;
                     }
 
                     if (drawEmpty && drawEmptyTiles)

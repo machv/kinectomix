@@ -164,6 +164,17 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
+        private bool _isClear = false;
+        public bool IsClear
+        {
+            get { return _isClear; }
+            set
+            {
+                _isClear = value;
+                OnPropertyChanged();
+            }
+        }
+
         private ImageSource _assetSource;
         public ImageSource AssetSource
         {

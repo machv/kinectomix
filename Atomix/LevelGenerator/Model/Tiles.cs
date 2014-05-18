@@ -70,6 +70,11 @@ namespace Kinectomix.LevelEditor.Model
             BoardTileViewModel tileVm;
 
             // Add default system tiles
+            tile = new BoardTile() { Asset = "Clean", Name = "Clean" };
+            tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))), IsClear = true };
+            Add(tileVm, TileType.Board);
+            Add(tileVm, TileType.Molecule);
+
             tile = new BoardTile() { IsFixed = true, IsEmpty = true, Asset = "Empty", Name = "Empty" };
             tileVm = new BoardTileViewModel(tile) { AssetSource = BitmapFrame.Create(new Uri(string.Format("pack://application:,,,/Board/{0}.png", tile.Asset))) };
             Add(tileVm, TileType.Board);

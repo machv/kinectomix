@@ -83,19 +83,19 @@ namespace Atomix.ViewModel
                 case "Left":
                 case "Right":
                 case "Empty":
-                case "Wall":
                     return tile.Asset;
             }
 
-            return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", tile.Asset,
-                (int)tile.TopLeftBond,
-                (int)tile.TopBond,
-                (int)tile.TopRightBond,
-                (int)tile.RightBond,
-                (int)tile.BottomRightBond,
-                (int)tile.BottomBond,
-                (int)tile.BottomLeftBond,
-                (int)tile.LeftBond);
+            return !tile.HasBonds ? tile.Asset :
+                                    string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", tile.Asset,
+                                        (int)tile.TopLeftBond,
+                                        (int)tile.TopBond,
+                                        (int)tile.TopRightBond,
+                                        (int)tile.RightBond,
+                                        (int)tile.BottomRightBond,
+                                        (int)tile.BottomBond,
+                                        (int)tile.BottomLeftBond,
+                                        (int)tile.LeftBond);
         }
     }
 }

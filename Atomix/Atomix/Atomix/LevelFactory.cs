@@ -27,7 +27,10 @@ namespace Atomix
                 levelVm.Board = new TilesCollection<BoardTileViewModel>(level.Board.RowsCount, level.Board.ColumnsCount);
 
                 foreach (BoardTile tile in level.Board)
-                    levelVm.Board.Add(new BoardTileViewModel(tile));
+                {
+                    BoardTileViewModel tileVm = tile != null ? new BoardTileViewModel(tile) : null;
+                    levelVm.Board.Add(tileVm);
+                }
             }
 
             if (level.Molecule != null)
@@ -35,7 +38,10 @@ namespace Atomix
                 levelVm.Molecule = new TilesCollection<BoardTileViewModel>(level.Molecule.RowsCount, level.Molecule.ColumnsCount);
 
                 foreach (BoardTile tile in level.Molecule)
-                    levelVm.Molecule.Add(new BoardTileViewModel(tile));
+                {
+                    BoardTileViewModel tileVm = tile != null ? new BoardTileViewModel(tile) : null;
+                    levelVm.Molecule.Add(tileVm);
+                }
             }
 
             // Load assets
