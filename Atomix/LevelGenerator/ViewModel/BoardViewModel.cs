@@ -64,8 +64,18 @@ namespace Kinectomix.LevelEditor.ViewModel
 
             foreach (BoardTile tile in board)
             {
-                BoardTileViewModel tileViewModel = new BoardTileViewModel(tile);
-                tileViewModel.AssetSource = tiles[tile.Asset].AssetSource;
+                BoardTileViewModel tileViewModel;
+                if (tile == null)
+                {
+                    tileViewModel = new BoardTileViewModel(new BoardTile() { Asset = "Clean" });
+                    tileViewModel.IsClear = true;
+                }
+                else
+                {
+                    tileViewModel = new BoardTileViewModel(tile);
+                }
+
+                tileViewModel.AssetSource = tiles[tileViewModel.Asset].AssetSource;
 
                 Tiles.Add(tileViewModel);
             }

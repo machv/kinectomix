@@ -14,7 +14,7 @@ namespace Atomix.ViewModel
 
         public bool CanGoUp(int x, int y)
         {
-            if (x > 0 && Board[x - 1, y].IsEmpty)
+            if (x > 0 && Board[x - 1, y] != null && Board[x - 1, y].IsEmpty)
                 return true;
 
             return false;
@@ -22,7 +22,7 @@ namespace Atomix.ViewModel
 
         public bool CanGoDown(int x, int y)
         {
-            if (x + 1 < Board.RowsCount && Board[x + 1, y].IsEmpty)
+            if (x + 1 < Board.RowsCount && Board[x + 1, y] != null && Board[x + 1, y].IsEmpty)
                 return true;
 
             return false;
@@ -30,7 +30,7 @@ namespace Atomix.ViewModel
 
         public bool CanGoLeft(int x, int y)
         {
-            if (y > 0 && Board[x, y - 1].IsEmpty)
+            if (y > 0 && Board[x, y - 1] != null && Board[x, y - 1].IsEmpty)
                 return true;
 
             return false;
@@ -38,7 +38,7 @@ namespace Atomix.ViewModel
 
         public bool CanGoRight(int x, int y)
         {
-            if (y + 1 < Board.ColumnsCount && Board[x, y + 1].IsEmpty)
+            if (y + 1 < Board.ColumnsCount && Board[x, y + 1] != null && Board[x, y + 1].IsEmpty)
                 return true;
 
             return false;

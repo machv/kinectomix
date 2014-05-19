@@ -186,7 +186,7 @@ namespace Atomix
                 clickOccurred = true;
             }
 
-            KinectCursor cursor = ((AtomixGame)this.ScreenManager.Game).Cursor;
+            KinectCursor cursor = ((AtomixGame)ScreenManager.Game).Cursor;
 
             if (isLevelFinished)
             {
@@ -264,7 +264,7 @@ namespace Atomix
                     for (int j = 0; j < level.Board.ColumnsCount; j++)
                     {
                         Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
-                        if (tile.Contains(mousePosition))
+                        if (clickOccurred && tile.Contains(mousePosition))
                         {
                             if (!level.Board[i, j].IsFixed)
                             {
@@ -449,7 +449,7 @@ namespace Atomix
             {
                 for (int j = 0; j < board.ColumnsCount; j++)
                 {
-                    if(board[i, j] != null)
+                    if (board[i, j] != null)
                         board[i, j].RenderPosition = mPosition;
 
                     mPosition.X += TileWidth;
@@ -474,10 +474,11 @@ namespace Atomix
                         for (int y = 0; y < level.Molecule.ColumnsCount; y++)
                         {
                             // If we have empty tile in definition it is like a wildcard that matches everything
-                            if (level.Molecule[x, y].IsEmpty)
+                            if (level.Molecule[x, y] == null || level.Molecule[x, y].IsEmpty)
                                 continue;
 
-                            if (level.Board[i + x, j + y].Asset != level.Molecule[x, y].Asset)
+                            // TODO overflow
+                            if (i + x >= level.Board.RowsCount || j + y >= level.Board.ColumnsCount || level.Board[i + x, j + y] == null || level.Board[i + x, j + y].Asset != level.Molecule[x, y].Asset)
                             {
                                 isMatch = false;
                                 break;
@@ -530,7 +531,7 @@ namespace Atomix
                 case Direction.Right:
                     while (newCoordinates.Y < level.Board.ColumnsCount)
                     {
-                        if (!level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty)
+                        if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
                             break;
 
                         newCoordinates.Y++;
@@ -541,7 +542,7 @@ namespace Atomix
                 case Direction.Left:
                     while (newCoordinates.Y >= 0)
                     {
-                        if (!level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty)
+                        if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
                             break;
 
                         newCoordinates.Y--;
@@ -552,7 +553,7 @@ namespace Atomix
                 case Direction.Down:
                     while (newCoordinates.X < level.Board.RowsCount)
                     {
-                        if (!level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty)
+                        if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
                             break;
 
                         newCoordinates.X++;
@@ -563,7 +564,7 @@ namespace Atomix
                 case Direction.Up:
                     while (newCoordinates.X >= 0)
                     {
-                        if (!level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty)
+                        if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
                             break;
 
                         newCoordinates.X--;
@@ -582,6 +583,9 @@ namespace Atomix
             {
                 for (int y = 0; y < level.Board.ColumnsCount; y++)
                 {
+                    if (level.Board[x, y] == null)
+                        continue;
+
                     switch (level.Board[x, y].Asset)
                     {
                         case "Down":
