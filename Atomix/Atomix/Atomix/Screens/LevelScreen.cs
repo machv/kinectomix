@@ -344,16 +344,12 @@ namespace Atomix
                                     // instead of just switching do the animation
                                     level.Board[atomCoordinates.X, atomCoordinates.Y] = level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
                                     level.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
-                                    level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true;// = TileType.Empty; // but now will be rendered as empty
-                                    level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// = TileType.Empty; // but now will be rendered as empty
+                                    level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true; // but now will be rendered as empty
+                                    level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// but now will be rendered as empty
 
                                     CalculateBoardTilePositions(boardPosition, level.Board);
 
                                     moves += 1;
-
-                                    //BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
-                                    //currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
-                                    //currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
 
                                     ClearBoard();
                                 }

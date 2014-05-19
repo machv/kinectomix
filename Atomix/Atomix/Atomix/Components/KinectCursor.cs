@@ -667,16 +667,16 @@ namespace Atomix.Components
             // draw lines for grid
             foreach (var line in _lines)
             {
-                Vector2 start = new Vector2(line.Item1.X, line.Item1.Y);
-                Vector2 end = new Vector2(line.Item2.X, line.Item2.Y);
+                Vector2 start = new Vector2(line.Item1.X / _scale, line.Item1.Y / _scale);
+                Vector2 end = new Vector2(line.Item2.X / _scale, line.Item2.Y / _scale);
                 Vector2 diff = end - start;
-                Vector2 scale = new Vector2(1.0f, diff.Length() / this.dotTexture.Height);
+                Vector2 scale = new Vector2(1.0f, diff.Length() / dotTexture.Height);
 
                 float angle = (float)Math.Atan2(diff.Y, diff.X) - MathHelper.PiOver2;
 
                 Color color = Color.CornflowerBlue;
 
-                spriteBatch.Draw(this.dotTexture, start + _renderOffset, null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
+                spriteBatch.Draw(dotTexture, (start + _renderOffset), null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
             }
 
             //spriteBatch.Draw(_pointTextures, new Vector2(left, top) + _renderOffset, Color.Yellow);
