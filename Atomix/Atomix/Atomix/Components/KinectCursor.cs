@@ -61,6 +61,13 @@ namespace Atomix.Components
 
         public Vector2 HandPosition { get { return new Vector2((int)cursorPosition.X, (int)cursorPosition.Y); } }
 
+        protected bool _isHandTracked = false;
+        public bool IsHandTracked
+        {
+            get { return _isHandTracked; }
+            protected set { _isHandTracked = value; }
+        }
+
         private const int Frames = 10;
         private const int FramesPerSec = 10;
 
@@ -111,6 +118,13 @@ namespace Atomix.Components
                         var cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton);
 
                         AddCursorPosition(cursor);
+
+                        if (cursor != Vector2.Zero)
+                            _isHandTracked = true;
+                    }
+                    else
+                    {
+                        _isHandTracked = false;
                     }
                 }
 
