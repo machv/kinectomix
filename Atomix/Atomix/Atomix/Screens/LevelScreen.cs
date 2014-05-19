@@ -37,6 +37,7 @@ namespace Atomix
         Texture2D wallTexture;
         Texture2D emptyTexture;
         Texture2D arrowTexture;
+        Texture2D activeTexture;
         Texture2D idleTexture;
         MouseState mouseState;
         MouseState lastMouseState;
@@ -90,13 +91,8 @@ namespace Atomix
 
             wallTexture = _content.Load<Texture2D>("Board/Wall");
             emptyTexture = _content.Load<Texture2D>("Board/Empty");
-            //carbonTexture = _content.Load<Texture2D>("Board/Carbon");
-            //carbonSelectedTexture = _content.Load<Texture2D>("Board/CarbonSelected");
-            //hydrogenTexture = _content.Load<Texture2D>("Board/Hydrogen");
-            //hydrogenSelectedTexture = _content.Load<Texture2D>("Board/HydrogenSelected");
-            //oxygenTexture = _content.Load<Texture2D>("Board/Oxygen");
-            //oxygenSelectedTexture = _content.Load<Texture2D>("Board/OxygenSelected");
-            arrowTexture = _content.Load<Texture2D>("Board/Up");
+            arrowTexture = _content.Load<Texture2D>("Board/Arrow");
+            activeTexture = _content.Load<Texture2D>("Board/Active");
             applause = _content.Load<SoundEffect>("Sounds/Applause");
             normalFont = _content.Load<SpriteFont>("Fonts/Normal");
             splashFont = _content.Load<SpriteFont>("Fonts/Splash");
@@ -241,16 +237,44 @@ namespace Atomix
                 return;
             }
 
+            // Detect hover
+            Point mousePosition = cursor.IsHandTracked ?
+                new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y) :
+                new Point(mouseState.X, mouseState.Y);
+
+            // Find nearest point
+            Vector2 renderPosition = new Vector2(boardPosition.X, boardPosition.Y);
+
+            for (int i = 0; i < level.Board.RowsCount; i++)
+            {
+                for (int j = 0; j < level.Board.ColumnsCount; j++)
+                {
+                    if (level.Board[i, j] != null)
+                    {
+                        level.Board[i, j].IsHovered = false;
+
+                        Rectangle tile = new Rectangle((int)renderPosition.X, (int)renderPosition.Y, TileWidth, TileHeight);
+                        if (tile.Contains(mousePosition))
+                            level.Board[i, j].IsHovered = true;
+                    }
+                    renderPosition.X += TileWidth;
+                }
+
+                renderPosition.X = boardPosition.X;
+                renderPosition.Y += TileHeight;
+            }
+
+            // Detect clicks
             if (clickOccurred || cursor.IsHandClosed)
             {
-                Point mousePosition;
+                Point activityPosition;
                 if (clickOccurred)
                 {
-                    mousePosition = new Point(mouseState.X, mouseState.Y);
+                    activityPosition = new Point(mouseState.X, mouseState.Y);
                 }
                 else
                 {
-                    mousePosition = new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y);
+                    activityPosition = new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y);
                 }
 
                 // Find nearest point
@@ -264,9 +288,9 @@ namespace Atomix
                     for (int j = 0; j < level.Board.ColumnsCount; j++)
                     {
                         Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
-                        if (clickOccurred && tile.Contains(mousePosition))
+                        if (clickOccurred && tile.Contains(activityPosition))
                         {
-                            if (!level.Board[i, j].IsFixed)
+                            if (level.Board[i, j] != null && level.Board[i, j].IsFixed == false)
                             {
                                 ClearBoard();
 
@@ -643,9 +667,6 @@ namespace Atomix
 
                     switch (board[i, j].AssetCode)
                     {
-                        //case TileType.Wall:
-                        //    drawEmpty = false;
-                        //    break;
                         case "Down":
                             RotationAngle = MathHelper.Pi;
                             origin.X = tile.Width;
@@ -674,6 +695,11 @@ namespace Atomix
                     if (tile != null)
                     {
                         spriteBatch.Draw(tile, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), null, Color.White, RotationAngle, origin, SpriteEffects.None, 0f);
+
+                        if (board[i, j].IsHovered && (board[i, j].IsFixed == false || board[i, j].IsEmpty == true))
+                        {
+                            spriteBach.Draw(activeTexture, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), Color.White);
+                        }
                     }
                 }
             }

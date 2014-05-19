@@ -39,36 +39,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Board\Carbon.png">
-      <Name>Carbon</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Board\CarbonSelected.png">
-      <Name>CarbonSelected</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Board\Hydrogen.png">
-      <Name>Hydrogen</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Board\HydrogenSelected.png">
-      <Name>HydrogenSelected</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Board\Oxygen.png">
-      <Name>Oxygen</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Board\OxygenSelected.png">
-      <Name>OxygenSelected</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board\Empty.png">
@@ -91,8 +61,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Board\Up.png">
-      <Name>Up</Name>
+    <Compile Include="Board\Arrow.png">
+      <Name>Arrow</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -178,6 +148,11 @@
     </Compile>
     <Compile Include="Images\Dot.png">
       <Name>Dot</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Board\Active.png">
+      <Name>Active</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

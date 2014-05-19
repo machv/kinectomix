@@ -46,6 +46,12 @@ namespace Atomix.ViewModel
         }
 
         /// <summary>
+        /// Indicates if this tile is currently highlighted in the game.
+        /// </summary>
+        /// <returns>True if is hover should be active.</returns>
+        public bool IsHovered { get; set; }
+
+        /// <summary>
         /// Indicates if this tile is currently active in the game.
         /// </summary>
         /// <returns>True if is selected.</returns>
