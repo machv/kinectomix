@@ -287,73 +287,76 @@ namespace Atomix
                 {
                     for (int j = 0; j < level.Board.ColumnsCount; j++)
                     {
-                        Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
-                        if (clickOccurred && tile.Contains(activityPosition))
+                        if (level.Board[i, j] != null)
                         {
-                            if (level.Board[i, j] != null && level.Board[i, j].IsFixed == false)
+                            Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
+                            if (clickOccurred && tile.Contains(activityPosition))
                             {
-                                ClearBoard();
-
-                                level.Board[i, j].IsSelected = true;
-                                level.Board[i, j].Movements = Direction.None;
-                                activeAtomIndex = new Point(i, j);
-
-                                //zjistit jakymi smery se muze pohnout
-                                if (level.CanGoUp(i, j))
+                                if (level.Board[i, j].IsFixed == false)
                                 {
-                                    level.Board[i, j].Movements |= Direction.Up;
-                                    level.Board[i - 1, j].Asset = "Up";
+                                    ClearBoard();
+
+                                    level.Board[i, j].IsSelected = true;
+                                    level.Board[i, j].Movements = Direction.None;
+                                    activeAtomIndex = new Point(i, j);
+
+                                    //zjistit jakymi smery se muze pohnout
+                                    if (level.CanGoUp(i, j))
+                                    {
+                                        level.Board[i, j].Movements |= Direction.Up;
+                                        level.Board[i - 1, j].Asset = "Up";
+                                    }
+                                    if (level.CanGoDown(i, j))
+                                    {
+                                        level.Board[i, j].Movements |= Direction.Down;
+                                        level.Board[i + 1, j].Asset = "Down";
+                                    }
+                                    if (level.CanGoLeft(i, j))
+                                    {
+                                        level.Board[i, j].Movements |= Direction.Left;
+                                        level.Board[i, j - 1].Asset = "Left";
+                                    }
+                                    if (level.CanGoRight(i, j))
+                                    {
+                                        level.Board[i, j].Movements |= Direction.Right;
+                                        level.Board[i, j + 1].Asset = "Right";
+                                    }
                                 }
-                                if (level.CanGoDown(i, j))
+                                else if (level.Board[i, j].Asset == "Right" ||
+                                         level.Board[i, j].Asset == "Left" ||
+                                         level.Board[i, j].Asset == "Up" ||
+                                         level.Board[i, j].Asset == "Down")
                                 {
-                                    level.Board[i, j].Movements |= Direction.Down;
-                                    level.Board[i + 1, j].Asset = "Down";
+                                    Direction direction = GetDirectionFromAsset(level.Board[i, j].Asset);
+                                    Point coordinates = new Point(i, j);
+                                    Point newCoordinates = NewPosition(coordinates, direction);
+                                    Point atomCoordinates = GetAtomPosition(coordinates, direction);
+
+                                    BoardTileViewModel atom = level.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
+
+                                    // start animation
+                                    isMovementAnimation = true;
+                                    atomPosition = atom.RenderPosition;
+                                    destination = newCoordinates;
+                                    atomToMove = atom.Asset;
+                                    moveDirection = direction;
+
+                                    // instead of just switching do the animation
+                                    level.Board[atomCoordinates.X, atomCoordinates.Y] = level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
+                                    level.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
+                                    level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true;// = TileType.Empty; // but now will be rendered as empty
+                                    level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// = TileType.Empty; // but now will be rendered as empty
+
+                                    CalculateBoardTilePositions(boardPosition, level.Board);
+
+                                    moves += 1;
+
+                                    //BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
+                                    //currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
+                                    //currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
+
+                                    ClearBoard();
                                 }
-                                if (level.CanGoLeft(i, j))
-                                {
-                                    level.Board[i, j].Movements |= Direction.Left;
-                                    level.Board[i, j - 1].Asset = "Left";
-                                }
-                                if (level.CanGoRight(i, j))
-                                {
-                                    level.Board[i, j].Movements |= Direction.Right;
-                                    level.Board[i, j + 1].Asset = "Right";
-                                }
-                            }
-                            else if (level.Board[i, j].Asset == "Right" ||
-                                     level.Board[i, j].Asset == "Left" ||
-                                     level.Board[i, j].Asset == "Up" ||
-                                     level.Board[i, j].Asset == "Down")
-                            {
-                                Direction direction = GetDirectionFromAsset(level.Board[i, j].Asset);
-                                Point coordinates = new Point(i, j);
-                                Point newCoordinates = NewPosition(coordinates, direction);
-                                Point atomCoordinates = GetAtomPosition(coordinates, direction);
-
-                                BoardTileViewModel atom = level.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
-
-                                // start animation
-                                isMovementAnimation = true;
-                                atomPosition = atom.RenderPosition;
-                                destination = newCoordinates;
-                                atomToMove = atom.Asset;
-                                moveDirection = direction;
-
-                                // instead of just switching do the animation
-                                level.Board[atomCoordinates.X, atomCoordinates.Y] = level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
-                                level.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
-                                level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true;// = TileType.Empty; // but now will be rendered as empty
-                                level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// = TileType.Empty; // but now will be rendered as empty
-
-                                CalculateBoardTilePositions(boardPosition, level.Board);
-
-                                moves += 1;
-
-                                //BoardTile atom = currentLevel.Board[atomCoordinates.X, atomCoordinates.Y];
-                                //currentLevel.Board[atomCoordinates.X, atomCoordinates.Y] = currentLevel.Board[newCoordinates.X, newCoordinates.Y];
-                                //currentLevel.Board[newCoordinates.X, newCoordinates.Y] = atom;
-
-                                ClearBoard();
                             }
                         }
 
