@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Storage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,9 +25,14 @@ namespace AtomixData
             set { _data = value; }
         }
 
+        public Highscore(string file)
+        {
+            _path = file;
+        }
+
         public HighscoreData Load()
         {
-            using (FileStream stream = File.Open(_path, FileMode.OpenOrCreate))
+            using (Stream stream = TitleContainer.OpenStream(_path))
             {
                 try
                 {
@@ -43,7 +50,7 @@ namespace AtomixData
 
         public bool Save()
         {
-            using (FileStream stream = File.Open(_path, FileMode.OpenOrCreate))
+            using (Stream stream = TitleContainer.OpenStream(_path))
             {
                 try
                 {

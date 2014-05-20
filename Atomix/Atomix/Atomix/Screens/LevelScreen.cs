@@ -1,5 +1,6 @@
 ﻿using Atomix.Components;
 using Atomix.ViewModel;
+using AtomixData;
 using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -7,9 +8,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Atomix
 {
@@ -18,6 +16,7 @@ namespace Atomix
         Level levelDefinition;
         LevelViewModel level;
         SpriteBatch spriteBatch;
+        Highscore highScore;
 
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
@@ -32,6 +31,7 @@ namespace Atomix
             base.Initialize();
 
             level = LevelFactory.ToViewModel(levelDefinition, ScreenManager.GraphicsDevice);
+            highScore = new Highscore(AtomixGame.HighscoreFile);
         }
 
         Texture2D wallTexture;
@@ -47,8 +47,8 @@ namespace Atomix
         SpriteFont splashFont;
         Point activeAtomIndex = new Point(-1, -1);
 
-        int TileWidth = 60;
-        int TileHeight = 60;
+        int TileWidth = 64;
+        int TileHeight = 64;
 
         // Animation stuff
         protected bool isMovementAnimation = false;
@@ -74,14 +74,21 @@ namespace Atomix
 
         public override void LoadContent()
         {
-            boardPosition = new Vector2(20, 60);
+            int boardHeight = level.Board.RowsCount * TileHeight;
+
+            int startX = ScreenManager.GraphicsDevice.Viewport.Bounds.Width - (level.Board.ColumnsCount * TileWidth) - 2 * TileWidth;
+            int startY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - boardHeight / 2;
+
+            boardPosition = new Vector2(startX, startY);
 
             CalculateBoardTilePositions(boardPosition, level.Board);
 
-            int offset = (int)boardPosition.X + level.Board.ColumnsCount * TileWidth + TileWidth;
+            //int offset = (int)boardPosition.X + level.Board.ColumnsCount * TileWidth + TileWidth;
+            int offset = 60;
             int moleculeWidth = level.Molecule.ColumnsCount * TileWidth;
             int moleculeHeight = level.Molecule.RowsCount * TileHeight;
-            int posX = (ScreenManager.GraphicsDevice.Viewport.Bounds.Width - offset) / 2 - moleculeWidth / 2;
+            //int posX = (ScreenManager.GraphicsDevice.Viewport.Bounds.Width - offset) / 2 - moleculeWidth / 2;
+            int posX = (offset); // / 2 - moleculeWidth / 2;
             int posY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - moleculeHeight / 2;
 
             CalculateBoardTilePositions(new Vector2(offset + posX, posY), level.Molecule);

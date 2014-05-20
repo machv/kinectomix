@@ -19,8 +19,10 @@ namespace Atomix
     /// <summary>
     /// This is the main class for the Atomix game.
     /// </summary>
-    public class AtomixGame : Microsoft.Xna.Framework.Game
+    public class AtomixGame : Game
     {
+        public const string HighscoreFile = "atomix.highscore";
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         ScreenManager _gameScreenManager;

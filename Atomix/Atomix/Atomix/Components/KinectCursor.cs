@@ -14,7 +14,7 @@ namespace Atomix.Components
         protected KinectChooser _KinectChooser;
         protected Skeletons _skeletons;
         SpriteBatch spriteBatch;
-        bool leftHanded = false;
+        bool leftHanded = true;
         Vector2 _renderOffset;
         float _scale;
         Texture2D _handTexture;
@@ -144,45 +144,18 @@ namespace Atomix.Components
                         lastDepthFrame = depthFrame;
                     }
                 }
-
-                //using (InteractionFrame frame = _KinectChooser.Interactions.OpenNextFrame(0))
-                //{
-                //    if (frame != null)
-                //    {
-                //        UserInfo[] info = new UserInfo[6];
-                //        frame.CopyInteractionDataTo(info);
-
-                //        var usr = info.Where(i => i.SkeletonTrackingId > 0).FirstOrDefault();
-                //        if (usr != null)
-                //        {
-                //            foreach (var interaction in usr.HandPointers)
-                //            {
-                //                if (interaction.HandType == InteractionHandType.Right)
-                //                {
-                //                    //_textToRender = string.Format("Interaction: [{0}x{1}]", interaction.X, interaction.Y, _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.X, _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Y);
-
-                //                    if (interaction.HandEventType == InteractionHandEventType.Grip)
-                //                    {
-                //                        IsHandClosed = true;
-                //                    }
-                //                    else if (interaction.HandEventType == InteractionHandEventType.GripRelease)
-                //                    {
-                //                        IsHandClosed = false;
-                //                    }
-
-                //                    cursorPositionInteraction = new Vector2();
-                //                    cursorPositionInteraction.X = (int)(interaction.X * GraphicsDevice.Viewport.Bounds.Width);
-                //                    cursorPositionInteraction.Y = (int)(interaction.Y * GraphicsDevice.Viewport.Bounds.Height);
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
             }
 
             // Hand tracking START
             if (_skeletons.TrackedSkeleton != null)
             {
+                leftHanded =
+                    (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                    _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
+                    ||
+                    (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                    _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
+
                 // check for hand
                 if (cursorPosition != Vector2.Zero)
                 {
@@ -231,35 +204,6 @@ namespace Atomix.Components
                     int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
                     int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
 
-                    //byte[] colorPixels = new byte[lastDepthFrameDataLength * sizeof(int)];
-
-                    //// Convert the depth to BGRA
-                    //int colorPixelIndex = 0;
-                    //for (int i = 0; i < frameData.Length; ++i)
-                    //{
-                    //    // Get the depth for this pixel
-                    //    int depth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-
-                    //    // To convert to a byte, we're discarding the most-significant
-                    //    // rather than least-significant bits.
-                    //    // We're preserving detail, although the intensity will "wrap."
-                    //    // Values outside the reliable depth range are mapped to 0 (black).
-
-                    //    byte intensity = (byte)(~(depth >> 4));
-
-                    //    // Write out blue byte
-                    //    colorPixels[colorPixelIndex++] = intensity;
-
-                    //    // Write out green byte
-                    //    colorPixels[colorPixelIndex++] = intensity;
-
-                    //    // Write out red byte                        
-                    //    colorPixels[colorPixelIndex++] = intensity;
-
-                    //    // Write alpha byte
-                    //    colorPixels[colorPixelIndex++] = (Byte)255;
-                    //}
-
                     float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
                     int handArea = 0;
                     if (realDepth > 0)
@@ -276,13 +220,9 @@ namespace Atomix.Components
                             //_handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
                             _handRect = new Rectangle(_handDepthPoint.X - _handRadius / 2, _handDepthPoint.Y - _handRadius / 2, _handRadius, _handRadius);
 
-                            // transform 13-bit depth information into an 8-bit intensity appropriate
-                            // for display (we disregard information in most significant bit)
-                            //                byte intensity = (byte)(~(realDepth >> 4));
-
                             handArea = 0;
 
-                            int tolerance = 40; // in milimeters
+                            int tolerance = 45; // in milimeters
 
                             // Lines for checking
                             List<int> changes = GetChangesList(frameData, stride, realDepth, tolerance);
@@ -297,13 +237,13 @@ namespace Atomix.Components
                                 }
                             }
 
-                            _textToRender = isOpenMatches > 2 ? "Open" : "Closed";
+                            _textToRender = isOpenMatches > 1 ? "Open" : "Closed";
                             _textToRender += string.Format(" ({0})", isOpenMatches);
 
                             //TODO check only one person at time
                             int width, height;
                             CalculateHandDimensions(frameData, stride, realDepth, tolerance, out width, out height);
-                            _textToRender += string.Format(" Width: {0}px, Height: {1}px", width, height);
+                            _textToRender += string.Format(" Width: {0}px, Height: {1}px (ratio {2}) / depth: {3} cm", width, height, Math.Round(width / (double)height, 2), realDepth / 10d);
 
                             byte[] pixels = null;
                             if (VideoStreamData != null && VideoStreamData.VideoFrame != null)
@@ -395,11 +335,11 @@ namespace Atomix.Components
                         //if (max > (_handRect.Width * _handRect.Height) / 3)
                         if (handArea < (_handRect.Width * _handRect.Height) / 2)
                         {
-                            _textToRender += "Open!";
+                            _textToRender += "O!";
                         }
                         else
                         {
-                            _textToRender += "Closed";
+                            _textToRender += "C";
                         }
 
                         //_textToRender += string.Format(" [{0:P2}], Width = {1} px, Height = {2} px", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2), handWidth, handHeight);
@@ -654,7 +594,7 @@ namespace Atomix.Components
             {
                 Vector2 FontOrigin = font.MeasureString(_textToRender) / 2;
 
-                spriteBatch.DrawString(font, _textToRender, new Vector2(500, 20), Color.Red,
+                spriteBatch.DrawString(font, _textToRender, new Vector2(600, 20), Color.Red,
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
@@ -707,7 +647,7 @@ namespace Atomix.Components
             if (_pointTexture == null)
             {
                 _pointTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-                _pointTexture.SetData<Color>(new Color[] { Color.White });
+                _pointTexture.SetData(new Color[] { Color.White });
             }
 
             spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
@@ -721,7 +661,7 @@ namespace Atomix.Components
 
         float xPrevious;
         float yPrevious;
-        float MoveThreshold = 0; //0.005f;
+        float MoveThreshold = 0.005f;
 
         float RightHandX;
         float RightHandY;
@@ -740,22 +680,32 @@ namespace Atomix.Components
             Joint leftHand = skeleton.Joints[JointType.HandLeft];
             Joint rightHand = skeleton.Joints[JointType.HandRight];
 
+            Joint hand = leftHanded ? leftHand : rightHand;
+
             Joint leftShoulder = skeleton.Joints[JointType.ShoulderLeft];
             Joint rightShoulder = skeleton.Joints[JointType.ShoulderRight];
 
-            Joint rightHip = skeleton.Joints[JointType.HipRight];
+            Joint oppositeShoulder = leftHanded ? rightShoulder : leftShoulder;
+            Joint sameShoulder = leftHanded ? leftShoulder : rightShoulder;
+            Joint hip = leftHanded ? skeleton.Joints[JointType.HipLeft] : skeleton.Joints[JointType.HipRight];
+
+            //Joint rightHip = skeleton.Joints[JointType.HipRight];
             Joint head = skeleton.Joints[JointType.Head];
 
-            // the right hand joint is being tracked
-            if (rightHand.TrackingState == JointTrackingState.Tracked)
+            // the hand joint is tracked
+            if (hand.TrackingState == JointTrackingState.Tracked)
             {
                 // the hand is sufficiently in front of the shoulder
-                if (rightShoulder.Position.Z - rightHand.Position.Z > 0.2)
+                if (sameShoulder.Position.Z - hand.Position.Z > 0.2)
                 {
-                    float xScaled = (rightHand.Position.X - leftShoulder.Position.X) / ((rightShoulder.Position.X - leftShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
+                    float xScaled = (hand.Position.X - oppositeShoulder.Position.X) / ((sameShoulder.Position.X - oppositeShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
+
+                    if (leftHanded)
+                        xScaled = GraphicsDevice.Viewport.Bounds.Width - xScaled;
+
                     float yScaled = _KinectChooser.Sensor.SkeletonStream.TrackingMode == SkeletonTrackingMode.Seated ?
-                        (rightHand.Position.Y - rightShoulder.Position.Y) / ((rightShoulder.Position.Y - head.Position.Y) / 2) * GraphicsDevice.Viewport.Bounds.Height :
-                        (rightHand.Position.Y - rightShoulder.Position.Y) / (rightHip.Position.Y - rightShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
+                        (hand.Position.Y - sameShoulder.Position.Y) / ((sameShoulder.Position.Y - head.Position.Y) / 2) * GraphicsDevice.Viewport.Bounds.Height :
+                        (hand.Position.Y - sameShoulder.Position.Y) / (hip.Position.Y - sameShoulder.Position.Y) * GraphicsDevice.Viewport.Bounds.Height;
 
                     if (yScaled < 0) yScaled = 0;
                     if (yScaled > GraphicsDevice.Viewport.Bounds.Height) yScaled = GraphicsDevice.Viewport.Bounds.Height;
@@ -764,13 +714,13 @@ namespace Atomix.Components
                     if (xScaled > GraphicsDevice.Viewport.Bounds.Width) xScaled = GraphicsDevice.Viewport.Bounds.Width;
 
                     // the hand has moved enough to update screen position (jitter control / smoothing)
-                    if (Math.Abs(rightHand.Position.X - xPrevious) > MoveThreshold || Math.Abs(rightHand.Position.Y - yPrevious) > MoveThreshold)
+                    if (Math.Abs(hand.Position.X - xPrevious) > MoveThreshold || Math.Abs(hand.Position.Y - yPrevious) > MoveThreshold)
                     {
                         RightHandX = xScaled;
                         RightHandY = yScaled;
 
-                        xPrevious = rightHand.Position.X;
-                        yPrevious = rightHand.Position.Y;
+                        xPrevious = hand.Position.X;
+                        yPrevious = hand.Position.Y;
 
                         return new Vector2(RightHandX, RightHandY);
                     }
