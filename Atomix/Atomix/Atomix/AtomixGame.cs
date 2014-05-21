@@ -1,16 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using Kinectomix.Logic;
-using System.Xml;
-using Microsoft.Kinect;
 using Atomix.Components;
 using Atomix.Input;
 
@@ -139,10 +130,10 @@ namespace Atomix
         protected override void Update(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Add))
+            if (state.IsKeyDown(Keys.Q))
                 UpdateScale(_scale - 0.005f);
 
-            if (state.IsKeyDown(Keys.Subtract))
+            if (state.IsKeyDown(Keys.A))
                 UpdateScale(_scale + 0.005f);
 
             if (_KinectChooser.Sensor != null && _KinectChooser.Sensor.IsRunning && _KinectChooser.SkeletonData != null)
