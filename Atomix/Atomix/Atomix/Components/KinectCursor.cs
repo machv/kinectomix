@@ -213,16 +213,24 @@ namespace Atomix.Components
                         //float radius = 35000 / (float)realDepth;
                         //if (radius < 1) radius = 1;
 
-                        _handRadius = (int)(distanceHead);
+                        
+
+                            // Hind for searching bounding box of hand
+                        _handRadius = (int)(distanceHead * 2);
 
                         if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
                         {
                             //_handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
-                            _handRect = new Rectangle(_handDepthPoint.X - _handRadius / 2, _handDepthPoint.Y - _handRadius / 2, _handRadius, _handRadius);
+                            Rectangle hintRectangle = new Rectangle(_handDepthPoint.X - _handRadius / 2, _handDepthPoint.Y - _handRadius / 2, _handRadius, _handRadius);
+
+
+                            //TODO check only one person at time
+                            int tolerance = 45; // in milimeters
+                            int width, height;
+                            _handRect = CalculateHandDimensions(hintRectangle, frameData, stride, realDepth, tolerance, out width, out height);
 
                             handArea = 0;
-
-                            int tolerance = 45; // in milimeters
+                           
 
                             // Lines for checking
                             List<int> changes = GetChangesList(frameData, stride, realDepth, tolerance);
@@ -239,10 +247,6 @@ namespace Atomix.Components
 
                             _textToRender = isOpenMatches > 1 ? "Open" : "Closed";
                             _textToRender += string.Format(" ({0})", isOpenMatches);
-
-                            //TODO check only one person at time
-                            int width, height;
-                            CalculateHandDimensions(frameData, stride, realDepth, tolerance, out width, out height);
                             _textToRender += string.Format(" Width: {0}px, Height: {1}px (ratio {2}) / depth: {3} cm", width, height, Math.Round(width / (double)height, 2), realDepth / 10d);
 
                             byte[] pixels = null;
@@ -251,6 +255,8 @@ namespace Atomix.Components
                                 pixels = new byte[VideoStreamData.VideoFrame.Width * VideoStreamData.VideoFrame.Height * 4];
                                 VideoStreamData.VideoFrame.GetData(pixels);
                             }
+
+                       
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
@@ -384,16 +390,16 @@ namespace Atomix.Components
             base.Update(gameTime);
         }
 
-        private void CalculateHandDimensions(short[] frameData, int stride, int realDepth, int tolerance, out int width, out int height)
+        private Rectangle CalculateHandDimensions(Rectangle rectangle, short[] frameData, int stride, int realDepth, int tolerance, out int width, out int height)
         {
             top = int.MaxValue;
             left = int.MaxValue;
             bottom = 0;
             right = 0;
 
-            for (int y = _handRect.Top; y < _handRect.Bottom; y++)
+            for (int y = rectangle.Top; y < rectangle.Bottom; y++)
             {
-                for (int x = _handRect.Left; x < _handRect.Right; x++)
+                for (int x = rectangle.Left; x < rectangle.Right; x++)
                 {
                     int i = y * stride + x;
                     if (i < frameData.Length && i >= 0)
@@ -414,6 +420,12 @@ namespace Atomix.Components
             }
             width = right - left;
             height = bottom - top;
+
+            // If we didnt matched any hand, return default hint box
+            if (top == int.MaxValue)
+                return rectangle;
+
+            return new Rectangle(left, top, width, height);
         }
 
         private List<int> GetChangesList(short[] frameData, int stride, int realDepth, int tolerance)

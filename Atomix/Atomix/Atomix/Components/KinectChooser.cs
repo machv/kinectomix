@@ -66,12 +66,20 @@ namespace Atomix
                 {
                     try
                     {
-                        sensor.SkeletonStream.Enable();
+                        // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
+                        TransformSmoothParameters parameters = new TransformSmoothParameters();
+                        parameters.Smoothing = 0.5f;
+                        parameters.Correction = 0.5f;
+                        parameters.Prediction = 0.4f;
+                        parameters.JitterRadius = 1.0f;
+                        parameters.MaxDeviationRadius = 0.5f;
+
+                        sensor.SkeletonStream.Enable(parameters);
+
                         sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                         sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
 
-                        //sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
-                        sensor.SkeletonStream.EnableTrackingInNearRange = true;
+                        //EnableSeatedMode(sensor);
 
                         KinectInteractionClient ic = new KinectInteractionClient();
                         Interactions = new Microsoft.Kinect.Toolkit.Interaction.InteractionStream(sensor, ic);
@@ -91,7 +99,17 @@ namespace Atomix
                 }
             }
         }
-            
+
+        private void EnableSeatedMode(KinectSensor sensor)
+        {
+            if (sensor != null && sensor.DepthStream != null && sensor.SkeletonStream != null)
+            {   
+                sensor.DepthStream.Range = DepthRange.Near; // Depth in near range enabled
+                sensor.SkeletonStream.EnableTrackingInNearRange = true; // enable returning skeletons while depth is in Near Range
+                sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use seated tracking
+            }
+        }
+
         /// <summary>
         /// This method initializes necessary objects.
         /// </summary>
