@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:l="clr-namespace:Kinectomix.LevelEditor"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400">
     <UserControl.Resources>
@@ -12,9 +13,9 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="150" />
             <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
@@ -30,7 +31,7 @@
                 <Button Content="_Load..." Margin="5" Padding="3" Command="{Binding LoadLevelsCommand}" />
                 <Button Content="_Save as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsCommand}" FontWeight="Bold" />
             </StackPanel>
-            
+
             <ListBox Grid.Row="2">
                 <ListBoxItem>Level 1</ListBoxItem>
                 <ListBoxItem>Level 2</ListBoxItem>
@@ -41,44 +42,50 @@
         <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" BorderBrush="Silver" BorderThickness="1,0" />
 
         <Grid Grid.Column="2" Margin="3" AllowDrop="True" DragOver="OnFileDragOver" Drop="OnFileDrop">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="13">Level</TextBlock>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="test" Margin="5" Padding="3" Command="{Binding TestCommand}" />
-                    <Button Content="_New level" Margin="5" Padding="3" Command="{Binding NewLevelCommand}" />
-                    <Button Content="_Load level..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
-                    <Button Content="_Save level as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" FontWeight="Bold" />
+            <Grid>
+                <Grid.Visibility>
+                    <Binding Path="Level" Converter="{StaticResource NotNullToVisibilityConverter}">
+                        <Binding.ConverterParameter>
+                            <sys:Boolean>True</sys:Boolean>
+                        </Binding.ConverterParameter>
+                    </Binding>
+                </Grid.Visibility>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Content="_New level" Margin="10" Padding="10" FontSize="16" Command="{Binding NewLevelCommand}" />
+                    <Button Content="_Load existing level..." Margin="10" Padding="10" FontSize="16" Command="{Binding LoadLevelCommand}" />
                 </StackPanel>
-
             </Grid>
 
-            <TabControl Grid.Row="2" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
-                <TabItem Header="Board" Tag="Board">
-                    <!-- 
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    --> 
-                    <ContentPresenter Content="{Binding Level.Board}"/>
-                <!--     
-                </ScrollViewer>
-                    -->
-                </TabItem>
-                <TabItem Header="Molecule" Tag="Molecule">
-                    <ContentPresenter Content="{Binding Level.Molecule}"/>
-                </TabItem>
-            </TabControl>
+            <DockPanel Margin="0" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
+                <Border DockPanel.Dock="Bottom"  Background="WhiteSmoke" BorderBrush="Silver" BorderThickness="0,1,0,0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                        <Button Content="_New level" Margin="5" Padding="3" Command="{Binding NewLevelCommand}" />
+                        <Button Content="_Load level..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
+                        <Button Content="_Save level as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" FontWeight="Bold" />
+                    </StackPanel>
+                </Border>
+                <Grid Margin="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
 
-            <ContentPresenter Content="{Binding TileSelector}" Grid.Row="3"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24">Level</TextBlock>
+
+                    <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
+                        <TabItem Header="Board" Tag="Board">
+                            <ContentPresenter Content="{Binding Level.Board}"/>
+                        </TabItem>
+                        <TabItem Header="Molecule" Tag="Molecule">
+                            <ContentPresenter Content="{Binding Level.Molecule}"/>
+                        </TabItem>
+                    </TabControl>
+
+                    <ContentPresenter Content="{Binding TileSelector}" Grid.Row="3"/>
+                </Grid>
+            </DockPanel>
         </Grid>
     </Grid>
 </UserControl>
