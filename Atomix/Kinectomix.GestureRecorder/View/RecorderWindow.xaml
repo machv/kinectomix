@@ -1,21 +1,25 @@
-﻿<Window x:Class="Kinectomix.GestureRecorder.MainWindow"
+﻿<Window x:Class="Kinectomix.GestureRecorder.View.RecorderWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="400" Width="525">
+        xmlns:ViewModel="clr-namespace:Kinectomix.GestureRecorder.ViewModel"
+        Title="RecorderWindow" Height="300" Width="300">
+    <Window.DataContext>
+        <ViewModel:RecorderViewModel />
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Canvas Width="145">
-            
+
             <!-- Krk -->
             <Line
                 X1="70" Y1="30"
                 X2="70" Y2="60"
                 Stroke="Black"
                 StrokeThickness="4" />
-            
+
 
             <!--  prava ruka -->
             <Line X1="70" X2="120" Y1="60" Y2="70" Stroke="Black" />
@@ -80,7 +84,7 @@
             <Line X1="40" X2="10" Y1="330" Y2="360" Stroke="Black" />
 
             <!-- Head -->
-            <CheckBox Canvas.Left="62" Canvas.Top="20" />
+            <CheckBox IsChecked="{Binding TrackedJoints.Head}" Canvas.Left="62" Canvas.Top="20" />
 
             <!-- Spine -->
             <CheckBox Canvas.Left="62" Canvas.Top="143" />

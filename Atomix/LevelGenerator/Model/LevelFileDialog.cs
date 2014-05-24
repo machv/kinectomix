@@ -1,10 +1,5 @@
-﻿using Kinectomix.LevelEditor.Mvvm;
+﻿using Kinectomix.Wpf.Mvvm;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Kinectomix.LevelEditor.Model
 {
