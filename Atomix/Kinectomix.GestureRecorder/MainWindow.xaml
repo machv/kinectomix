@@ -3,7 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="400" Width="525">
     <Grid>
-        <Canvas>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Canvas Width="145">
             
             <!-- Krk -->
             <Line
@@ -135,5 +139,6 @@
             <!-- Right hand -->
             <CheckBox Canvas.Left="120" Canvas.Top="180" />
         </Canvas>
+
     </Grid>
 </Window>

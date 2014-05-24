@@ -1,11 +1,11 @@
 ﻿using Kinectomix.Logic;
 using Kinectomix.LevelEditor.Model;
 using System.Windows.Input;
-using Kinectomix.LevelEditor.Mvvm;
+using Kinectomix.Wpf.Mvvm;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
-    public class BoardViewModel : Mvvm.NotifyPropertyBase
+    public class BoardViewModel : NotifyPropertyBase
     {
         private ObservableTilesCollection<BoardTileViewModel> _tiles = new ObservableTilesCollection<BoardTileViewModel>();
 

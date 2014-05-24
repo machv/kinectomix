@@ -1,10 +1,5 @@
 ﻿using Kinectomix.Logic;
-using Kinectomix.LevelEditor.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Kinectomix.Wpf.Mvvm;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {

@@ -1,26 +1,12 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Kinectomix.LevelEditor.Mvvm
+namespace Kinectomix.Wpf.Mvvm
 {
-    public class DelegateCommand : ICommand
+    public class DelegateCommandBase : ICommand
     {
         private readonly Action _action;
-        private readonly ICommandOnCanExecute _canExecute;
-
-        //public delegate void ICommandOnExecute(object parameter);
-        public delegate bool ICommandOnCanExecute(object parameter);
-
-        public DelegateCommand(Action action)
-        {
-            _action = action;
-        }
-
-        public DelegateCommand(Action action, ICommandOnCanExecute canExecute)
-        {
-            _action = action;
-            _canExecute = canExecute;
-        }
+        private readonly Func<object, bool> _canExecute;
 
         public bool CanExecute(object parameter)
         {
@@ -37,7 +23,6 @@ namespace Kinectomix.LevelEditor.Mvvm
             _action();
         }
 
-#pragma warning disable 67
         public event EventHandler CanExecuteChanged;
 
         public void RaiseCanExecuteChanged()
@@ -47,6 +32,5 @@ namespace Kinectomix.LevelEditor.Mvvm
                 CanExecuteChanged(this, EventArgs.Empty);
             }
         }
-#pragma warning restore 67
     }
 }

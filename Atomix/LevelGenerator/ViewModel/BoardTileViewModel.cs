@@ -1,16 +1,13 @@
 ﻿using Kinectomix.Logic;
-using System;
-using System.Collections.Generic;
+using Kinectomix.Wpf.Mvvm;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
-    public class BoardTileViewModel : Mvvm.NotifyPropertyBase
+    public class BoardTileViewModel : NotifyPropertyBase
     {
         protected static ImageSourceConverter SourceConverter = new ImageSourceConverter();
 

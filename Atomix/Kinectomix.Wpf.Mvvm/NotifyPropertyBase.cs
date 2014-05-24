@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 
 // http://www.markwithall.com/programming/2013/03/01/worlds-simplest-csharp-wpf-mvvm-example.html
-namespace Kinectomix.LevelEditor.Mvvm
+namespace Kinectomix.Wpf.Mvvm
 {
     public class NotifyPropertyBase : INotifyPropertyChanged
     {

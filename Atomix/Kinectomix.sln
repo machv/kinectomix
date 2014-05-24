@@ -15,9 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelEditor", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.GestureRecorder", "Kinectomix.GestureRecorder\Kinectomix.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Wpf.Mvvm", "Kinectomix.Wpf.Mvvm\Kinectomix.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 8
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
@@ -39,6 +41,9 @@ Global
 		SccProjectUniqueName6 = Kinectomix.GestureRecorder\\Kinectomix.GestureRecorder.csproj
 		SccProjectName6 = Kinectomix.GestureRecorder
 		SccLocalPath6 = Kinectomix.GestureRecorder
+		SccProjectUniqueName7 = Kinectomix.Wpf.Mvvm\\Kinectomix.Wpf.Mvvm.csproj
+		SccProjectName7 = Kinectomix.Wpf.Mvvm
+		SccLocalPath7 = Kinectomix.Wpf.Mvvm
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +110,16 @@ Global
 		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|x86.ActiveCfg = Release|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

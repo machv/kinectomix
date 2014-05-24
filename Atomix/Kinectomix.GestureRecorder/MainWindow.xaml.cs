@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Kinect;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,18 @@ namespace Kinectomix.GestureRecorder
     /// </summary>
     public partial class MainWindow : Window
     {
+        public KinectSensor Sensor { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
+        }
+
+        private void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
+        {
+            Sensor = KinectSensor.KinectSensors.FirstOrDefault();
         }
     }
 }

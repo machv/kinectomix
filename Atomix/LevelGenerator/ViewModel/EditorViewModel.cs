@@ -1,8 +1,8 @@
 ﻿using Kinectomix.Logic;
 using Kinectomix.LevelEditor.Model;
-using Kinectomix.LevelEditor.Mvvm;
 using System.IO;
 using System.Windows.Input;
+using Kinectomix.Wpf.Mvvm;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {

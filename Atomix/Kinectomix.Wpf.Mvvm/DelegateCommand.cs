@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Kinectomix.LevelEditor.Mvvm
+namespace Kinectomix.Wpf.Mvvm
 {
-    public class DelegateCommand<T> : ICommand
+    public class DelegateCommand : ICommand
     {
-        public DelegateCommand(Action<T> action)
+        private readonly Action _action;
+        private readonly ICommandOnCanExecute _canExecute;
+
+        //public delegate void ICommandOnExecute(object parameter);
+        public delegate bool ICommandOnCanExecute(object parameter);
+
+        public DelegateCommand(Action action)
         {
             _action = action;
         }
 
-        public DelegateCommand(Action<T> action, Func<T, bool> canExecute)
+        public DelegateCommand(Action action, ICommandOnCanExecute canExecute)
         {
             _action = action;
             _canExecute = canExecute;
         }
 
-        private readonly Action<T> _action;
-        private readonly Func<T, bool> _canExecute;
-
-        public bool CanExecute(T parameter)
+        public bool CanExecute(object parameter)
         {
             if (_canExecute == null)
             {
@@ -29,22 +32,9 @@ namespace Kinectomix.LevelEditor.Mvvm
             return _canExecute(parameter);
         }
 
-        public void Execute(T parameter)
-        {
-            _action(parameter);
-        }
-
         public void Execute(object parameter)
         {
-            _action((T)parameter);
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            if (parameter == null)
-                return true;
-
-            return _canExecute((T)parameter);
+            _action();
         }
 
 #pragma warning disable 67

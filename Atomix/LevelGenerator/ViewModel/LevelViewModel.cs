@@ -6,10 +6,11 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Kinectomix.Wpf.Mvvm;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
-    public class LevelViewModel : Mvvm.NotifyPropertyBase
+    public class LevelViewModel : NotifyPropertyBase
     {
         BoardViewModel _board;
         BoardViewModel _molecule;

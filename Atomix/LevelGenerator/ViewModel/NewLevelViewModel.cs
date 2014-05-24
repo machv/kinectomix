@@ -1,14 +1,9 @@
-﻿using Kinectomix.LevelEditor.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Kinectomix.Wpf.Mvvm;
 using System.Windows.Input;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
-    public class NewLevelViewModel : Mvvm.NotifyPropertyBase
+    public class NewLevelViewModel : NotifyPropertyBase
     {
         private string _name;
         public string Name

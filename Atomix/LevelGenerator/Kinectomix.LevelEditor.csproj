@@ -86,9 +86,6 @@
     <Compile Include="Model\LevelFactory.cs" />
     <Compile Include="Model\LevelFileDialog.cs" />
     <Compile Include="Model\Tiles.cs" />
-    <Compile Include="Mvvm\DelegateCommandBase.cs" />
-    <Compile Include="Mvvm\DelegateCommandGeneric.cs" />
-    <Compile Include="Mvvm\IFileDialogService.cs" />
     <Compile Include="TileSelectedEventArgs.cs" />
     <Compile Include="ViewModel\AvailableTilesViewModel.cs" />
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
@@ -132,8 +129,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mvvm\DelegateCommand.cs" />
-    <Compile Include="Mvvm\NotifyPropertyBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -164,6 +159,10 @@
     <ProjectReference Include="..\AtomixData\Kinectomix.Logic.csproj">
       <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
       <Name>Kinectomix.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kinectomix.Wpf.Mvvm\Kinectomix.Wpf.Mvvm.csproj">
+      <Project>{e6aefe09-e617-40ed-9594-91e7e7594d32}</Project>
+      <Name>Kinectomix.Wpf.Mvvm</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
