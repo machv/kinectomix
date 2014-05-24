@@ -61,11 +61,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Control\KinectSkeleton.cs" />
+    <Compile Include="Control\KinectSkeletonViewer.xaml.cs">
+      <DependentUpon>KinectSkeletonViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ImageType.cs" />
+    <Compile Include="Model\JointMapping.cs" />
     <Compile Include="ViewModel\RecorderViewModel.cs" />
     <Compile Include="ViewModel\SkeletonViewModel.cs" />
     <Compile Include="View\RecorderWindow.xaml.cs">
       <DependentUpon>RecorderWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Control\KinectSkeletonViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Control\KinectStreamViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
