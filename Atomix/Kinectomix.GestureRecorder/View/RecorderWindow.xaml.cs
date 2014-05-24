@@ -22,6 +22,13 @@ namespace Kinectomix.GestureRecorder.View
         public RecorderWindow()
         {
             InitializeComponent();
+
+            Closing += Window_Closing;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            (DataContext as ViewModel.RecorderViewModel).OnWindowClosing();
         }
     }
 }

@@ -35,6 +35,31 @@ namespace Kinectomix.GestureRecorder.ViewModel
         public RecorderViewModel()
         {
             _trackedJoints = new SkeletonViewModel();
+
+            KinectSensor.KinectSensors.StatusChanged += KinectSensorsChanged;
+        }
+
+        internal void OnWindowClosing()
+        {
+            if (_sensor != null)
+                _sensor.Stop();
+        }
+
+        private void KinectSensorsChanged(object sender, StatusChangedEventArgs e)
+        {
+            if (_sensor == e.Sensor && e.Status != KinectStatus.Connected)
+            {
+                Sensor = null;
+            }
+
+            if (_sensor == null && e.Status == KinectStatus.Connected)
+            {
+                e.Sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                e.Sensor.SkeletonStream.Enable();
+                e.Sensor.Start();
+
+                Sensor = e.Sensor;
+            }
         }
     }
 }

@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ViewModel="clr-namespace:Kinectomix.GestureRecorder.ViewModel"
-        Title="RecorderWindow" Height="300" Width="300">
+        xmlns:Control="clr-namespace:Kinectomix.GestureRecorder.Control"
+        Title="RecorderWindow" Height="400" Width="500">
     <Window.DataContext>
         <ViewModel:RecorderViewModel />
     </Window.DataContext>
@@ -144,5 +145,7 @@
             <CheckBox Canvas.Left="120" Canvas.Top="180" />
         </Canvas>
 
+        <Control:KinectStreamViewer Grid.Column="1"
+                                    KinectSensor="{Binding Sensor}" />
     </Grid>
 </Window>
