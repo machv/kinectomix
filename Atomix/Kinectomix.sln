@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game", "Atomix\Atomix\Kinectomix.Game.csproj", "{50576933-926E-4951-92FD-9FE370386BC2}"
 EndProject
@@ -13,9 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Logic", "AtomixD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelEditor", "LevelGenerator\Kinectomix.LevelEditor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.GestureRecorder", "Kinectomix.GestureRecorder\Kinectomix.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
@@ -34,6 +36,9 @@ Global
 		SccProjectUniqueName5 = Atomix\\Atomix\\Kinectomix.Game.csproj
 		SccProjectName5 = Atomix/Atomix
 		SccLocalPath5 = Atomix\\Atomix
+		SccProjectUniqueName6 = Kinectomix.GestureRecorder\\Kinectomix.GestureRecorder.csproj
+		SccProjectName6 = Kinectomix.GestureRecorder
+		SccLocalPath6 = Kinectomix.GestureRecorder
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +95,16 @@ Global
 		{5313A90B-65AB-4D03-AB9E-73C257C765FC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5313A90B-65AB-4D03-AB9E-73C257C765FC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5313A90B-65AB-4D03-AB9E-73C257C765FC}.Release|x86.ActiveCfg = Release|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
