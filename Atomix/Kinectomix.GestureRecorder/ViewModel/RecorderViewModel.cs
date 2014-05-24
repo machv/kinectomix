@@ -2,6 +2,7 @@
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,9 @@ namespace Kinectomix.GestureRecorder.ViewModel
             _trackedJoints = new SkeletonViewModel();
 
             KinectSensor.KinectSensors.StatusChanged += KinectSensorsChanged;
+
+            if (KinectSensor.KinectSensors.Count > 0)
+                StartKinect(KinectSensor.KinectSensors.FirstOrDefault());
         }
 
         internal void OnWindowClosing()
@@ -54,12 +58,23 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
             if (_sensor == null && e.Status == KinectStatus.Connected)
             {
-                e.Sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-                e.Sensor.SkeletonStream.Enable();
-                e.Sensor.Start();
-
-                Sensor = e.Sensor;
+                StartKinect(e.Sensor);
             }
+        }
+
+        private void StartKinect(KinectSensor sensor)
+        {
+            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+            sensor.SkeletonStream.Enable();
+            try
+            {
+                sensor.Start();
+
+                Sensor = sensor;
+            }
+            catch (IOException)
+            { }
+
         }
     }
 }
