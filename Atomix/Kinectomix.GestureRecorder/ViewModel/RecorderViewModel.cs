@@ -66,8 +66,18 @@ namespace Kinectomix.GestureRecorder.ViewModel
         {
             sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
             sensor.SkeletonStream.Enable();
+
+#if DEBUG
             try
             {
+                sensor.Stop();
+            }
+            catch
+            { }
+#endif
+            try
+            {
+
                 sensor.Start();
 
                 Sensor = sensor;

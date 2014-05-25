@@ -62,6 +62,8 @@ namespace Kinectomix.GestureRecorder.Control
             ShowJoints = true;
             ShowBones = true;
             ShowCenter = true;
+
+            Loaded += KinectSkeletonViewer_OnLoaded;
         }
 
         public bool ShowBones
@@ -92,7 +94,7 @@ namespace Kinectomix.GestureRecorder.Control
 DependencyProperty.Register(
 "KinectSensor",
 typeof(KinectSensor),
-typeof(KinectStreamViewer),
+typeof(KinectSkeletonViewer),
 new UIPropertyMetadata(null, KinectSensorChanged));
 
         public KinectSensor KinectSensor

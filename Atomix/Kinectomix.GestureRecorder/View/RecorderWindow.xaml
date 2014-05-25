@@ -145,7 +145,15 @@
             <CheckBox Canvas.Left="120" Canvas.Top="180" />
         </Canvas>
 
-        <Control:KinectStreamViewer Grid.Column="1"
-                                    KinectSensor="{Binding Sensor}" />
+        <Grid Grid.Column="1">
+            <Control:KinectStreamViewer x:Name="ColorViewer" KinectSensor="{Binding Sensor}" CollectFrameRate="True" RetainImageOnSensorChange="True" />
+            <Canvas>
+                <Control:KinectSkeletonViewer 
+                                    KinectSensor="{Binding Sensor}"
+                                    Width="{Binding ElementName=ColorViewer,Path=ActualWidth}"
+                                    Height="{Binding ElementName=ColorViewer,Path=ActualHeight}"
+                                    ImageType="Color" />
+            </Canvas>
+        </Grid>
     </Grid>
 </Window>
