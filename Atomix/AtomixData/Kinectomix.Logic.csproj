@@ -78,7 +78,9 @@
     <Compile Include="BondType.cs" />
     <Compile Include="Bresenham.cs" />
     <Compile Include="DTW\DynamicTimeWarping.cs" />
+    <Compile Include="DTW\FrameData.cs" />
     <Compile Include="DTW\Gesture.cs" />
+    <Compile Include="DTW\GestureProcessor.cs" />
     <Compile Include="DTW\GestureRecognizer.cs" />
     <Compile Include="DTW\GestureRecorder.cs" />
     <Compile Include="DTW\GestureTrackingDepth.cs" />
