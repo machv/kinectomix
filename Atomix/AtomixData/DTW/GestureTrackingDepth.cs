@@ -7,7 +7,7 @@ namespace Kinectomix.Logic.DTW
 {
     public enum GestureTrackingDimension
     {
-        2D,
-        3D
+        Two = 2,
+        Three = 3,
     }
 }

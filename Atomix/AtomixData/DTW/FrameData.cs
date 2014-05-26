@@ -15,7 +15,7 @@ namespace Kinectomix.Logic.DTW
         public FrameData(int capacity)
         {
             Capacity = capacity;
-            SkeletonJoints = new JointType[capacity];
+            SkeletonJoints = new SkeletonPoint[capacity];
         }
     }
 }

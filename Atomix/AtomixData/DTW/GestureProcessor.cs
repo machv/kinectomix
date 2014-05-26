@@ -11,9 +11,9 @@ namespace Kinectomix.Logic.DTW
         public const int TrackedJointsCount = 20;
         public const int BufferLength = 30;
 
-        Queue<FrameData> _frameBuffer;
+        protected Queue<FrameData> _frameBuffer;
 
-        private static JointType[] _tracableSkeletonJoints;
+        protected static JointType[] _tracableSkeletonJoints;
 
         static GestureProcessor()
         {
@@ -30,7 +30,12 @@ namespace Kinectomix.Logic.DTW
 
         }
 
-        public void ProcessSkeleton(Skeleton skeleton)
+        public void Clear()
+        {
+            _frameBuffer.Clear();
+        }
+
+        public virtual void ProcessSkeleton(Skeleton skeleton)
         {
             // transpozice a normalizace souřadnic, jednotkou je délka krku (ShoulderCenter - Head) 
 

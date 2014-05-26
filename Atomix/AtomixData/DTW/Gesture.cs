@@ -20,6 +20,6 @@ namespace Kinectomix.Logic.DTW
         /// List of invariant positions ordered by TrackedJoints
         /// </summary>
         /// <returns></returns>
-        public double[] GestureSequence { get; set; }
+        public List<double[]> GestureSequence { get; set; }
     }
 }
