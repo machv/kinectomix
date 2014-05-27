@@ -1,15 +1,39 @@
-﻿using System;
+﻿using Kinectomix.Logic.DTW;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Kinectomix.Logic.DynamicTimeWarping
+namespace Kinectomix.Logic.DTW
 {
     public class DynamicTimeWarping
     {
-        public static double Distance(double a, double b)
+        public static double EuclidianDistance(double x, double y)
         {
-            return Math.Abs(a - b);
+            return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
+        }
+
+        public static double EuclidianDistance(double x, double y, double z)
+        {
+            return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
+        }
+
+        public static double AccumulatedEuclidianDistance(GestureFrame a, GestureFrame b, GestureTrackingDimension dimension)
+        {
+            double accumulatedDistance = 0;
+
+            for (int i = 0; i < Math.Min(a.Count, b.Count); i++)
+            {
+                double x = a[i].X - b[i].X;
+                double y = a[i].Y - b[i].Y;
+                double z = a[i].Z - b[i].Z;
+
+                accumulatedDistance += dimension == GestureTrackingDimension.Two ? 
+                    EuclidianDistance(x, y) : 
+                    EuclidianDistance(x, y, z);
+            }
+
+            return accumulatedDistance;
         }
 
         public static double Minimum(params double[] values)
@@ -17,51 +41,30 @@ namespace Kinectomix.Logic.DynamicTimeWarping
             return Enumerable.Min(values);
         }
 
-        public static double CalculateDtw(double[] sequence1, double[] sequence2)
+        public static double CalculateDtw(Gesture gesture1, Gesture gesture2)
         {
-            double[,] matrix = new double[sequence1.Length + 1, sequence2.Length + 1];
+            double[,] matrix = new double[gesture1.GestureSequence.Count + 1, gesture2.GestureSequence.Count + 1];
 
-            for (int i = 1; i <= sequence1.Length; i++)
+            for (int i = 1; i <= gesture1.GestureSequence.Count; i++)
                 matrix[i, 0] = double.PositiveInfinity;
 
-            for (int i = 1; i <= sequence2.Length; i++)
+            for (int i = 1; i <= gesture2.GestureSequence.Count; i++)
                 matrix[0, i] = double.PositiveInfinity;
 
             matrix[0, 0] = 0;
 
-            for (int i = 1; i <= sequence1.Length; i++)
+            for (int i = 1; i <= gesture1.GestureSequence.Count; i++)
             {
-                for (int j = 1; j <= sequence2.Length; j++)
+                for (int j = 1; j <= gesture2.GestureSequence.Count; j++)
                 {
-                    matrix[i, j] = Distance(sequence1[i], sequence2[j]) +
+                    matrix[i, j] = AccumulatedEuclidianDistance(gesture1.GestureSequence[i], gesture2.GestureSequence[j], gesture1.Dimension) +
                         Minimum(matrix[i - 1, j],
                                 matrix[i, j - 1],
                                 matrix[i - 1, j - 1]);
                 }
             }
 
-            return matrix[sequence1.Length, sequence2.Length];
+            return matrix[gesture1.GestureSequence.Count, gesture2.GestureSequence.Count];
         }
-
-        /*
-        int DTWDistance(s: array[1..n], t: array[1..m])
-        {
-            DTW:= array[0..n, 0..m]
-
-    for i := 1 to n
-        DTW[i, 0] := infinity
-    for i := 1 to m
-        DTW[0, i] := infinity
-    DTW[0, 0] := 0
-
-    for i := 1 to n
-        for j := 1 to m
-            cost:= d(s[i], t[j])
-            DTW[i, j] := cost + minimum(DTW[i - 1, j],    // insertion
-                                        DTW[i, j - 1],    // deletion
-                                        DTW[i - 1, j - 1])    // match
-
-    return DTW[n, m]
-}*/
     }
 }

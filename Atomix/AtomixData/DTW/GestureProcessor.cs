@@ -9,6 +9,8 @@ namespace Kinectomix.Logic.DTW
     public class GestureProcessor
     {
         public const int TrackedJointsCount = 20;
+        
+        //TODO ADD maximalBufferLength 
         protected int _minimalBufferLength = 30;
 
         protected Queue<FrameData> _frameBuffer;
@@ -23,11 +25,6 @@ namespace Kinectomix.Logic.DTW
         public GestureProcessor()
         {
             _frameBuffer = new Queue<FrameData>(_minimalBufferLength);
-        }
-
-        public void AddGesture(Gesture gesture)
-        {
-
         }
 
         public void Clear()

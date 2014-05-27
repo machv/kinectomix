@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using System.Xml.Serialization;
 
 namespace Kinectomix.GestureRecorder.ViewModel
 {
@@ -51,6 +52,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
         {
             _trackedJoints = new SkeletonViewModel();
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
+            _startRecognizingCommand = new DelegateCommand(StartRecognizing, CanStartRecognizing);
 
             _countDownTimer = new DispatcherTimer();
             _countDownTimer.Interval = TimeSpan.FromSeconds(_step.TotalSeconds);
@@ -66,6 +68,24 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 StartKinect(KinectSensor.KinectSensors.FirstOrDefault());
         }
 
+        private bool CanStartRecognizing(object parameter)
+        {
+            return true;
+        }
+
+        private void StartRecognizing()
+        {
+            _recognizer = new GestureRecognizer();
+
+            XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
+            using (Stream stream = File.Open("d:\\TEMP\\gesture.gst", FileMode.Open))
+            {
+                Gesture gesture = seralizer.Deserialize(stream) as Gesture;
+                _recognizer.AddGesture(gesture);
+            }
+            
+        }
+
         private void _recordingTimer_Tick(object sender, EventArgs e)
         {
             RecordingRemainingTime = _recordingRemainingTime.Subtract(_step);
@@ -76,9 +96,20 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
                 Gesture gesture = _recorder.GetRecordedGesture();
 
+                using (Stream stream = File.Open("d:\\TEMP\\gesture.gst", FileMode.OpenOrCreate))
+                {
+                    SaveGestureToStream(gesture, stream);
+                }
+
                 IsRecording = false;
                 _recorder = null;
             }
+        }
+
+        private void SaveGestureToStream(Gesture gesture, Stream stream)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Gesture));
+            serializer.Serialize(stream, gesture);
         }
 
         internal void OnWindowClosing()
@@ -121,6 +152,13 @@ namespace Kinectomix.GestureRecorder.ViewModel
         {
             get { return _startRecordingCommand; }
         }
+
+        private DelegateCommand _startRecognizingCommand;
+        public ICommand StartRecognizingCommand
+        {
+            get { return _startRecognizingCommand; }
+        }
+
         public TimeSpan RecordingTimeout
         {
             get { return _recordingCountDownDuration; }
@@ -165,6 +203,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         private DateTime _recordingStarted;
         private Logic.DTW.GestureRecorder _recorder;
+        private GestureRecognizer _recognizer;
         private void StartRecording()
         {
             _recorder = new Logic.DTW.GestureRecorder();

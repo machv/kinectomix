@@ -8,14 +8,14 @@ namespace Kinectomix.Logic.DTW
 {
     public class FrameData
     {
-        public SkeletonPoint[] SkeletonJoints { get; set; }
+        public GestureFrame SkeletonJoints { get; set; }
 
         public int Capacity { get; private set; }
 
         public FrameData(int capacity)
         {
             Capacity = capacity;
-            SkeletonJoints = new SkeletonPoint[capacity];
+            SkeletonJoints = new GestureFrame();
         }
     }
 }

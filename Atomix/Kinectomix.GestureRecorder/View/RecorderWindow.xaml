@@ -24,6 +24,7 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
                 <Button Content="Start recording" Command="{Binding StartRecordingCommand}" />
+                <Button Content="Start recognizing" Command="{Binding StartRecognizingCommand}" />
             </StackPanel>
 
             <Grid Grid.Column="1" Grid.Row="0">

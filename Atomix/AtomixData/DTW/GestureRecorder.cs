@@ -22,30 +22,7 @@ namespace Kinectomix.Logic.DTW
 
         public Gesture GetRecordedGesture()
         {
-            Gesture gesture = new Gesture();
-            gesture.TrackedJoints = _trackedJoints.ToArray();
-            gesture.Dimension = _dimension;
-            gesture.GestureSequence = new List<double[]>();
-
-            
-            foreach (FrameData frame in _frameBuffer)
-            {
-                double[] frameData = new double[(int)_dimension * _trackedJoints.Count()];
-
-                int i = 0;
-                foreach (JointType joint in _trackedJoints)
-                {
-                    frameData[i++] = frame.SkeletonJoints[(int)joint].X;
-                    frameData[i++] = frame.SkeletonJoints[(int)joint].Y;
-
-                   if (_dimension == GestureTrackingDimension.Three)
-                        frameData[i++] = frame.SkeletonJoints[(int)joint].Z;
-                }
-
-                gesture.GestureSequence.Add(frameData);
-            }
-
-            return gesture;
+            return Gesture.FromFrameData(_frameBuffer, _trackedJoints, _dimension);
         }
 
         public override void ProcessSkeleton(Skeleton skeleton)
