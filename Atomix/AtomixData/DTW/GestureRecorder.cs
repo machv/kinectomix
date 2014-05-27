@@ -15,6 +15,7 @@ namespace Kinectomix.Logic.DTW
         {
             Clear();
 
+            _minimalBufferLength = int.MaxValue;
             _trackedJoints = trackedJoints;
             _dimension = dimension;
         }

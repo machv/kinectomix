@@ -1,4 +1,5 @@
-﻿using Kinectomix.Wpf.Mvvm;
+﻿using Kinectomix.Logic.DTW;
+using Kinectomix.Wpf.Mvvm;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
@@ -41,14 +42,26 @@ namespace Kinectomix.GestureRecorder.ViewModel
             _trackedJoints = new SkeletonViewModel();
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
 
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
-            _timer.Tick += new EventHandler(TimerTick);
+            _countDownTimer = new DispatcherTimer();
+            _countDownTimer.Interval = TimeSpan.FromSeconds(1);
+            _countDownTimer.Tick += _countDownTimer_Tick;
+
+            _recordingTimer = new DispatcherTimer();
+            _recordingTimer.Tick += _recordingTimer_Tick;
 
             KinectSensor.KinectSensors.StatusChanged += KinectSensorsChanged;
 
             if (KinectSensor.KinectSensors.Count > 0)
                 StartKinect(KinectSensor.KinectSensors.FirstOrDefault());
+        }
+
+        private void _recordingTimer_Tick(object sender, EventArgs e)
+        {
+            _recordingTimer.Stop();
+
+            Gesture gesture = _recorder.GetRecordedGesture();
+
+            IsRecording = false;
         }
 
         internal void OnWindowClosing()
@@ -70,10 +83,22 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
+        private bool _isRecording = false;
+        public bool IsRecording
+        {
+            get { return _isRecording; }
+            protected set
+            {
+                _isRecording = value;
+                OnPropertyChanged();
+                _startRecordingCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         private TimeSpan _step = new TimeSpan(0,0,1);
         private TimeSpan _recordingTimeout = TimeSpan.Zero;
-        private DispatcherTimer _timer;
-        private bool _isRecording = false;
+        private DispatcherTimer _countDownTimer;
+        private DispatcherTimer _recordingTimer;
         private DelegateCommand _startRecordingCommand;
         public ICommand StartRecordingCommand
         {
@@ -102,20 +127,19 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         private void StartRecordingCountdown()
         {
-            _isRecording = true;
-            _startRecordingCommand.RaiseCanExecuteChanged();
+            IsRecording = true;
 
             _recordingTimeout = new TimeSpan(0, 0, 5);
-            _timer.Start();
+            _countDownTimer.Start();
         }
 
-        private void TimerTick(object sender, EventArgs e)
+        private void _countDownTimer_Tick(object sender, EventArgs e)
         {
             RecordingTimeout = RecordingTimeout.Subtract(_step);
 
             if (RecordingTimeout == TimeSpan.Zero)
             {
-                _timer.Stop();
+                _countDownTimer.Stop();
 
                 StartRecording();
             }
@@ -124,11 +148,11 @@ namespace Kinectomix.GestureRecorder.ViewModel
         private Logic.DTW.GestureRecorder _recorder;
         private void StartRecording()
         {
-            MessageBox.Show("Start");
-            _isRecording = false;
-
             _recorder = new Logic.DTW.GestureRecorder();
-            _recorder.Start(_trackedJoints.GetSelectedJoints(), Logic.DTW.GestureTrackingDimension.Two);
+            _recorder.Start(_trackedJoints.GetSelectedJoints(), GestureTrackingDimension.Two);
+
+            _recordingTimer.Interval = TimeSpan.FromSeconds(RecordingDuration.TotalSeconds);
+            _recordingTimer.Start();
         }
 
         private bool CanStartRecording(object parameter)
