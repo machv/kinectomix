@@ -68,6 +68,14 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 StartKinect(KinectSensor.KinectSensors.FirstOrDefault());
         }
 
+        private double _dtwCost;
+        public double DtwCost
+        {
+            get { return _dtwCost; }
+            set { _dtwCost = value; OnPropertyChanged(); }
+        }
+
+
         private bool CanStartRecognizing(object parameter)
         {
             return true;
@@ -260,7 +268,10 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 if (trackedSkeleton != null)
                 {
                     if (_recognizer != null)
+                    {
                         _recognizer.ProcessSkeleton(trackedSkeleton);
+                        DtwCost = _recognizer.GetLastCost();
+                    }
                     else if (_isRecording == true && _recorder != null)
                         _recorder.ProcessSkeleton(trackedSkeleton);
                 }

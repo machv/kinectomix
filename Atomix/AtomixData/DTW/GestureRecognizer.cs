@@ -24,6 +24,7 @@ namespace Kinectomix.Logic.DTW
             _gestures.Add(gesture);
         }
 
+        private double _lastCost;
         public override void ProcessSkeleton(Skeleton skeleton)
         {
             if (_frameBuffer.Count >= _minimalBufferLength)
@@ -32,6 +33,8 @@ namespace Kinectomix.Logic.DTW
                 {
                     double distance = DynamicTimeWarping.CalculateDtw(gesture, Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension));
                     double cost = distance / _frameBuffer.Count;
+
+                    _lastCost = cost;
                 }
             }
 
@@ -43,6 +46,11 @@ namespace Kinectomix.Logic.DTW
             foreach (Gesture gesture in _gestures)
             {
             }
+        }
+
+        public double GetLastCost()
+        {
+            return _lastCost;
         }
     }
 }

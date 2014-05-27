@@ -183,6 +183,7 @@
                                     Height="{Binding ElementName=ColorViewer,Path=ActualHeight}"
                                     ImageType="Color" />
                 </Canvas>
+                <TextBlock Text="{Binding DtwCost}" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="42" Foreground="Orange" />
             </Grid>
         </Grid>
         <Grid Background="White" Opacity="0.7" Visibility="{Binding RecordingTimeout, Converter={StaticResource RecordingTimeoutToVisibilityConverter}}">
