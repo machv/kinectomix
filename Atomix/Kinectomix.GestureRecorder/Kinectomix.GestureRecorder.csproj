@@ -65,6 +65,7 @@
     <Compile Include="Control\KinectSkeletonViewer.xaml.cs">
       <DependentUpon>KinectSkeletonViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\RecordingTimeoutToVisibilityConverter.cs" />
     <Compile Include="Model\ImageType.cs" />
     <Compile Include="Model\JointMapping.cs" />

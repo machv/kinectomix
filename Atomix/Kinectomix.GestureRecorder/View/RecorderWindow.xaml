@@ -4,12 +4,13 @@
         xmlns:ViewModel="clr-namespace:Kinectomix.GestureRecorder.ViewModel"
         xmlns:Control="clr-namespace:Kinectomix.GestureRecorder.Control"
         xmlns:Converter="clr-namespace:Kinectomix.GestureRecorder.Converter"
-        Title="RecorderWindow" Height="400" Width="500">
+        Title="RecorderWindow" Height="450" Width="500">
     <Window.DataContext>
         <ViewModel:RecorderViewModel />
     </Window.DataContext>
     <Window.Resources>
         <Converter:RecordingTimeoutToVisibilityConverter x:Key="RecordingTimeoutToVisibilityConverter" />
+        <Converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
     <Grid>
         <Grid>
@@ -25,9 +26,19 @@
                 <Button Content="Start recording" Command="{Binding StartRecordingCommand}" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
-                <TextBox Text="{Binding RecordingDuration, Mode=TwoWay}" />
-            </StackPanel>
+            <Grid Grid.Column="1" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" 
+                           Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                           Text="{Binding RecordingRemainingTime}" />
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <TextBox Text="{Binding RecordingDuration, Mode=TwoWay}" />
+                </StackPanel>
+
+            </Grid>
             
             <Canvas Grid.Row="1" Width="145">
 

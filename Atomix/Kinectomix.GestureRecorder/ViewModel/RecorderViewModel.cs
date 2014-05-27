@@ -37,16 +37,27 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
+        private TimeSpan _recordingRemainingTime;
+        public TimeSpan RecordingRemainingTime
+        {
+            get { return _recordingRemainingTime; }
+            set
+            {
+                _recordingRemainingTime = value;
+                OnPropertyChanged();
+            }
+        }
         public RecorderViewModel()
         {
             _trackedJoints = new SkeletonViewModel();
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
 
             _countDownTimer = new DispatcherTimer();
-            _countDownTimer.Interval = TimeSpan.FromSeconds(1);
+            _countDownTimer.Interval = TimeSpan.FromSeconds(_step.TotalSeconds);
             _countDownTimer.Tick += _countDownTimer_Tick;
 
             _recordingTimer = new DispatcherTimer();
+            _recordingTimer.Interval = TimeSpan.FromSeconds(_step.TotalSeconds);
             _recordingTimer.Tick += _recordingTimer_Tick;
 
             KinectSensor.KinectSensors.StatusChanged += KinectSensorsChanged;
@@ -57,11 +68,16 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         private void _recordingTimer_Tick(object sender, EventArgs e)
         {
-            _recordingTimer.Stop();
+            RecordingRemainingTime = _recordingRemainingTime.Subtract(_step);
 
-            Gesture gesture = _recorder.GetRecordedGesture();
+            if (_recordingStarted + _recordingDuration < DateTime.Now)
+            {
+                _recordingTimer.Stop();
 
-            IsRecording = false;
+                Gesture gesture = _recorder.GetRecordedGesture();
+
+                IsRecording = false;
+            }
         }
 
         internal void OnWindowClosing()
@@ -96,7 +112,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
         }
 
         private TimeSpan _step = new TimeSpan(0,0,1);
-        private TimeSpan _recordingTimeout = TimeSpan.Zero;
+        private TimeSpan _recordingCountDownDuration = TimeSpan.Zero;
         private DispatcherTimer _countDownTimer;
         private DispatcherTimer _recordingTimer;
         private DelegateCommand _startRecordingCommand;
@@ -106,10 +122,10 @@ namespace Kinectomix.GestureRecorder.ViewModel
         }
         public TimeSpan RecordingTimeout
         {
-            get { return _recordingTimeout; }
+            get { return _recordingCountDownDuration; }
             set
             {
-                _recordingTimeout = value;
+                _recordingCountDownDuration = value;
                 OnPropertyChanged();
             }
         }
@@ -128,8 +144,9 @@ namespace Kinectomix.GestureRecorder.ViewModel
         private void StartRecordingCountdown()
         {
             IsRecording = true;
+            RecordingRemainingTime = _recordingDuration;
 
-            _recordingTimeout = new TimeSpan(0, 0, 5);
+            _recordingCountDownDuration = new TimeSpan(0, 0, 5);
             _countDownTimer.Start();
         }
 
@@ -145,14 +162,15 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
+        private DateTime _recordingStarted;
         private Logic.DTW.GestureRecorder _recorder;
         private void StartRecording()
         {
             _recorder = new Logic.DTW.GestureRecorder();
             _recorder.Start(_trackedJoints.GetSelectedJoints(), GestureTrackingDimension.Two);
 
-            _recordingTimer.Interval = TimeSpan.FromSeconds(RecordingDuration.TotalSeconds);
             _recordingTimer.Start();
+            _recordingStarted = DateTime.Now;
         }
 
         private bool CanStartRecording(object parameter)
