@@ -1,4 +1,7 @@
-﻿using Kinectomix.Wpf.Mvvm;
+﻿using System;
+using System.Collections.Generic;
+using Kinectomix.Wpf.Mvvm;
+using Microsoft.Kinect;
 
 namespace Kinectomix.GestureRecorder.ViewModel
 {
@@ -150,6 +153,12 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        internal IEnumerable<JointType> GetSelectedJoints()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool KneeLeft
         {
             get { return _kneeLeft; }

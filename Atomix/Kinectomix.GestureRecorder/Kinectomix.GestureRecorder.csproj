@@ -65,6 +65,7 @@
     <Compile Include="Control\KinectSkeletonViewer.xaml.cs">
       <DependentUpon>KinectSkeletonViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converter\RecordingTimeoutToVisibilityConverter.cs" />
     <Compile Include="Model\ImageType.cs" />
     <Compile Include="Model\JointMapping.cs" />
     <Compile Include="ViewModel\RecorderViewModel.cs" />
@@ -120,6 +121,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AtomixData\Kinectomix.Logic.csproj">
+      <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
+      <Name>Kinectomix.Logic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kinectomix.Wpf.Mvvm\Kinectomix.Wpf.Mvvm.csproj">
       <Project>{e6aefe09-e617-40ed-9594-91e7e7594d32}</Project>
       <Name>Kinectomix.Wpf.Mvvm</Name>

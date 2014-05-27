@@ -9,7 +9,7 @@ namespace Kinectomix.Logic.DTW
     public class GestureProcessor
     {
         public const int TrackedJointsCount = 20;
-        public const int BufferLength = 30;
+        protected int _minimalBufferLength = 30;
 
         protected Queue<FrameData> _frameBuffer;
 
@@ -22,7 +22,7 @@ namespace Kinectomix.Logic.DTW
 
         public GestureProcessor()
         {
-            _frameBuffer = new Queue<FrameData>(BufferLength);
+            _frameBuffer = new Queue<FrameData>(_minimalBufferLength);
         }
 
         public void AddGesture(Gesture gesture)
@@ -68,7 +68,7 @@ namespace Kinectomix.Logic.DTW
                 };
             }
 
-            if (_frameBuffer.Count > BufferLength)
+            if (_frameBuffer.Count > _minimalBufferLength)
                 _frameBuffer.Dequeue();
 
             _frameBuffer.Enqueue(frame);
