@@ -7,34 +7,21 @@ namespace Kinectomix.GestureRecorder.ViewModel
 {
     public class SkeletonViewModel : NotifyPropertyBase
     {
-        private bool _hipCenter;
-        private bool _spine;
-        private bool _shoulderCenter;
-        private bool _head;
-        private bool _shoulderLeft;
-        private bool _elbowLeft;
-        private bool _wristLeft;
-        private bool _handLeft;
-        private bool _shoulderRight;
-        private bool _elbowRight;
-        private bool _wristRight;
-        private bool _handRight;
-        private bool _hipLeft;
-        private bool _kneeLeft;
-        private bool _ankleLeft;
-        private bool _footLeft;
-        private bool _hipRight;
-        private bool _kneeRight;
-        private bool _ankleRight;
-        private bool _footRight;
+        public const int JointsCount = 20;
+        
+        private bool[] _joints;
 
+        public SkeletonViewModel()
+        {
+            _joints = new bool[JointsCount];
+        }
 
         public bool HipCenter
         {
-            get { return _hipCenter; }
+            get { return _joints[(int)JointType.HipCenter]; }
             set
             {
-                _hipCenter = value;
+                _joints[(int)JointType.HipCenter] = value;
                 OnPropertyChanged();
             }
         }
@@ -42,20 +29,21 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         public bool Spine
         {
-            get { return _spine; }
+            get { return _joints[(int)JointType.Spine]; }
             set
             {
-                _spine = value; OnPropertyChanged();
+                _joints[(int)JointType.Spine] = value;
+                OnPropertyChanged();
             }
         }
 
 
         public bool ShoulderCenter
         {
-            get { return _shoulderCenter; }
+            get { return _joints[(int)JointType.ShoulderCenter]; }
             set
             {
-                _shoulderCenter = value;
+                _joints[(int)JointType.ShoulderCenter] = value;
                 OnPropertyChanged();
             }
         }
@@ -63,10 +51,10 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         public bool Head
         {
-            get { return _head; }
+            get { return _joints[(int)JointType.Head]; }
             set
             {
-                _head = value;
+                _joints[(int)JointType.Head] = value;
                 OnPropertyChanged();
             }
         }
@@ -74,154 +62,165 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         public bool ShoulderLeft
         {
-            get { return _shoulderLeft; }
+            get { return _joints[(int)JointType.ShoulderLeft];  }
             set
             {
-                _shoulderLeft = value;
+                _joints[(int)JointType.ShoulderLeft] = value;
                 OnPropertyChanged();
             }
         }
         public bool ElbowLeft
         {
-            get { return _elbowLeft; }
+            get { return _joints[(int)JointType.ElbowLeft];  }
             set
             {
-                _elbowLeft = value;
+                _joints[(int)JointType.ElbowLeft] = value;
                 OnPropertyChanged();
             }
         }
         public bool WristLeft
         {
-            get { return _wristLeft; }
+            get { return _joints[(int)JointType.WristLeft];  }
             set
             {
-                _wristLeft = value;
+                _joints[(int)JointType.WristLeft] = value;
                 OnPropertyChanged();
             }
         }
         public bool HandLeft
         {
-            get { return _handLeft; }
+            get { return _joints[(int)JointType.HandLeft]; }
             set
             {
-                _handLeft = value;
+                _joints[(int)JointType.HandLeft] = value;
                 OnPropertyChanged();
             }
         }
         public bool ShoulderRight
         {
-            get { return _shoulderRight; }
+            get { return _joints[(int)JointType.ShoulderRight]; }
             set
             {
-                _shoulderRight = value;
+                _joints[(int)JointType.ShoulderRight] = value;
                 OnPropertyChanged();
             }
         }
         public bool ElbowRight
         {
-            get { return _elbowRight; }
+            get { return _joints[(int)JointType.ElbowRight]; }
             set
             {
-                _elbowRight = value;
+                _joints[(int)JointType.ElbowRight] = value;
                 OnPropertyChanged();
             }
         }
         public bool WristRight
         {
-            get { return _wristRight; }
+            get { return _joints[(int)JointType.WristRight]; }
             set
             {
-                _wristRight = value;
+                _joints[(int)JointType.WristRight] = value;
                 OnPropertyChanged();
             }
         }
         public bool HandRight
         {
-            get { return _handRight; }
+            get { return _joints[(int)JointType.HandRight]; }
             set
             {
-                _handRight = value;
+                _joints[(int)JointType.HandRight] = value;
                 OnPropertyChanged();
             }
         }
         public bool HipLeft
         {
-            get { return _hipLeft; }
+            get { return _joints[(int)JointType.HipLeft]; }
             set
             {
-                _hipLeft = value;
+                _joints[(int)JointType.HipLeft] = value;
                 OnPropertyChanged();
             }
         }
 
-        internal IEnumerable<JointType> GetSelectedJoints()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool KneeLeft
         {
-            get { return _kneeLeft; }
+            get { return _joints[(int)JointType.KneeLeft]; }
             set
             {
-                _kneeLeft = value;
+                _joints[(int)JointType.KneeLeft] = value;
                 OnPropertyChanged();
             }
         }
         public bool AnkleLeft
         {
-            get { return _ankleLeft; }
+            get { return _joints[(int)JointType.AnkleLeft]; }
             set
             {
-                _ankleLeft = value;
+                _joints[(int)JointType.AnkleLeft] = value;
                 OnPropertyChanged();
             }
         }
         public bool FootLeft
         {
-            get { return _footLeft; }
+            get { return _joints[(int)JointType.FootLeft]; }
             set
             {
-                _footLeft = value;
+                _joints[(int)JointType.FootLeft] = value;
                 OnPropertyChanged();
 
             }
         }
         public bool HipRight
         {
-            get { return _hipRight; }
+            get { return _joints[(int)JointType.HipRight]; }
             set
             {
-                _hipRight = value;
+                _joints[(int)JointType.HipRight] = value;
                 OnPropertyChanged();
             }
         }
         public bool KneeRight
         {
-            get { return _kneeRight; }
+            get { return _joints[(int)JointType.KneeRight]; }
             set
             {
-                _kneeRight = value;
+                _joints[(int)JointType.KneeRight] = value;
                 OnPropertyChanged();
             }
         }
         public bool AnkleRight
         {
-            get { return _ankleRight; }
+            get { return _joints[(int)JointType.AnkleRight]; }
             set
             {
-                _ankleRight = value;
+                _joints[(int)JointType.AnkleRight] = value;
                 OnPropertyChanged();
             }
         }
         public bool FootRight
         {
-            get { return _footRight; }
+            get { return _joints[(int)JointType.FootRight]; }
             set
             {
-                _footRight = value;
+                _joints[(int)JointType.FootRight] = value;
                 OnPropertyChanged();
             }
+        }
+
+        public IEnumerable<JointType> GetSelectedJoints()
+        {
+            List<JointType> joints = new List<JointType>();
+
+            for (int i = 0; i < _joints.Length; i++)
+            {
+                if (_joints[i] == true)
+                {
+                    JointType joint = (JointType)i;
+                    joints.Add(joint);
+                }
+            }
+
+            return joints;
         }
     }
 }
