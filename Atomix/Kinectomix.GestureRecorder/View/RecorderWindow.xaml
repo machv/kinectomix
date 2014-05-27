@@ -105,61 +105,61 @@
                 <CheckBox IsChecked="{Binding TrackedJoints.Head}" Canvas.Left="62" Canvas.Top="20" />
 
                 <!-- Spine -->
-                <CheckBox Canvas.Left="62" Canvas.Top="143" />
+                <CheckBox IsChecked="{Binding TrackedJoints.Spine}" Canvas.Left="62" Canvas.Top="143" />
 
                 <!-- Hip Center -->
-                <CheckBox Canvas.Left="62" Canvas.Top="165" />
+                <CheckBox IsChecked="{Binding TrackedJoints.HipCenter}" Canvas.Left="62" Canvas.Top="165" />
 
                 <!-- Hip Left -->
-                <CheckBox Canvas.Left="35" Canvas.Top="180" />
+                <CheckBox IsChecked="{Binding TrackedJoints.HipLeft}" Canvas.Left="35" Canvas.Top="180" />
 
                 <!-- Hip Right -->
-                <CheckBox Canvas.Left="90" Canvas.Top="180" />
+                <CheckBox IsChecked="{Binding TrackedJoints.Hipright}" Canvas.Left="90" Canvas.Top="180" />
 
                 <!-- Knee Right -->
-                <CheckBox Canvas.Left="90" Canvas.Top="270" />
+                <CheckBox IsChecked="{Binding TrackedJoints.KneeRight}" Canvas.Left="90" Canvas.Top="270" />
 
                 <!-- Knee Left -->
-                <CheckBox Canvas.Left="35" Canvas.Top="270" />
+                <CheckBox IsChecked="{Binding TrackedJoints.KneeLeft}" Canvas.Left="35" Canvas.Top="270" />
 
                 <!-- Ankle Right -->
-                <CheckBox Canvas.Left="90" Canvas.Top="325" />
+                <CheckBox IsChecked="{Binding TrackedJoints.AnkleRight}" Canvas.Left="90" Canvas.Top="325" />
 
                 <!-- Ankle Left -->
-                <CheckBox Canvas.Left="35" Canvas.Top="325" />
+                <CheckBox IsChecked="{Binding TrackedJoints.AnkleRight}" Canvas.Left="35" Canvas.Top="325" />
 
                 <!-- Foot Left -->
-                <CheckBox Canvas.Left="5" Canvas.Top="350" />
+                <CheckBox IsChecked="{Binding TrackedJoints.FootLeft}" Canvas.Left="5" Canvas.Top="350" />
 
                 <!-- Foot Right -->
-                <CheckBox Canvas.Left="115" Canvas.Top="350" />
+                <CheckBox IsChecked="{Binding TrackedJoints.FootRight}" Canvas.Left="115" Canvas.Top="350" />
 
                 <!-- Shoulder center -->
-                <CheckBox Canvas.Left="62" Canvas.Top="53" />
+                <CheckBox IsChecked="{Binding TrackedJoints.ShoulderCenter}" Canvas.Left="62" Canvas.Top="53" />
 
                 <!-- Left shoulder -->
-                <CheckBox Canvas.Left="9" Canvas.Top="63" />
+                <CheckBox IsChecked="{Binding TrackedJoints.ShoulderLeft}" Canvas.Left="9" Canvas.Top="63" />
 
                 <!-- Right shoulder -->
-                <CheckBox Canvas.Left="116" Canvas.Top="63" />
+                <CheckBox IsChecked="{Binding TrackedJoints.ShoulderRight}" Canvas.Left="116" Canvas.Top="63" />
 
                 <!-- Right elbow -->
-                <CheckBox Canvas.Left="120" Canvas.Top="110" />
+                <CheckBox IsChecked="{Binding TrackedJoints.ElbowRight}" Canvas.Left="120" Canvas.Top="110" />
 
                 <!-- Left elbow -->
-                <CheckBox Canvas.Left="3" Canvas.Top="110" />
+                <CheckBox IsChecked="{Binding TrackedJoints.ElbowLeft}" Canvas.Left="3" Canvas.Top="110" />
 
                 <!-- Left wrist -->
-                <CheckBox Canvas.Left="3" Canvas.Top="160" />
+                <CheckBox IsChecked="{Binding TrackedJoints.WristLeft}" Canvas.Left="3" Canvas.Top="160" />
 
                 <!-- Right wrist -->
-                <CheckBox Canvas.Left="120" Canvas.Top="160" />
+                <CheckBox IsChecked="{Binding TrackedJoints.WristRight}" Canvas.Left="120" Canvas.Top="160" />
 
                 <!-- Left hand -->
-                <CheckBox Canvas.Left="3" Canvas.Top="180" />
+                <CheckBox IsChecked="{Binding TrackedJoints.HandLeft}" Canvas.Left="3" Canvas.Top="180" />
 
                 <!-- Right hand -->
-                <CheckBox Canvas.Left="120" Canvas.Top="180" />
+                <CheckBox IsChecked="{Binding TrackedJoints.HandRight}" Canvas.Left="120" Canvas.Top="180" />
             </Canvas>
 
             <Grid Grid.Row="1" Grid.Column="1">
