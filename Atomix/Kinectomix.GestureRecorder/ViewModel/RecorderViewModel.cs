@@ -77,6 +77,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 Gesture gesture = _recorder.GetRecordedGesture();
 
                 IsRecording = false;
+                _recorder = null;
             }
         }
 
@@ -206,7 +207,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         private void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
-            if (_isRecording)
+            if (_isRecording && _recorder != null)
             {
                 using (SkeletonFrame frame = e.OpenSkeletonFrame())
                 {
