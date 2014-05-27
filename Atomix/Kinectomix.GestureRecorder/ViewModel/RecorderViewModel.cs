@@ -83,7 +83,6 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 Gesture gesture = seralizer.Deserialize(stream) as Gesture;
                 _recognizer.AddGesture(gesture);
             }
-            
         }
 
         private void _recordingTimer_Tick(object sender, EventArgs e)
@@ -143,7 +142,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
-        private TimeSpan _step = new TimeSpan(0,0,1);
+        private TimeSpan _step = new TimeSpan(0, 0, 1);
         private TimeSpan _recordingCountDownDuration = TimeSpan.Zero;
         private DispatcherTimer _countDownTimer;
         private DispatcherTimer _recordingTimer;
@@ -169,7 +168,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
-        private TimeSpan _recordingDuration = new TimeSpan(0,0,5);
+        private TimeSpan _recordingDuration = new TimeSpan(0, 0, 5);
         public TimeSpan RecordingDuration
         {
             get { return _recordingDuration; }
@@ -246,16 +245,23 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         private void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
-            if (_isRecording && _recorder != null)
+            if (_recorder == null && _recognizer == null)
+                return;
+
+            using (SkeletonFrame frame = e.OpenSkeletonFrame())
             {
-                using (SkeletonFrame frame = e.OpenSkeletonFrame())
+                if (frame == null)
+                    return;
+
+                Skeleton[] skeletons = new Skeleton[frame.SkeletonArrayLength];
+                frame.CopySkeletonDataTo(skeletons);
+
+                Skeleton trackedSkeleton = skeletons.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
+                if (trackedSkeleton != null)
                 {
-                    Skeleton[] skeletons = new Skeleton[frame.SkeletonArrayLength];
-                    frame.CopySkeletonDataTo(skeletons);
-
-                    Skeleton trackedSkeleton = skeletons.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
-
-                    if (trackedSkeleton != null)
+                    if (_recognizer != null)
+                        _recognizer.ProcessSkeleton(trackedSkeleton);
+                    else if (_isRecording == true && _recorder != null)
                         _recorder.ProcessSkeleton(trackedSkeleton);
                 }
             }

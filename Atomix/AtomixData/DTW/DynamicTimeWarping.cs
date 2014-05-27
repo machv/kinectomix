@@ -53,11 +53,11 @@ namespace Kinectomix.Logic.DTW
 
             matrix[0, 0] = 0;
 
-            for (int i = 1; i <= gesture1.GestureSequence.Count; i++)
+            for (int i = 1; i < gesture1.GestureSequence.Count + 1; i++)
             {
-                for (int j = 1; j <= gesture2.GestureSequence.Count; j++)
+                for (int j = 1; j < gesture2.GestureSequence.Count + 1; j++)
                 {
-                    matrix[i, j] = AccumulatedEuclidianDistance(gesture1.GestureSequence[i], gesture2.GestureSequence[j], gesture1.Dimension) +
+                    matrix[i, j] = AccumulatedEuclidianDistance(gesture1.GestureSequence[i - 1], gesture2.GestureSequence[j - 1], gesture1.Dimension) +
                         Minimum(matrix[i - 1, j],
                                 matrix[i, j - 1],
                                 matrix[i - 1, j - 1]);
