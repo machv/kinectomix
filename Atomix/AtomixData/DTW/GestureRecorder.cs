@@ -29,7 +29,7 @@ namespace Kinectomix.Logic.DTW
             
             foreach (FrameData frame in _frameBuffer)
             {
-                double[] frameData = new double[(int)_dimension * _trackedJoints.Count() * _frameBuffer.Count];
+                double[] frameData = new double[(int)_dimension * _trackedJoints.Count()];
 
                 int i = 0;
                 foreach (JointType joint in _trackedJoints)
