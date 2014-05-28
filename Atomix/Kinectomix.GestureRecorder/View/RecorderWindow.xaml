@@ -33,15 +33,19 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="1" 
-                           Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                           Text="{Binding RecordingRemainingTime}" />
+                           Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Run Text="Remaining time:" />
+                    <Run Text="{Binding RecordingRemainingTime}" />
+                    <Run Text="| Recorded frames:" />
+                    <Run Text="{Binding RecordedFrameCount}" />
+                </TextBlock>
                 <StackPanel Orientation="Horizontal" Grid.Column="0">
                     <TextBox Text="{Binding RecordingDuration, Mode=TwoWay}" />
                 </StackPanel>
 
             </Grid>
             
-            <Canvas Grid.Row="1" Width="145">
+            <Canvas VerticalAlignment="Center" Height="380" Grid.Row="1" Width="145">
 
                 <!-- Krk -->
                 <Line

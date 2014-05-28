@@ -17,6 +17,11 @@ namespace Kinectomix.Logic.DTW
 
         protected static JointType[] _tracableSkeletonJoints;
 
+        public int FrameBufferCount
+        {
+            get { return _frameBuffer.Count; }
+        }
+
         static GestureProcessor()
         {
             _tracableSkeletonJoints = (JointType[])Enum.GetValues(typeof(JointType));

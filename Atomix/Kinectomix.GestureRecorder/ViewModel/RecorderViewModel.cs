@@ -1,4 +1,5 @@
-﻿using Kinectomix.Logic.DTW;
+﻿using Kinectomix.GestureRecorder.Model;
+using Kinectomix.Logic.DTW;
 using Kinectomix.Wpf.Mvvm;
 using Microsoft.Kinect;
 using System;
@@ -38,6 +39,17 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
+        private int _recordedFrameCount;
+        public int RecordedFrameCount
+        {
+            get { return _recordedFrameCount; }
+            set
+            {
+                _recordedFrameCount = value;
+                OnPropertyChanged();
+            }
+        }
+
         private TimeSpan _recordingRemainingTime;
         public TimeSpan RecordingRemainingTime
         {
@@ -48,8 +60,12 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private GestureFileDialog _fileDialog;
+
         public RecorderViewModel()
         {
+            _fileDialog = new GestureFileDialog();
             _trackedJoints = new SkeletonViewModel();
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
             _startRecognizingCommand = new DelegateCommand(StartRecognizing, CanStartRecognizing);
@@ -103,9 +119,12 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
                 Gesture gesture = _recorder.GetRecordedGesture();
 
-                using (Stream stream = File.Open("d:\\TEMP\\gesture.gst", FileMode.OpenOrCreate))
+                if (_fileDialog.SaveFileDialog())
                 {
-                    SaveGestureToStream(gesture, stream);
+                    using (Stream stream = File.Open(_fileDialog.FileName, FileMode.OpenOrCreate))
+                    {
+                        SaveGestureToStream(gesture, stream);
+                    }
                 }
 
                 IsRecording = false;
@@ -270,10 +289,15 @@ namespace Kinectomix.GestureRecorder.ViewModel
                     if (_recognizer != null)
                     {
                         _recognizer.ProcessSkeleton(trackedSkeleton);
+
                         DtwCost = _recognizer.GetLastCost();
                     }
                     else if (_isRecording == true && _recorder != null)
+                    {
                         _recorder.ProcessSkeleton(trackedSkeleton);
+
+                        RecordedFrameCount = _recorder.FrameBufferCount;
+                    }
                 }
             }
         }
