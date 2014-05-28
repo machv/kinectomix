@@ -12,6 +12,10 @@ namespace Kinectomix.Logic.DTW
     {
         public GestureTrackingDimension Dimension { get; set; }
 
+        public string Name { get; set; }
+
+        public int ID { get; set; }
+
         /// <summary>
         /// List of joints required to observe for this gesture.
         /// </summary>
