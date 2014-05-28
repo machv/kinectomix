@@ -9,13 +9,15 @@ namespace Kinectomix.GestureRecorder.Converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            bool negate = parameter is string && (parameter as string) == "1";
+
             if (value is bool)
             {
                 if ((bool)value == true)
-                    return Visibility.Visible;
+                    return negate ? Visibility.Collapsed : Visibility.Visible;
             }
 
-            return Visibility.Collapsed;
+            return negate ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

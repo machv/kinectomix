@@ -118,6 +118,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 _recordingTimer.Stop();
 
                 Gesture gesture = _recorder.GetRecordedGesture();
+                gesture.Name = GestureName;
+                gesture.Id = GestureId;
 
                 if (_fileDialog.SaveFileDialog())
                 {
@@ -209,21 +211,50 @@ namespace Kinectomix.GestureRecorder.ViewModel
         private void StartRecordingCountdown()
         {
             IsRecording = true;
+            IsActiveSkeleton = false;
             RecordingRemainingTime = _recordingDuration;
+            RecordingTimeout = new TimeSpan(0, 0, 5);
 
-            _recordingCountDownDuration = new TimeSpan(0, 0, 5);
+            _recorder = new Logic.DTW.GestureRecorder();
+            _recorder.Start(_trackedJoints.GetSelectedJoints(), GestureTrackingDimension.Two);
+
             _countDownTimer.Start();
         }
 
         private void _countDownTimer_Tick(object sender, EventArgs e)
         {
-            RecordingTimeout = RecordingTimeout.Subtract(_step);
-
-            if (RecordingTimeout == TimeSpan.Zero)
+            if (IsActiveSkeleton)
             {
-                _countDownTimer.Stop();
+                RecordingTimeout = RecordingTimeout.Subtract(_step);
 
-                StartRecording();
+                if (RecordingTimeout == TimeSpan.Zero)
+                {
+                    _countDownTimer.Stop();
+
+                    StartRecording();
+                }
+            }
+        }
+
+        private string _gestureName;
+        public string GestureName
+        {
+            get { return _gestureName; }
+            set
+            {
+                _gestureName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _gestureId;
+        public int GestureId
+        {
+            get { return _gestureId; }
+            set
+            {
+                _gestureId = value;
+                OnPropertyChanged();
             }
         }
 
@@ -232,9 +263,6 @@ namespace Kinectomix.GestureRecorder.ViewModel
         private GestureRecognizer _recognizer;
         private void StartRecording()
         {
-            _recorder = new Logic.DTW.GestureRecorder();
-            _recorder.Start(_trackedJoints.GetSelectedJoints(), GestureTrackingDimension.Two);
-
             _recordingTimer.Start();
             _recordingStarted = DateTime.Now;
         }
@@ -270,6 +298,16 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         }
 
+        private bool _isActiveSkeleton = false;
+        public bool IsActiveSkeleton
+        {
+            get { return _isActiveSkeleton; }
+            set
+            {
+                _isActiveSkeleton = value;
+                OnPropertyChanged();
+            }
+        }
         private void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             if (_recorder == null && _recognizer == null)
@@ -286,13 +324,15 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 Skeleton trackedSkeleton = skeletons.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
                 if (trackedSkeleton != null)
                 {
+                    IsActiveSkeleton = true;
+
                     if (_recognizer != null)
                     {
                         _recognizer.ProcessSkeleton(trackedSkeleton);
 
                         DtwCost = _recognizer.GetLastCost();
                     }
-                    else if (_isRecording == true && _recorder != null)
+                    else if (_isRecording == true && _recorder != null && RecordingTimeout <= TimeSpan.Zero)
                     {
                         _recorder.ProcessSkeleton(trackedSkeleton);
 

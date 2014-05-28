@@ -14,7 +14,7 @@ namespace Kinectomix.Logic.DTW
 
         public string Name { get; set; }
 
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// List of joints required to observe for this gesture.
