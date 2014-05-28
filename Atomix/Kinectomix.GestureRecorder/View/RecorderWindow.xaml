@@ -54,6 +54,13 @@
                 <!--  prava ruka -->
                 <Line X1="70" X2="120" Y1="60" Y2="70" Stroke="Black" />
 
+                <!-- Head -->
+                <CheckBox IsChecked="{Binding TrackedJoints.Head}" Canvas.Left="62" Canvas.Top="20" />
+
+                <!-- Spine -->
+                <CheckBox IsChecked="{Binding TrackedJoints.Spine}" Canvas.Left="62" Canvas.Top="143" />
+
+
                 <!--  leva ruka -->
                 <Line X1="70" X2="10" Y1="60" Y2="70" Stroke="Black" />
 

@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\RecordingTimeoutToVisibilityConverter.cs" />
+    <Compile Include="Model\GestureFileDialog.cs" />
     <Compile Include="Model\ImageType.cs" />
     <Compile Include="Model\JointMapping.cs" />
     <Compile Include="ViewModel\RecorderViewModel.cs" />
