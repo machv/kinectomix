@@ -186,7 +186,10 @@
             </Canvas>
 
             <Grid Grid.Row="1" Grid.Column="1">
-                <Control:KinectStreamViewer x:Name="ColorViewer" KinectSensor="{Binding Sensor}" CollectFrameRate="True" RetainImageOnSensorChange="True" />
+                <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform">
+                    <!-- colorViewer and skeletonViewer should overlap entirely. -->
+                    <Grid>
+                        <Control:KinectStreamViewer x:Name="ColorViewer" KinectSensor="{Binding Sensor}" CollectFrameRate="True" RetainImageOnSensorChange="True" />
                 <Canvas>
                     <Control:KinectSkeletonViewer 
                                     KinectSensor="{Binding Sensor}"
@@ -194,6 +197,8 @@
                                     Height="{Binding ElementName=ColorViewer,Path=ActualHeight}"
                                     ImageType="Color" />
                 </Canvas>
+                    </Grid>
+                </Viewbox>
                 <TextBlock Text="{Binding DtwCost}" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="42" Foreground="Orange" />
             </Grid>
         </Grid>
