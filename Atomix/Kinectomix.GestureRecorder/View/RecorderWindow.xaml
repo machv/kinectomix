@@ -22,175 +22,175 @@
                 <ColumnDefinition Width="150" MinWidth="10" />
             </Grid.ColumnDefinitions>
 
-           
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <TextBlock Margin="2" Grid.Row="0" Text="Recording" FontSize="18" FontWeight="ExtraLight" />
 
-                    <TextBlock Margin="2,2,2,0" Grid.Row="1" Text="Gesture recording duration" FontWeight="ExtraLight" />
-                    <TextBox Margin="2,0,2,2" Grid.Row="2" TextAlignment="Center" Text="{Binding RecordingDuration, Mode=TwoWay}" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Margin="2" Grid.Row="0" Text="Recording" FontSize="18" FontWeight="ExtraLight" />
 
-                    <TextBlock Margin="2,2,2,0" Grid.Row="3" Text="Gesture name" FontWeight="ExtraLight" />
-                    <TextBox Margin="2,0,2,2" Grid.Row="4" TextAlignment="Center" Text="{Binding GestureName, Mode=TwoWay}" />
+                <TextBlock Margin="2,2,2,0" Grid.Row="1" Text="Gesture recording duration" FontWeight="ExtraLight" />
+                <TextBox Margin="2,0,2,2" Grid.Row="2" TextAlignment="Center" Text="{Binding RecordingDuration, Mode=TwoWay}" />
 
-                    <TextBlock Margin="2,2,2,0" Grid.Row="5" Text="Gesture id" FontWeight="ExtraLight" />
-                    <TextBox Margin="2,0,2,2" Grid.Row="6" TextAlignment="Center" Text="{Binding GestureId, Mode=TwoWay}" />
+                <TextBlock Margin="2,2,2,0" Grid.Row="3" Text="Gesture name" FontWeight="ExtraLight" />
+                <TextBox Margin="2,0,2,2" Grid.Row="4" TextAlignment="Center" Text="{Binding GestureName, Mode=TwoWay}" />
 
-                    <Button Margin="2" Grid.Row="7" Content="_Start recording" Command="{Binding StartRecordingCommand}" />
+                <TextBlock Margin="2,2,2,0" Grid.Row="5" Text="Gesture id" FontWeight="ExtraLight" />
+                <TextBox Margin="2,0,2,2" Grid.Row="6" TextAlignment="Center" Text="{Binding GestureId, Mode=TwoWay}" />
 
-                    <TextBlock Margin="2" Grid.Row="8" Text="Tracked joints" FontSize="18" FontWeight="ExtraLight" />
+                <Button Margin="2" Grid.Row="7" Content="_Start recording" Command="{Binding StartRecordingCommand}" />
 
-                    <Canvas Grid.Row="9" VerticalAlignment="Center" Height="380"  Width="145">
+                <TextBlock Margin="2" Grid.Row="8" Text="Tracked joints" FontSize="18" FontWeight="ExtraLight" />
 
-                        <!-- Krk -->
-                        <Line
+                <Canvas Grid.Row="9" VerticalAlignment="Center" Height="380"  Width="145">
+
+                    <!-- Krk -->
+                    <Line
                 X1="70" Y1="30"
                 X2="70" Y2="60"
                 Stroke="Black"
                 StrokeThickness="4" />
 
 
-                        <!--  prava ruka -->
-                        <Line X1="70" X2="120" Y1="60" Y2="70" Stroke="Black" />
+                    <!--  prava ruka -->
+                    <Line X1="70" X2="120" Y1="60" Y2="70" Stroke="Black" />
 
-                        <!-- Head -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.Head}" Canvas.Left="62" Canvas.Top="20" />
+                    <!-- Head -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.Head}" Canvas.Left="62" Canvas.Top="20" />
 
-                        <!-- Spine -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.Spine}" Canvas.Left="62" Canvas.Top="143" />
+                    <!-- Spine -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.Spine}" Canvas.Left="62" Canvas.Top="143" />
 
 
-                        <!--  leva ruka -->
-                        <Line X1="70" X2="10" Y1="60" Y2="70" Stroke="Black" />
+                    <!--  leva ruka -->
+                    <Line X1="70" X2="10" Y1="60" Y2="70" Stroke="Black" />
 
-                        <!-- leva paze -->
-                        <Line X1="10" X2="8" Y1="70" Y2="120" Stroke="Black" />
+                    <!-- leva paze -->
+                    <Line X1="10" X2="8" Y1="70" Y2="120" Stroke="Black" />
 
-                        <!-- prava paze -->
-                        <Line X1="120" X2="125" Y1="70" Y2="120" Stroke="Black" />
+                    <!-- prava paze -->
+                    <Line X1="120" X2="125" Y1="70" Y2="120" Stroke="Black" />
 
-                        <!-- prave predlokti -->
-                        <Line X1="125" X2="125" Y1="120" Y2="170" Stroke="Black" />
+                    <!-- prave predlokti -->
+                    <Line X1="125" X2="125" Y1="120" Y2="170" Stroke="Black" />
 
-                        <!-- leve predlokti -->
-                        <Line X1="10" X2="10" Y1="120" Y2="170" Stroke="Black" />
+                    <!-- leve predlokti -->
+                    <Line X1="10" X2="10" Y1="120" Y2="170" Stroke="Black" />
 
-                        <!-- leva ruka -->
-                        <Line X1="125" X2="125" Y1="170" Y2="190" Stroke="Black" />
+                    <!-- leva ruka -->
+                    <Line X1="125" X2="125" Y1="170" Y2="190" Stroke="Black" />
 
-                        <!-- prava ruka -->
-                        <Line X1="10" X2="10" Y1="170" Y2="190" Stroke="Black" />
+                    <!-- prava ruka -->
+                    <Line X1="10" X2="10" Y1="170" Y2="190" Stroke="Black" />
 
-                        <!-- telo -->
-                        <Line
+                    <!-- telo -->
+                    <Line
                 X1="70" Y1="60"
                 X2="70" Y2="140"
                 Stroke="Black"
                 StrokeThickness="4" />
 
-                        <!-- bricho -->
-                        <Line
+                    <!-- bricho -->
+                    <Line
                 X1="70" Y1="140"
                 X2="70" Y2="170"
                 Stroke="Black"
                 StrokeThickness="4" />
 
-                        <!-- levy bok-->
-                        <Line X1="70" X2="45" Y1="170" Y2="190" Stroke="Black"/>
+                    <!-- levy bok-->
+                    <Line X1="70" X2="45" Y1="170" Y2="190" Stroke="Black"/>
 
-                        <!-- pravy bok-->
-                        <Line X1="70" X2="95" Y1="170" Y2="190" Stroke="Black"/>
+                    <!-- pravy bok-->
+                    <Line X1="70" X2="95" Y1="170" Y2="190" Stroke="Black"/>
 
-                        <!-- prava noha -->
-                        <Line X1="95" X2="95" Y1="190" Y2="280" Stroke="Black" />
+                    <!-- prava noha -->
+                    <Line X1="95" X2="95" Y1="190" Y2="280" Stroke="Black" />
 
-                        <!-- leva noha -->
-                        <Line X1="40" X2="40" Y1="190" Y2="280" Stroke="Black" />
+                    <!-- leva noha -->
+                    <Line X1="40" X2="40" Y1="190" Y2="280" Stroke="Black" />
 
-                        <!-- leva holen -->
-                        <Line X1="40" X2="40" Y1="280" Y2="330" Stroke="Black" />
+                    <!-- leva holen -->
+                    <Line X1="40" X2="40" Y1="280" Y2="330" Stroke="Black" />
 
-                        <!-- prava holen -->
-                        <Line X1="95" X2="95" Y1="280" Y2="330" Stroke="Black" />
+                    <!-- prava holen -->
+                    <Line X1="95" X2="95" Y1="280" Y2="330" Stroke="Black" />
 
-                        <!-- prave chodidlo -->
-                        <Line X1="95" X2="125" Y1="330" Y2="360" Stroke="Black" />
+                    <!-- prave chodidlo -->
+                    <Line X1="95" X2="125" Y1="330" Y2="360" Stroke="Black" />
 
-                        <!-- leve chodidlo -->
-                        <Line X1="40" X2="10" Y1="330" Y2="360" Stroke="Black" />
+                    <!-- leve chodidlo -->
+                    <Line X1="40" X2="10" Y1="330" Y2="360" Stroke="Black" />
 
-                        <!-- Head -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.Head}" Canvas.Left="62" Canvas.Top="20" />
+                    <!-- Head -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.Head}" Canvas.Left="62" Canvas.Top="20" />
 
-                        <!-- Spine -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.Spine}" Canvas.Left="62" Canvas.Top="143" />
+                    <!-- Spine -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.Spine}" Canvas.Left="62" Canvas.Top="143" />
 
-                        <!-- Hip Center -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.HipCenter}" Canvas.Left="62" Canvas.Top="165" />
+                    <!-- Hip Center -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.HipCenter}" Canvas.Left="62" Canvas.Top="165" />
 
-                        <!-- Hip Left -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.HipLeft}" Canvas.Left="35" Canvas.Top="180" />
+                    <!-- Hip Left -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.HipLeft}" Canvas.Left="35" Canvas.Top="180" />
 
-                        <!-- Hip Right -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.Hipright}" Canvas.Left="90" Canvas.Top="180" />
+                    <!-- Hip Right -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.Hipright}" Canvas.Left="90" Canvas.Top="180" />
 
-                        <!-- Knee Right -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.KneeRight}" Canvas.Left="90" Canvas.Top="270" />
+                    <!-- Knee Right -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.KneeRight}" Canvas.Left="90" Canvas.Top="270" />
 
-                        <!-- Knee Left -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.KneeLeft}" Canvas.Left="35" Canvas.Top="270" />
+                    <!-- Knee Left -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.KneeLeft}" Canvas.Left="35" Canvas.Top="270" />
 
-                        <!-- Ankle Right -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.AnkleRight}" Canvas.Left="90" Canvas.Top="325" />
+                    <!-- Ankle Right -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.AnkleRight}" Canvas.Left="90" Canvas.Top="325" />
 
-                        <!-- Ankle Left -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.AnkleRight}" Canvas.Left="35" Canvas.Top="325" />
+                    <!-- Ankle Left -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.AnkleRight}" Canvas.Left="35" Canvas.Top="325" />
 
-                        <!-- Foot Left -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.FootLeft}" Canvas.Left="5" Canvas.Top="350" />
+                    <!-- Foot Left -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.FootLeft}" Canvas.Left="5" Canvas.Top="350" />
 
-                        <!-- Foot Right -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.FootRight}" Canvas.Left="115" Canvas.Top="350" />
+                    <!-- Foot Right -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.FootRight}" Canvas.Left="115" Canvas.Top="350" />
 
-                        <!-- Shoulder center -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.ShoulderCenter}" Canvas.Left="62" Canvas.Top="53" />
+                    <!-- Shoulder center -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.ShoulderCenter}" Canvas.Left="62" Canvas.Top="53" />
 
-                        <!-- Left shoulder -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.ShoulderLeft}" Canvas.Left="9" Canvas.Top="63" />
+                    <!-- Left shoulder -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.ShoulderLeft}" Canvas.Left="9" Canvas.Top="63" />
 
-                        <!-- Right shoulder -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.ShoulderRight}" Canvas.Left="116" Canvas.Top="63" />
+                    <!-- Right shoulder -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.ShoulderRight}" Canvas.Left="116" Canvas.Top="63" />
 
-                        <!-- Right elbow -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.ElbowRight}" Canvas.Left="120" Canvas.Top="110" />
+                    <!-- Right elbow -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.ElbowRight}" Canvas.Left="120" Canvas.Top="110" />
 
-                        <!-- Left elbow -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.ElbowLeft}" Canvas.Left="3" Canvas.Top="110" />
+                    <!-- Left elbow -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.ElbowLeft}" Canvas.Left="3" Canvas.Top="110" />
 
-                        <!-- Left wrist -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.WristLeft}" Canvas.Left="3" Canvas.Top="160" />
+                    <!-- Left wrist -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.WristLeft}" Canvas.Left="3" Canvas.Top="160" />
 
-                        <!-- Right wrist -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.WristRight}" Canvas.Left="120" Canvas.Top="160" />
+                    <!-- Right wrist -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.WristRight}" Canvas.Left="120" Canvas.Top="160" />
 
-                        <!-- Left hand -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.HandLeft}" Canvas.Left="3" Canvas.Top="180" />
+                    <!-- Left hand -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.HandLeft}" Canvas.Left="3" Canvas.Top="180" />
 
-                        <!-- Right hand -->
-                        <CheckBox IsChecked="{Binding TrackedJoints.HandRight}" Canvas.Left="120" Canvas.Top="180" />
-                    </Canvas>
-                </Grid>
+                    <!-- Right hand -->
+                    <CheckBox IsChecked="{Binding TrackedJoints.HandRight}" Canvas.Left="120" Canvas.Top="180" />
+                </Canvas>
+            </Grid>
 
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" BorderBrush="Silver" BorderThickness="1,0" />
 
@@ -200,22 +200,14 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="1" 
+                <TextBlock FontSize="14"
+                           TextAlignment="Center"
                            Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Run Text="Remaining time:" />
                     <Run Text="{Binding RecordingRemainingTime}" />
                     <Run Text="| Recorded frames:" />
                     <Run Text="{Binding RecordedFrameCount}" />
-                    </TextBlock>
-                    <StackPanel Orientation="Horizontal" Grid.Column="0">
-                        
-                    </StackPanel>
-                </Grid>
+                </TextBlock>
 
                 <Grid Grid.Row="1">
                     <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform">
@@ -254,7 +246,7 @@
 
                 </ListBox>
             </Grid>
-            
+
         </Grid>
         <Grid Background="White" Opacity="0.7" Visibility="{Binding RecordingTimeout, Converter={StaticResource RecordingTimeoutToVisibilityConverter}}">
             <StackPanel VerticalAlignment="Center">
