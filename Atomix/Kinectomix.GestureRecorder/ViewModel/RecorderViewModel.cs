@@ -67,8 +67,10 @@ namespace Kinectomix.GestureRecorder.ViewModel
         {
             _fileDialog = new GestureFileDialog();
             _trackedJoints = new SkeletonViewModel();
+            _recognizer = new GestureRecognizer();
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
             _startRecognizingCommand = new DelegateCommand(StartRecognizing, CanStartRecognizing);
+            _addGestureCommand = new DelegateCommand(AddGesture);
 
             _countDownTimer = new DispatcherTimer();
             _countDownTimer.Interval = TimeSpan.FromSeconds(_step.TotalSeconds);
@@ -82,6 +84,20 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
             if (KinectSensor.KinectSensors.Count > 0)
                 StartKinect(KinectSensor.KinectSensors.FirstOrDefault());
+        }
+
+        private void AddGesture()
+        {
+            if (_fileDialog.OpenFileDialog())
+            {
+                XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
+                using (Stream stream = File.Open(_fileDialog.FileName, FileMode.Open))
+                {
+                    Gesture gesture = seralizer.Deserialize(stream) as Gesture;
+
+                    _recognizer.AddGesture(gesture);
+                }
+            }
         }
 
         private double _dtwCost;
@@ -99,14 +115,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         private void StartRecognizing()
         {
-            _recognizer = new GestureRecognizer();
-
-            XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
-            using (Stream stream = File.Open("d:\\TEMP\\gesture.gst", FileMode.Open))
-            {
-                Gesture gesture = seralizer.Deserialize(stream) as Gesture;
-                _recognizer.AddGesture(gesture);
-            }
+            _recognizer.Start();
         }
 
         private void _recordingTimer_Tick(object sender, EventArgs e)
@@ -187,6 +196,11 @@ namespace Kinectomix.GestureRecorder.ViewModel
             get { return _startRecognizingCommand; }
         }
 
+        private DelegateCommand _addGestureCommand;
+        public ICommand AddGestureCommand
+        {
+            get { return _addGestureCommand; }
+        }
         public TimeSpan RecordingTimeout
         {
             get { return _recordingCountDownDuration; }
@@ -210,6 +224,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         private void StartRecordingCountdown()
         {
+            _recognizer.Stop();
+
             IsRecording = true;
             IsActiveSkeleton = false;
             RecordingRemainingTime = _recordingDuration;

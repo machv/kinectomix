@@ -9,6 +9,17 @@ namespace Kinectomix.Logic.DTW
     public class GestureRecognizer : GestureProcessor
     {
         private List<Gesture> _gestures;
+        private bool _isStarted = false;
+
+        public void Start()
+        {
+            _isStarted = true;
+        }
+
+        public void Stop()
+        {
+            _isStarted = false;
+        }
 
         public GestureRecognizer()
         {
@@ -27,6 +38,9 @@ namespace Kinectomix.Logic.DTW
         private double _lastCost;
         public override void ProcessSkeleton(Skeleton skeleton)
         {
+            if (!_isStarted)
+                return;
+
             if (_frameBuffer.Count >= _minimalBufferLength)
             {
                 foreach (Gesture gesture in _gestures)
