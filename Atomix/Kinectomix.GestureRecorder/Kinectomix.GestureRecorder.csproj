@@ -66,6 +66,7 @@
       <DependentUpon>KinectSkeletonViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converter\IsRecognizedToBrushConverter.cs" />
     <Compile Include="Converter\RecordingTimeoutToVisibilityConverter.cs" />
     <Compile Include="Model\GestureFileDialog.cs" />
     <Compile Include="Model\ImageType.cs" />

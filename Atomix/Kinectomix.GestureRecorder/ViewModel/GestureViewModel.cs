@@ -9,6 +9,22 @@ namespace Kinectomix.GestureRecorder.ViewModel
     {
         private Gesture _gesture;
 
+        public Gesture Gesture
+        {
+            get { return _gesture; }
+        }
+
+        private bool _isRecognized;
+        public bool IsRecognized
+        {
+            get { return _isRecognized; }
+            set
+            {
+                _isRecognized = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string Name
         {
             get { return _gesture.Name; }

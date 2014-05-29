@@ -4,6 +4,7 @@ using Kinectomix.Wpf.Mvvm;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -71,6 +72,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
             _startRecognizingCommand = new DelegateCommand(StartRecognizing, CanStartRecognizing);
             _addGestureCommand = new DelegateCommand(AddGesture);
+            _gestures = new ObservableCollection<Gesture>();
 
             _countDownTimer = new DispatcherTimer();
             _countDownTimer.Interval = TimeSpan.FromSeconds(_step.TotalSeconds);
@@ -95,6 +97,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 {
                     Gesture gesture = seralizer.Deserialize(stream) as Gesture;
 
+                    _gestures.Add(gesture);
                     _recognizer.AddGesture(gesture);
                 }
             }
@@ -118,6 +121,17 @@ namespace Kinectomix.GestureRecorder.ViewModel
             _recognizer.Start();
         }
 
+        private ObservableCollection<Gesture> _gestures;
+        public ObservableCollection<Gesture> Gestures
+        {
+            get { return _gestures; }
+            set
+            {
+                _gestures = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void _recordingTimer_Tick(object sender, EventArgs e)
         {
             RecordingRemainingTime = _recordingRemainingTime.Subtract(_step);
@@ -136,6 +150,9 @@ namespace Kinectomix.GestureRecorder.ViewModel
                     {
                         SaveGestureToStream(gesture, stream);
                     }
+
+                    _gestures.Add(gesture);
+                    _recognizer.AddGesture(gesture);
                 }
 
                 IsRecording = false;
