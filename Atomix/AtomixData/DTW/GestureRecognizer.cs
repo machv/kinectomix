@@ -29,8 +29,8 @@ namespace Kinectomix.Logic.DTW
         public void AddGesture(Gesture gesture)
         {
             //TODO takhle nastavovat maximal
-            if (gesture.GestureSequence.Count > _minimalBufferLength)
-                _minimalBufferLength = gesture.GestureSequence.Count;
+            if (gesture.Sequence.Count > _minimalBufferLength)
+                _minimalBufferLength = gesture.Sequence.Count;
 
             _gestures.Add(gesture);
         }

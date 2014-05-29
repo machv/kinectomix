@@ -41,10 +41,10 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         public List<GestureFrame> Sequence
         {
-            get { return _gesture.GestureSequence; }
+            get { return _gesture.Sequence; }
             set
             {
-                _gesture.GestureSequence = value;
+                _gesture.Sequence = value;
                 OnPropertyChanged();
             }
         }

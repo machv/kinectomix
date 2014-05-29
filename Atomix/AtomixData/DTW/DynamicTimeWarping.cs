@@ -43,28 +43,28 @@ namespace Kinectomix.Logic.DTW
 
         public static double CalculateDtw(Gesture gesture1, Gesture gesture2)
         {
-            double[,] matrix = new double[gesture1.GestureSequence.Count + 1, gesture2.GestureSequence.Count + 1];
+            double[,] matrix = new double[gesture1.Sequence.Count + 1, gesture2.Sequence.Count + 1];
 
-            for (int i = 1; i <= gesture1.GestureSequence.Count; i++)
+            for (int i = 1; i <= gesture1.Sequence.Count; i++)
                 matrix[i, 0] = double.PositiveInfinity;
 
-            for (int i = 1; i <= gesture2.GestureSequence.Count; i++)
+            for (int i = 1; i <= gesture2.Sequence.Count; i++)
                 matrix[0, i] = double.PositiveInfinity;
 
             matrix[0, 0] = 0;
 
-            for (int i = 1; i < gesture1.GestureSequence.Count + 1; i++)
+            for (int i = 1; i < gesture1.Sequence.Count + 1; i++)
             {
-                for (int j = 1; j < gesture2.GestureSequence.Count + 1; j++)
+                for (int j = 1; j < gesture2.Sequence.Count + 1; j++)
                 {
-                    matrix[i, j] = AccumulatedEuclidianDistance(gesture1.GestureSequence[i - 1], gesture2.GestureSequence[j - 1], gesture1.Dimension) +
+                    matrix[i, j] = AccumulatedEuclidianDistance(gesture1.Sequence[i - 1], gesture2.Sequence[j - 1], gesture1.Dimension) +
                         Minimum(matrix[i - 1, j],
                                 matrix[i, j - 1],
                                 matrix[i - 1, j - 1]);
                 }
             }
 
-            return matrix[gesture1.GestureSequence.Count, gesture2.GestureSequence.Count];
+            return matrix[gesture1.Sequence.Count, gesture2.Sequence.Count];
         }
     }
 }

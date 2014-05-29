@@ -27,7 +27,7 @@ namespace Kinectomix.Logic.DTW
         /// List of invariant positions ordered by TrackedJoints
         /// </summary>
         /// <returns></returns>
-        public List<GestureFrame> GestureSequence
+        public List<GestureFrame> Sequence
         {
             get { return _gestureSequence; }
             set { _gestureSequence = value; }
@@ -46,7 +46,7 @@ namespace Kinectomix.Logic.DTW
                 foreach (JointType joint in gesture.TrackedJoints)
                     frame.Add(frameData.SkeletonJoints[(int)joint]);
 
-                gesture.GestureSequence.Add(frame);
+                gesture.Sequence.Add(frame);
             }
 
             return gesture;
