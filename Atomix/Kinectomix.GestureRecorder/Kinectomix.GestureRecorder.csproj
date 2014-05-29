@@ -70,6 +70,7 @@
     <Compile Include="Model\GestureFileDialog.cs" />
     <Compile Include="Model\ImageType.cs" />
     <Compile Include="Model\JointMapping.cs" />
+    <Compile Include="ViewModel\GestureViewModel.cs" />
     <Compile Include="ViewModel\RecorderViewModel.cs" />
     <Compile Include="ViewModel\SkeletonViewModel.cs" />
     <Compile Include="View\RecorderWindow.xaml.cs">
