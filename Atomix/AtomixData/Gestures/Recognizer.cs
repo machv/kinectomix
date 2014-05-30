@@ -66,29 +66,46 @@ namespace Kinectomix.Logic.Gestures
 
             if (_frameBuffer.Count >= _minimalBufferLength)
             {
-                foreach (Gesture gesture in _gestures)
+                Gesture recordedGesture;
+                Gesture candidate = GetClosestCandidate(out recordedGesture);
+                if (candidate != null)
                 {
-                    Gesture candidate = Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension);
-                    double frameDistance = DynamicTimeWarping.AccumulatedEuclidianDistance(candidate.Sequence[candidate.Sequence.Count - 1], gesture.Sequence[gesture.Sequence.Count - 1], gesture.Dimension);
-                    if (frameDistance < _lastFrameMatchThreshold)
-                    {
-                        double distance = DynamicTimeWarping.CalculateDistance(gesture, Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension));
-                        double cost = distance / _frameBuffer.Count;
+                    double distance = DynamicTimeWarping.CalculateDistance(candidate, recordedGesture);
+                    double cost = distance / _frameBuffer.Count;
 
-                        _lastCost = cost;
+                    _lastCost = cost;
 
-                        if (cost < _gestureMatchThreshold)
-                        {
-                            _recognizedGesture = new RecognizedGesture() { Gesture = gesture, Cost = cost, Distance = distance, Matching = candidate };
-                            break;
-                        }
-                    }
-                    else
-                        System.Diagnostics.Debug.Print(string.Format("Frame distance: {0}", frameDistance));
+                    if (cost < _gestureMatchThreshold)
+                        _recognizedGesture = new RecognizedGesture() { Gesture = candidate, Cost = cost, Distance = distance, Matching = recordedGesture };
                 }
             }
 
             base.ProcessSkeleton(skeleton);
+        }
+
+        private Gesture GetClosestCandidate(out Gesture recorded)
+        {
+            recorded = null;
+
+            double minimalFrameDistance = double.MaxValue;
+            Gesture candidate = null;
+
+            foreach (Gesture gesture in _gestures)
+            {
+                Gesture recordedGesture = Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension);
+
+                double frameDistance = DynamicTimeWarping.AccumulatedEuclidianDistance(recordedGesture.Sequence[recordedGesture.Sequence.Count - 1], gesture.Sequence[gesture.Sequence.Count - 1], gesture.Dimension);
+                if (frameDistance < _lastFrameMatchThreshold && frameDistance < minimalFrameDistance)
+                {
+                    candidate = gesture;
+                    recorded = recordedGesture;
+                    minimalFrameDistance = frameDistance;
+                }
+                else
+                    System.Diagnostics.Debug.Print(string.Format("Frame distance: {0} from {1}", frameDistance, gesture.Name));
+            }
+
+            return candidate;
         }
 
         public void RemoveGesture(Gesture gesture)
