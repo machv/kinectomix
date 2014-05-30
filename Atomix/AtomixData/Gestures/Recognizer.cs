@@ -42,10 +42,17 @@ namespace Kinectomix.Logic.Gestures
             {
                 foreach (Gesture gesture in _gestures)
                 {
-                    double distance = DynamicTimeWarping.CalculateDtw(gesture, Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension));
-                    double cost = distance / _frameBuffer.Count;
+                    Gesture candidate = Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension);
+                    double frameDistance = DynamicTimeWarping.AccumulatedEuclidianDistance(candidate.Sequence[candidate.Sequence.Count - 1], gesture.Sequence[gesture.Sequence.Count - 1], gesture.Dimension);
+                    if (frameDistance < 2)
+                    {
+                        double distance = DynamicTimeWarping.CalculateDtw(gesture, Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension));
+                        double cost = distance / _frameBuffer.Count;
 
-                    _lastCost = cost;
+                        _lastCost = cost;
+                    }
+                    else
+                        System.Diagnostics.Debug.Print(string.Format("Frame distance: {0}", frameDistance));
                 }
             }
 
