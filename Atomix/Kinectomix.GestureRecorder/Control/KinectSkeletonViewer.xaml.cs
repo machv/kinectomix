@@ -2,6 +2,7 @@
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,24 +106,35 @@ new UIPropertyMetadata(null, KinectSensorChanged));
 
         private static void KinectSensorChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            var streamControl = sender as KinectSkeletonViewer;
-
-            if (null == streamControl)
-            {
+            if (DesignerProperties.GetIsInDesignMode(sender))
                 return;
-            }
 
-            KinectSensor sensor = args.NewValue as KinectSensor;
+            var streamControl = sender as KinectSkeletonViewer;
+            if (null == streamControl)
+                return;
 
-            sensor.AllFramesReady += streamControl.KinectAllFramesReady;
-
-            if (sensor.Status != KinectStatus.Connected)
+            KinectSensor previousSensor = args.OldValue as KinectSensor;
+            if (previousSensor != null)
             {
-                sensor.SkeletonStream.Enable();
-
-                sensor.Start();
+                try
+                {
+                    previousSensor.Stop();
+                }
+                catch
+                { }
             }
 
+            KinectSensor newSensor = args.NewValue as KinectSensor;
+            if (newSensor != null)
+            {
+                newSensor.AllFramesReady += streamControl.KinectAllFramesReady;
+
+                if (newSensor.Status != KinectStatus.Connected)
+                {
+                    newSensor.SkeletonStream.Enable();
+                    newSensor.Start();
+                }
+            }
         }
 
 

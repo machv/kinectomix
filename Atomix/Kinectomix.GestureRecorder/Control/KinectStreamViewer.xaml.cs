@@ -1,6 +1,7 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -39,24 +40,35 @@ namespace Kinectomix.GestureRecorder.Control
 
         private static void KinectSensorChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            var streamControl = sender as KinectStreamViewer;
-
-            if (null == streamControl)
-            {
+            if (DesignerProperties.GetIsInDesignMode(sender))
                 return;
-            }
 
-            KinectSensor sensor = args.NewValue as KinectSensor;
+            var streamControl = sender as KinectStreamViewer;
+            if (null == streamControl)
+                return;
 
-            sensor.ColorFrameReady += streamControl.Sensor_ColorFrameReady;
-
-            if (sensor.Status != KinectStatus.Connected)
+            KinectSensor previousSensor = args.OldValue as KinectSensor;
+            if (previousSensor != null)
             {
-                sensor.ColorStream.Enable();
-
-                sensor.Start();
+                try
+                {
+                    previousSensor.Stop();
+                }
+                catch
+                { }
             }
 
+            KinectSensor newSensor = args.NewValue as KinectSensor;
+            if (newSensor != null)
+            {
+                newSensor.ColorFrameReady += streamControl.Sensor_ColorFrameReady;
+
+                if (newSensor.Status != KinectStatus.Connected)
+                {
+                    newSensor.ColorStream.Enable();
+                    newSensor.Start();
+                }
+            }
         }
 
         protected void Sensor_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)

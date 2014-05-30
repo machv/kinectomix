@@ -359,19 +359,21 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 {
                     IsActiveSkeleton = true;
 
-                    if (_recognizer != null)
-                    {
-                        _recognizer.ProcessSkeleton(trackedSkeleton);
-
-                        DtwCost = _recognizer.GetLastCost();
-                    }
-                    else if (_isRecording == true && _recorder != null && RecordingTimeout <= TimeSpan.Zero)
+                    if (_isRecording == true && _recorder != null && RecordingTimeout <= TimeSpan.Zero)
                     {
                         _recorder.ProcessSkeleton(trackedSkeleton);
 
                         RecordedFrameCount = _recorder.FrameBufferCount;
                     }
+                    else if (_recognizer != null)
+                    {
+                        _recognizer.ProcessSkeleton(trackedSkeleton);
+
+                        DtwCost = _recognizer.GetLastCost();
+                    }
                 }
+                else
+                    IsActiveSkeleton = false;
             }
         }
     }
