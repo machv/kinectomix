@@ -369,7 +369,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                     {
                         _recognizer.ProcessSkeleton(trackedSkeleton);
 
-                        DtwCost = _recognizer.GetLastCost();
+                        DtwCost = _recognizer.LastCost;
                     }
                 }
                 else

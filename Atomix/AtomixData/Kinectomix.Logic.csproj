@@ -82,6 +82,7 @@
     <Compile Include="Gestures\FrameData.cs" />
     <Compile Include="Gestures\Gesture.cs" />
     <Compile Include="Gestures\GestureProcessor.cs" />
+    <Compile Include="Gestures\RecognizedGesture.cs" />
     <Compile Include="Gestures\Recognizer.cs" />
     <Compile Include="Gestures\Recorder.cs" />
     <Compile Include="Gestures\TrackingDimension.cs" />

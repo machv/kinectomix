@@ -52,6 +52,8 @@ namespace Kinectomix.GestureRecorder.Control
             {
                 try
                 {
+                    streamControl.kinectColorImage.Visibility = Visibility.Collapsed;
+
                     previousSensor.Stop();
                 }
                 catch
@@ -61,6 +63,8 @@ namespace Kinectomix.GestureRecorder.Control
             KinectSensor newSensor = args.NewValue as KinectSensor;
             if (newSensor != null)
             {
+                streamControl.kinectColorImage.Visibility = Visibility.Visible;
+
                 newSensor.ColorFrameReady += streamControl.Sensor_ColorFrameReady;
 
                 if (newSensor.Status != KinectStatus.Connected)
@@ -131,7 +135,7 @@ namespace Kinectomix.GestureRecorder.Control
                             format,
                             null);
 
-                        this.kinectColorImage.Source = this.outputImage;
+                        kinectColorImage.Source = this.outputImage;
                     }
 
                     this.outputImage.WritePixels(
