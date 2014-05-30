@@ -1,12 +1,9 @@
-﻿using Kinectomix.Logic.DTW;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
 
-namespace Kinectomix.Logic.DTW
+namespace Kinectomix.Logic.Gestures
 {
-    public class DynamicTimeWarping
+    public static class DynamicTimeWarping
     {
         public static double EuclidianDistance(double x, double y)
         {
@@ -18,7 +15,7 @@ namespace Kinectomix.Logic.DTW
             return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
         }
 
-        public static double AccumulatedEuclidianDistance(GestureFrame a, GestureFrame b, GestureTrackingDimension dimension)
+        public static double AccumulatedEuclidianDistance(GestureFrame a, GestureFrame b, TrackingDimension dimension)
         {
             double accumulatedDistance = 0;
 
@@ -28,7 +25,7 @@ namespace Kinectomix.Logic.DTW
                 double y = a[i].Y - b[i].Y;
                 double z = a[i].Z - b[i].Z;
 
-                accumulatedDistance += dimension == GestureTrackingDimension.Two ? 
+                accumulatedDistance += dimension == TrackingDimension.Two ? 
                     EuclidianDistance(x, y) : 
                     EuclidianDistance(x, y, z);
             }

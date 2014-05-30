@@ -1,5 +1,5 @@
 ﻿using Kinectomix.GestureRecorder.Model;
-using Kinectomix.Logic.DTW;
+using Kinectomix.Logic.Gestures;
 using Kinectomix.Wpf.Mvvm;
 using Microsoft.Kinect;
 using System;
@@ -68,7 +68,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
         {
             _fileDialog = new GestureFileDialog();
             _trackedJoints = new SkeletonViewModel();
-            _recognizer = new GestureRecognizer();
+            _recognizer = new Recognizer();
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
             _startRecognizingCommand = new DelegateCommand(StartRecognizing, CanStartRecognizing);
             _addGestureCommand = new DelegateCommand(AddGesture);
@@ -248,8 +248,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
             RecordingRemainingTime = _recordingDuration;
             RecordingTimeout = new TimeSpan(0, 0, 5);
 
-            _recorder = new Logic.DTW.GestureRecorder();
-            _recorder.Start(_trackedJoints.GetSelectedJoints(), GestureTrackingDimension.Two);
+            _recorder = new Logic.Gestures.Recorder();
+            _recorder.Start(_trackedJoints.GetSelectedJoints(), TrackingDimension.Two);
 
             _countDownTimer.Start();
         }
@@ -292,8 +292,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
         }
 
         private DateTime _recordingStarted;
-        private Logic.DTW.GestureRecorder _recorder;
-        private GestureRecognizer _recognizer;
+        private Logic.Gestures.Recorder _recorder;
+        private Recognizer _recognizer;
         private void StartRecording()
         {
             _recordingTimer.Start();

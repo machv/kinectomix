@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Kinect;
 
-namespace Kinectomix.Logic.DTW
+namespace Kinectomix.Logic.Gestures
 {
-    public class GestureRecorder : GestureProcessor
+    public class Recorder : GestureProcessor
     {
         private IEnumerable<JointType> _trackedJoints;
-        private GestureTrackingDimension _dimension;
+        private TrackingDimension _dimension;
 
-        public void Start(IEnumerable<JointType> trackedJoints, GestureTrackingDimension dimension)
+        public void Start(IEnumerable<JointType> trackedJoints, TrackingDimension dimension)
         {
             Clear();
 

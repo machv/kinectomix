@@ -5,12 +5,12 @@ using System.Text;
 using Microsoft.Kinect;
 using System.Collections.ObjectModel;
 
-namespace Kinectomix.Logic.DTW
+namespace Kinectomix.Logic.Gestures
 {
     [Serializable]
     public class Gesture
     {
-        public GestureTrackingDimension Dimension { get; set; }
+        public TrackingDimension Dimension { get; set; }
 
         public string Name { get; set; }
 
@@ -33,7 +33,7 @@ namespace Kinectomix.Logic.DTW
             set { _gestureSequence = value; }
         }
 
-        public static Gesture FromFrameData(IEnumerable<FrameData> frames, IEnumerable<JointType> trackedJoints, GestureTrackingDimension dimension = GestureTrackingDimension.Three)
+        public static Gesture FromFrameData(IEnumerable<FrameData> frames, IEnumerable<JointType> trackedJoints, TrackingDimension dimension = TrackingDimension.Three)
         {
             Gesture gesture = new Gesture();
             gesture.Dimension = dimension;

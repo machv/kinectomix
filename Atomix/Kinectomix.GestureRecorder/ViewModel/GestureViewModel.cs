@@ -1,4 +1,4 @@
-﻿using Kinectomix.Logic.DTW;
+﻿using Kinectomix.Logic.Gestures;
 using Kinectomix.Wpf.Mvvm;
 using Microsoft.Kinect;
 using System.Collections.Generic;
@@ -45,7 +45,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
-        public GestureTrackingDimension Dimension
+        public TrackingDimension Dimension
         {
             get { return _gesture.Dimension; }
             set

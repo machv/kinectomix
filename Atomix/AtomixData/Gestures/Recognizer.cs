@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Kinect;
 
-namespace Kinectomix.Logic.DTW
+namespace Kinectomix.Logic.Gestures
 {
-    public class GestureRecognizer : GestureProcessor
+    public class Recognizer : GestureProcessor
     {
         private List<Gesture> _gestures;
         private bool _isStarted = false;
@@ -21,7 +18,7 @@ namespace Kinectomix.Logic.DTW
             _isStarted = false;
         }
 
-        public GestureRecognizer()
+        public Recognizer()
         {
             _gestures = new List<Gesture>();
         }
