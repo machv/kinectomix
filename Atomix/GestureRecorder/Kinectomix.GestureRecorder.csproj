@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5313A90B-65AB-4D03-AB9E-73C257C765FC}</ProjectGuid>
+    <ProjectGuid>{97B671A1-997A-4A02-A73C-59711C435CEC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Kinectomix.LevelEditor</RootNamespace>
-    <AssemblyName>Kinectomix.LevelEditor</AssemblyName>
+    <RootNamespace>Kinectomix.GestureRecorder</RootNamespace>
+    <AssemblyName>Kinectomix.GestureRecorder</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -19,7 +19,7 @@
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -38,17 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+    <Reference Include="Microsoft.Kinect, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Content.Pipeline, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Graphics.dll</HintPath>
+      <HintPath>C:\Program Files\Microsoft SDKs\Kinect\v1.8\Assemblies\Microsoft.Kinect.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -69,61 +61,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BondDirection.cs" />
-    <Compile Include="DrawingContextExtensions.cs" />
-    <Compile Include="Behavior\TileBonds.cs" />
-    <Compile Include="Behavior\TilePainter.cs" />
-    <Compile Include="Visual\BondsVisualiser.cs" />
-    <Compile Include="Visual\BondsAdorner.cs" />
-    <Compile Include="Converter\AllTrueConveter.cs" />
-    <Compile Include="Converter\NegateConverter.cs" />
-    <Compile Include="Converter\NotNullToVisibilityConverter.cs" />
-    <Compile Include="Converter\NullToTrueConverter.cs" />
-    <Compile Include="Model\DependencyPropertyCollection.cs" />
-    <Compile Include="Model\ObservableTilesCollection.cs" />
-    <Compile Include="Model\TileAsset.cs" />
-    <Compile Include="Library\DialogCloser.cs" />
-    <Compile Include="Model\LevelFactory.cs" />
-    <Compile Include="Model\LevelFileDialog.cs" />
-    <Compile Include="Model\Tiles.cs" />
-    <Compile Include="TileSelectedEventArgs.cs" />
-    <Compile Include="ViewModel\AvailableTilesViewModel.cs" />
-    <Compile Include="ViewModel\BoardTileViewModel.cs" />
-    <Compile Include="ViewModel\EditorViewModel.cs" />
-    <Compile Include="ViewModel\LevelDefinitionViewModel.cs" />
-    <Compile Include="ViewModel\LevelsViewModel.cs" />
-    <Compile Include="ViewModel\LevelViewModel.cs" />
-    <Compile Include="ViewModel\NewLevelViewModel.cs" />
-    <Compile Include="ViewModel\BoardViewModel.cs" />
-    <Compile Include="View\EditorWindow.xaml.cs">
-      <DependentUpon>EditorWindow.xaml</DependentUpon>
+    <Compile Include="Control\KinectSkeleton.cs" />
+    <Compile Include="Control\KinectSkeletonViewer.xaml.cs">
+      <DependentUpon>KinectSkeletonViewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\EditorControl.xaml.cs">
-      <DependentUpon>EditorControl.xaml</DependentUpon>
+    <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converter\IsRecognizedToBrushConverter.cs" />
+    <Compile Include="Converter\RecordingTimeoutToVisibilityConverter.cs" />
+    <Compile Include="Model\GestureFileDialog.cs" />
+    <Compile Include="Model\ImageType.cs" />
+    <Compile Include="Model\JointMapping.cs" />
+    <Compile Include="ViewModel\GestureViewModel.cs" />
+    <Compile Include="ViewModel\RecorderViewModel.cs" />
+    <Compile Include="ViewModel\SkeletonViewModel.cs" />
+    <Compile Include="View\RecorderWindow.xaml.cs">
+      <DependentUpon>RecorderWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\NewLevelControl.xaml.cs">
-      <DependentUpon>NewLevelControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\NewLevelWindow.xaml.cs">
-      <DependentUpon>NewLevelWindow.xaml</DependentUpon>
-    </Compile>
+    <Page Include="Control\KinectSkeletonViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\KinectStreamViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\EditorWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\EditorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\NewLevelControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\NewLevelWindow.xaml">
+    <Compile Include="Control\KinectStreamViewer.xaml.cs">
+      <DependentUpon>KinectStreamViewer.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\RecorderWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -156,36 +125,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AtomixData\Kinectomix.Logic.csproj">
+    <ProjectReference Include="..\Logic\Kinectomix.Logic.csproj">
       <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
       <Name>Kinectomix.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Kinectomix.Wpf.Mvvm\Kinectomix.Wpf.Mvvm.csproj">
+    <ProjectReference Include="..\Wpf.Mvvm\Kinectomix.Wpf.Mvvm.csproj">
       <Project>{e6aefe09-e617-40ed-9594-91e7e7594d32}</Project>
       <Name>Kinectomix.Wpf.Mvvm</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Board\Clean.png" />
-    <Content Include="Tile\Fixed\Wall.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="Board\Empty.png" />
-    <Content Include="Tile\Atom\Hydrogen.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Tile\Atom\Oxygen.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icon\Add.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Tile\Atom\Carbon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

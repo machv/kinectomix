@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game", "Atomix\Atomix\Kinectomix.Game.csproj", "{50576933-926E-4951-92FD-9FE370386BC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game", "Game\Atomix\Kinectomix.Game.csproj", "{50576933-926E-4951-92FD-9FE370386BC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game.Content", "Atomix\AtomixContent\Kinectomix.Game.Content.contentproj", "{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game.Content", "Game\AtomixContent\Kinectomix.Game.Content.contentproj", "{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.SimpleLevelGenerator", "SimpleLevelGenerator\Kinectomix.SimpleLevelGenerator.csproj", "{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Logic", "AtomixData\Kinectomix.Logic.csproj", "{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Logic", "Logic\Kinectomix.Logic.csproj", "{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelEditor", "LevelGenerator\Kinectomix.LevelEditor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelEditor", "LevelEditor\Kinectomix.LevelEditor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.GestureRecorder", "Kinectomix.GestureRecorder\Kinectomix.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.GestureRecorder", "GestureRecorder\Kinectomix.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Wpf.Mvvm", "Kinectomix.Wpf.Mvvm\Kinectomix.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Wpf.Mvvm", "Wpf.Mvvm\Kinectomix.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
