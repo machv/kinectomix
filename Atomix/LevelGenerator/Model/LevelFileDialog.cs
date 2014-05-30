@@ -15,15 +15,18 @@ namespace Kinectomix.LevelEditor.Model
         private int _filterIndex;
         public int FilterIndex
         {
-            get
-            {
-                return _filterIndex;
-            }
+            get { return _filterIndex; }
         }
 
         public string[] FileNames
         {
             get { throw new NotImplementedException(); }
+        }
+
+        public bool Multiselect
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
         public bool OpenFileDialog()

@@ -24,9 +24,17 @@ namespace Kinectomix.GestureRecorder.Model
             get { return _fileNames; }
         }
 
+        private bool _multiselect;
+        public bool Multiselect
+        {
+            get { return _multiselect; }
+            set { _multiselect = value; }
+        }
+
         public bool OpenFileDialog()
         {
             OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = _multiselect;
             dialog.Filter = "Recorded gesture (*.gst)|*.gst|All files|*.*";
             dialog.Title = "Open recorded gesture";
 

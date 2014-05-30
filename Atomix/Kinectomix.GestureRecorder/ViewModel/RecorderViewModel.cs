@@ -66,7 +66,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         public RecorderViewModel()
         {
-            _fileDialog = new GestureFileDialog();
+            _fileDialog = new GestureFileDialog() { Multiselect = true };
             _trackedJoints = new SkeletonViewModel();
             _recognizer = new Recognizer();
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
@@ -89,7 +89,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 StartKinect(KinectSensor.KinectSensors.FirstOrDefault());
         }
 
-        private void RemoveGesture(GestureViewModel obj)
+        private void RemoveGesture(GestureViewModel gesture)
         {
             throw new NotImplementedException();
         }
@@ -99,12 +99,16 @@ namespace Kinectomix.GestureRecorder.ViewModel
             if (_fileDialog.OpenFileDialog())
             {
                 XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
-                using (Stream stream = File.Open(_fileDialog.FileName, FileMode.Open))
-                {
-                    Gesture gesture = seralizer.Deserialize(stream) as Gesture;
 
-                    _gestures.Add(new GestureViewModel(gesture));
-                    _recognizer.AddGesture(gesture);
+                foreach (string fileName in _fileDialog.FileNames)
+                {
+                    using (Stream stream = File.Open(fileName, FileMode.Open))
+                    {
+                        Gesture gesture = seralizer.Deserialize(stream) as Gesture;
+
+                        _gestures.Add(new GestureViewModel(gesture));
+                        _recognizer.AddGesture(gesture);
+                    }
                 }
             }
         }
