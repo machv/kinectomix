@@ -35,6 +35,11 @@ namespace Kinectomix.Logic.Gestures
             _frameBuffer.Clear();
         }
 
+        /// <summary>
+        /// Last processed frame inserted into the frame buffer.
+        /// </summary>
+        protected FrameData _lastFrame;
+
         public virtual void ProcessSkeleton(Skeleton skeleton)
         {
             // transpozice a normalizace souřadnic, jednotkou je délka krku (ShoulderCenter - Head) 
@@ -72,6 +77,7 @@ namespace Kinectomix.Logic.Gestures
                 _frameBuffer.Dequeue();
 
             _frameBuffer.Enqueue(frame);
+            _lastFrame = frame;
         }
     }
 }

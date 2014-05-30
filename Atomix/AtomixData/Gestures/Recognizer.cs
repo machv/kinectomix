@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Kinect;
+using System.Linq;
 
 namespace Kinectomix.Logic.Gestures
 {
@@ -66,10 +67,10 @@ namespace Kinectomix.Logic.Gestures
 
             if (_frameBuffer.Count >= _minimalBufferLength)
             {
-                Gesture recordedGesture;
-                Gesture candidate = GetClosestCandidate(out recordedGesture);
+                Gesture candidate = GetClosestCandidate(_lastFrame);
                 if (candidate != null)
                 {
+                    Gesture recordedGesture = Gesture.FromFrameData(_frameBuffer, candidate.TrackedJoints, candidate.Dimension);
                     double distance = DynamicTimeWarping.CalculateDistance(candidate, recordedGesture);
                     double cost = distance / _frameBuffer.Count;
 
@@ -83,22 +84,19 @@ namespace Kinectomix.Logic.Gestures
             base.ProcessSkeleton(skeleton);
         }
 
-        private Gesture GetClosestCandidate(out Gesture recorded)
+        private Gesture GetClosestCandidate(FrameData lastFrame)
         {
-            recorded = null;
-
             double minimalFrameDistance = double.MaxValue;
             Gesture candidate = null;
 
             foreach (Gesture gesture in _gestures)
             {
-                Gesture recordedGesture = Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension);
+                GestureFrame frame = GestureFrame.FromFrameData(lastFrame, gesture.TrackedJoints, gesture.Dimension);
 
-                double frameDistance = DynamicTimeWarping.AccumulatedEuclidianDistance(recordedGesture.Sequence[recordedGesture.Sequence.Count - 1], gesture.Sequence[gesture.Sequence.Count - 1], gesture.Dimension);
+                double frameDistance = DynamicTimeWarping.AccumulatedEuclidianDistance(frame, gesture.Sequence[gesture.Sequence.Count - 1], gesture.Dimension);
                 if (frameDistance < _lastFrameMatchThreshold && frameDistance < minimalFrameDistance)
                 {
                     candidate = gesture;
-                    recorded = recordedGesture;
                     minimalFrameDistance = frameDistance;
                 }
                 else

@@ -40,14 +40,7 @@ namespace Kinectomix.Logic.Gestures
             gesture.TrackedJoints = trackedJoints.ToArray();
 
             foreach (FrameData frameData in frames)
-            {
-                GestureFrame frame = new GestureFrame();
-
-                foreach (JointType joint in gesture.TrackedJoints)
-                    frame.Add(frameData.SkeletonJoints[(int)joint]);
-
-                gesture.Sequence.Add(frame);
-            }
+                gesture.Sequence.Add(GestureFrame.FromFrameData(frameData, trackedJoints, dimension));
 
             return gesture;
         }
