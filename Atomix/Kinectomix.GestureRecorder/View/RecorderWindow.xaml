@@ -264,7 +264,7 @@
                 <ItemsControl ItemsSource="{Binding Gestures}" Margin="2,0,2,2" Grid.Row="1">
                     <ItemsControl.Template>
                         <ControlTemplate>
-                            <ScrollViewer>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                                 <ItemsPresenter />
                             </ScrollViewer>
                         </ControlTemplate>
@@ -274,12 +274,13 @@
                             <Border Background="{Binding IsRecognized, Converter={StaticResource IsRecognizedToBrushConverter}}" 
                                     Margin="2" 
                                     BorderThickness="1" 
-                                    BorderBrush="Azure">
+                                    BorderBrush="Azure"
+                                    Tag="{Binding DataContext,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}">
                                 <Border.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Delete" 
-                                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, 
-AncestorType={x:Type ListBox}}, Path=DataContext.RemoveGestureCommand}" CommandParameter="{Binding}" />
+                                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.RemoveGestureCommand}" 
+                                                  CommandParameter="{Binding}" />
                                     </ContextMenu>
                                 </Border.ContextMenu>
                             <StackPanel>

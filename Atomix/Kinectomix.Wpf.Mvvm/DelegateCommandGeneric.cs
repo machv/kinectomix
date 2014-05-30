@@ -50,6 +50,9 @@ namespace Kinectomix.Wpf.Mvvm
             if (parameter == null)
                 return true;
 
+            if (_canExecute == null)
+                return true;
+
             return _canExecute((T)parameter);
         }
 
