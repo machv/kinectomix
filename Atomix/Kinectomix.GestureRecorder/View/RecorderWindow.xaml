@@ -4,6 +4,7 @@
         xmlns:ViewModel="clr-namespace:Kinectomix.GestureRecorder.ViewModel"
         xmlns:Control="clr-namespace:Kinectomix.GestureRecorder.Control"
         xmlns:Converter="clr-namespace:Kinectomix.GestureRecorder.Converter"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         Title="Gesture Recorder" Height="600" Width="600" MinHeight="600">
     <Window.DataContext>
         <ViewModel:RecorderViewModel />
@@ -144,7 +145,7 @@
                     <CheckBox IsChecked="{Binding TrackedJoints.HipLeft}" Canvas.Left="35" Canvas.Top="180" />
 
                     <!-- Hip Right -->
-                    <CheckBox IsChecked="{Binding TrackedJoints.Hipright}" Canvas.Left="90" Canvas.Top="180" />
+                    <CheckBox IsChecked="{Binding TrackedJoints.HipRight}" Canvas.Left="90" Canvas.Top="180" />
 
                     <!-- Knee Right -->
                     <CheckBox IsChecked="{Binding TrackedJoints.KneeRight}" Canvas.Left="90" Canvas.Top="270" />
@@ -204,6 +205,21 @@
 
 
                 <Grid Grid.Row="1">
+                   
+                    <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform">
+                        <!-- colorViewer and skeletonViewer should overlap entirely. -->
+                        <Grid>
+                            <Control:KinectStreamViewer x:Name="ColorViewer" KinectSensor="{Binding Sensor}" CollectFrameRate="True" RetainImageOnSensorChange="True" />
+                            <Canvas>
+                                <Control:KinectSkeletonViewer 
+                                    KinectSensor="{Binding Sensor}"
+                                    Width="{Binding ElementName=ColorViewer,Path=ActualWidth}"
+                                    Height="{Binding ElementName=ColorViewer,Path=ActualHeight}"
+                                    ImageType="Color" />
+                            </Canvas>
+                        </Grid>
+                    </Viewbox>
+
                     <TextBlock HorizontalAlignment="Left" 
                            VerticalAlignment="Top" 
                            FontSize="20"
@@ -223,20 +239,47 @@
                     <Run Text="Recorded frames:" />
                     <Run Text="{Binding RecordedFrameCount}" />
                     </TextBlock>
+
+                    <TextBlock Text="{Binding LastRecognizedGesture.Name}" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               FontSize="52" 
+                               Foreground="Orange">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Opacity" Value="0" />
+                                
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ShowRecognizedGestureName}">
+                                        <DataTrigger.Value>
+                                            <System:Boolean>True</System:Boolean>
+                                        </DataTrigger.Value>
+
+                                        <DataTrigger.EnterActions>
+                                            <StopStoryboard BeginStoryboardName="FadeOut"/>
+                                        </DataTrigger.EnterActions>
+                                        
+                                        <Setter Property="Opacity" Value="1" />
+
+                                        <DataTrigger.ExitActions>
+                                            <BeginStoryboard Name="FadeOut">
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)"
+                                                                     From="1.0"
+                                                                     To="2.0"
+                                                                     Duration="0:0:2"
+                                                                     AutoReverse="True"
+                                                                     RepeatBehavior="1x" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     
-                    <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform">
-                        <!-- colorViewer and skeletonViewer should overlap entirely. -->
-                        <Grid>
-                            <Control:KinectStreamViewer x:Name="ColorViewer" KinectSensor="{Binding Sensor}" CollectFrameRate="True" RetainImageOnSensorChange="True" />
-                            <Canvas>
-                                <Control:KinectSkeletonViewer 
-                                    KinectSensor="{Binding Sensor}"
-                                    Width="{Binding ElementName=ColorViewer,Path=ActualWidth}"
-                                    Height="{Binding ElementName=ColorViewer,Path=ActualHeight}"
-                                    ImageType="Color" />
-                            </Canvas>
-                        </Grid>
-                    </Viewbox>
                     <TextBlock Text="{Binding DtwCost}" 
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Bottom" 

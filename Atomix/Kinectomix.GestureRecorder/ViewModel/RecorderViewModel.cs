@@ -127,6 +127,13 @@ namespace Kinectomix.GestureRecorder.ViewModel
             set { _dtwCost = value; OnPropertyChanged(); }
         }
 
+        private GestureViewModel _lastRecognizedGesture;
+        public GestureViewModel LastRecognizedGesture
+        {
+            get { return _lastRecognizedGesture; }
+            set { _lastRecognizedGesture = value; OnPropertyChanged(); }
+        }
+
 
         private bool CanStartRecognizing(object parameter)
         {
@@ -365,6 +372,21 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private bool _showRecognizedGestureName = false;
+        public bool ShowRecognizedGestureName
+        {
+            get { return _showRecognizedGestureName; }
+            set
+            {
+                if (value != _showRecognizedGestureName)
+                {
+                    _showRecognizedGestureName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             if (_recorder == null && _recognizer == null)
@@ -393,6 +415,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
                     {
                         _recognizer.ProcessSkeleton(trackedSkeleton);
 
+                        ShowRecognizedGestureName = false;
+
                         DtwCost = _recognizer.LastCost;
 
                         if (_recognizer.RecognizedGesture != null)
@@ -401,6 +425,9 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
                             GestureViewModel gesture = _gestures.Where(g => g.Gesture == _recognizer.RecognizedGesture.Gesture).FirstOrDefault();
                             gesture.IsRecognized = true;
+
+                            LastRecognizedGesture = gesture;
+                            ShowRecognizedGestureName = true;
                         }
                     }
                 }
