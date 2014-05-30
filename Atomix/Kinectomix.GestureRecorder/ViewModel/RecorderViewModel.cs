@@ -72,6 +72,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
             _startRecognizingCommand = new DelegateCommand(StartRecognizing, CanStartRecognizing);
             _addGestureCommand = new DelegateCommand(AddGesture);
+            _removeGestureCommand = new DelegateCommand<GestureViewModel>(RemoveGesture);
             _gestures = new ObservableCollection<GestureViewModel>();
 
             _countDownTimer = new DispatcherTimer();
@@ -86,6 +87,11 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
             if (KinectSensor.KinectSensors.Count > 0)
                 StartKinect(KinectSensor.KinectSensors.FirstOrDefault());
+        }
+
+        private void RemoveGesture(GestureViewModel obj)
+        {
+            throw new NotImplementedException();
         }
 
         private void AddGesture()
@@ -218,6 +224,13 @@ namespace Kinectomix.GestureRecorder.ViewModel
         {
             get { return _addGestureCommand; }
         }
+
+        private DelegateCommand<GestureViewModel> _removeGestureCommand;
+        public ICommand RemoveGestureCommand
+        {
+            get { return _removeGestureCommand; }
+        }
+
         public TimeSpan RecordingTimeout
         {
             get { return _recordingCountDownDuration; }
@@ -248,7 +261,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
             RecordingRemainingTime = _recordingDuration;
             RecordingTimeout = new TimeSpan(0, 0, 5);
 
-            _recorder = new Logic.Gestures.Recorder();
+            _recorder = new Recorder();
             _recorder.Start(_trackedJoints.GetSelectedJoints(), TrackingDimension.Two);
 
             _countDownTimer.Start();

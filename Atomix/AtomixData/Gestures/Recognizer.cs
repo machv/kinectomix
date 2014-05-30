@@ -71,14 +71,14 @@ namespace Kinectomix.Logic.Gestures
                     double frameDistance = DynamicTimeWarping.AccumulatedEuclidianDistance(candidate.Sequence[candidate.Sequence.Count - 1], gesture.Sequence[gesture.Sequence.Count - 1], gesture.Dimension);
                     if (frameDistance < _lastFrameMatchThreshold)
                     {
-                        double distance = DynamicTimeWarping.CalculateDtw(gesture, Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension));
+                        double distance = DynamicTimeWarping.CalculateDistance(gesture, Gesture.FromFrameData(_frameBuffer, gesture.TrackedJoints, gesture.Dimension));
                         double cost = distance / _frameBuffer.Count;
 
                         _lastCost = cost;
 
                         if (cost < _gestureMatchThreshold)
                         {
-                            _recognizedGesture = new RecognizedGesture() { Gesture = gesture, Cost = cost, Distance = distance, Matching = candidate);
+                            _recognizedGesture = new RecognizedGesture() { Gesture = gesture, Cost = cost, Distance = distance, Matching = candidate };
                             break;
                         }
                     }

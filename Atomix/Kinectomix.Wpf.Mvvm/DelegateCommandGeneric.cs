@@ -16,8 +16,14 @@ namespace Kinectomix.Wpf.Mvvm
             _canExecute = canExecute;
         }
 
+        public DelegateCommand(Action removeGesture)
+        {
+            this.removeGesture = removeGesture;
+        }
+
         private readonly Action<T> _action;
         private readonly Func<T, bool> _canExecute;
+        private Action removeGesture;
 
         public bool CanExecute(T parameter)
         {

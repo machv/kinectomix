@@ -38,7 +38,7 @@ namespace Kinectomix.Logic.Gestures
             return Enumerable.Min(values);
         }
 
-        public static double CalculateDtw(Gesture gesture1, Gesture gesture2)
+        public static double CalculateDistance(Gesture gesture1, Gesture gesture2)
         {
             double[,] matrix = new double[gesture1.Sequence.Count + 1, gesture2.Sequence.Count + 1];
 
