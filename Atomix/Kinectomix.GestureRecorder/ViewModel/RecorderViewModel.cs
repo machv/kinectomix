@@ -95,6 +95,12 @@ namespace Kinectomix.GestureRecorder.ViewModel
             _recognizer.RemoveGesture(gesture.Gesture);
         }
 
+        private void DeselectAllGestures()
+        {
+            foreach (GestureViewModel gesture in _gestures)
+                gesture.IsRecognized = false;
+        }
+
         private void AddGesture()
         {
             if (_fileDialog.OpenFileDialog())
@@ -388,6 +394,14 @@ namespace Kinectomix.GestureRecorder.ViewModel
                         _recognizer.ProcessSkeleton(trackedSkeleton);
 
                         DtwCost = _recognizer.LastCost;
+
+                        if (_recognizer.RecognizedGesture != null)
+                        {
+                            DeselectAllGestures();
+
+                            GestureViewModel gesture = _gestures.Where(g => g.Gesture == _recognizer.RecognizedGesture.Gesture).FirstOrDefault();
+                            gesture.IsRecognized = true;
+                        }
                     }
                 }
                 else
