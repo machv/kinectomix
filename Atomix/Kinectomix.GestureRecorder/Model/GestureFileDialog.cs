@@ -1,4 +1,5 @@
-﻿using Kinectomix.Wpf.Mvvm;
+﻿using System;
+using Kinectomix.Wpf.Mvvm;
 using Microsoft.Win32;
 
 namespace Kinectomix.GestureRecorder.Model
@@ -14,10 +15,13 @@ namespace Kinectomix.GestureRecorder.Model
         private int _filterIndex;
         public int FilterIndex
         {
-            get
-            {
-                return _filterIndex;
-            }
+            get { return _filterIndex; }
+        }
+
+        private string[] _fileNames;
+        public string[] FileNames
+        {
+            get { return _fileNames; }
         }
 
         public bool OpenFileDialog()
@@ -29,6 +33,7 @@ namespace Kinectomix.GestureRecorder.Model
             if (dialog.ShowDialog() == true)
             {
                 _fileName = dialog.FileName;
+                _fileNames = dialog.FileNames;
 
                 return true;
             }

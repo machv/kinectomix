@@ -1,4 +1,5 @@
-﻿using Kinectomix.Wpf.Mvvm;
+﻿using System;
+using Kinectomix.Wpf.Mvvm;
 using Microsoft.Win32;
 
 namespace Kinectomix.LevelEditor.Model
@@ -18,6 +19,11 @@ namespace Kinectomix.LevelEditor.Model
             {
                 return _filterIndex;
             }
+        }
+
+        public string[] FileNames
+        {
+            get { throw new NotImplementedException(); }
         }
 
         public bool OpenFileDialog()
