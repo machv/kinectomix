@@ -91,7 +91,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
 
         private void RemoveGesture(GestureViewModel gesture)
         {
-            throw new NotImplementedException();
+            _gestures.Remove(gesture);
+            _recognizer.RemoveGesture(gesture.Gesture);
         }
 
         private void AddGesture()

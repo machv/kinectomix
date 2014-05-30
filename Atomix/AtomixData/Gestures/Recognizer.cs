@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Kinect;
 
 namespace Kinectomix.Logic.Gestures
@@ -88,6 +89,11 @@ namespace Kinectomix.Logic.Gestures
             }
 
             base.ProcessSkeleton(skeleton);
+        }
+
+        public void RemoveGesture(Gesture gesture)
+        {
+            _gestures.Remove(gesture);
         }
     }
 }
