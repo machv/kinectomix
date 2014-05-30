@@ -72,7 +72,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
             _startRecordingCommand = new DelegateCommand(StartRecordingCountdown, CanStartRecording);
             _startRecognizingCommand = new DelegateCommand(StartRecognizing, CanStartRecognizing);
             _addGestureCommand = new DelegateCommand(AddGesture);
-            _gestures = new ObservableCollection<Gesture>();
+            _gestures = new ObservableCollection<GestureViewModel>();
 
             _countDownTimer = new DispatcherTimer();
             _countDownTimer.Interval = TimeSpan.FromSeconds(_step.TotalSeconds);
@@ -97,7 +97,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 {
                     Gesture gesture = seralizer.Deserialize(stream) as Gesture;
 
-                    _gestures.Add(gesture);
+                    _gestures.Add(new GestureViewModel(gesture));
                     _recognizer.AddGesture(gesture);
                 }
             }
@@ -121,8 +121,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
             _recognizer.Start();
         }
 
-        private ObservableCollection<Gesture> _gestures;
-        public ObservableCollection<Gesture> Gestures
+        private ObservableCollection<GestureViewModel> _gestures;
+        public ObservableCollection<GestureViewModel> Gestures
         {
             get { return _gestures; }
             set
@@ -151,7 +151,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                         SaveGestureToStream(gesture, stream);
                     }
 
-                    _gestures.Add(gesture);
+                    _gestures.Add(new GestureViewModel(gesture));
                     _recognizer.AddGesture(gesture);
                 }
 
