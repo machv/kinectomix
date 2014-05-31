@@ -135,7 +135,7 @@ namespace Atomix
             }
             else
             {
-                Level newLevel = _content.Load<Kinectomix.Logic.Level>("Levels/" + newLevelInfo.AssetName);
+                Level newLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", newLevelInfo.AssetName));
                 gameScreen = new LevelScreen(newLevel, spriteBatch);
             }
 
@@ -150,7 +150,6 @@ namespace Atomix
             // Load current level again
             LevelDefinition newLevelInfo = AtomixGame.State.GetCurrentLevel();
             Level newLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", newLevelInfo.AssetName));
-            //Level newLevel = _content.Load<Kinectomix.Logic.Level>("Levels/" + newLevelInfo.AssetName);
             gameScreen = new LevelScreen(newLevel, spriteBatch);
 
             ScreenManager.Add(gameScreen);

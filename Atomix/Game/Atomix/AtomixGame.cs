@@ -17,10 +17,9 @@ namespace Atomix
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         ScreenManager _gameScreenManager;
-        KinectChooser _KinectChooser;
+        KinectChooser _kinectChooser;
         VideoStreamComponent _videoStream;
         SkeletonRenderer _skeletonRenderer;
-        Skeletons _skeletons = new Skeletons();
         IInputProvider _input;
         static GameState _state;
         Vector2 _kinectDebugOffset;
@@ -93,10 +92,10 @@ namespace Atomix
 
             _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / _scale);
 
-            _KinectChooser = new KinectChooser(this);
-            _skeletonRenderer = new SkeletonRenderer(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
-            _cursor = new KinectCursor(this, _KinectChooser, _skeletons, _kinectDebugOffset, _scale);
-            _videoStream = new VideoStreamComponent(this, _KinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
+            _kinectChooser = new KinectChooser(this);
+            _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectChooser.Skeletons, _kinectDebugOffset, _scale);
+            _cursor = new KinectCursor(this, _kinectChooser, _kinectChooser.Skeletons, _kinectDebugOffset, _scale);
+            _videoStream = new VideoStreamComponent(this, _kinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
             var background = new Background(this);
             _cursor.VideoStreamData = _videoStream;
 
@@ -107,12 +106,12 @@ namespace Atomix
             multipleInput.AddProvider(kinectInput);
             multipleInput.AddProvider(mouseInput);
             _input = multipleInput;
-            
+
             _gameScreenManager = new ScreenManager(this, _input);
 
             Components.Add(background);
             Components.Add(_gameScreenManager);
-            Components.Add(_KinectChooser);
+            Components.Add(_kinectChooser);
             Components.Add(_videoStream);
             Components.Add(_skeletonRenderer);
             Components.Add(_cursor);
@@ -185,8 +184,11 @@ namespace Atomix
                 }
             }
 
-            if (_KinectChooser.Sensor != null && _KinectChooser.Sensor.IsRunning && _KinectChooser.SkeletonData != null)
-                _skeletons.Items = _KinectChooser.SkeletonData;
+            if (state.IsKeyDown(Keys.D))
+            {
+                Components.Remove(_videoStream);
+                Components.Remove(_skeletonRenderer);
+            }
 
             base.Update(gameTime);
         }

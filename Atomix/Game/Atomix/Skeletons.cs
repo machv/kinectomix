@@ -10,7 +10,7 @@ namespace Atomix
     {
         public enum TrackingType { Nearest, FixById }
 
-        public Skeleton[] Items { get; set; }
+        public Skeleton[] Items { get; private set; }
 
         public TrackingType Tracking { get; set; }
 
@@ -40,6 +40,11 @@ namespace Atomix
                     return GetNearestTrackedSkeleton();
                 }
             }
+        }
+
+        public void SetSkeletonData(Skeleton[] skeletons)
+        {
+            Items = skeletons;
         }
 
         private void FixToFirstTrackedSkeleton()
