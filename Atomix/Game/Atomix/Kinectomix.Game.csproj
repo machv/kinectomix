@@ -86,6 +86,7 @@
     <Compile Include="AnimatedTexture.cs" />
     <Compile Include="Components\Background.cs" />
     <Compile Include="Components\Button.cs" />
+    <Compile Include="Components\GestureProcessing.cs" />
     <Compile Include="Components\KinectCursor.cs" />
     <Compile Include="Components\KinectCursorInteractions.cs" />
     <Compile Include="Components\ScreenManager.cs" />

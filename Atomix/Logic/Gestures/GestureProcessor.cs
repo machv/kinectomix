@@ -7,9 +7,14 @@ namespace Kinectomix.Logic.Gestures
     public abstract class GestureProcessor
     {
         public const int TrackedJointsCount = 20;
-        
+
         //TODO ADD maximalBufferLength 
         protected int _minimalBufferLength = 30;
+        public int MinimalBufferLength
+        {
+            get { return _minimalBufferLength; }
+            set { if (value > 0) _minimalBufferLength = value; }
+        }
 
         protected Queue<FrameData> _frameBuffer;
 
@@ -42,9 +47,17 @@ namespace Kinectomix.Logic.Gestures
 
         public virtual void ProcessSkeleton(Skeleton skeleton)
         {
+            if (skeleton == null)
+            {
+                if (_frameBuffer.Count > 0)
+                    _frameBuffer.Dequeue();
+
+                return;
+            }
+
             // transpozice a normalizace souřadnic, jednotkou je délka krku (ShoulderCenter - Head) 
 
-            if (skeleton.Joints[JointType.Head].TrackingState != JointTrackingState.Tracked || 
+            if (skeleton.Joints[JointType.Head].TrackingState != JointTrackingState.Tracked ||
                 skeleton.Joints[JointType.ShoulderCenter].TrackingState != JointTrackingState.Tracked)
                 return;
 
