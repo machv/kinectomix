@@ -23,7 +23,7 @@ namespace Atomix.Components
         private static Gestures _instance;
         public static GesturesState GetState()
         {
-            return new GesturesState(_instance._recognizedGesture);
+            return new GesturesState(_instance._recognizedGesture, _instance._knownGestures);
         }
 
         private Skeletons _skeletons;
@@ -77,11 +77,7 @@ namespace Atomix.Components
         public override void Update(GameTime gameTime)
         {
             _recognizer.ProcessSkeleton(_skeletons.TrackedSkeleton);
-
-            if (_recognizer.RecognizedGesture != null)
-            {
-                _recognizedGesture = _recognizer.RecognizedGesture;
-            }
+            _recognizedGesture = _recognizer.RecognizedGesture;
 
             base.Update(gameTime);
         }

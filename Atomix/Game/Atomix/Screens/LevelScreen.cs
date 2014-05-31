@@ -2,6 +2,7 @@
 using Atomix.ViewModel;
 using AtomixData;
 using Kinectomix.Logic;
+using Kinectomix.Logic.Game;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -174,6 +175,7 @@ namespace Atomix
         public override void Update(GameTime gameTime)
         {
             bool clickOccurred = false;
+            bool isGestureDetected = false;
 
             // The active state from the last frame is now old
             lastMouseState = mouseState;
@@ -189,9 +191,11 @@ namespace Atomix
             }
 
             GesturesState gesturesState = Gestures.GetState();
-            //if (gesturesState.IsGestureRecognized())
-            //{
-           // }
+            if (gesturesState.IsGestureRecognized(GestureType.RightHandUp))
+            {
+                clickOccurred = true;
+                isGestureDetected = true;
+            }
 
             KinectCursor cursor = ((AtomixGame)ScreenManager.Game).Cursor;
 
@@ -276,10 +280,10 @@ namespace Atomix
             }
 
             // Detect clicks
-            if (clickOccurred || cursor.IsHandClosed)
+            if (clickOccurred || isGestureDetected || cursor.IsHandClosed)
             {
                 Point activityPosition;
-                if (clickOccurred)
+                if (clickOccurred && !isGestureDetected)
                 {
                     activityPosition = new Point(mouseState.X, mouseState.Y);
                 }
