@@ -387,6 +387,32 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
+        private bool _isRecognizing;
+        private void ProcessRecognizerSkeletonFrame(Skeleton trackedSkeleton)
+        {
+            if (_isRecognizing)
+            {
+                System.Diagnostics.Debug.Write("Skipping..");
+                return;
+            }
+
+            _recognizer.ProcessSkeleton(trackedSkeleton);
+
+            ShowRecognizedGestureName = false;
+            DtwCost = _recognizer.LastCost;
+
+            if (_recognizer.RecognizedGesture != null)
+            {
+                DeselectAllGestures();
+
+                GestureViewModel gesture = _gestures.Where(g => g.Gesture == _recognizer.RecognizedGesture.Gesture).FirstOrDefault();
+                gesture.IsRecognized = true;
+
+                LastRecognizedGesture = gesture;
+                ShowRecognizedGestureName = true;
+            }
+        }
+
         private void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             if (_recorder == null && _recognizer == null)
@@ -413,22 +439,13 @@ namespace Kinectomix.GestureRecorder.ViewModel
                     }
                     else if (_recognizer != null)
                     {
-                        _recognizer.ProcessSkeleton(trackedSkeleton);
+                        //Task.Run(() =>
+                            ProcessRecognizerSkeletonFrame(trackedSkeleton);
+                        //    );
 
-                        ShowRecognizedGestureName = false;
-
-                        DtwCost = _recognizer.LastCost;
-
-                        if (_recognizer.RecognizedGesture != null)
-                        {
-                            DeselectAllGestures();
-
-                            GestureViewModel gesture = _gestures.Where(g => g.Gesture == _recognizer.RecognizedGesture.Gesture).FirstOrDefault();
-                            gesture.IsRecognized = true;
-
-                            LastRecognizedGesture = gesture;
-                            ShowRecognizedGestureName = true;
-                        }
+                        //TaskScheduler scheduler = TaskScheduler.FromCurrentSynchronizationContext();
+                        //CancellationToken token = new CancellationToken();
+                        //Task.Factory.StartNew(() => ProcessRecognizerSkeletonFrame(e)).ContinueWith(
                     }
                 }
                 else
