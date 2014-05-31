@@ -27,6 +27,12 @@ namespace Atomix.Components
         private const float Depth = 0.5f;
         public VideoStreamComponent VideoStreamData { get; set; }
 
+        /// <summary>
+        /// Enables tracking of open/close hand.
+        /// </summary>
+        /// <returns></returns>
+        public bool EnableHandStatusTracking { get; set; }
+
         public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
             : base(game)
         {
@@ -109,11 +115,15 @@ namespace Atomix.Components
             {
                 if (_KinectChooser.SkeletonData != null)
                 {
-                    //_KinectChooser.Interactions.ProcessSkeleton(_KinectChooser.SkeletonData, _KinectChooser.Sensor.AccelerometerGetCurrentReading(), _KinectChooser.SkeletonTimestamp);
-                    _skeletons.Items = _KinectChooser.SkeletonData;
-
                     if (_skeletons.TrackedSkeleton != null)
                     {
+                        leftHanded =
+                            (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                            _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
+                            ||
+                            (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                            _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
+
                         //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
                         var cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton);
 
@@ -136,8 +146,6 @@ namespace Atomix.Components
                         short[] pixelData = new short[depthFrame.PixelDataLength];
                         depthFrame.CopyPixelDataTo(pixelData);
 
-                        //_KinectChooser.Interactions.ProcessDepth(depthPixels, depthFrame.Timestamp);
-
                         lastDepthFrameData = pixelData;
                         lastDepthFrameDataLength = depthFrame.PixelDataLength;
 
@@ -146,32 +154,11 @@ namespace Atomix.Components
                 }
             }
 
-            // Hand tracking START
-            if (_skeletons.TrackedSkeleton != null)
+            if (_skeletons.TrackedSkeleton != null && EnableHandStatusTracking)
             {
-                leftHanded =
-                    (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
-                    _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
-                    ||
-                    (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
-                    _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
-
-                // check for hand
+                // Hand tracking START
                 if (cursorPosition != Vector2.Zero)
                 {
-                    Vector2 handPosition = cursorPosition; // SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
-
-                    if (Vector2.Distance(handPosition, lastHandPosition) > 5)
-                    {
-                        lastHandTime = 0;
-                    }
-                    else
-                    {
-                        lastHandTime += gameTime.ElapsedGameTime.TotalSeconds;
-                    }
-
-                    lastHandPosition = handPosition;
-
                     JointType handType = leftHanded ? JointType.HandLeft : JointType.HandRight;
                     JointType wristType = leftHanded ? JointType.WristLeft : JointType.WristRight;
 
@@ -182,15 +169,8 @@ namespace Atomix.Components
                     SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[wristType].Position;
                     Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
                     Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
-                    //float distance = Vector2.Distance(handVector, wristVector);
                     float distance = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, handType, wristType);
-
-                    //float distance = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, JointType.Head, JointType.HipCenter);
-
-                    //var head = _skeletons.TrackedSkeleton.Joints[JointType.Head].Position;
-                    //var shoulder = _skeletons.TrackedSkeleton.Joints[JointType.ShoulderCenter].Position;
                     float distanceHead = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, JointType.Head, JointType.ShoulderCenter);
-                    //float distance1 = (head.Y - shoulder.Y) * 100; // in milimeters
 
                     // podivame se, v jake vzdalenosti bod je
                     // i kdyz prevadime body ze skeletonu do depth space, tak to vraci body i mimo ten obrazek, proto 
@@ -210,17 +190,11 @@ namespace Atomix.Components
                     {
                         _histogram = new int[256];
 
-                        //float radius = 35000 / (float)realDepth;
-                        //if (radius < 1) radius = 1;
-
-
-
-                        // Hind for searching bounding box of hand
+                        // Hint for searching bounding box of hand
                         _handRadius = (int)(distanceHead * 2);
 
                         if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
                         {
-                            //_handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
                             Rectangle hintRectangle = new Rectangle(_handDepthPoint.X - _handRadius / 2, _handDepthPoint.Y - _handRadius / 2, _handRadius, _handRadius);
 
                             //TODO check only one person at time
@@ -260,8 +234,6 @@ namespace Atomix.Components
                                 pixels = new byte[VideoStreamData.VideoFrame.Width * VideoStreamData.VideoFrame.Height * 4];
                                 VideoStreamData.VideoFrame.GetData(pixels);
                             }
-
-
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
@@ -352,12 +324,28 @@ namespace Atomix.Components
                         {
                             _textToRender += "C";
                         }
+                    }
+                }
+            }
 
-                        //_textToRender += string.Format(" [{0:P2}], Width = {1} px, Height = {2} px", Math.Round((double)handArea / (_handRect.Width * _handRect.Height), 2), handWidth, handHeight);
+            if (_skeletons.TrackedSkeleton != null)
+            {
+                // check for hand
+                if (cursorPosition != Vector2.Zero)
+                {
+                    Vector2 handPosition = cursorPosition; // SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
+
+                    if (Vector2.Distance(handPosition, lastHandPosition) > 5)
+                    {
+                        lastHandTime = 0;
+                    }
+                    else
+                    {
+                        lastHandTime += gameTime.ElapsedGameTime.TotalSeconds;
                     }
 
-                    //_colorVideo = new Texture2D(GraphicsDevice, 640, 480);
-                    //_colorVideo.SetData(colorPixels);
+                    lastHandPosition = handPosition;
+
                 }
 
                 var cursorPos = GetHarmonizedCursorPosition();
@@ -615,30 +603,27 @@ namespace Atomix.Components
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
-            //if (_handRect != null)
-            //{
-            Rectangle translated = new Rectangle((int)(_handRect.X / _scale) + (int)_renderOffset.X, (int)(_handRect.Y / _scale) + (int)_renderOffset.Y, (int)(_handRect.Width / _scale), (int)(_handRect.Height / _scale));
-
-            DrawBoudingBox(translated, Color.Red, 1);
-
-            // draw lines for grid
-            foreach (var line in _lines)
+            if (EnableHandStatusTracking)
             {
-                Vector2 start = new Vector2(line.Item1.X / _scale, line.Item1.Y / _scale);
-                Vector2 end = new Vector2(line.Item2.X / _scale, line.Item2.Y / _scale);
-                Vector2 diff = end - start;
-                Vector2 scale = new Vector2(1.0f, diff.Length() / dotTexture.Height);
+                Rectangle translated = new Rectangle((int)(_handRect.X / _scale) + (int)_renderOffset.X, (int)(_handRect.Y / _scale) + (int)_renderOffset.Y, (int)(_handRect.Width / _scale), (int)(_handRect.Height / _scale));
 
-                float angle = (float)Math.Atan2(diff.Y, diff.X) - MathHelper.PiOver2;
+                DrawBoudingBox(translated, Color.Red, 1);
 
-                Color color = Color.CornflowerBlue;
+                // draw lines for grid
+                foreach (var line in _lines)
+                {
+                    Vector2 start = new Vector2(line.Item1.X / _scale, line.Item1.Y / _scale);
+                    Vector2 end = new Vector2(line.Item2.X / _scale, line.Item2.Y / _scale);
+                    Vector2 diff = end - start;
+                    Vector2 scale = new Vector2(1.0f, diff.Length() / dotTexture.Height);
 
-                spriteBatch.Draw(dotTexture, (start + _renderOffset), null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
+                    float angle = (float)Math.Atan2(diff.Y, diff.X) - MathHelper.PiOver2;
+
+                    Color color = Color.CornflowerBlue;
+
+                    spriteBatch.Draw(dotTexture, (start + _renderOffset), null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
+                }
             }
-
-            //spriteBatch.Draw(_pointTextures, new Vector2(left, top) + _renderOffset, Color.Yellow);
-
-            //}
 
             if (cursorPosition != Vector2.Zero)
             {
@@ -646,11 +631,6 @@ namespace Atomix.Components
 
                 SpriteTexture.DrawFrame(spriteBatch, cursorPosition);
             }
-
-            //if (_colorVideo != null)
-            //{
-            //    spriteBatch.Draw(_colorVideo, new Rectangle(50, 50, 640, 480), Color.White);
-            //}
 
             spriteBatch.End();
 
@@ -680,8 +660,8 @@ namespace Atomix.Components
         float yPrevious;
         float MoveThreshold = 0.005f;
 
-        float RightHandX;
-        float RightHandY;
+        float handX;
+        float handY;
         private int lastDepthFrameDataLength;
         private Texture2D _colorVideo;
 
@@ -733,13 +713,13 @@ namespace Atomix.Components
                     // the hand has moved enough to update screen position (jitter control / smoothing)
                     if (Math.Abs(hand.Position.X - xPrevious) > MoveThreshold || Math.Abs(hand.Position.Y - yPrevious) > MoveThreshold)
                     {
-                        RightHandX = xScaled;
-                        RightHandY = yScaled;
+                        handX = xScaled;
+                        handY = yScaled;
 
                         xPrevious = hand.Position.X;
                         yPrevious = hand.Position.Y;
 
-                        return new Vector2(RightHandX, RightHandY);
+                        return new Vector2(handX, handY);
                     }
                 }
             }

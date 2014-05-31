@@ -26,6 +26,8 @@ namespace Atomix
         /// </summary>
         private Texture2D icon;
 
+        public Skeletons Skeletons { get; private set; }
+
         public KinectSensor Sensor { get; private set; }
 
         /// <summary>
@@ -36,6 +38,7 @@ namespace Atomix
         public KinectChooser(Game game)
             : base(game)
         {
+            Skeletons = new Skeletons();
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
             DiscoverSensor();
 
@@ -73,6 +76,9 @@ namespace Atomix
                         parameters.Prediction = 0.4f;
                         parameters.JitterRadius = 1.0f;
                         parameters.MaxDeviationRadius = 0.5f;
+
+                        parameters.Smoothing = 0.7f;
+                        parameters.Correction = 0.3f;
 
                         sensor.SkeletonStream.Enable(parameters);
 
@@ -137,6 +143,8 @@ namespace Atomix
                         skeletonFrame.CopySkeletonDataTo(SkeletonData);
 
                         SkeletonTimestamp = skeletonFrame.Timestamp;
+
+                        Skeletons.SetSkeletonData(SkeletonData);
                     }
                 }
             }
