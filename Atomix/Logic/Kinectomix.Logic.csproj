@@ -77,6 +77,8 @@
     <Compile Include="BoardTile.cs" />
     <Compile Include="BondType.cs" />
     <Compile Include="Bresenham.cs" />
+    <Compile Include="Game\GestureType.cs" />
+    <Compile Include="Game\KnownGesture.cs" />
     <Compile Include="Gestures\DynamicTimeWarping.cs" />
     <Compile Include="Gestures\GestureFrame.cs" />
     <Compile Include="Gestures\FrameData.cs" />

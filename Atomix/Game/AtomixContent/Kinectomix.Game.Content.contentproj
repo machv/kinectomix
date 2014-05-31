@@ -158,6 +158,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gestures.xml">
+      <Name>Gestures</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
     <Content Include="Levels\original_level_01.atx">
       <Name>original_level_01</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

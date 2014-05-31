@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Game="Kinectomix.Logic.Game">
+  <Asset Type="Game:KnownGesture[]">
+    <Item>
+      <Filename>LeftHandUp.gst</Filename>
+      <Type>LeftHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>RightHandUp.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+  </Asset>
+</XnaContent>

@@ -11,22 +11,32 @@ using Microsoft.Xna.Framework.Media;
 using Kinectomix.Logic.Gestures;
 using System.Xml.Serialization;
 using System.IO;
+using Kinectomix.Logic.Game;
 
 namespace Atomix.Components
 {
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class GestureProcessing : GameComponent
+    public class Gestures : GameComponent
     {
+        private static Gestures _instance;
+        public static GesturesState GetState()
+        {
+            return new GesturesState(_instance._recognizedGesture);
+        }
+
         private Skeletons _skeletons;
         private Recognizer _recognizer;
         private string _gesturesLocation;
         private RecognizedGesture _recognizedGesture;
+        private KnownGestures _knownGestures;
 
-        public GestureProcessing(Game game, Skeletons skeletons, string gesturesLocation)
+        public Gestures(Game game, Skeletons skeletons, string gesturesLocation)
             : base(game)
         {
+            _instance = this;
+
             _skeletons = skeletons;
             _recognizer = new Recognizer();
             _gesturesLocation = gesturesLocation;
@@ -40,16 +50,16 @@ namespace Atomix.Components
         {
             XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
 
-            string[] gestures = new string[] {
-                "LeftHandUp.gst",
-                "RightHandUp.gst",
-            };
-            foreach (string gestureName in gestures)
+            var knownGestures = Game.Content.Load<KnownGesture[]>("Gestures");
+            _knownGestures = new KnownGestures(knownGestures);
+
+            foreach (KnownGesture knownGesture in _knownGestures)
             {
-                using (Stream stream = TitleContainer.OpenStream(_gesturesLocation + gestureName))
+                using (Stream stream = TitleContainer.OpenStream(_gesturesLocation + knownGesture.Filename))
                 {
                     Gesture gesture = seralizer.Deserialize(stream) as Gesture;
 
+                    knownGesture.Instance = gesture;
                     _recognizer.AddGesture(gesture);
                 }
             }

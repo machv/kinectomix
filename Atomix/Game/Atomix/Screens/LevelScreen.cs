@@ -188,6 +188,11 @@ namespace Atomix
                 clickOccurred = true;
             }
 
+            GesturesState gesturesState = Gestures.GetState();
+            //if (gesturesState.IsGestureRecognized())
+            //{
+           // }
+
             KinectCursor cursor = ((AtomixGame)ScreenManager.Game).Cursor;
 
             if (isLevelFinished)
