@@ -213,9 +213,9 @@ namespace Atomix.Components
                         //float radius = 35000 / (float)realDepth;
                         //if (radius < 1) radius = 1;
 
-                        
 
-                            // Hind for searching bounding box of hand
+
+                        // Hind for searching bounding box of hand
                         _handRadius = (int)(distanceHead * 2);
 
                         if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
@@ -223,31 +223,36 @@ namespace Atomix.Components
                             //_handRect = new Rectangle((int)(_handDepthPoint.X - _handRadius), (int)(_handDepthPoint.Y - _handRadius), _handRadius * 2, _handRadius * 2);
                             Rectangle hintRectangle = new Rectangle(_handDepthPoint.X - _handRadius / 2, _handDepthPoint.Y - _handRadius / 2, _handRadius, _handRadius);
 
-
                             //TODO check only one person at time
-                            int tolerance = 45; // in milimeters
+                            // Clear buffer for drawing
+                            _lines.Clear();
+
+                            int tolerance = 50; // in milimeters
                             int width, height;
-                            _handRect = CalculateHandDimensions(hintRectangle, frameData, stride, realDepth, tolerance, out width, out height);
-
-                            handArea = 0;
-                           
-
-                            // Lines for checking
-                            List<int> changes = GetChangesList(frameData, stride, realDepth, tolerance);
-
-                            short isOpenMatches = 0;
-                            foreach (int parts in changes)
+                            Rectangle handRect = CalculateHandDimensions(hintRectangle, frameData, stride, realDepth, tolerance, out width, out height);
+                            if (handRect != Rectangle.Empty)
                             {
-                                if (parts > 3) // ......--------...... = empty HAND empty = at least 3 parts
-                                {
-                                    // probably open hand?
-                                    isOpenMatches++;
-                                }
-                            }
+                                _handRect = new Rectangle(handRect.X - 10, handRect.Y - 10, handRect.Width + 20, handRect.Height + 20);
 
-                            _textToRender = isOpenMatches > 1 ? "Open" : "Closed";
-                            _textToRender += string.Format(" ({0})", isOpenMatches);
-                            _textToRender += string.Format(" Width: {0}px, Height: {1}px (ratio {2}) / depth: {3} cm", width, height, Math.Round(width / (double)height, 2), realDepth / 10d);
+                                handArea = 0;
+
+                                // Lines for checking
+                                List<int> changes = GetChangesList(frameData, stride, realDepth, tolerance);
+
+                                short isOpenMatches = 0;
+                                foreach (int parts in changes)
+                                {
+                                    if (parts > 3) // ......--------...... = empty HAND empty = at least 3 parts
+                                    {
+                                        // probably open hand?
+                                        isOpenMatches++;
+                                    }
+                                }
+
+                                _textToRender = isOpenMatches > 1 ? "Open" : "Closed";
+                                _textToRender += string.Format(" ({0})", isOpenMatches);
+                                _textToRender += string.Format(" Width: {0}px, Height: {1}px (ratio {2}) / depth: {3} cm", width, height, Math.Round(width / (double)height, 2), realDepth / 10d);
+                            }
 
                             byte[] pixels = null;
                             if (VideoStreamData != null && VideoStreamData.VideoFrame != null)
@@ -256,7 +261,7 @@ namespace Atomix.Components
                                 VideoStreamData.VideoFrame.GetData(pixels);
                             }
 
-                       
+
 
                             for (int y = _handRect.Top; y < _handRect.Bottom; y++)
                             {
@@ -421,9 +426,9 @@ namespace Atomix.Components
             width = right - left;
             height = bottom - top;
 
-            // If we didnt matched any hand, return default hint box
+            // If we didnt matched any hand, return empty
             if (top == int.MaxValue)
-                return rectangle;
+                return Rectangle.Empty;
 
             return new Rectangle(left, top, width, height);
         }
