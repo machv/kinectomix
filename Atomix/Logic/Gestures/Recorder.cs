@@ -12,7 +12,7 @@ namespace Kinectomix.Logic.Gestures
         {
             Clear();
 
-            _minimalBufferLength = int.MaxValue;
+            _maximalBufferLength = int.MaxValue;
             _trackedJoints = trackedJoints;
             _dimension = dimension;
         }

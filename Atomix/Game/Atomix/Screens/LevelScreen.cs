@@ -451,8 +451,10 @@ namespace Atomix
             DrawBoard(spriteBatch, level.Board, true);
             DrawBoard(spriteBatch, level.Molecule);
 
+            spriteBatch.DrawString(normalFont, string.Format("Score: {0}", moves), new Vector2(21, 21), Color.Black);
             spriteBatch.DrawString(normalFont, string.Format("Score: {0}", moves), new Vector2(20, 20), Color.Red);
 
+            spriteBatch.DrawString(normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(201, 21), Color.Black);
             spriteBatch.DrawString(normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(200, 20), Color.Red);
 
             if (isMovementAnimation)

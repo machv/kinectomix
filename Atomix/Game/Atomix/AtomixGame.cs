@@ -99,6 +99,7 @@ namespace Atomix
             _cursor = new KinectCursor(this, _kinectChooser, _kinectChooser.Skeletons, _kinectDebugOffset, _scale);
             _videoStream = new VideoStreamComponent(this, _kinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
             var background = new Background(this);
+            var frameRate = new FrameRateInfo(this);
             _cursor.VideoStreamData = _videoStream;
 
             // Input
@@ -112,6 +113,7 @@ namespace Atomix
             _gameScreenManager = new ScreenManager(this, _input);
 
             Components.Add(background);
+            Components.Add(frameRate);
             Components.Add(_gameScreenManager);
             Components.Add(_kinectChooser);
             Components.Add(_gestures);
