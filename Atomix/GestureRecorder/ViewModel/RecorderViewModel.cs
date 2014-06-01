@@ -435,7 +435,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                     {
                         _recorder.ProcessSkeleton(trackedSkeleton);
 
-                        RecordedFrameCount = _recorder.FrameBufferCount;
+                        RecordedFrameCount = _recorder.FrameBufferLength;
                     }
                     else if (_recognizer != null)
                     {

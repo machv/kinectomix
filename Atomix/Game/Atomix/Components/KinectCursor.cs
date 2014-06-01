@@ -10,7 +10,7 @@ namespace Atomix.Components
 {
     public class KinectCursor : DrawableGameComponent
     {
-        const int CursorPositionsBufferLenth = 15;
+        const int CursorPositionsBufferLenth = 1;
         protected KinectChooser _KinectChooser;
         protected Skeletons _skeletons;
         SpriteBatch spriteBatch;

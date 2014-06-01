@@ -22,6 +22,13 @@ namespace Kinectomix.Logic.Gestures
             set { _gestureMatchThreshold = value; }
         }
 
+        protected int _minimalBufferLength = 20;
+        public int MinimalBufferLength
+        {
+            get { return _minimalBufferLength; }
+            set { if (value > 0) _minimalBufferLength = value; }
+        }
+
         private List<Gesture> _gestures;
         private bool _isStarted = false;
 
@@ -42,9 +49,11 @@ namespace Kinectomix.Logic.Gestures
 
         public void AddGesture(Gesture gesture)
         {
-            //TODO takhle nastavovat maximal
-            if (gesture.Sequence.Count > _minimalBufferLength)
+            if (gesture.Sequence.Count < _minimalBufferLength)
                 _minimalBufferLength = gesture.Sequence.Count;
+
+            if (gesture.Sequence.Count > _maximalBufferLength)
+                _maximalBufferLength = gesture.Sequence.Count;
 
             _gestures.Add(gesture);
         }

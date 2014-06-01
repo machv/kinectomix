@@ -8,19 +8,23 @@ namespace Kinectomix.Logic.Gestures
     {
         public const int TrackedJointsCount = 20;
 
-        //TODO ADD maximalBufferLength 
-        protected int _minimalBufferLength = 30;
-        public int MinimalBufferLength
-        {
-            get { return _minimalBufferLength; }
-            set { if (value > 0) _minimalBufferLength = value; }
-        }
-
-        protected Queue<FrameData> _frameBuffer;
-
         protected static JointType[] _tracableSkeletonJoints;
 
-        public int FrameBufferCount
+        protected Queue<FrameData> _frameBuffer;
+        protected int _maximalBufferLength = 30;
+
+        /// <summary>
+        /// Last processed frame inserted into the frame buffer.
+        /// </summary>
+        protected FrameData _lastFrame;
+
+
+        public int MaximalBufferLength
+        {
+            get { return _maximalBufferLength; }
+            set { if (value > 0) _maximalBufferLength = value; }
+        }
+        public int FrameBufferLength
         {
             get { return _frameBuffer.Count; }
         }
@@ -32,18 +36,13 @@ namespace Kinectomix.Logic.Gestures
 
         public GestureProcessor()
         {
-            _frameBuffer = new Queue<FrameData>(_minimalBufferLength);
+            _frameBuffer = new Queue<FrameData>(_maximalBufferLength);
         }
 
         public void Clear()
         {
             _frameBuffer.Clear();
         }
-
-        /// <summary>
-        /// Last processed frame inserted into the frame buffer.
-        /// </summary>
-        protected FrameData _lastFrame;
 
         public virtual void ProcessSkeleton(Skeleton skeleton)
         {
@@ -86,7 +85,7 @@ namespace Kinectomix.Logic.Gestures
                 };
             }
 
-            if (_frameBuffer.Count > _minimalBufferLength)
+            if (_frameBuffer.Count > _maximalBufferLength)
                 _frameBuffer.Dequeue();
 
             _frameBuffer.Enqueue(frame);

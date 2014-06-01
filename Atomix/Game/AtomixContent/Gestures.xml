@@ -9,5 +9,9 @@
       <Filename>RightHandUp.gst</Filename>
       <Type>RightHandUp</Type>
     </Item>
+    <Item>
+      <Filename>55_RightHandUp.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
   </Asset>
 </XnaContent>
