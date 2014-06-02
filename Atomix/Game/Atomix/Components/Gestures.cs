@@ -15,6 +15,7 @@ using Kinectomix.Logic.Game;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Microsoft.Kinect;
+using System.Threading;
 
 namespace Atomix.Components
 {
@@ -34,6 +35,7 @@ namespace Atomix.Components
         private string _gesturesLocation;
         private RecognizedGesture _recognizedGesture;
         private KnownGestures _knownGestures;
+        private Thread _processingThread;
 
         public Gestures(Game game, Skeletons skeletons, string gesturesLocation)
             : base(game)
@@ -43,6 +45,8 @@ namespace Atomix.Components
             _skeletons = skeletons;
             _recognizer = new Recognizer();
             _gesturesLocation = gesturesLocation;
+            _processingThread = new Thread(ProcessRecognizingWorker);
+
         }
 
         /// <summary>
@@ -67,12 +71,14 @@ namespace Atomix.Components
                 }
             }
 
+            //_processingThread.Start();
             _recognizer.MinimalBufferLength = 35;
             _recognizer.Start();
 
             base.Initialize();
         }
 
+        private const int MinimalFramesToProcess = 4;
         private readonly object _locker = new object();
         private bool _isUpdating = false;
         private ConcurrentQueue<Skeleton> _pendingSkeletons = new ConcurrentQueue<Skeleton>();
@@ -86,7 +92,7 @@ namespace Atomix.Components
         {
             lock (_locker)
             {
-                if (_isUpdating == false && _pendingSkeletons.Count > 0)
+                if (_isUpdating == false && _pendingSkeletons.Count > MinimalFramesToProcess)
                 {
                     Task.Factory.StartNew(() => ProcessRecognizing());
                 }
@@ -97,6 +103,15 @@ namespace Atomix.Components
             }
 
             base.Update(gameTime);
+        }
+
+        public void ProcessRecognizingWorker()
+        {
+            while (true)
+            {
+                ProcessRecognizing();
+
+            }
         }
 
         public void ProcessRecognizing()

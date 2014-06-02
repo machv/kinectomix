@@ -23,27 +23,27 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = AtomixData\\Kinectomix.Logic.csproj
-		SccProjectName1 = AtomixData
-		SccLocalPath1 = AtomixData
-		SccProjectUniqueName2 = LevelGenerator\\Kinectomix.LevelEditor.csproj
-		SccProjectName2 = LevelGenerator
-		SccLocalPath2 = LevelGenerator
-		SccProjectUniqueName3 = SimpleLevelGenerator\\Kinectomix.SimpleLevelGenerator.csproj
-		SccProjectName3 = SimpleLevelGenerator
-		SccLocalPath3 = SimpleLevelGenerator
-		SccProjectUniqueName4 = Atomix\\AtomixContent\\Kinectomix.Game.Content.contentproj
-		SccProjectName4 = Atomix/AtomixContent
-		SccLocalPath4 = Atomix\\AtomixContent
-		SccProjectUniqueName5 = Atomix\\Atomix\\Kinectomix.Game.csproj
-		SccProjectName5 = Atomix/Atomix
-		SccLocalPath5 = Atomix\\Atomix
-		SccProjectUniqueName6 = Kinectomix.GestureRecorder\\Kinectomix.GestureRecorder.csproj
-		SccProjectName6 = Kinectomix.GestureRecorder
-		SccLocalPath6 = Kinectomix.GestureRecorder
-		SccProjectUniqueName7 = Kinectomix.Wpf.Mvvm\\Kinectomix.Wpf.Mvvm.csproj
-		SccProjectName7 = Kinectomix.Wpf.Mvvm
-		SccLocalPath7 = Kinectomix.Wpf.Mvvm
+		SccProjectUniqueName1 = SimpleLevelGenerator\\Kinectomix.SimpleLevelGenerator.csproj
+		SccProjectName1 = SimpleLevelGenerator
+		SccLocalPath1 = SimpleLevelGenerator
+		SccProjectUniqueName2 = Logic\\Kinectomix.Logic.csproj
+		SccProjectName2 = Logic
+		SccLocalPath2 = Logic
+		SccProjectUniqueName3 = Game\\AtomixContent\\Kinectomix.Game.Content.contentproj
+		SccProjectName3 = Game/AtomixContent
+		SccLocalPath3 = Game\\AtomixContent
+		SccProjectUniqueName4 = Game\\Atomix\\Kinectomix.Game.csproj
+		SccProjectName4 = Game/Atomix
+		SccLocalPath4 = Game\\Atomix
+		SccProjectUniqueName5 = Wpf.Mvvm\\Kinectomix.Wpf.Mvvm.csproj
+		SccProjectName5 = Wpf.Mvvm
+		SccLocalPath5 = Wpf.Mvvm
+		SccProjectUniqueName6 = GestureRecorder\\Kinectomix.GestureRecorder.csproj
+		SccProjectName6 = GestureRecorder
+		SccLocalPath6 = GestureRecorder
+		SccProjectUniqueName7 = LevelEditor\\Kinectomix.LevelEditor.csproj
+		SccProjectName7 = LevelEditor
+		SccLocalPath7 = LevelEditor
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,5 +123,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

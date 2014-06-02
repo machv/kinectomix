@@ -13,5 +13,38 @@
       <Filename>55_RightHandUp.gst</Filename>
       <Type>RightHandUp</Type>
     </Item>
+    <Item>
+      <Filename>2_LeftHandRight.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>3_LeftHandDown.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>5_RightHandUp.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>5_RightHandUp1.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>6_RightHandLeft.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>7_rightHandRight.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>marketa_left_hand_left.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>wave.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
   </Asset>
 </XnaContent>
+
