@@ -36,7 +36,6 @@ namespace Atomix.Components
         private string _gesturesLocation;
         private RecognizedGesture _recognizedGesture;
         private KnownGestures _knownGestures;
-        //private Thread _processingThread;
 
         public Gestures(Game game, Skeletons skeletons, string gesturesLocation)
             : base(game)
@@ -46,7 +45,6 @@ namespace Atomix.Components
             _skeletons = skeletons;
             _recognizer = new Recognizer();
             _gesturesLocation = gesturesLocation;
-            //_processingThread = new Thread(ProcessRecognizingWorker);
         }
 
         /// <summary>
@@ -71,7 +69,6 @@ namespace Atomix.Components
                 }
             }
 
-            //_processingThread.Start();
             _recognizer.MinimalBufferLength = 35;
             _recognizer.Start();
 
@@ -111,8 +108,12 @@ namespace Atomix.Components
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_skeletons.TrackedSkeleton != null)
-                _pendingSkeletons.Enqueue(_skeletons.TrackedSkeleton);
+            if (_isEven)
+            {
+                if (_skeletons.TrackedSkeleton != null)
+                    _pendingSkeletons.Enqueue(_skeletons.TrackedSkeleton);
+            }
+            _isEven = !_isEven;
 
             if (_isUpdating == false && _pendingSkeletons.Count > MinimalFramesToProcess)
             {
@@ -122,16 +123,7 @@ namespace Atomix.Components
             base.Update(gameTime);
         }
 
-        //public void ProcessRecognizingWorker()
-        //{
-        //    while (true)
-        //    {
-        //        ProcessRecognizing();
-
-        //        Thread.Sleep(1);
-        //    }
-        //}
-
+        private bool _isEven = true;
         public void ProcessRecognizing()
         {
             if (_pendingSkeletons.Count == 0)
@@ -150,6 +142,7 @@ namespace Atomix.Components
             foreach (Skeleton skeleton in skeletons)
             {
                 _recognizer.ProcessSkeleton(skeleton);
+
                 if (_recognizer.RecognizedGesture != null)
                 {
                     _recognizedGestures.Enqueue(_recognizer.RecognizedGesture);
