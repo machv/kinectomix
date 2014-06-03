@@ -19,15 +19,38 @@ using System.Threading;
 
 namespace Atomix.Components
 {
+    public class RecognizedGestureComparer : IEqualityComparer<RecognizedGesture>
+    {
+        public bool Equals(RecognizedGesture x, RecognizedGesture y)
+        {
+            return x.Gesture.Equals(y.Gesture);
+        }
+
+        public int GetHashCode(RecognizedGesture obj)
+        {
+            return obj.Gesture.GetHashCode();
+        }
+    }
+
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
     public class Gestures : GameComponent
     {
+        private static IEqualityComparer<RecognizedGesture> _gesturesComparer = new RecognizedGestureComparer();
         private static Gestures _instance;
         public static GesturesState GetState()
         {
-            return new GesturesState(_instance._recognizedGesture, _instance._knownGestures);
+            IEnumerable<RecognizedGesture> recognized = null;
+            int count = _instance.RecognizedGestures.Count;
+            if (count > 0)
+            {
+                RecognizedGesture[] gestures = new RecognizedGesture[count];
+                _instance.RecognizedGestures.CopyTo(0, gestures, 0, count);
+                _instance.RecognizedGestures.RemoveRange(0, count);
+                recognized = gestures.Distinct(_gesturesComparer);
+            }
+            return new GesturesState(recognized, _instance._knownGestures);
         }
 
         private Skeletons _skeletons;
@@ -84,6 +107,8 @@ namespace Atomix.Components
         private ConcurrentQueue<Skeleton> _pendingSkeletons = new ConcurrentQueue<Skeleton>();
         private ConcurrentQueue<RecognizedGesture> _recognizedGestures = new ConcurrentQueue<RecognizedGesture>();
 
+        public List<RecognizedGesture> RecognizedGestures { get { return _recognizedGestures.ToList(); } }
+
         /// <summary>
         /// Allows the game component to update itself.
         /// </summary>
@@ -98,7 +123,8 @@ namespace Atomix.Components
                 }
                 else
                 {
-                    _pendingSkeletons.Enqueue(_skeletons.TrackedSkeleton);
+                    if(_skeletons.TrackedSkeleton != null)
+                        _pendingSkeletons.Enqueue(_skeletons.TrackedSkeleton);
                 }
             }
 

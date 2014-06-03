@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 
 namespace Atomix
 {
@@ -18,7 +19,7 @@ namespace Atomix
         LevelViewModel level;
         SpriteBatch spriteBatch;
         Highscore highScore;
-
+        string _log = "";
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
             levelDefinition = currentLevel;
@@ -191,10 +192,12 @@ namespace Atomix
             }
 
             GesturesState gesturesState = Gestures.GetState();
-            if (gesturesState.IsGestureRecognized(GestureType.RightHandUp))
+            if (gesturesState.RecognizedGestures != null && gesturesState.RecognizedGestures.Count() > 0)
+            //if (gesturesState.IsGestureRecognized(GestureType.RightHandUp))
             {
                 clickOccurred = true;
                 isGestureDetected = true;
+                _log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString();
             }
 
             KinectCursor cursor = ((AtomixGame)ScreenManager.Game).Cursor;
@@ -447,6 +450,8 @@ namespace Atomix
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
+
+            spriteBatch.DrawString(normalFont, _log, new Vector2(20, 600), Color.Red);
 
             DrawBoard(spriteBatch, level.Board, true);
             DrawBoard(spriteBatch, level.Molecule);

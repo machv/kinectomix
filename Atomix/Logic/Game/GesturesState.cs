@@ -1,30 +1,32 @@
 using Kinectomix.Logic.Gestures;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kinectomix.Logic.Game
 {
     public struct GesturesState
     {
-        private RecognizedGesture _recognizedGesture;
+        private IEnumerable<RecognizedGesture> _recognizedGestures;
         private KnownGestures _knownGestures;
-        public GesturesState(RecognizedGesture recognizedGesture, KnownGestures knownGestures)
+        public GesturesState(IEnumerable<RecognizedGesture> recognizedGestures, KnownGestures knownGestures)
         {
-            _recognizedGesture = recognizedGesture;
+            _recognizedGestures = recognizedGestures;
             _knownGestures = knownGestures;
         }
 
-        public RecognizedGesture RecognizedGesture
+        public IEnumerable<RecognizedGesture> RecognizedGestures
         {
-            get { return _recognizedGesture; }
+            get { return _recognizedGestures; }
         }
 
         public bool IsGestureRecognized(Gesture gesture)
         {
-            return _recognizedGesture != null && _recognizedGesture.Gesture == gesture;
+            return _recognizedGestures != null && _recognizedGestures.Where(g => g.Gesture == gesture).FirstOrDefault() != null;
         }
 
         public bool IsGestureRecognized(GestureType gesture)
         {
-            return _recognizedGesture != null && _recognizedGesture.Gesture == _knownGestures[gesture].Instance;
+            return true; // _recognizedGestures != null && _recognizedGestures.Where(g => g.Gesture == _knownGestures[g].Instance).FirstOrDefault() != null;
         }
     }
 }
