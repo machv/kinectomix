@@ -66,7 +66,7 @@ namespace Atomix
             Button button = sender as Button;
             LevelDefinition level = button.Tag as LevelDefinition;
 
-            Level currentLevel = ScreenManager.Content.Load<Kinectomix.Logic.Level>("Levels/" + level.AssetName);
+            Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", level.AssetName));
             LevelScreen gameScreen = new LevelScreen(currentLevel, _spriteBatch);
 
             AtomixGame.State.SetLevelToCurrent(level);
