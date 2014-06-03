@@ -279,12 +279,21 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    
+
                     <TextBlock Text="{Binding DtwCost}" 
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Bottom" 
                                FontSize="42" 
                                Foreground="Orange" />
+                    
+                    <TextBlock
+                               HorizontalAlignment="Left" 
+                               VerticalAlignment="Bottom" 
+                               FontSize="32" 
+                               Foreground="Orange">
+                        <Run Text="FPS:" />
+                        <Run Text="{Binding Fps}" />
+                    </TextBlock>
                 </Grid>
             </Grid>
 

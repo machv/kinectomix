@@ -463,19 +463,54 @@ namespace Kinectomix.GestureRecorder.ViewModel
             return null;
         }
 
+        int frameRate = 0;
+        int frameCounter = 0;
+        TimeSpan elapsedTime = TimeSpan.Zero;
+
+        private int _fps;
+        public int Fps
+        {
+            get { return _fps; }
+            set
+            {
+                _fps = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime _lastDate = DateTime.MinValue;
         private void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
+            if (_lastDate == DateTime.MinValue)
+                _lastDate = DateTime.Now;
+
+            elapsedTime += DateTime.Now - _lastDate;
+            _lastDate = DateTime.Now;
+
+            if (elapsedTime > TimeSpan.FromSeconds(1))
+            {
+                elapsedTime -= TimeSpan.FromSeconds(1);
+                Fps = frameCounter;
+                frameCounter = 0;
+            }
+
+            
+
             if (_recorder == null && _recognizer == null)
                 return;
 
+            Skeleton[] skeletons = null;
             using (SkeletonFrame frame = e.OpenSkeletonFrame())
             {
-                if (frame == null)
-                    return;
+                if (frame != null)
+                {
+                    skeletons = new Skeleton[frame.SkeletonArrayLength];
+                    frame.CopySkeletonDataTo(skeletons);
+                }
+            }
 
-                Skeleton[] skeletons = new Skeleton[frame.SkeletonArrayLength];
-                frame.CopySkeletonDataTo(skeletons);
-
+            if (skeletons != null)
+            {
                 Skeleton trackedSkeleton = skeletons.Where(s => s.TrackingState == SkeletonTrackingState.Tracked).FirstOrDefault();
                 if (trackedSkeleton != null)
                 {
@@ -496,7 +531,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                         {
                             Task.Factory.StartNew(() => ProcessRecognizing()).ContinueWith((t) =>
                             {
-                                IEnumerable <RecognizedGesture> gestures = GetRecognizedGestures();
+                                IEnumerable<RecognizedGesture> gestures = GetRecognizedGestures();
 
                                 if (gestures != null)
                                 {
@@ -519,6 +554,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 else
                     IsActiveSkeleton = false;
             }
+
+            frameCounter++;
         }
     }
 }
