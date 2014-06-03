@@ -26,9 +26,9 @@ namespace Atomix.Components
                 {
                     // Create array for pixel data and copy it from the image frame
                     DepthImagePixel[] depthPixels = new DepthImagePixel[depthFrame.PixelDataLength];
-                    lastDepthFrame.CopyDepthImagePixelDataTo(depthPixels);
+                    depthFrame.CopyDepthImagePixelDataTo(depthPixels);
 
-                    _KinectChooser.Interactions.ProcessDepth(depthPixels, lastDepthFrame.Timestamp);
+                    _KinectChooser.Interactions.ProcessDepth(depthPixels, depthFrame.Timestamp);
                 }
             }
 

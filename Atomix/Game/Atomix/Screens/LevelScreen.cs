@@ -197,7 +197,7 @@ namespace Atomix
             {
                 clickOccurred = true;
                 isGestureDetected = true;
-                _log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString();
+                _log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString() + " / " + gesturesState.RecognizedGestures.ToArray()[0].Gesture.Name;
             }
 
             KinectCursor cursor = ((AtomixGame)ScreenManager.Game).Cursor;

@@ -105,8 +105,6 @@ namespace Atomix.Components
         int bottom;
         int right;
 
-        protected DepthImageFrame lastDepthFrame;
-
         public override void Update(GameTime gameTime)
         {
             _textToRender = string.Empty;
@@ -148,8 +146,6 @@ namespace Atomix.Components
 
                         lastDepthFrameData = pixelData;
                         lastDepthFrameDataLength = depthFrame.PixelDataLength;
-
-                        lastDepthFrame = depthFrame;
                     }
                 }
             }
