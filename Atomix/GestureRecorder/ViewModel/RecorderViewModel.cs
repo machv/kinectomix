@@ -3,6 +3,7 @@ using Kinectomix.Logic.Gestures;
 using Kinectomix.Wpf.Mvvm;
 using Microsoft.Kinect;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -18,6 +19,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
 {
     public class RecorderViewModel : NotifyPropertyBase
     {
+        private static IEqualityComparer<RecognizedGesture> _gesturesComparer = new RecognizedGestureComparer();
+
         private KinectSensor _sensor;
         public KinectSensor Sensor
         {
@@ -387,15 +390,8 @@ namespace Kinectomix.GestureRecorder.ViewModel
             }
         }
 
-        private bool _isRecognizing;
         private void ProcessRecognizerSkeletonFrame(Skeleton trackedSkeleton)
         {
-            if (_isRecognizing)
-            {
-                System.Diagnostics.Debug.Write("Skipping..");
-                return;
-            }
-
             _recognizer.ProcessSkeleton(trackedSkeleton);
 
             ShowRecognizedGestureName = false;
@@ -411,6 +407,60 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 LastRecognizedGesture = gesture;
                 ShowRecognizedGestureName = true;
             }
+        }
+
+        private const int MinimalFramesToProcess = 4;
+        private readonly object _locker = new object();
+        private bool _isUpdating = false;
+        private ConcurrentQueue<Skeleton> _pendingSkeletons = new ConcurrentQueue<Skeleton>();
+        private ConcurrentQueue<RecognizedGesture> _recognizedGestures = new ConcurrentQueue<RecognizedGesture>();
+
+        public void ProcessRecognizing()
+        {
+            if (_pendingSkeletons.Count == 0)
+                return;
+
+            _isUpdating = true;
+
+            Skeleton[] skeletons = new Skeleton[_pendingSkeletons.Count];
+            for (int i = 0; i < skeletons.Length; i++)
+            {
+                Skeleton skeleton;
+                if (_pendingSkeletons.TryDequeue(out skeleton))
+                    skeletons[i] = skeleton;
+            }
+
+            foreach (Skeleton skeleton in skeletons)
+            {
+                _recognizer.ProcessSkeleton(skeleton);
+                if (_recognizer.RecognizedGesture != null)
+                {
+                    _recognizedGestures.Enqueue(_recognizer.RecognizedGesture);
+                }
+            }
+
+            _isUpdating = false;
+        }
+
+        private IEnumerable<RecognizedGesture> GetRecognizedGestures()
+        {
+            int count = _recognizedGestures.Count;
+            if (count > 0)
+            {
+                RecognizedGesture[] gestures = new RecognizedGesture[count];
+                for (int i = 0; i < count; i++)
+                {
+                    RecognizedGesture gesture;
+                    if (_recognizedGestures.TryDequeue(out gesture))
+                    {
+                        gestures[i] = gesture;
+                    }
+                }
+
+                return gestures.Where(g => g != null).Distinct(_gesturesComparer);
+            }
+
+            return null;
         }
 
         private void Sensor_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
@@ -439,13 +489,31 @@ namespace Kinectomix.GestureRecorder.ViewModel
                     }
                     else if (_recognizer != null)
                     {
-                        //Task.Run(() =>
-                            ProcessRecognizerSkeletonFrame(trackedSkeleton);
-                        //    );
+                        if (trackedSkeleton != null)
+                            _pendingSkeletons.Enqueue(trackedSkeleton);
 
-                        //TaskScheduler scheduler = TaskScheduler.FromCurrentSynchronizationContext();
-                        //CancellationToken token = new CancellationToken();
-                        //Task.Factory.StartNew(() => ProcessRecognizerSkeletonFrame(e)).ContinueWith(
+                        if (_isUpdating == false && _pendingSkeletons.Count > MinimalFramesToProcess)
+                        {
+                            Task.Factory.StartNew(() => ProcessRecognizing()).ContinueWith((t) =>
+                            {
+                                IEnumerable <RecognizedGesture> gestures = GetRecognizedGestures();
+
+                                if (gestures != null)
+                                {
+                                    DeselectAllGestures();
+
+                                    GestureViewModel gestureViewModel = null;
+                                    foreach (RecognizedGesture recognized in gestures)
+                                    {
+                                        gestureViewModel = _gestures.Where(g => g.Gesture == recognized.Gesture).FirstOrDefault();
+                                        gestureViewModel.IsRecognized = true;
+                                    }
+
+                                    LastRecognizedGesture = gestureViewModel;
+                                    ShowRecognizedGestureName = true;
+                                }
+                            }, TaskScheduler.FromCurrentSynchronizationContext());
+                        }
                     }
                 }
                 else
