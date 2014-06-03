@@ -19,19 +19,6 @@ using System.Threading;
 
 namespace Atomix.Components
 {
-    public class RecognizedGestureComparer : IEqualityComparer<RecognizedGesture>
-    {
-        public bool Equals(RecognizedGesture x, RecognizedGesture y)
-        {
-            return x.Gesture.Equals(y.Gesture);
-        }
-
-        public int GetHashCode(RecognizedGesture obj)
-        {
-            return obj.Gesture.GetHashCode();
-        }
-    }
-
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
@@ -41,16 +28,7 @@ namespace Atomix.Components
         private static Gestures _instance;
         public static GesturesState GetState()
         {
-            IEnumerable<RecognizedGesture> recognized = null;
-            int count = _instance.RecognizedGestures.Count;
-            if (count > 0)
-            {
-                RecognizedGesture[] gestures = new RecognizedGesture[count];
-                _instance.RecognizedGestures.CopyTo(0, gestures, 0, count);
-                _instance.RecognizedGestures.RemoveRange(0, count);
-                recognized = gestures.Distinct(_gesturesComparer);
-            }
-            return new GesturesState(recognized, _instance._knownGestures);
+            return new GesturesState(_instance.GetRecognizedGestures(), _instance._knownGestures);
         }
 
         private Skeletons _skeletons;
@@ -58,7 +36,7 @@ namespace Atomix.Components
         private string _gesturesLocation;
         private RecognizedGesture _recognizedGesture;
         private KnownGestures _knownGestures;
-        private Thread _processingThread;
+        //private Thread _processingThread;
 
         public Gestures(Game game, Skeletons skeletons, string gesturesLocation)
             : base(game)
@@ -68,8 +46,7 @@ namespace Atomix.Components
             _skeletons = skeletons;
             _recognizer = new Recognizer();
             _gesturesLocation = gesturesLocation;
-            _processingThread = new Thread(ProcessRecognizingWorker);
-
+            //_processingThread = new Thread(ProcessRecognizingWorker);
         }
 
         /// <summary>
@@ -107,7 +84,26 @@ namespace Atomix.Components
         private ConcurrentQueue<Skeleton> _pendingSkeletons = new ConcurrentQueue<Skeleton>();
         private ConcurrentQueue<RecognizedGesture> _recognizedGestures = new ConcurrentQueue<RecognizedGesture>();
 
-        public List<RecognizedGesture> RecognizedGestures { get { return _recognizedGestures.ToList(); } }
+        public IEnumerable<RecognizedGesture> GetRecognizedGestures()
+        {
+            int count = _recognizedGestures.Count;
+            if (count > 0)
+            {
+                RecognizedGesture[] gestures = new RecognizedGesture[count];
+                for (int i = 0; i < count; i++)
+                {
+                    RecognizedGesture gesture;
+                    if (_recognizedGestures.TryDequeue(out gesture))
+                    {
+                        gestures[i] = gesture;
+                    }
+                }
+
+                return gestures.Where(g => g != null).Distinct(_gesturesComparer);
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Allows the game component to update itself.
@@ -115,40 +111,33 @@ namespace Atomix.Components
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            lock (_locker)
+            if (_skeletons.TrackedSkeleton != null)
+                _pendingSkeletons.Enqueue(_skeletons.TrackedSkeleton);
+
+            if (_isUpdating == false && _pendingSkeletons.Count > MinimalFramesToProcess)
             {
-                if (_isUpdating == false && _pendingSkeletons.Count > MinimalFramesToProcess)
-                {
-                    Task.Factory.StartNew(() => ProcessRecognizing());
-                }
-                else
-                {
-                    if(_skeletons.TrackedSkeleton != null)
-                        _pendingSkeletons.Enqueue(_skeletons.TrackedSkeleton);
-                }
+                Task.Factory.StartNew(() => ProcessRecognizing());
             }
 
             base.Update(gameTime);
         }
 
-        public void ProcessRecognizingWorker()
-        {
-            while (true)
-            {
-                ProcessRecognizing();
+        //public void ProcessRecognizingWorker()
+        //{
+        //    while (true)
+        //    {
+        //        ProcessRecognizing();
 
-            }
-        }
+        //        Thread.Sleep(1);
+        //    }
+        //}
 
         public void ProcessRecognizing()
         {
             if (_pendingSkeletons.Count == 0)
                 return;
 
-            lock (_locker)
-            {
-                _isUpdating = true;
-            }
+            _isUpdating = true;
 
             Skeleton[] skeletons = new Skeleton[_pendingSkeletons.Count];
             for (int i = 0; i < skeletons.Length; i++)
@@ -167,10 +156,7 @@ namespace Atomix.Components
                 }
             }
 
-            lock (_locker)
-            {
-                _isUpdating = false;
-            }
+            _isUpdating = false;
         }
     }
 }
