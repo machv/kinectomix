@@ -66,6 +66,12 @@ namespace Atomix.ViewModel
         /// </summary>
         public Vector2 RenderPosition { get; set; }
 
+        /// <summary>
+        /// Rendering rectangle in which tile is on the board. Used for hit testing.
+        /// </summary>
+        /// <returns></returns>
+        public Rectangle RenderRectangle { get; set; }
+
         public BoardTileViewModel(BoardTile tile)
         {
             _tile = tile;

@@ -263,17 +263,41 @@ namespace Atomix
             // Find nearest point
             Vector2 renderPosition = new Vector2(boardPosition.X, boardPosition.Y);
 
+            // Clear selection
+            foreach (BoardTileViewModel tile in level.Board.Where(t => t != null && t.IsHovered == true))
+            {
+                tile.IsHovered = false;
+            }
+
             for (int i = 0; i < level.Board.RowsCount; i++)
             {
                 for (int j = 0; j < level.Board.ColumnsCount; j++)
                 {
                     if (level.Board[i, j] != null)
                     {
-                        level.Board[i, j].IsHovered = false;
+                        //level.Board[i, j].IsHovered = false;
 
-                        Rectangle tile = new Rectangle((int)renderPosition.X, (int)renderPosition.Y, TileWidth, TileHeight);
-                        if (tile.Contains(mousePosition))
-                            level.Board[i, j].IsHovered = true;
+                        if (level.Board[i, j].RenderRectangle.Contains(mousePosition))
+                        {
+                            if (cursor.IsHandTracked)
+                            {
+                                // If we are tracking cursor via Kinect, we use some affinity
+                                if (level.Board[i, j].IsFixed == false)
+                                {
+                                    level.Board[i, j].IsHovered = true;
+                                }
+                                else
+                                {
+                                    CheckNeigbourTiles(level.Board, i, j);
+                                }
+                            }
+                            else
+                            {
+                                // In normal way (mouse) we use direct positions
+                                level.Board[i, j].IsHovered = true;
+                            }
+                        }
+
                     }
                     renderPosition.X += TileWidth;
                 }
@@ -422,6 +446,30 @@ namespace Atomix
             }
         }
 
+        private void CheckNeigbourTiles(TilesCollection<BoardTileViewModel> board, int x, int y)
+        {
+            BoardTileViewModel tile = null;
+
+            for (int i = -1; i <= 1; i++) // erows
+            {
+                for (int j = -1; j <= 1; j++) // columns
+                {
+                    if (x + i > 0 && x + i < board.RowsCount &&
+                        y + j > 0 && y + j < board.ColumnsCount &&
+                        board[x + i, y + j] != null)
+                    {
+                        if (board[x + i, y + j].IsFixed == false)
+                        {
+                            tile = board[x + i, y + j];
+                        }
+                    }
+                }
+            }
+
+            if (tile != null)
+                tile.IsHovered = true;
+        }
+
         private Direction GetDirectionFromAsset(string asset)
         {
             switch (asset)
@@ -488,20 +536,23 @@ namespace Atomix
 
         private void CalculateBoardTilePositions(Vector2 startPosition, TilesCollection<BoardTileViewModel> board)
         {
-            Vector2 mPosition = new Vector2(startPosition.X, startPosition.Y);
+            Vector2 currentPosition = new Vector2(startPosition.X, startPosition.Y);
 
             for (int i = 0; i < board.RowsCount; i++)
             {
                 for (int j = 0; j < board.ColumnsCount; j++)
                 {
                     if (board[i, j] != null)
-                        board[i, j].RenderPosition = mPosition;
+                    {
+                        board[i, j].RenderPosition = currentPosition;
+                        board[i, j].RenderRectangle = new Rectangle((int)currentPosition.X, (int)currentPosition.Y, TileWidth, TileHeight);
+                    }
 
-                    mPosition.X += TileWidth;
+                    currentPosition.X += TileWidth;
                 }
 
-                mPosition.X = startPosition.X;
-                mPosition.Y += TileHeight;
+                currentPosition.X = startPosition.X;
+                currentPosition.Y += TileHeight;
             }
         }
 
