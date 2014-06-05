@@ -13,6 +13,9 @@ using System.Linq;
 
 namespace Atomix
 {
+    /// <summary>
+    /// Screen for current game level.
+    /// </summary>
     public class LevelScreen : GameScreen
     {
         Level levelDefinition;
