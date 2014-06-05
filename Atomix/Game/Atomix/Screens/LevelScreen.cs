@@ -176,6 +176,11 @@ namespace Atomix
 
         //bool lastHandClosedState;
 
+
+        BoardTileViewModel currentlyHoveredTile = null;
+        DateTime lastHoveredTileTime = DateTime.MinValue;
+
+
         public override void Update(GameTime gameTime)
         {
             bool clickOccurred = false;
@@ -263,14 +268,16 @@ namespace Atomix
                 new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y) :
                 new Point(mouseState.X, mouseState.Y);
 
-            // Find nearest point
-            Vector2 renderPosition = new Vector2(boardPosition.X, boardPosition.Y);
-
             // Clear selection
             foreach (BoardTileViewModel tile in level.Board.Where(t => t != null && t.IsHovered == true))
             {
                 tile.IsHovered = false;
             }
+
+            BoardTileViewModel newHoveredTileBefore = null;
+            DateTime lastHoveredTileTimeBefore = lastHoveredTileTime;
+            int k = -1;
+            int l = -1;
 
             for (int i = 0; i < level.Board.RowsCount; i++)
             {
@@ -287,26 +294,57 @@ namespace Atomix
                                 // If we are tracking cursor via Kinect, we use some affinity
                                 if (level.Board[i, j].IsFixed == false)
                                 {
-                                    level.Board[i, j].IsHovered = true;
+                                    //level.Board[i, j].IsHovered = true;
+                                    newHoveredTileBefore = level.Board[i, j];
+                                    k = i;
+                                    l = j;
                                 }
                                 else
                                 {
-                                    CheckNeigbourTiles(level.Board, i, j);
+                                    int m, n;
+                                    BoardTileViewModel tile = GetNeigbourMoleculeTile(level.Board, i, j, out m, out n);
+
+                                    if (tile != null)
+                                    {
+                                        //tile.IsHovered = true;
+                                        newHoveredTileBefore = tile;
+                                        k = m;
+                                        l = n;
+                                    }
                                 }
                             }
                             else
                             {
                                 // In normal way (mouse) we use direct positions
-                                level.Board[i, j].IsHovered = true;
+                                //level.Board[i, j].IsHovered = true;
+                                newHoveredTileBefore = level.Board[i, j];
+                                k = i;
+                                l = j;
                             }
                         }
 
                     }
-                    renderPosition.X += TileWidth;
                 }
+            }
 
-                renderPosition.X = boardPosition.X;
-                renderPosition.Y += TileHeight;
+            if (newHoveredTileBefore != currentlyHoveredTile)
+            {
+                lastHoveredTileTime = DateTime.Now;
+                currentlyHoveredTile = newHoveredTileBefore;
+            }
+
+            if (currentlyHoveredTile != null)
+            {
+                currentlyHoveredTile.IsHovered = true;
+
+                if (currentlyHoveredTile.IsFixed == false && DateTime.Now - lastHoveredTileTime > TimeSpan.FromSeconds(2))
+                {
+                    ClearBoard();
+
+                    currentlyHoveredTile.IsSelected = true;
+
+                    PrepareAvailableTileMovements(level.Board, k, l);
+                }
             }
 
             // Detect clicks
@@ -345,27 +383,7 @@ namespace Atomix
                                     level.Board[i, j].Movements = Direction.None;
                                     activeAtomIndex = new Point(i, j);
 
-                                    //zjistit jakymi smery se muze pohnout
-                                    if (level.CanGoUp(i, j))
-                                    {
-                                        level.Board[i, j].Movements |= Direction.Up;
-                                        level.Board[i - 1, j].Asset = "Up";
-                                    }
-                                    if (level.CanGoDown(i, j))
-                                    {
-                                        level.Board[i, j].Movements |= Direction.Down;
-                                        level.Board[i + 1, j].Asset = "Down";
-                                    }
-                                    if (level.CanGoLeft(i, j))
-                                    {
-                                        level.Board[i, j].Movements |= Direction.Left;
-                                        level.Board[i, j - 1].Asset = "Left";
-                                    }
-                                    if (level.CanGoRight(i, j))
-                                    {
-                                        level.Board[i, j].Movements |= Direction.Right;
-                                        level.Board[i, j + 1].Asset = "Right";
-                                    }
+                                    PrepareAvailableTileMovements(level.Board, i, j);
                                 }
                                 else if (level.Board[i, j].Asset == "Right" ||
                                          level.Board[i, j].Asset == "Left" ||
@@ -449,9 +467,38 @@ namespace Atomix
             }
         }
 
-        private void CheckNeigbourTiles(TilesCollection<BoardTileViewModel> board, int x, int y)
+        private void PrepareAvailableTileMovements(TilesCollection<BoardTileViewModel> board, int i, int j)
+        {
+            board[i, j].Movements = Direction.None;
+
+            //zjistit jakymi smery se muze pohnout
+            if (level.CanGoUp(i, j))
+            {
+                board[i, j].Movements |= Direction.Up;
+                board[i - 1, j].Asset = "Up";
+            }
+            if (level.CanGoDown(i, j))
+            {
+                board[i, j].Movements |= Direction.Down;
+                board[i + 1, j].Asset = "Down";
+            }
+            if (level.CanGoLeft(i, j))
+            {
+                board[i, j].Movements |= Direction.Left;
+                board[i, j - 1].Asset = "Left";
+            }
+            if (level.CanGoRight(i, j))
+            {
+                board[i, j].Movements |= Direction.Right;
+                board[i, j + 1].Asset = "Right";
+            }
+        }
+
+        private BoardTileViewModel GetNeigbourMoleculeTile(TilesCollection<BoardTileViewModel> board, int x, int y, out int k, out int l)
         {
             BoardTileViewModel tile = null;
+            k = -1;
+            l = -1;
 
             for (int i = -1; i <= 1; i++) // erows
             {
@@ -464,13 +511,14 @@ namespace Atomix
                         if (board[x + i, y + j].IsFixed == false)
                         {
                             tile = board[x + i, y + j];
+                            k = x + i;
+                            l = y + j;
                         }
                     }
                 }
             }
 
-            if (tile != null)
-                tile.IsHovered = true;
+            return tile;
         }
 
         private Direction GetDirectionFromAsset(string asset)
