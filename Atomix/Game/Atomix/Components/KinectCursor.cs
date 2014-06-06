@@ -125,7 +125,8 @@ namespace Atomix.Components
                             _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
 
                         //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
-                        var cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton);
+                        bool isTracked;
+                        var cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton, out isTracked);
 
                         var handPoint = _skeletons.TrackedSkeleton.Joints[leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
                         HandRealPosition = new Vector3(handPoint.X, handPoint.Y, handPoint.Z);
@@ -133,11 +134,20 @@ namespace Atomix.Components
                         AddCursorPosition(cursor);
 
                         if (cursor != Vector2.Zero)
+                        {
                             _isHandTracked = true;
+                            Game.IsMouseVisible = false;
+                        }
+                        else if(!isTracked)
+                        {
+                            _isHandTracked = false;
+                            Game.IsMouseVisible = true;
+                        }
                     }
                     else
                     {
                         _isHandTracked = false;
+                        Game.IsMouseVisible = true;
                     }
                 }
 
@@ -675,6 +685,15 @@ namespace Atomix.Components
         /// <param name="skeleton"></param>
         private Vector2 TrackHandMovementRelative(Skeleton skeleton)
         {
+            bool isTracked;
+
+            return TrackHandMovementRelative(skeleton, out isTracked);
+        }
+
+        private Vector2 TrackHandMovementRelative(Skeleton skeleton, out bool isHandTracked)
+        {
+            isHandTracked = false;
+
             Joint leftHand = skeleton.Joints[JointType.HandLeft];
             Joint rightHand = skeleton.Joints[JointType.HandRight];
 
@@ -696,6 +715,8 @@ namespace Atomix.Components
                 // the hand is sufficiently in front of the shoulder
                 if (sameShoulder.Position.Z - hand.Position.Z > 0.2)
                 {
+                    isHandTracked = true; 
+
                     float xScaled = (hand.Position.X - oppositeShoulder.Position.X) / ((sameShoulder.Position.X - oppositeShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
 
                     if (leftHanded)
