@@ -67,6 +67,8 @@ namespace Atomix.Components
 
         public Vector2 HandPosition { get { return new Vector2((int)cursorPosition.X, (int)cursorPosition.Y); } }
 
+        public Vector3 HandRealPosition { get;set; }
+
         protected bool _isHandTracked = false;
         public bool IsHandTracked
         {
@@ -124,6 +126,9 @@ namespace Atomix.Components
 
                         //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
                         var cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton);
+
+                        var handPoint = _skeletons.TrackedSkeleton.Joints[leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
+                        HandRealPosition = new Vector3(handPoint.X, handPoint.Y, handPoint.Z);
 
                         AddCursorPosition(cursor);
 

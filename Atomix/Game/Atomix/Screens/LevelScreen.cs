@@ -285,8 +285,6 @@ namespace Atomix
                 {
                     if (level.Board[i, j] != null)
                     {
-                        //level.Board[i, j].IsHovered = false;
-
                         if (level.Board[i, j].RenderRectangle.Contains(mousePosition))
                         {
                             if (cursor.IsHandTracked)
@@ -294,7 +292,6 @@ namespace Atomix
                                 // If we are tracking cursor via Kinect, we use some affinity
                                 if (level.Board[i, j].IsFixed == false)
                                 {
-                                    //level.Board[i, j].IsHovered = true;
                                     newHoveredTileBefore = level.Board[i, j];
                                     k = i;
                                     l = j;
@@ -306,7 +303,6 @@ namespace Atomix
 
                                     if (tile != null)
                                     {
-                                        //tile.IsHovered = true;
                                         newHoveredTileBefore = tile;
                                         k = m;
                                         l = n;
@@ -316,7 +312,6 @@ namespace Atomix
                             else
                             {
                                 // In normal way (mouse) we use direct positions
-                                //level.Board[i, j].IsHovered = true;
                                 newHoveredTileBefore = level.Board[i, j];
                                 k = i;
                                 l = j;
@@ -343,7 +338,18 @@ namespace Atomix
 
                     currentlyHoveredTile.IsSelected = true;
 
+                    activeAtomIndex = new Point(k, l);
                     PrepareAvailableTileMovements(level.Board, k, l);
+
+
+                    // prepare for gesture
+                    isGestureCandidate = true;
+                    gestureAccumulatedDistanceX = 0;
+                    lastHandPosition = cursor.HandPosition;
+                    startHandPosition = lastHandPosition;
+                    startHandPositionReal = cursor.HandRealPosition;
+                    lastHandPositionReal = startHandPositionReal;
+
                 }
             }
 
@@ -380,7 +386,6 @@ namespace Atomix
                                     ClearBoard();
 
                                     level.Board[i, j].IsSelected = true;
-                                    level.Board[i, j].Movements = Direction.None;
                                     activeAtomIndex = new Point(i, j);
 
                                     PrepareAvailableTileMovements(level.Board, i, j);
@@ -425,6 +430,27 @@ namespace Atomix
                     mPosition.X = boardPosition.X;
                     mPosition.Y += TileHeight;
                 }
+            }
+
+            if (isGestureCandidate)
+            {
+                if (cursor.HandRealPosition.Z > startHandPositionReal.Z - 20 && cursor.HandRealPosition.Z < startHandPositionReal.Z + 20) // same depth from sensor
+                {
+                    // horizontal gesture is within tolerance
+                    if (cursor.HandRealPosition.Y > startHandPositionReal.Y - 30 && cursor.HandRealPosition.Y < startHandPositionReal.Y + 30)
+                    {
+                        gestureAccumulatedDistanceX += cursor.HandRealPosition.X - lastHandPositionReal.X;
+
+                        if (gestureAccumulatedDistanceX > 100)
+                            isToRightGesture = true;
+                    }
+                    else
+                        isGestureCandidate = false;
+                }
+                else
+                    isGestureCandidate = false;
+
+                lastHandPositionReal = cursor.HandRealPosition;
             }
 
             if (!isMovementAnimation && activeAtomIndex.X != -1 && activeAtomIndex.Y != -1)
@@ -538,6 +564,7 @@ namespace Atomix
             return Direction.None;
         }
 
+        bool isGestureCandidate = false;
         bool isToLeftGesture = false;
         bool isToRightGesture = false;
         float gestureAccumulatedDistanceX = 0;
@@ -545,6 +572,9 @@ namespace Atomix
         float gestureThreshold = 20;
         Direction gestureDirection;
         Vector2 lastHandPosition;
+        Vector2 startHandPosition;
+        Vector3 startHandPositionReal;
+        Vector3 lastHandPositionReal;
 
         public override void Draw(GameTime gameTime)
         {
