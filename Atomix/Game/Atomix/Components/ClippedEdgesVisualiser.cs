@@ -10,16 +10,15 @@ namespace Atomix.Components
     /// </summary>
     public class ClippedEdgesVisualiser : DrawableGameComponent
     {
-        private int _edgeWidth = 15;
-        private Texture2D _edgeTexture;
-        private Skeletons _skeletons;
-        private SpriteBatch _spriteBatch;
-
         private const float TopRotation = (float)Math.PI;
         private const float RightRotation = (float)Math.PI * 3 / 2;
         private const float LeftRotation = (float)Math.PI / 2;
         private const float BottomRotation = 0;
 
+        private int _edgeWidth;
+        private Texture2D _edgeTexture;
+        private Skeletons _skeletons;
+        private SpriteBatch _spriteBatch;
         private Rectangle _verticalRectangle;
         private Rectangle _horizontalRectangle;
         private Vector2 _topEdgeOrigin;
@@ -117,6 +116,8 @@ namespace Atomix.Components
 
         private void InitializeEdges()
         {
+            _edgeWidth = _edgeTexture.Width;
+
             _verticalRectangle = new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Height, _edgeWidth);
             _horizontalRectangle = new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, _edgeWidth);
 
