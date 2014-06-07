@@ -20,6 +20,8 @@ namespace Atomix
         Button _levelsButton;
         Button _quitButton;
 
+        private MessageBox _quitMessageBox;
+
         public StartScreen(SpriteBatch spriteBatch)
         {
             this.spriteBatch = spriteBatch;
@@ -27,7 +29,22 @@ namespace Atomix
 
         public override void Initialize()
         {
-            //Components.Add(new MessageBox(ScreenManager.Game));
+            _quitMessageBox = new MessageBox(ScreenManager.Game);
+
+            _startButton = new Button(ScreenManager.Game, spriteBatch, "play game");
+            _startButton.Selected += _startButton_Selected;
+
+            _levelsButton = new Button(ScreenManager.Game, spriteBatch, "levels");
+            _levelsButton.Selected += _levelsButton_Selected;
+
+            _quitButton = new Button(ScreenManager.Game, spriteBatch, "quit game");
+            _quitButton.Selected += _quitButton_Selected;
+
+            Components.Add(_startButton);
+            Components.Add(_levelsButton);
+            Components.Add(_quitButton);
+
+            Components.Add(_quitMessageBox);
 
             base.Initialize();
         }
@@ -35,30 +52,19 @@ namespace Atomix
         public override void Update(GameTime gameTime)
         {
             _startButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 80);
-            _startButton.Update(gameTime, ScreenManager.InputProvider);
-
             _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 20);
-            _levelsButton.Update(gameTime, ScreenManager.InputProvider);
-
             _quitButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _quitButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 50 + _quitButton.Height);
-            _quitButton.Update(gameTime, ScreenManager.InputProvider);
 
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin();
-
             string name = "Kinectomix";
             Vector2 size = splashFont.MeasureString(name);
 
+            spriteBatch.Begin();
             spriteBatch.DrawString(splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 220), Color.Black);
-
-            _startButton.Draw(gameTime);
-            _levelsButton.Draw(gameTime);
-            _quitButton.Draw(gameTime);
-
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -69,33 +75,36 @@ namespace Atomix
             splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
             normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
-            _startButton = new Button(spriteBatch, "play game");
+            _quitMessageBox.Font = normalFont;
+
             _startButton.Font = normalFont;
-            _startButton.LoadContent(ScreenManager.Content);
-            _startButton.Selected += _startButton_Selected;
+            _startButton.InputProvider = ScreenManager.InputProvider;
 
-            _levelsButton = new Button(spriteBatch, "levels");
             _levelsButton.Font = normalFont;
-            _levelsButton.LoadContent(ScreenManager.Content);
-            _levelsButton.Selected += _levelsButton_Selected;
+            _levelsButton.InputProvider = ScreenManager.InputProvider;
 
-            _quitButton = new Button(spriteBatch, "quit game");
             _quitButton.Font = normalFont;
-            _quitButton.LoadContent(ScreenManager.Content);
-            _quitButton.Selected += _quitButton_Selected;
+            _quitButton.InputProvider = ScreenManager.InputProvider;
 
             base.LoadContent();
         }
 
         void _quitButton_Selected(object sender, EventArgs e)
         {
+            if (_quitMessageBox.IsVisible)
+                return;
             //TODO: Add confirmation
 
-            ScreenManager.Game.Exit();
+            _quitMessageBox.Show("Do you really want to quit this game?", MessageBoxButtons.YesNo);
+
+            //ScreenManager.Game.Exit();
         }
 
         void _levelsButton_Selected(object sender, EventArgs e)
         {
+            if (_quitMessageBox.IsVisible)
+                return;
+
             GameScreen screen = new LevelsScreen(spriteBatch);
 
             ScreenManager.Add(screen);
@@ -104,11 +113,13 @@ namespace Atomix
 
         void _startButton_Selected(object sender, EventArgs e)
         {
+            if (_quitMessageBox.IsVisible)
+                return;
+
             LevelDefinition levelInfo = AtomixGame.State.GetCurrentLevel();
 
             Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
 
-            //Level currentLevel = ScreenManager.Content.Load<AtomixData.Level>("Levels/" + levelInfo.AssetName);
             LevelScreen gameScreen = new LevelScreen(currentLevel, spriteBatch);
 
             ScreenManager.Add(gameScreen);

@@ -5,17 +5,27 @@ using System;
 
 namespace Atomix
 {
-    public class Button
+    public class Button : DrawableGameComponent
     {
-        Texture2D _empty;
-        Vector2 _position;
+        private Texture2D _empty;
+        private Vector2 _position;
+        private IInputProvider _inputProvider;
 
+        /// <summary>
+        /// Gets or sets rendering position of this button.
+        /// </summary>
+        /// <returns>Top position to render.</returns>
         public Vector2 Position
         {
             get { return _position; }
             set { _position = value; }
         }
 
+        public IInputProvider InputProvider
+        {
+            get { return _inputProvider; }
+            set { _inputProvider = value; }
+        }
         public int Width { get; set; }
         public int Height { get; set; }
 
@@ -25,7 +35,7 @@ namespace Atomix
 
         public Color BorderColor { get; set; }
         public Color Background { get; set; }
-        
+
         public Color ActiveBackground { get; set; }
 
         public Color Foreground { get; set; }
@@ -44,7 +54,8 @@ namespace Atomix
 
         SpriteBatch _spriteBatch;
 
-        public Button(SpriteBatch spriteBatch)
+        public Button(Game game, SpriteBatch spriteBatch)
+            : base(game)
         {
             Background = Color.Gray;
             ActiveBackground = Color.Silver;
@@ -58,15 +69,17 @@ namespace Atomix
             _spriteBatch = spriteBatch;
         }
 
-        public Button(SpriteBatch spriteBatch, string content)
-            : this(spriteBatch)
+        public Button(Game game, SpriteBatch spriteBatch, string content)
+            : this(game, spriteBatch)
         {
             Content = content;
         }
 
-        public void LoadContent(ContentManager content)
+        protected override void LoadContent()
         {
-            _empty = content.Load<Texture2D>("Empty");
+            _empty = Game.Content.Load<Texture2D>("Empty");
+
+            base.LoadContent();
         }
 
         IInputState lastState;
@@ -74,10 +87,13 @@ namespace Atomix
 
         private Color currentBackground;
 
-        public void Update(GameTime gameTime, IInputProvider input)
+        public override void Update(GameTime gameTime)
         {
+            if (_inputProvider == null)
+                throw new Exception("No input provider is set.");
+
             lastState = currState;
-            currState = input.GetState();
+            currState = _inputProvider.GetState();
             bool isOver = currState.X >= Position.X &&
                     currState.Y >= Position.Y &&
                     currState.X <= Position.X + Width &&
@@ -87,13 +103,17 @@ namespace Atomix
 
             if (lastState != null && lastState.IsSelected != currState.IsSelected && isOver)
             {
-                    OnSelected();
-                
+                OnSelected();
+
             }
+
+            base.Update(gameTime);
         }
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
+            _spriteBatch.Begin();
+
             if (Font == null)
                 throw new Exception("Font is not set.");
 
@@ -103,24 +123,15 @@ namespace Atomix
                 Width,
                 Height);
 
-            _spriteBatch.Draw(_empty, buttonDimensions, currentBackground);
+            Rectangle innerDimensions = new Rectangle(
+                (int)Position.X + BorderThickness,
+                (int)Position.Y + BorderThickness,
+                Width - 2 * BorderThickness,
+                Height - 2 * BorderThickness);
 
-            _spriteBatch.Draw(
-                _empty,
-                new Rectangle(buttonDimensions.Left, buttonDimensions.Top, buttonDimensions.Width, BorderThickness),
-                BorderColor);
-            _spriteBatch.Draw(
-                _empty,
-                new Rectangle(buttonDimensions.Left, buttonDimensions.Top, BorderThickness, buttonDimensions.Height),
-                BorderColor);
-            _spriteBatch.Draw(
-                _empty,
-                new Rectangle(buttonDimensions.Right - BorderThickness, buttonDimensions.Top, BorderThickness, buttonDimensions.Height),
-                BorderColor);
-            _spriteBatch.Draw(
-                _empty,
-                new Rectangle(buttonDimensions.Left, buttonDimensions.Bottom - BorderThickness, buttonDimensions.Width, BorderThickness),
-                BorderColor);
+            _spriteBatch.Draw(_empty, buttonDimensions, BorderColor);
+
+            _spriteBatch.Draw(_empty, innerDimensions, currentBackground);
 
 
             Vector2 textSize = Font.MeasureString(Content);
@@ -129,12 +140,9 @@ namespace Atomix
             textPosition.Y = (int)textPosition.Y;
             _spriteBatch.DrawString(Font, Content, textPosition, Foreground);
 
-        }
+            _spriteBatch.End();
 
-        protected void UnloadContent(Game game)
-        {
-            //game.Content.Unload();
-
+            base.Draw(gameTime);
         }
     }
 }

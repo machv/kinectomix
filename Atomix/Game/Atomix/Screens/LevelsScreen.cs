@@ -30,7 +30,7 @@ namespace Atomix
                 position.Y += b.Height + 10;
                 position.X += 10;
 
-                b.Update(gameTime, ScreenManager.InputProvider);
+                b.Update(gameTime);
             }
 
             base.Update(gameTime);
@@ -54,9 +54,8 @@ namespace Atomix
 
             foreach (var level in AtomixGame.State.Levels)
             {
-                Button button = new Button(_spriteBatch);
+                Button button = new Button(ScreenManager.Game, _spriteBatch);
                 button.Font = _normalFont;
-                button.LoadContent(ScreenManager.Content);
                 button.Selected += button_Selected;
                 button.Tag = level;
                 button.Content = level.Name;

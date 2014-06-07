@@ -112,19 +112,19 @@ namespace Atomix
             splashFont = _content.Load<SpriteFont>("Fonts/Splash");
             idleTexture = _content.Load<Texture2D>("Idle");
 
-            _levelsButton = new Button(spriteBatch, "levels");
+            _levelsButton = new Button(ScreenManager.Game, spriteBatch, "levels");
             _levelsButton.Font = normalFont;
-            _levelsButton.LoadContent(ScreenManager.Content);
+            _levelsButton.InputProvider = ScreenManager.InputProvider;
             _levelsButton.Selected += _levelsButton_Selected;
 
-            _repeatButton = new Button(spriteBatch, "play again");
+            _repeatButton = new Button(ScreenManager.Game, spriteBatch, "play again");
             _repeatButton.Font = normalFont;
-            _repeatButton.LoadContent(ScreenManager.Content);
+            _repeatButton.InputProvider = ScreenManager.InputProvider;
             _repeatButton.Selected += _repeatButton_Selected;
 
-            _nextButton = new Button(spriteBatch, "continue");
+            _nextButton = new Button(ScreenManager.Game, spriteBatch, "continue");
             _nextButton.Font = normalFont;
-            _nextButton.LoadContent(ScreenManager.Content);
+            _nextButton.InputProvider = ScreenManager.InputProvider;
             _nextButton.Selected += _nextButton_Selected;
 
             base.LoadContent();
@@ -216,13 +216,13 @@ namespace Atomix
             if (isLevelFinished)
             {
                 _repeatButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 - _repeatButton.Width - 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _repeatButton.Update(gameTime, ScreenManager.InputProvider);
+                _repeatButton.Update(gameTime);
 
                 _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _levelsButton.Update(gameTime, ScreenManager.InputProvider);
+                _levelsButton.Update(gameTime);
 
                 _nextButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 + _nextButton.Width + 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _nextButton.Update(gameTime, ScreenManager.InputProvider);
+                _nextButton.Update(gameTime);
 
                 return;
             }
