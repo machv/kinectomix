@@ -27,6 +27,13 @@ namespace Atomix.Components
         private const float Depth = 0.5f;
         public VideoStreamComponent VideoStreamData { get; set; }
 
+        private bool _hideMouseCursorWhenHandTracked;
+        public bool HideMouseCursorWhenHandTracked
+        {
+            get { return _hideMouseCursorWhenHandTracked; }
+            set { _hideMouseCursorWhenHandTracked = value; }
+        }
+
         /// <summary>
         /// Enables tracking of open/close hand.
         /// </summary>
@@ -73,7 +80,6 @@ namespace Atomix.Components
         public bool IsHandTracked
         {
             get { return _isHandTracked; }
-            protected set { _isHandTracked = value; }
         }
 
         private const int Frames = 10;
@@ -136,18 +142,24 @@ namespace Atomix.Components
                         if (cursor != Vector2.Zero)
                         {
                             _isHandTracked = true;
-                            Game.IsMouseVisible = false;
+
+                            if (_hideMouseCursorWhenHandTracked)
+                                Game.IsMouseVisible = false;
                         }
                         else if(!isTracked)
                         {
                             _isHandTracked = false;
-                            Game.IsMouseVisible = true;
+
+                            if (_hideMouseCursorWhenHandTracked)
+                                Game.IsMouseVisible = true;
                         }
                     }
                     else
                     {
                         _isHandTracked = false;
-                        Game.IsMouseVisible = true;
+
+                        if (_hideMouseCursorWhenHandTracked)
+                            Game.IsMouseVisible = true;
                     }
                 }
 
