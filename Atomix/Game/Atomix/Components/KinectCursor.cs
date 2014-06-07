@@ -23,7 +23,16 @@ namespace Atomix.Components
         Vector2[] cursorPositionsBuffer;
         int cursorPositionsBufferIndex;
 
-        private AnimatedTexture SpriteTexture;
+        private ClosedHandConvexityTracker _handTracker;
+
+        public ClosedHandConvexityTracker HandTracker
+        {
+            get { return _handTracker; }
+            set { _handTracker = value; }
+        }
+
+
+        private AnimatedTexture _animatedHand;
         private const float Depth = 0.5f;
         public VideoStreamComponent VideoStreamData { get; set; }
 
@@ -53,7 +62,7 @@ namespace Atomix.Components
             cursorPositionsBuffer = new Vector2[CursorPositionsBufferLenth];
             cursorPositionsBufferIndex = -1;
 
-            SpriteTexture = new AnimatedTexture(Vector2.Zero, 0, 0.25f, Depth);
+            _animatedHand = new AnimatedTexture(Vector2.Zero, 0, 0.25f, Depth);
         }
 
         public float Scale
@@ -89,10 +98,8 @@ namespace Atomix.Components
         {
             _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
             font = Game.Content.Load<SpriteFont>("Fonts/Normal");
-            dotTexture = Game.Content.Load<Texture2D>("Images/Dot");
             _pointTextures = Game.Content.Load<Texture2D>("Images/Joint");
-
-            SpriteTexture.Load(Game.Content, "HandAnimation", Frames, FramesPerSec);
+            _animatedHand.Load(Game.Content, "HandAnimation", Frames, FramesPerSec);
 
             base.LoadContent();
         }
@@ -173,182 +180,18 @@ namespace Atomix.Components
 
                         lastDepthFrameData = pixelData;
                         lastDepthFrameDataLength = depthFrame.PixelDataLength;
+
+                        if (_handTracker != null)
+                        {
+                            _handTracker.ProcessDepthData(depthFrame);
+                        }
                     }
                 }
             }
 
-            if (_skeletons.TrackedSkeleton != null && EnableHandStatusTracking)
+            if (_skeletons.TrackedSkeleton != null && _handTracker != null)
             {
-                // Hand tracking START
-                if (cursorPosition != Vector2.Zero)
-                {
-                    JointType handType = leftHanded ? JointType.HandLeft : JointType.HandRight;
-                    JointType wristType = leftHanded ? JointType.WristLeft : JointType.WristRight;
-
-                    _handDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[handType].Position, DepthImageFormat.Resolution640x480Fps30);
-                    var wristDepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[wristType].Position, DepthImageFormat.Resolution640x480Fps30);
-
-                    SkeletonPoint hand = _skeletons.TrackedSkeleton.Joints[handType].Position;
-                    SkeletonPoint wrist = _skeletons.TrackedSkeleton.Joints[wristType].Position;
-                    Vector2 handVector = new Vector2(_handDepthPoint.X, _handDepthPoint.Y);
-                    Vector2 wristVector = new Vector2(wristDepthPoint.X, wristDepthPoint.Y);
-                    float distance = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, handType, wristType);
-                    float distanceHead = GetDistanceBetweenJoints(_skeletons.TrackedSkeleton, JointType.Head, JointType.ShoulderCenter);
-
-                    // podivame se, v jake vzdalenosti bod je
-                    // i kdyz prevadime body ze skeletonu do depth space, tak to vraci body i mimo ten obrazek, proto 
-                    // je nutne takhle osetrit okrajove podminky pri cteni surovych dat
-                    short[] frameData = lastDepthFrameData;
-                    int stride = 640;
-                    int index = (_handDepthPoint.Y > stride ? stride : _handDepthPoint.Y) * stride + _handDepthPoint.X;
-                    if (index > frameData.Length) index = frameData.Length - 1;
-                    if (index < 0) index = 0;
-
-                    int player = frameData[index] & DepthImageFrame.PlayerIndexBitmask;
-                    int realDepth = frameData[index] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-
-                    float angle = (float)Math.Atan2(hand.Y - wrist.Y, hand.X - wrist.X) - MathHelper.PiOver2;
-                    int handArea = 0;
-                    if (realDepth > 0)
-                    {
-                        _histogram = new int[256];
-
-                        // Hint for searching bounding box of hand
-                        _handRadius = (int)(distanceHead * 2);
-
-                        if (_handRadius <= _handDepthPoint.X && _handRadius <= _handDepthPoint.Y)
-                        {
-                            Rectangle hintRectangle = new Rectangle(_handDepthPoint.X - _handRadius / 2, _handDepthPoint.Y - _handRadius / 2, _handRadius, _handRadius);
-
-                            //TODO check only one person at time
-                            // Clear buffer for drawing
-                            _lines.Clear();
-
-                            int tolerance = 50; // in milimeters
-                            int width, height;
-                            Rectangle handRect = CalculateHandDimensions(hintRectangle, frameData, stride, realDepth, tolerance, out width, out height);
-                            if (handRect != Rectangle.Empty)
-                            {
-                                _handRect = new Rectangle(handRect.X - 10, handRect.Y - 10, handRect.Width + 20, handRect.Height + 20);
-
-                                handArea = 0;
-
-                                // Lines for checking
-                                List<int> changes = GetChangesList(frameData, stride, realDepth, tolerance);
-
-                                short isOpenMatches = 0;
-                                foreach (int parts in changes)
-                                {
-                                    if (parts > 3) // ......--------...... = empty HAND empty = at least 3 parts
-                                    {
-                                        // probably open hand?
-                                        isOpenMatches++;
-                                    }
-                                }
-
-                                _textToRender = isOpenMatches > 1 ? "Open" : "Closed";
-                                _textToRender += string.Format(" ({0})", isOpenMatches);
-                                _textToRender += string.Format(" Width: {0}px, Height: {1}px (ratio {2}) / depth: {3} cm", width, height, Math.Round(width / (double)height, 2), realDepth / 10d);
-                            }
-
-                            byte[] pixels = null;
-                            if (VideoStreamData != null && VideoStreamData.VideoFrame != null)
-                            {
-                                pixels = new byte[VideoStreamData.VideoFrame.Width * VideoStreamData.VideoFrame.Height * 4];
-                                VideoStreamData.VideoFrame.GetData(pixels);
-                            }
-
-                            for (int y = _handRect.Top; y < _handRect.Bottom; y++)
-                            {
-                                for (int x = _handRect.Left; x < _handRect.Right; x++)
-                                {
-                                    int i = y * stride + x;
-                                    if (i < frameData.Length && i >= 0)
-                                    {
-                                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-
-                                        // transform 13-bit depth information into an 8-bit intensity appropriate
-                                        // for display (we disregard information in most significant bit)
-                                        byte intensity = (byte)(~(realPixelDepth >> 4));
-
-                                        int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
-
-                                        if (playerIndex > 0 && playerIndex == player)
-                                        {
-                                            _histogram[intensity]++;
-
-                                            int colorOffset = i * 4;
-
-                                            // Skip pixels outside depth tolerance
-                                            if (realPixelDepth < (realDepth - tolerance) || realPixelDepth > (realDepth + tolerance))
-                                            {
-                                                // ouside tolerance
-                                                //continue;
-
-                                                if (pixels != null)
-                                                {
-                                                    // Write out red byte
-                                                    pixels[colorOffset++] = 255;
-
-                                                    // Write out green byte
-                                                    pixels[colorOffset++] = 0;
-
-                                                    // blue
-                                                    pixels[colorOffset++] = 0;
-
-                                                    // Alpha
-                                                    pixels[colorOffset++] = 255;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                // Inside tolerance
-
-                                                handArea++;
-
-                                                if (pixels != null)
-                                                {
-                                                    // Write out red byte
-                                                    pixels[colorOffset++] = 0;
-
-                                                    // Write out green byte
-                                                    pixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)255 : (byte)0;
-
-                                                    // Write out red byte                        
-                                                    pixels[colorOffset++] = (_handDepthPoint.X == x && _handDepthPoint.Y == y) ? (byte)0 : (byte)255;
-
-                                                    // Alpha
-                                                    pixels[colorOffset++] = 255;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (pixels != null)
-                            {
-                                VideoStreamData.VideoFrame.SetData(pixels);
-                            }
-                        }
-
-                        int max = 0;
-                        for (int i = 0; i < _histogram.Length; i++)
-                        {
-                            max = Math.Max(max, _histogram[i]);
-                        }
-
-                        //if (max > (_handRect.Width * _handRect.Height) / 3)
-                        if (handArea < (_handRect.Width * _handRect.Height) / 2)
-                        {
-                            _textToRender += "O!";
-                        }
-                        else
-                        {
-                            _textToRender += "C";
-                        }
-                    }
-                }
+                _handTracker.Update(leftHanded);
             }
 
             if (_skeletons.TrackedSkeleton != null)
@@ -379,8 +222,8 @@ namespace Atomix.Components
                     // animate only if on same place
                     if (Vector2.Distance(cursorPosition, cursorPos) > distanceTolerance)
                     {
-                        SpriteTexture.Reset();
-                        SpriteTexture.Play();
+                        _animatedHand.Reset();
+                        _animatedHand.Play();
                         IsHandPressed = false;
                     }
 
@@ -389,12 +232,12 @@ namespace Atomix.Components
 
 
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                SpriteTexture.UpdateFrame(elapsed);
+                _animatedHand.UpdateFrame(elapsed);
 
-                if (SpriteTexture.Frame == Frames - 1)
+                if (_animatedHand.Frame == Frames - 1)
                 {
                     IsHandPressed = true;
-                    SpriteTexture.Pause();
+                    _animatedHand.Pause();
                 }
             }
             else
@@ -406,158 +249,8 @@ namespace Atomix.Components
             base.Update(gameTime);
         }
 
-        private Rectangle CalculateHandDimensions(Rectangle rectangle, short[] frameData, int stride, int realDepth, int tolerance, out int width, out int height)
-        {
-            top = int.MaxValue;
-            left = int.MaxValue;
-            bottom = 0;
-            right = 0;
-
-            for (int y = rectangle.Top; y < rectangle.Bottom; y++)
-            {
-                for (int x = rectangle.Left; x < rectangle.Right; x++)
-                {
-                    int i = y * stride + x;
-                    if (i < frameData.Length && i >= 0)
-                    {
-                        int realPixelDepth = frameData[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-                        int playerIndex = frameData[i] & DepthImageFrame.PlayerIndexBitmask;
-
-                        // Checking only within tolerance
-                        if (playerIndex > 0 && realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
-                        {
-                            top = Math.Min(top, y);
-                            left = Math.Min(left, x);
-                            bottom = Math.Max(bottom, y);
-                            right = Math.Max(right, x);
-                        }
-                    }
-                }
-            }
-            width = right - left;
-            height = bottom - top;
-
-            // If we didnt matched any hand, return empty
-            if (top == int.MaxValue)
-                return Rectangle.Empty;
-
-            return new Rectangle(left, top, width, height);
-        }
-
-        private List<int> GetChangesList(short[] frameData, int stride, int realDepth, int tolerance)
-        {
-            // Clear buffer for drawing
-            _lines.Clear();
-
-            // Count parts for testing open/closed
-            List<int> changes = new List<int>();
-            int step = 10;
-            Random rand = new Random();
-
-            // horizontal uniform grid
-            for (int i = _handRect.Top; i < _handRect.Bottom; i += step)
-            {
-                Point lineStart = new Point(_handRect.Left, i);
-                Point lineEnd = new Point(_handRect.Right, i);
-                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                changes.Add(parts);
-            }
-
-            // vertical uniform grid
-            for (int i = _handRect.Left; i < _handRect.Right; i += step)
-            {
-                Point lineStart = new Point(i, _handRect.Bottom);
-                Point lineEnd = new Point(i, _handRect.Top);
-                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                changes.Add(parts);
-            }
-
-            // horizontal "cake"
-            for (int i = _handRect.Top; i < _handRect.Bottom; i += step)
-            {
-                int j = _handRect.Bottom - i + _handRect.Top;
-                Point lineStart = new Point(_handRect.Left, i);
-                Point lineEnd = new Point(_handRect.Right, j);
-                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                changes.Add(parts);
-            }
-
-            // vertical "cake"
-            for (int i = _handRect.Left; i < _handRect.Right; i += step)
-            {
-                int j = _handRect.Right - i + _handRect.Left;
-                Point lineStart = new Point(i, _handRect.Bottom);
-                Point lineEnd = new Point(j, _handRect.Top);
-                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                changes.Add(parts);
-            }
-
-            // + some random horizontal lines
-            for (int i = 0; i < 5; i++)
-            {
-                Point lineStart = new Point(_handRect.Left, rand.Next(_handRect.Top, _handRect.Bottom));
-                Point lineEnd = new Point(_handRect.Right, rand.Next(_handRect.Top, _handRect.Bottom));
-                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                changes.Add(parts);
-            }
-
-            // + some random vertical lines
-            for (int i = 0; i < 5; i++)
-            {
-                Point lineStart = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Bottom);
-                Point lineEnd = new Point(rand.Next(_handRect.Left, _handRect.Right), _handRect.Top);
-                int parts = GetLineParts(lineStart, lineEnd, frameData, stride, realDepth, tolerance);
-
-                changes.Add(parts);
-            }
-
-            return changes;
-        }
-
         int frame = 0;
-        float distanceTolerance = 0.5f;
-
-        List<Tuple<Point, Point>> _lines = new List<Tuple<Point, Point>>();
-
-        private int GetLineParts(Point start, Point end, short[] frame, int stride, int realDepth, int tolerance)
-        {
-            _lines.Add(Tuple.Create<Point, Point>(start, end));
-
-            int changes = 0;
-            int previousPixel = 0;
-
-            IEnumerable<Point> points = Bresenham.GetLinePoints(start, end);
-            foreach (Point point in points)
-            {
-                int i = point.Y * stride + point.X;
-                if (i < frame.Length && i >= 0)
-                {
-                    int realPixelDepth = frame[i] >> DepthImageFrame.PlayerIndexBitmaskWidth;
-
-                    // transform 13-bit depth information into an 8-bit intensity appropriate
-                    // for display (we disregard information in most significant bit)
-                    byte intensity = (byte)(~(realPixelDepth >> 4));
-
-                    int playerIndex = frame[i] & DepthImageFrame.PlayerIndexBitmask;
-                    // Checking of convex for lines only within tolerance
-                    if (realPixelDepth >= (realDepth - tolerance) && realPixelDepth <= (realDepth + tolerance))
-                    {
-                        // Change, add to counter
-                        if (playerIndex != previousPixel)
-                            changes++;
-
-                        previousPixel = playerIndex;
-                    }
-                }
-            }
-
-            return changes;
-        }
+        float distanceTolerance = 1;
 
         protected void AddCursorPosition(Vector2 cursorPosition)
         {
@@ -586,33 +279,14 @@ namespace Atomix.Components
 
         private float GetDistanceBetweenJoints(Skeleton skeleton, JointType join1, JointType join2)
         {
-            var join1DepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[join1].Position, DepthImageFormat.Resolution640x480Fps30);
-            var join2DepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(_skeletons.TrackedSkeleton.Joints[join2].Position, DepthImageFormat.Resolution640x480Fps30);
+            DepthImagePoint join1DepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(skeleton.Joints[join1].Position, _KinectChooser.Sensor.DepthStream.Format);
+            DepthImagePoint join2DepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(skeleton.Joints[join2].Position, _KinectChooser.Sensor.DepthStream.Format);
 
             Vector2 joint1Position = new Vector2(join1DepthPoint.X, join1DepthPoint.Y);
             Vector2 joint2Position = new Vector2(join2DepthPoint.X, join2DepthPoint.Y);
 
             return Vector2.Distance(joint1Position, joint2Position);
         }
-
-        // Absolute mapping of cursor
-        private Vector2 TrackHandMovementAbsolute(Skeleton skeleton)
-        {
-            int width = GraphicsDevice.Viewport.Bounds.Width;
-            int height = GraphicsDevice.Viewport.Bounds.Height;
-            SkeletonPoint handPoint = skeleton.Joints[JointType.HandLeft].Position;
-            var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
-            double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
-            double ratioY = (double)colorPt.Y / _KinectChooser.Sensor.ColorStream.FrameHeight;
-
-            var cursor = new Vector2();
-            cursor.X = (int)(width * ratioX);
-            cursor.Y = (int)(height * ratioY);
-
-            return cursor;
-        }
-
-        private Texture2D dotTexture;
 
         public override void Draw(GameTime gameTime)
         {
@@ -626,54 +300,21 @@ namespace Atomix.Components
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
-            if (EnableHandStatusTracking)
+            if (_handTracker != null)
             {
-                Rectangle translated = new Rectangle((int)(_handRect.X / _scale) + (int)_renderOffset.X, (int)(_handRect.Y / _scale) + (int)_renderOffset.Y, (int)(_handRect.Width / _scale), (int)(_handRect.Height / _scale));
-
-                DrawBoudingBox(translated, Color.Red, 1);
-
-                // draw lines for grid
-                foreach (var line in _lines)
-                {
-                    Vector2 start = new Vector2(line.Item1.X / _scale, line.Item1.Y / _scale);
-                    Vector2 end = new Vector2(line.Item2.X / _scale, line.Item2.Y / _scale);
-                    Vector2 diff = end - start;
-                    Vector2 scale = new Vector2(1.0f, diff.Length() / dotTexture.Height);
-
-                    float angle = (float)Math.Atan2(diff.Y, diff.X) - MathHelper.PiOver2;
-
-                    Color color = Color.CornflowerBlue;
-
-                    spriteBatch.Draw(dotTexture, (start + _renderOffset), null, color, angle, new Vector2(0.5f, 0.0f), scale, SpriteEffects.None, 1.0f);
-                }
+                _handTracker.Draw(gameTime, spriteBatch, _scale, _renderOffset);
             }
 
             if (cursorPosition != Vector2.Zero)
             {
                 spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
 
-                SpriteTexture.DrawFrame(spriteBatch, cursorPosition);
+                _animatedHand.DrawFrame(spriteBatch, cursorPosition);
             }
 
             spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        // credits http://stackoverflow.com/questions/13893959/how-to-draw-the-border-of-a-square
-        Texture2D _pointTexture;
-        private void DrawBoudingBox(Rectangle rectangle, Color color, int lineWidth)
-        {
-            if (_pointTexture == null)
-            {
-                _pointTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-                _pointTexture.SetData(new Color[] { Color.White });
-            }
-
-            spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
-            spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width + lineWidth, lineWidth), color);
-            spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X + rectangle.Width, rectangle.Y, lineWidth, rectangle.Height + lineWidth), color);
-            spriteBatch.Draw(_pointTexture, new Rectangle(rectangle.X, rectangle.Y + rectangle.Height, rectangle.Width + lineWidth, lineWidth), color);
         }
 
         Vector2 cursorPosition;
@@ -687,6 +328,24 @@ namespace Atomix.Components
         float handY;
         private int lastDepthFrameDataLength;
         private Texture2D _colorVideo;
+
+        private Vector2 TrackHandMovementAbsolute(Skeleton skeleton)
+        {
+            JointType hand = leftHanded ? JointType.HandLeft : JointType.HandRight;
+
+            int width = GraphicsDevice.Viewport.Bounds.Width;
+            int height = GraphicsDevice.Viewport.Bounds.Height;
+            SkeletonPoint handPoint = skeleton.Joints[hand].Position;
+            var colorPt = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(handPoint, _KinectChooser.Sensor.ColorStream.Format);
+            double ratioX = (double)colorPt.X / _KinectChooser.Sensor.ColorStream.FrameWidth;
+            double ratioY = (double)colorPt.Y / _KinectChooser.Sensor.ColorStream.FrameHeight;
+
+            var cursor = new Vector2();
+            cursor.X = (int)(width * ratioX);
+            cursor.Y = (int)(height * ratioY);
+
+            return cursor;
+        }
 
         // http://stackoverflow.com/questions/12569706/how-to-use-skeletal-joint-to-act-as-cursor-using-bounds-no-gestures
         /// <summary>
