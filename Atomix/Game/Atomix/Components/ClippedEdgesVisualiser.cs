@@ -85,17 +85,17 @@ namespace Atomix.Components
             {
                 if (_skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Top))
                 {
-                    DrawEdge(_horizontalRectangle, _topEdgeOrigin, _topEdgePosition, TopRotation);
+                    DrawEdge(_horizontalRectangle, _topEdgePosition, _topEdgeOrigin, TopRotation);
                 }
 
                 if (_skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Bottom))
                 {
-                    DrawEdge(_horizontalRectangle, _bottomEdgeOrigin, _bottomEdgePosition, BottomRotation);
+                    DrawEdge(_horizontalRectangle, _bottomEdgePosition, _bottomEdgeOrigin, BottomRotation);
                 }
 
                 if (_skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Left))
                 {
-                    DrawEdge(_verticalRectangle, _leftEdgeOrigin, _leftEdgePosition, LeftRotation);
+                    DrawEdge(_verticalRectangle, _leftEdgePosition, _leftEdgeOrigin, LeftRotation);
                 }
 
                 if (_skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Right))
