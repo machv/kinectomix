@@ -23,9 +23,9 @@ namespace Atomix.Components
         Vector2[] cursorPositionsBuffer;
         int cursorPositionsBufferIndex;
 
-        private ClosedHandConvexityTracker _handTracker;
+        private IHandStateTracker _handTracker;
 
-        public ClosedHandConvexityTracker HandTracker
+        public IHandStateTracker HandTracker
         {
             get { return _handTracker; }
             set { _handTracker = value; }

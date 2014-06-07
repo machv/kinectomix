@@ -86,6 +86,7 @@
     <Compile Include="AnimatedTexture.cs" />
     <Compile Include="Components\Common\Background.cs" />
     <Compile Include="Components\Common\Button.cs" />
+    <Compile Include="Components\Kinect\KinectButton.cs" />
     <Compile Include="Components\Kinect\ClippedEdgesVisualiser.cs" />
     <Compile Include="Components\Common\FrameRateInfo.cs" />
     <Compile Include="Components\Kinect\Gestures.cs" />
@@ -94,7 +95,8 @@
     <Compile Include="Components\Common\MessageBox.cs" />
     <Compile Include="Components\ScreenManager.cs" />
     <Compile Include="Components\Kinect\VideoStreamComponent.cs" />
-    <Compile Include="HandTracker.cs" />
+    <Compile Include="ConvexityClosedHandTracker.cs" />
+    <Compile Include="IHandStateTracker.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\IInputState.cs" />
     <Compile Include="Components\Kinect\KinectChooser.cs" />

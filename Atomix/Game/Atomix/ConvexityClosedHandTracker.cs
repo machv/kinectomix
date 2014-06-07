@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Atomix
 {
-    public class ClosedHandConvexityTracker
+    public class ConvexityClosedHandTracker : IHandStateTracker
     {
         private List<Tuple<Point, Point>> _lines = new List<Tuple<Point, Point>>();
         private KinectChooser _kinectChooser;
@@ -27,7 +27,7 @@ namespace Atomix
             get { return _isHandClosed; }
         }
 
-        public ClosedHandConvexityTracker(KinectChooser chooser)
+        public ConvexityClosedHandTracker(KinectChooser chooser)
         {
             _kinectChooser = chooser;
         }
@@ -45,7 +45,7 @@ namespace Atomix
             }
         }
 
-        public void ProcessSkeletonData(DepthImageFrame frame)
+        public void ProcessSkeletonData(SkeletonFrame frame)
         {
         }
 
