@@ -1,4 +1,5 @@
-﻿using Kinectomix.Logic;
+﻿using Atomix.Components;
+using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -24,6 +25,13 @@ namespace Atomix
             this.spriteBatch = spriteBatch;
         }
 
+        public override void Initialize()
+        {
+            //Components.Add(new MessageBox(ScreenManager.Game));
+
+            base.Initialize();
+        }
+
         public override void Update(GameTime gameTime)
         {
             _startButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 80);
@@ -34,6 +42,8 @@ namespace Atomix
 
             _quitButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _quitButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 50 + _quitButton.Height);
             _quitButton.Update(gameTime, ScreenManager.InputProvider);
+
+            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -50,6 +60,8 @@ namespace Atomix
             _quitButton.Draw(gameTime);
 
             spriteBatch.End();
+
+            base.Draw(gameTime);
         }
 
         public override void LoadContent()
@@ -71,6 +83,8 @@ namespace Atomix
             _quitButton.Font = normalFont;
             _quitButton.LoadContent(ScreenManager.Content);
             _quitButton.Selected += _quitButton_Selected;
+
+            base.LoadContent();
         }
 
         void _quitButton_Selected(object sender, EventArgs e)
