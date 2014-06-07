@@ -59,7 +59,7 @@ namespace Atomix.ViewModel
         /// <summary>
         /// Flag indicating in which directions can be this tile moved on the board.
         /// </summary>
-        public Direction Movements { get; set; }
+        public MoveDirection Movements { get; set; }
 
         /// <summary>
         /// Render position of this tile on the board.

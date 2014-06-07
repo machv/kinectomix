@@ -9,7 +9,7 @@ namespace Atomix
     /// Flag indicating in which directions can be tile moved on the board.
     /// </summary>
     [Flags]
-    public enum Direction
+    public enum MoveDirection
     {
         None = 0,
         Up = 1,
