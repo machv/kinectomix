@@ -100,6 +100,7 @@ namespace Atomix
             _videoStream = new VideoStreamComponent(this, _kinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
             var background = new Background(this);
             var frameRate = new FrameRateInfo(this);
+            var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _kinectChooser.Skeletons);
             _cursor.VideoStreamData = _videoStream;
 
             // Input
@@ -120,6 +121,7 @@ namespace Atomix
             Components.Add(_videoStream);
             Components.Add(_skeletonRenderer);
             Components.Add(_cursor);
+            Components.Add(clippedEdgeVisualiser);
 
             base.Initialize();
         }

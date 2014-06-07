@@ -325,6 +325,8 @@ namespace Atomix
             {
                 lastHoveredTileTime = DateTime.Now;
                 currentlyHoveredTile = newHoveredTileBefore;
+
+                ClearBoard();
             }
 
             if (currentlyHoveredTile != null)
@@ -339,7 +341,6 @@ namespace Atomix
 
                     activeAtomIndex = new Point(k, l);
                     PrepareAvailableTileMovements(level.Board, k, l);
-
 
                     // prepare for gesture
                     _swipeGestures.Start(cursor.HandRealPosition, 0.1);
