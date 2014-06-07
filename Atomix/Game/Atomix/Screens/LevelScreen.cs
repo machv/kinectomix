@@ -35,10 +35,10 @@ namespace Atomix
 
         public override void Initialize()
         {
-            base.Initialize();
-
             level = LevelFactory.ToViewModel(levelDefinition, ScreenManager.GraphicsDevice);
             highScore = new Highscore(AtomixGame.HighscoreFile);
+
+            base.Initialize();
         }
 
         Texture2D wallTexture;
@@ -126,6 +126,8 @@ namespace Atomix
             _nextButton.Font = normalFont;
             _nextButton.LoadContent(ScreenManager.Content);
             _nextButton.Selected += _nextButton_Selected;
+
+            base.LoadContent();
         }
 
         void _nextButton_Selected(object sender, EventArgs e)
@@ -174,6 +176,8 @@ namespace Atomix
         public override void UnloadContent()
         {
             _content.Unload();
+
+            base.UnloadContent();
         }
 
         BoardTileViewModel currentlyHoveredTile = null;
@@ -433,7 +437,7 @@ namespace Atomix
                 _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandRealPosition, out recognizedGesture);
                 if (recognizedGesture != null)
                 {
-                    _log = "Detected swipe!";
+                    _log = "Detected swipe " + recognizedGesture.Direction.ToString();
                 }
             }
 
@@ -475,6 +479,8 @@ namespace Atomix
                     // Detect Down
                 }
             }
+
+            base.Update(gameTime);
         }
 
         private void PrepareAvailableTileMovements(TilesCollection<BoardTileViewModel> board, int i, int j)
@@ -597,6 +603,8 @@ namespace Atomix
             }
 
             spriteBatch.End();
+
+            base.Draw(gameTime);
         }
 
 

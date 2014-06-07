@@ -32,6 +32,8 @@ namespace Atomix
 
                 b.Update(gameTime, ScreenManager.InputProvider);
             }
+
+            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
@@ -42,6 +44,8 @@ namespace Atomix
                 b.Draw(gameTime);
 
             _spriteBatch.End();
+
+            base.Draw(gameTime);
         }
 
         public override void LoadContent()
@@ -59,6 +63,8 @@ namespace Atomix
 
                 _buttons.Add(button);
             }
+
+            base.LoadContent();
         }
 
         void button_Selected(object sender, EventArgs e)
@@ -74,7 +80,5 @@ namespace Atomix
             ScreenManager.Add(gameScreen);
             ScreenManager.Activate(gameScreen);
         }
-
-        public override void UnloadContent() { }
     }
 }
