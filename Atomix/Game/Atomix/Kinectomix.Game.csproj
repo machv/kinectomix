@@ -91,7 +91,6 @@
     <Compile Include="Components\KinectCursor.cs" />
     <Compile Include="Components\KinectCursorInteractions.cs" />
     <Compile Include="Components\ScreenManager.cs" />
-    <Compile Include="Components\SwipeGesturesRecognizer.cs" />
     <Compile Include="Components\VideoStreamComponent.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\IInputState.cs" />
