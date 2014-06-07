@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Atomix.Components
+namespace Kinectomix.Logic
 {
     /// <summary>
     /// Direction of detected swipe gesture.

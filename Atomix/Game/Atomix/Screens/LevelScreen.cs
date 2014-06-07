@@ -18,6 +18,7 @@ namespace Atomix
     /// </summary>
     public class LevelScreen : GameScreen
     {
+        private SwipeGesturesRecognizer _swipeGestures;
         Level levelDefinition;
         LevelViewModel level;
         SpriteBatch spriteBatch;
@@ -25,6 +26,7 @@ namespace Atomix
         string _log = "";
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
+            _swipeGestures = new SwipeGesturesRecognizer();
             levelDefinition = currentLevel;
             this.spriteBatch = spriteBatch;
 
@@ -61,7 +63,7 @@ namespace Atomix
         protected Vector2 finalPosition;
         Point destination;
         string atomToMove;
-        Direction moveDirection;
+        MoveDirection moveDirection;
         float atomSpeed = 400f;
 
         // Scoring
@@ -174,9 +176,6 @@ namespace Atomix
             _content.Unload();
         }
 
-        //bool lastHandClosedState;
-
-
         BoardTileViewModel currentlyHoveredTile = null;
         DateTime lastHoveredTileTime = DateTime.MinValue;
 
@@ -234,13 +233,13 @@ namespace Atomix
 
                 if (atomPosition.X == destinationPosition.X)
                 {
-                    int direction = moveDirection == Direction.Up ? -1 : 1;
+                    int direction = moveDirection == MoveDirection.Up ? -1 : 1;
                     atomPosition.Y += direction * atomSpeed * elapsed;
                 }
 
                 if (atomPosition.Y == destinationPosition.Y)
                 {
-                    int direction = moveDirection == Direction.Left ? -1 : 1;
+                    int direction = moveDirection == MoveDirection.Left ? -1 : 1;
                     atomPosition.X += direction * atomSpeed * elapsed;
                 }
 
@@ -343,13 +342,8 @@ namespace Atomix
 
 
                     // prepare for gesture
-                    isGestureCandidate = true;
-                    gestureAccumulatedDistanceX = 0;
-                    lastHandPosition = cursor.HandPosition;
-                    startHandPosition = lastHandPosition;
-                    startHandPositionReal = cursor.HandRealPosition;
-                    lastHandPositionReal = startHandPositionReal;
-
+                    _swipeGestures.Start(cursor.HandRealPosition, 0.1);
+                    _isGestureCandidate = true;
                 }
             }
 
@@ -395,7 +389,7 @@ namespace Atomix
                                          level.Board[i, j].Asset == "Up" ||
                                          level.Board[i, j].Asset == "Down")
                                 {
-                                    Direction direction = GetDirectionFromAsset(level.Board[i, j].Asset);
+                                    MoveDirection direction = GetDirectionFromAsset(level.Board[i, j].Asset);
                                     Point coordinates = new Point(i, j);
                                     Point newCoordinates = NewPosition(coordinates, direction);
                                     Point atomCoordinates = GetAtomPosition(coordinates, direction);
@@ -432,25 +426,14 @@ namespace Atomix
                 }
             }
 
-            if (isGestureCandidate)
+            if (_isGestureCandidate)
             {
-                if (cursor.HandRealPosition.Z > startHandPositionReal.Z - 20 && cursor.HandRealPosition.Z < startHandPositionReal.Z + 20) // same depth from sensor
+                SwipeGesture recognizedGesture;
+                _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandRealPosition, out recognizedGesture);
+                if (recognizedGesture != null)
                 {
-                    // horizontal gesture is within tolerance
-                    if (cursor.HandRealPosition.Y > startHandPositionReal.Y - 30 && cursor.HandRealPosition.Y < startHandPositionReal.Y + 30)
-                    {
-                        gestureAccumulatedDistanceX += cursor.HandRealPosition.X - lastHandPositionReal.X;
-
-                        if (gestureAccumulatedDistanceX > 100)
-                            isToRightGesture = true;
-                    }
-                    else
-                        isGestureCandidate = false;
+                    _log = "Detected swipe!";
                 }
-                else
-                    isGestureCandidate = false;
-
-                lastHandPositionReal = cursor.HandRealPosition;
             }
 
             if (!isMovementAnimation && activeAtomIndex.X != -1 && activeAtomIndex.Y != -1)
@@ -495,27 +478,27 @@ namespace Atomix
 
         private void PrepareAvailableTileMovements(TilesCollection<BoardTileViewModel> board, int i, int j)
         {
-            board[i, j].Movements = Direction.None;
+            board[i, j].Movements = MoveDirection.None;
 
             //zjistit jakymi smery se muze pohnout
             if (level.CanGoUp(i, j))
             {
-                board[i, j].Movements |= Direction.Up;
+                board[i, j].Movements |= MoveDirection.Up;
                 board[i - 1, j].Asset = "Up";
             }
             if (level.CanGoDown(i, j))
             {
-                board[i, j].Movements |= Direction.Down;
+                board[i, j].Movements |= MoveDirection.Down;
                 board[i + 1, j].Asset = "Down";
             }
             if (level.CanGoLeft(i, j))
             {
-                board[i, j].Movements |= Direction.Left;
+                board[i, j].Movements |= MoveDirection.Left;
                 board[i, j - 1].Asset = "Left";
             }
             if (level.CanGoRight(i, j))
             {
-                board[i, j].Movements |= Direction.Right;
+                board[i, j].Movements |= MoveDirection.Right;
                 board[i, j + 1].Asset = "Right";
             }
         }
@@ -547,34 +530,35 @@ namespace Atomix
             return tile;
         }
 
-        private Direction GetDirectionFromAsset(string asset)
+        private MoveDirection GetDirectionFromAsset(string asset)
         {
             switch (asset)
             {
                 case "Right":
-                    return Direction.Right;
+                    return MoveDirection.Right;
                 case "Left":
-                    return Direction.Left;
+                    return MoveDirection.Left;
                 case "Up":
-                    return Direction.Up;
+                    return MoveDirection.Up;
                 case "Down":
-                    return Direction.Down;
+                    return MoveDirection.Down;
             }
 
-            return Direction.None;
+            return MoveDirection.None;
         }
 
-        bool isGestureCandidate = false;
+        bool _isGestureCandidate = false;
         bool isToLeftGesture = false;
         bool isToRightGesture = false;
-        float gestureAccumulatedDistanceX = 0;
-        float gestureAxeTolerance = 10;
-        float gestureThreshold = 20;
-        Direction gestureDirection;
+        double gestureAccumulatedDistanceX = 0;
+        double gestureAxeTolerance = 10;
+        double gestureThreshold = 20;
+        MoveDirection gestureDirection;
         Vector2 lastHandPosition;
         Vector2 startHandPosition;
         Vector3 startHandPositionReal;
         Vector3 lastHandPositionReal;
+        double lastDiff;
 
         public override void Draw(GameTime gameTime)
         {
@@ -676,22 +660,22 @@ namespace Atomix
             return false;
         }
 
-        private Point GetAtomPosition(Point directionTilePosition, Direction direction)
+        private Point GetAtomPosition(Point directionTilePosition, MoveDirection direction)
         {
             Point atomPosition = directionTilePosition;
 
             switch (direction)
             {
-                case Direction.Right:
+                case MoveDirection.Right:
                     atomPosition.Y -= 1;
                     break;
-                case Direction.Left:
+                case MoveDirection.Left:
                     atomPosition.Y += 1;
                     break;
-                case Direction.Down:
+                case MoveDirection.Down:
                     atomPosition.X -= 1;
                     break;
-                case Direction.Up:
+                case MoveDirection.Up:
                     atomPosition.X += 1;
                     break;
             }
@@ -699,13 +683,13 @@ namespace Atomix
             return atomPosition;
         }
 
-        private Point NewPosition(Point coordinates, Direction direction)
+        private Point NewPosition(Point coordinates, MoveDirection direction)
         {
             Point newCoordinates = coordinates;
 
             switch (direction)
             {
-                case Direction.Right:
+                case MoveDirection.Right:
                     while (newCoordinates.Y < level.Board.ColumnsCount)
                     {
                         if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
@@ -716,7 +700,7 @@ namespace Atomix
 
                     if (newCoordinates.Y != coordinates.Y) newCoordinates.Y--; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
-                case Direction.Left:
+                case MoveDirection.Left:
                     while (newCoordinates.Y >= 0)
                     {
                         if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
@@ -727,7 +711,7 @@ namespace Atomix
 
                     if (newCoordinates.Y != coordinates.Y) newCoordinates.Y++; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
-                case Direction.Down:
+                case MoveDirection.Down:
                     while (newCoordinates.X < level.Board.RowsCount)
                     {
                         if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
@@ -738,7 +722,7 @@ namespace Atomix
 
                     if (newCoordinates.X != coordinates.X) newCoordinates.X--; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
-                case Direction.Up:
+                case MoveDirection.Up:
                     while (newCoordinates.X >= 0)
                     {
                         if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
@@ -774,7 +758,7 @@ namespace Atomix
                     }
 
                     level.Board[x, y].IsSelected = false;
-                    level.Board[x, y].Movements = Direction.None;
+                    level.Board[x, y].Movements = MoveDirection.None;
                 }
             }
         }
