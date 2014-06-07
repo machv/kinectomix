@@ -112,17 +112,17 @@ namespace Atomix
             splashFont = _content.Load<SpriteFont>("Fonts/Splash");
             idleTexture = _content.Load<Texture2D>("Idle");
 
-            _levelsButton = new Button(ScreenManager.Game, spriteBatch, "levels");
+            _levelsButton = new Button(ScreenManager.Game, "levels");
             _levelsButton.Font = normalFont;
             _levelsButton.InputProvider = ScreenManager.InputProvider;
             _levelsButton.Selected += _levelsButton_Selected;
 
-            _repeatButton = new Button(ScreenManager.Game, spriteBatch, "play again");
+            _repeatButton = new Button(ScreenManager.Game, "play again");
             _repeatButton.Font = normalFont;
             _repeatButton.InputProvider = ScreenManager.InputProvider;
             _repeatButton.Selected += _repeatButton_Selected;
 
-            _nextButton = new Button(ScreenManager.Game, spriteBatch, "continue");
+            _nextButton = new Button(ScreenManager.Game, "continue");
             _nextButton.Font = normalFont;
             _nextButton.InputProvider = ScreenManager.InputProvider;
             _nextButton.Selected += _nextButton_Selected;

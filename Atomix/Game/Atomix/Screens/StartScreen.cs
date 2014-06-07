@@ -31,13 +31,13 @@ namespace Atomix
         {
             _quitMessageBox = new MessageBox(ScreenManager.Game);
 
-            _startButton = new Button(ScreenManager.Game, spriteBatch, "play game");
+            _startButton = new Button(ScreenManager.Game, "play game");
             _startButton.Selected += _startButton_Selected;
 
-            _levelsButton = new Button(ScreenManager.Game, spriteBatch, "levels");
+            _levelsButton = new Button(ScreenManager.Game, "levels");
             _levelsButton.Selected += _levelsButton_Selected;
 
-            _quitButton = new Button(ScreenManager.Game, spriteBatch, "quit game");
+            _quitButton = new Button(ScreenManager.Game, "quit game");
             _quitButton.Selected += _quitButton_Selected;
 
             Components.Add(_startButton);

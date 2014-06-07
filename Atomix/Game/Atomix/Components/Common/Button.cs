@@ -54,7 +54,7 @@ namespace Atomix
 
         SpriteBatch _spriteBatch;
 
-        public Button(Game game, SpriteBatch spriteBatch)
+        public Button(Game game)
             : base(game)
         {
             Background = Color.Gray;
@@ -65,18 +65,17 @@ namespace Atomix
             Width = 160;
             Height = 70;
             Content = string.Empty;
-
-            _spriteBatch = spriteBatch;
         }
 
-        public Button(Game game, SpriteBatch spriteBatch, string content)
-            : this(game, spriteBatch)
+        public Button(Game game, string content)
+            : this(game)
         {
             Content = content;
         }
 
         protected override void LoadContent()
         {
+            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
             _empty = Game.Content.Load<Texture2D>("Empty");
 
             base.LoadContent();

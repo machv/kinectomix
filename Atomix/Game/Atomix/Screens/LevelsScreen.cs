@@ -54,7 +54,7 @@ namespace Atomix
 
             foreach (var level in AtomixGame.State.Levels)
             {
-                Button button = new Button(ScreenManager.Game, _spriteBatch);
+                Button button = new Button(ScreenManager.Game);
                 button.Font = _normalFont;
                 button.Selected += button_Selected;
                 button.Tag = level;
