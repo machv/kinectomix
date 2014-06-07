@@ -75,20 +75,45 @@ namespace Atomix.Components
     {
         private bool _verticalCandidate;
         private bool _horizontalCandidate;
-        private Vector3 _startHandPosition;
-        private Vector3 _lastHandPosition;
+        private Vector3 _startPosition;
+        private Vector3 _previousPosition;
         private double _previousDiffX;
         private double _previousDiffY;
         private double _totalDistanceX;
         private double _totalDistanceY;
         private double _requiredDistance;
 
-        bool isToLeftGesture = false;
-        bool isToRightGesture = false;
+        private double _depthTolerance = 0.02d;
+        private double _verticalTolerance = 0.03d;
+        private double _horizontalTolerance = 0.03d;
 
-        double gestureAxeTolerance = 10;
-        double gestureThreshold = 20;
-
+        /// <summary>
+        /// Gets or sets depth distance tolerance of points against the starting point in meters for swipe gesture.
+        /// </summary>
+        /// <returns>Depth tolerance in meters.</returns>
+        public double DepthTolerance
+        {
+            get { return _depthTolerance; }
+            set { _depthTolerance = value; }
+        }
+        /// <summary>
+        /// Gets or sets vertical tolerance of points against the starting point in meters for swipe gesture.
+        /// </summary>
+        /// <returns>Vertical tolerane in meters.</returns>
+        public double VerticalTolerance
+        {
+            get { return _verticalTolerance; }
+            set { _verticalTolerance = value; }
+        }
+        /// <summary>
+        /// Gets or sets horizontal tolerance of points against the starting point in meters for swipe gesture.
+        /// </summary>
+        /// <returns>Horizontal tolerane in meters.</returns>
+        public double HorizontalTolerance
+        {
+            get { return _horizontalTolerance; }
+            set { _horizontalTolerance = value; }
+        }
 
         /// <summary>
         /// Starts new recognizing of swipe gesture based on startPosition and required length od swipe.
@@ -97,8 +122,8 @@ namespace Atomix.Components
         /// <param name="requiredDistance">Required distance of swipe gestures in meters.</param>
         public void Start(Vector3 startPosition, double requiredDistance)
         {
-            _startHandPosition = startPosition;
-            _lastHandPosition = startPosition;
+            _startPosition = startPosition;
+            _previousPosition = startPosition;
             _verticalCandidate = true;
             _horizontalCandidate = true;
             _previousDiffX = 0;
@@ -122,7 +147,7 @@ namespace Atomix.Components
                 return false;
 
             // real values are int meters
-            if (position.Z < _startHandPosition.Z - 0.02 || position.Z > _startHandPosition.Z + 0.02) // same depth from sensor
+            if (position.Z < _startPosition.Z - _depthTolerance || position.Z > _startPosition.Z + _depthTolerance) // same depth from sensor
                 return false; // Position is outside depth tolerance from starting point
 
             if (_verticalCandidate == true)
@@ -161,18 +186,18 @@ namespace Atomix.Components
                 }
             }
 
-            _lastHandPosition = position;
+            _previousPosition = position;
 
             return true;
         }
 
         private bool ProcessVerticalDirection(Vector3 position)
         {
-            // horizontal gesture is within tolerance
-            if (position.X < _startHandPosition.X - 0.03 || position.X > _startHandPosition.X + 0.03)
+            // Vertical gesture is within tolerance.
+            if (position.X < _startPosition.X - _verticalTolerance || position.X > _startPosition.X + _verticalTolerance)
                 return false; // Position is outside horizontal tolerance from starting point
 
-            double diffY = position.Y - _lastHandPosition.Y;
+            double diffY = position.Y - _previousPosition.Y;
 
             if (_previousDiffY != 0 && diffY < 0 && _previousDiffY > 0)
                 return false; // Changing direction detected (eg to top, to bottom and back to top
@@ -186,10 +211,10 @@ namespace Atomix.Components
         private bool ProcessHorizontalDirection(Vector3 position)
         {
             // horizontal gesture is within tolerance
-            if (position.Y < _startHandPosition.Y - 0.03 || position.Y > _startHandPosition.Y + 0.03)
+            if (position.Y < _startPosition.Y - _horizontalTolerance || position.Y > _startPosition.Y + _horizontalTolerance)
                 return false; // Position is outside vertical tolerance from starting point
 
-            double diffX = position.X - _lastHandPosition.X;
+            double diffX = position.X - _previousPosition.X;
 
             if (_previousDiffX != 0 && diffX < 0 && _previousDiffX > 0)
                 return false; // Changing direction detected (eg to left, to right and back to left
