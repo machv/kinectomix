@@ -31,7 +31,6 @@ namespace Atomix.Components
             set { _handTracker = value; }
         }
 
-
         private AnimatedTexture _animatedHand;
         private const float Depth = 0.5f;
         public VideoStreamComponent VideoStreamData { get; set; }

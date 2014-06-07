@@ -50,7 +50,7 @@ namespace Atomix
 
         public event EventHandler<EventArgs> Selected;
 
-        protected internal void OnSelected()
+        protected void OnSelected()
         {
             if (Selected != null)
                 Selected(this, new EventArgs());
@@ -97,10 +97,8 @@ namespace Atomix
 
             _previousInputState = _currentInputState;
             _currentInputState = _inputProvider.GetState();
-            bool isOver = _currentInputState.X >= Position.X &&
-                    _currentInputState.Y >= Position.Y &&
-                    _currentInputState.X <= Position.X + Width &&
-                    _currentInputState.Y <= Position.Y + Height;
+
+            bool isOver = _boundingRectangle.Contains(_currentInputState.X, _currentInputState.Y);
 
             currentBackground = isOver ? ActiveBackground : Background;
 

@@ -1,4 +1,5 @@
 ﻿using Atomix.Components;
+using Atomix.Components.Kinect;
 using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,32 +13,35 @@ namespace Atomix
 {
     public class StartScreen : GameScreen
     {
-        SpriteFont splashFont;
-        SpriteFont normalFont;
-        SpriteBatch spriteBatch;
+        private SpriteFont _splashFont;
+        private SpriteFont _normalFont;
+        private SpriteBatch _spriteBatch;
 
-        Button _startButton;
-        Button _levelsButton;
-        Button _quitButton;
+        private KinectButton _startButton;
+        private KinectButton _levelsButton;
+        private KinectButton _quitButton;
 
         private MessageBox _quitMessageBox;
+        private KinectCursor _cursor;
 
         public StartScreen(SpriteBatch spriteBatch)
         {
-            this.spriteBatch = spriteBatch;
+            _spriteBatch = spriteBatch;
         }
 
         public override void Initialize()
         {
+            _cursor = (ScreenManager.Game as AtomixGame).Cursor;
+
             _quitMessageBox = new MessageBox(ScreenManager.Game);
 
-            _startButton = new Button(ScreenManager.Game, "play game");
+            _startButton = new KinectButton(ScreenManager.Game, _cursor, "play game");
             _startButton.Selected += _startButton_Selected;
 
-            _levelsButton = new Button(ScreenManager.Game, "levels");
+            _levelsButton = new KinectButton(ScreenManager.Game, _cursor, "levels");
             _levelsButton.Selected += _levelsButton_Selected;
 
-            _quitButton = new Button(ScreenManager.Game, "quit game");
+            _quitButton = new KinectButton(ScreenManager.Game, _cursor, "quit game");
             _quitButton.Selected += _quitButton_Selected;
 
             Components.Add(_startButton);
@@ -61,29 +65,29 @@ namespace Atomix
         public override void Draw(GameTime gameTime)
         {
             string name = "Kinectomix";
-            Vector2 size = splashFont.MeasureString(name);
+            Vector2 size = _splashFont.MeasureString(name);
 
-            spriteBatch.Begin();
-            spriteBatch.DrawString(splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 220), Color.Black);
-            spriteBatch.End();
+            _spriteBatch.Begin();
+            _spriteBatch.DrawString(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 220), Color.Black);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
         public override void LoadContent()
         {
-            splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
-            normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
+            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
+            _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
-            _quitMessageBox.Font = normalFont;
+            _quitMessageBox.Font = _normalFont;
 
-            _startButton.Font = normalFont;
+            _startButton.Font = _normalFont;
             _startButton.InputProvider = ScreenManager.InputProvider;
 
-            _levelsButton.Font = normalFont;
+            _levelsButton.Font = _normalFont;
             _levelsButton.InputProvider = ScreenManager.InputProvider;
 
-            _quitButton.Font = normalFont;
+            _quitButton.Font = _normalFont;
             _quitButton.InputProvider = ScreenManager.InputProvider;
 
             base.LoadContent();
@@ -105,7 +109,7 @@ namespace Atomix
             if (_quitMessageBox.IsVisible)
                 return;
 
-            GameScreen screen = new LevelsScreen(spriteBatch);
+            GameScreen screen = new LevelsScreen(_spriteBatch);
 
             ScreenManager.Add(screen);
             ScreenManager.Activate(screen);
@@ -120,7 +124,7 @@ namespace Atomix
 
             Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
 
-            LevelScreen gameScreen = new LevelScreen(currentLevel, spriteBatch);
+            LevelScreen gameScreen = new LevelScreen(currentLevel, _spriteBatch);
 
             ScreenManager.Add(gameScreen);
             ScreenManager.Activate(gameScreen);
