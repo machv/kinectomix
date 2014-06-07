@@ -9,7 +9,8 @@ namespace Atomix
     {
         private Texture2D _empty;
         private Vector2 _position;
-        private IInputProvider _inputProvider;
+        protected IInputProvider _inputProvider;
+        protected Rectangle _boundingRectangle;
 
         /// <summary>
         /// Gets or sets rendering position of this button.
@@ -18,7 +19,10 @@ namespace Atomix
         public Vector2 Position
         {
             get { return _position; }
-            set { _position = value; }
+            set {
+                _position = value;
+                _boundingRectangle = new Rectangle((int)value.X, (int)value.Y, Width, Height);
+            }
         }
 
         public IInputProvider InputProvider
@@ -81,8 +85,8 @@ namespace Atomix
             base.LoadContent();
         }
 
-        IInputState lastState;
-        IInputState currState;
+        private IInputState _previousInputState;
+        private IInputState _currentInputState;
 
         private Color currentBackground;
 
@@ -91,16 +95,16 @@ namespace Atomix
             if (_inputProvider == null)
                 throw new Exception("No input provider is set.");
 
-            lastState = currState;
-            currState = _inputProvider.GetState();
-            bool isOver = currState.X >= Position.X &&
-                    currState.Y >= Position.Y &&
-                    currState.X <= Position.X + Width &&
-                    currState.Y <= Position.Y + Height;
+            _previousInputState = _currentInputState;
+            _currentInputState = _inputProvider.GetState();
+            bool isOver = _currentInputState.X >= Position.X &&
+                    _currentInputState.Y >= Position.Y &&
+                    _currentInputState.X <= Position.X + Width &&
+                    _currentInputState.Y <= Position.Y + Height;
 
             currentBackground = isOver ? ActiveBackground : Background;
 
-            if (lastState != null && lastState.IsSelected != currState.IsSelected && isOver)
+            if (_previousInputState != null && _previousInputState.IsSelected != _currentInputState.IsSelected && isOver)
             {
                 OnSelected();
 
@@ -116,25 +120,19 @@ namespace Atomix
             if (Font == null)
                 throw new Exception("Font is not set.");
 
-            Rectangle buttonDimensions = new Rectangle(
-                (int)Position.X,
-                (int)Position.Y,
-                Width,
-                Height);
-
             Rectangle innerDimensions = new Rectangle(
                 (int)Position.X + BorderThickness,
                 (int)Position.Y + BorderThickness,
                 Width - 2 * BorderThickness,
                 Height - 2 * BorderThickness);
 
-            _spriteBatch.Draw(_empty, buttonDimensions, BorderColor);
+            _spriteBatch.Draw(_empty, _boundingRectangle, BorderColor);
 
             _spriteBatch.Draw(_empty, innerDimensions, currentBackground);
 
 
             Vector2 textSize = Font.MeasureString(Content);
-            Vector2 textPosition = new Vector2(buttonDimensions.Center.X, buttonDimensions.Center.Y) - textSize / 2f;
+            Vector2 textPosition = new Vector2(_boundingRectangle.Center.X, _boundingRectangle.Center.Y) - textSize / 2f;
             textPosition.X = (int)textPosition.X;
             textPosition.Y = (int)textPosition.Y;
             _spriteBatch.DrawString(Font, Content, textPosition, Foreground);
