@@ -48,9 +48,9 @@ namespace Atomix.Components.Kinect
         }
 
         /// <summary>
-        /// Overrides update from base <see cref="Button"/> class and checks for hover.
+        /// Process checks in <see cref="Button"/> Update and adds additional checks for hover via <see cref="KinectCursor"/>.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
