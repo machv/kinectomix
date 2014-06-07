@@ -1,18 +1,6 @@
-﻿#region File Description
-//-----------------------------------------------------------------------------
-// AnimatedTexture.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Atomix
 {
@@ -32,10 +20,10 @@ namespace Atomix
         public AnimatedTexture(Vector2 origin, float rotation,
             float scale, float depth)
         {
-            this.Origin = origin;
-            this.Rotation = rotation;
-            this.Scale = scale;
-            this.Depth = depth;
+            Origin = origin;
+            Rotation = rotation;
+            Scale = scale;
+            Depth = depth;
         }
         public void Load(ContentManager content, string asset,
             int frameCount, int framesPerSec)
