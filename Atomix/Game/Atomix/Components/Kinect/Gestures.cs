@@ -12,23 +12,30 @@ using Microsoft.Kinect;
 namespace Atomix.Components
 {
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// Recognizes gestures against prerecorded gestures.
     /// </summary>
     public class Gestures : GameComponent
     {
         private static IEqualityComparer<RecognizedGesture> _gesturesComparer = new RecognizedGestureComparer();
         private static Gestures _instance;
-        public static GesturesState GetState()
-        {
-            return new GesturesState(_instance.GetRecognizedGestures(), _instance._knownGestures);
-        }
 
+        private const int MinimalFramesToProcess = 4;
         private Skeletons _skeletons;
         private Recognizer _recognizer;
         private string _gesturesLocation;
         private RecognizedGesture _recognizedGesture;
         private KnownGestures _knownGestures;
+        private bool _isUpdating;
+        private bool _isEven;
+        private ConcurrentQueue<Skeleton> _pendingSkeletons;
+        private ConcurrentQueue<RecognizedGesture> _recognizedGestures;
 
+        /// <summary>
+        /// Creates new instance of gestures component.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="skeletons">Skeletons tracked from the Kinect sensor.</param>
+        /// <param name="gesturesLocation">Path to prerecorded gestures.</param>
         public Gestures(Game game, Skeletons skeletons, string gesturesLocation)
             : base(game)
         {
@@ -37,19 +44,28 @@ namespace Atomix.Components
             _skeletons = skeletons;
             _recognizer = new Recognizer();
             _gesturesLocation = gesturesLocation;
+            _pendingSkeletons = new ConcurrentQueue<Skeleton>();
+            _recognizedGestures = new ConcurrentQueue<RecognizedGesture>();
         }
 
         /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
+        /// Gets the current state of the gestures recognizer, including known gestures and recognized gestures.
+        /// </summary>
+        /// <returns>Current state of the gestures recognizer.</returns>
+        public static GesturesState GetState()
+        {
+            return new GesturesState(_instance.GetRecognizedGestures(), _instance._knownGestures);
+        }
+
+        /// <summary>
+        /// Initializes gestures component.
         /// </summary>
         public override void Initialize()
         {
             XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
+            KnownGesture[] knownGestures = Game.Content.Load<KnownGesture[]>("Gestures");
 
-            var knownGestures = Game.Content.Load<KnownGesture[]>("Gestures");
             _knownGestures = new KnownGestures(knownGestures);
-
             foreach (KnownGesture knownGesture in _knownGestures)
             {
                 using (Stream stream = TitleContainer.OpenStream(_gesturesLocation + knownGesture.Filename))
@@ -67,12 +83,10 @@ namespace Atomix.Components
             base.Initialize();
         }
 
-        private const int MinimalFramesToProcess = 4;
-        private readonly object _locker = new object();
-        private bool _isUpdating = false;
-        private ConcurrentQueue<Skeleton> _pendingSkeletons = new ConcurrentQueue<Skeleton>();
-        private ConcurrentQueue<RecognizedGesture> _recognizedGestures = new ConcurrentQueue<RecognizedGesture>();
-
+        /// <summary>
+        /// Gets recognized gestures from recognizer pipeline.
+        /// </summary>
+        /// <returns>Recognized gestures.</returns>
         public IEnumerable<RecognizedGesture> GetRecognizedGestures()
         {
             int count = _recognizedGestures.Count;
@@ -95,9 +109,9 @@ namespace Atomix.Components
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// Processes new skeleton into the recognizer.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Update(GameTime gameTime)
         {
             if (_isEven)
@@ -115,8 +129,7 @@ namespace Atomix.Components
             base.Update(gameTime);
         }
 
-        private bool _isEven = true;
-        public void ProcessRecognizing()
+        private void ProcessRecognizing()
         {
             if (_pendingSkeletons.Count == 0)
                 return;

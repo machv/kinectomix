@@ -6,7 +6,7 @@ using Microsoft.Kinect;
 namespace Atomix.Components
 {
     /// <summary>
-    /// This is a game component that visualises clipped edges of currently tracked Skeleton from Kinect sensor.
+    /// Visualises clipped edges of currently tracked Skeleton from Kinect sensor.
     /// </summary>
     public class ClippedEdgesVisualiser : DrawableGameComponent
     {
