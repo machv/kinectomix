@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Atomix.Components.Common
+﻿namespace Atomix.Components.Common
 {
     /// <summary>
     /// Specifies constants defining which buttons to display on a MessageBox.

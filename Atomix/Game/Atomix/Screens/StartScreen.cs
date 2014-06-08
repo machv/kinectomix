@@ -1,4 +1,5 @@
 ﻿using Atomix.Components;
+using Atomix.Components.Common;
 using Atomix.Components.Kinect;
 using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
