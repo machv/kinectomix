@@ -114,7 +114,7 @@ namespace Atomix
                             }
                         }
 
-                        _isHandClosed = isOpenMatches > 1;
+                        _isHandClosed = isOpenMatches <= 1;
 
                         _textToRender = _isHandClosed ? "Closed" : "Open";
                         _textToRender += string.Format(" ({0})", isOpenMatches);
@@ -191,12 +191,20 @@ namespace Atomix
             }
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, float scale, Vector2 renderOffset)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, SpriteFont font, float scale, Vector2 renderOffset)
         {
             if (_pointTexture == null)
             {
                 _pointTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
                 _pointTexture.SetData(new Color[] { Color.White });
+            }
+
+            if (_textToRender != null)
+            {
+                Vector2 FontOrigin = font.MeasureString(_textToRender) / 2;
+
+                spriteBatch.DrawString(font, _textToRender, new Vector2(600, 20), Color.Red,
+                    0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
             Rectangle translated = new Rectangle((int)(_handBoundingBox.X / scale) + (int)renderOffset.X, (int)(_handBoundingBox.Y / scale) + (int)renderOffset.Y, (int)(_handBoundingBox.Width / scale), (int)(_handBoundingBox.Height / scale));

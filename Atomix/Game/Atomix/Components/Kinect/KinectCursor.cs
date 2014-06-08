@@ -19,7 +19,7 @@ namespace Atomix.Components
         float _scale;
         Texture2D _handTexture;
         Texture2D _pointTextures;
-        SpriteFont font;
+        SpriteFont _font;
         Vector2[] cursorPositionsBuffer;
         int cursorPositionsBufferIndex;
 
@@ -96,7 +96,7 @@ namespace Atomix.Components
         protected override void LoadContent()
         {
             _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
-            font = Game.Content.Load<SpriteFont>("Fonts/Normal");
+            _font = Game.Content.Load<SpriteFont>("Fonts/Normal");
             _pointTextures = Game.Content.Load<Texture2D>("Images/Joint");
             _animatedHand.Load(Game.Content, "HandAnimation", Frames, FramesPerSec);
 
@@ -293,15 +293,15 @@ namespace Atomix.Components
 
             if (_textToRender != null)
             {
-                Vector2 FontOrigin = font.MeasureString(_textToRender) / 2;
+                Vector2 FontOrigin = _font.MeasureString(_textToRender) / 2;
 
-                spriteBatch.DrawString(font, _textToRender, new Vector2(600, 20), Color.Red,
+                spriteBatch.DrawString(_font, _textToRender, new Vector2(600, 20), Color.Red,
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
             if (_handTracker != null)
             {
-                _handTracker.Draw(gameTime, spriteBatch, _scale, _renderOffset);
+                _handTracker.Draw(gameTime, spriteBatch, _font, _scale, _renderOffset);
             }
 
             if (cursorPosition != Vector2.Zero)

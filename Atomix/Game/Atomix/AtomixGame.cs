@@ -101,6 +101,7 @@ namespace Atomix
             var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);
             var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _kinectChooser.Skeletons);
+            _cursor.HandTracker = new ConvexityClosedHandTracker(_kinectChooser);
             _cursor.VideoStreamData = _videoStream;
 
             // Input
