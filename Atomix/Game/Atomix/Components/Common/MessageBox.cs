@@ -1,14 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-
 
 namespace Atomix.Components.Common
 {
@@ -17,16 +9,20 @@ namespace Atomix.Components.Common
     /// </summary>
     public class MessageBox : DrawableGameComponent
     {
-        private int _borderWidth = 4;
-        private int _height = 250;
-
-        private SpriteBatch _spriteBatch;
-        private Texture2D _empty;
+        private SpriteFont _font;
         private bool _isVisible;
         private bool _isFullscreen;
+        private int _height;
+        private int _borderWidth;
+        private SpriteBatch _spriteBatch;
+        private Texture2D _empty;
         private MessageBoxButtons _buttons;
-        private SpriteFont _font;
-        private string _message;
+        private string _text;
+        private Rectangle _backgroundBox;
+        private Rectangle _outerBox;
+        private Rectangle _innerBox;
+        private Vector2 _fontSize;
+        private Vector2 _textPosition;
 
         /// <summary>
         /// Gets or sets font used for rendering texts in message box.
@@ -37,7 +33,6 @@ namespace Atomix.Components.Common
             get { return _font; }
             set { _font = value; }
         }
-
         /// <summary>
         /// Gets if this message box is currently visible.
         /// </summary>
@@ -46,7 +41,6 @@ namespace Atomix.Components.Common
         {
             get { return _isVisible; }
         }
-
         /// <summary>
         /// Gets or sets if this message box should be in fullscreen background.
         /// </summary>
@@ -56,7 +50,6 @@ namespace Atomix.Components.Common
             get { return _isFullscreen; }
             set { _isFullscreen = value; }
         }
-
         /// <summary>
         /// Gets or sets message box height.
         /// </summary>
@@ -70,7 +63,6 @@ namespace Atomix.Components.Common
                     _height = value;
             }
         }
-
         /// <summary>
         /// Gets or sets width of the message box's border.
         /// </summary>
@@ -85,14 +77,23 @@ namespace Atomix.Components.Common
             }
         }
 
+        /// Occurs when a result inside <see cref="MessageBox"/> is selected.
         public event EventHandler<MessageBoxEventArgs> Changed;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageBox"/> component.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
         public MessageBox(Game game)
             : base(game)
         {
-
+            _borderWidth = 4;
+            _height = 250;
         }
 
+        /// <summary>
+        /// Fires <see cref="Changed"/> event.
+        /// </summary>
         private void OnChanged(MessageBoxResult result)
         {
             if (Changed != null)
@@ -102,8 +103,7 @@ namespace Atomix.Components.Common
         }
 
         /// <summary>
-        /// Allows the game component to perform any initialization it needs to before starting
-        /// to run.  This is where it can query for any required services and load content.
+        /// Initializes a message box component.
         /// </summary>
         public override void Initialize()
         {
@@ -112,69 +112,83 @@ namespace Atomix.Components.Common
             base.Initialize();
         }
 
+        /// <summary>
+        /// Loads content required for a message box.
+        /// </summary>
         protected override void LoadContent()
         {
-            _empty = Game.Content.Load<Texture2D>("Empty");
+            _empty = new Texture2D(_spriteBatch.GraphicsDevice, 1, 1);
+            _empty.SetData(new Color[] { Color.White });
 
             base.LoadContent();
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// Updates a message box before rendering.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Update(GameTime gameTime)
-        {
-            // TODO: Add your update code here
-
-            base.Update(gameTime);
-        }
-
-        public override void Draw(GameTime gameTime)
         {
             if (_font == null)
                 throw new Exception("No font specified for rendering.");
 
             if (_isVisible)
             {
+                _backgroundBox = new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height);
+                _outerBox = new Rectangle(0, (GraphicsDevice.Viewport.Bounds.Height - _height) / 2, GraphicsDevice.Viewport.Bounds.Width, _height);
+                _innerBox = new Rectangle(0, _borderWidth + (GraphicsDevice.Viewport.Bounds.Height - _height) / 2, GraphicsDevice.Viewport.Bounds.Width, _height - 2 * _borderWidth);
+                _fontSize = _font.MeasureString(_text);
+                _textPosition = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2 - _fontSize.X / 2, GraphicsDevice.Viewport.Bounds.Height / 2 - _height / 2 + _fontSize.Y / 2);
+            }
+
+            base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// Draws a message box on the screen.
+        /// </summary>
+        /// <param name="gameTime">Snapshot of game timing.</param>
+        public override void Draw(GameTime gameTime)
+        {
+            if (_isVisible)
+            {
                 _spriteBatch.Begin();
 
                 if (_isFullscreen)
-                {
-                    Rectangle background = new Rectangle(0, 0, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height);
-                    _spriteBatch.Draw(_empty, background, Color.LightGray);
-                }
+                    _spriteBatch.Draw(_empty, _backgroundBox, Color.LightGray);
 
-                Rectangle outerBox = new Rectangle(0, (GraphicsDevice.Viewport.Bounds.Height - _height) / 2, GraphicsDevice.Viewport.Bounds.Width, _height);
-
-                _spriteBatch.Draw(_empty, outerBox, Color.Silver);
-
-                Rectangle innerBox = new Rectangle(0, _borderWidth + (GraphicsDevice.Viewport.Bounds.Height - _height) / 2, GraphicsDevice.Viewport.Bounds.Width, _height - 2 * _borderWidth);
-
-                _spriteBatch.Draw(_empty, innerBox, Color.Gray);
-
-                Vector2 size = _font.MeasureString(_message);
-
-                _spriteBatch.DrawString(_font, _message, new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, GraphicsDevice.Viewport.Bounds.Height / 2 - _height / 2 + size.Y / 2), Color.White);
+                _spriteBatch.Draw(_empty, _outerBox, Color.Silver);
+                _spriteBatch.Draw(_empty, _innerBox, Color.Gray);
+                _spriteBatch.DrawString(_font, _text, _textPosition, Color.White);
 
                 _spriteBatch.End();
             }
+
             base.Draw(gameTime);
         }
 
-        public void Show(string message, MessageBoxButtons buttons)
+        /// <summary>
+        /// Displays a message box with specified text and buttons.
+        /// </summary>
+        /// <param name="text">The text to display in the message box.</param>
+        /// <param name="buttons">One of the <see cref="MessageBoxButtons"/> values that specifies which buttons to display in the message box.</param>
+        public void Show(string text, MessageBoxButtons buttons)
         {
-            if (message == null)
-                throw new ArgumentNullException("message");
+            if (text == null)
+                throw new ArgumentNullException("text");
 
             _isVisible = true;
-            _message = message;
+            _text = text;
             _buttons = buttons;
         }
 
-        public void Show(string message)
+        /// <summary>
+        /// Displays a message box with specified text.
+        /// </summary>
+        /// <param name="text"></param>
+        public void Show(string text)
         {
-            Show(message, MessageBoxButtons.OK);
+            Show(text, MessageBoxButtons.OK);
         }
     }
 }
