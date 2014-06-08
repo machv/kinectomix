@@ -12,14 +12,20 @@ namespace Atomix
     {
         private SpriteBatch _spriteBatch;
         private Texture2D _empty;
+        private IInputState _previousInputState;
+        private IInputState _currentInputState;
+        private Color _currentBackground;
         private Vector2 _position;
         private int _width;
         private int _height;
         private string _content;
-
-        private IInputState _previousInputState;
-        private IInputState _currentInputState;
-        private Color _currentBackground;
+        private int _borderThickness;
+        private Color _borderColor;
+        private Color _background;
+        private Color _activeBackground;
+        private Color _foreground;
+        private SpriteFont _font;
+        private object _tag;
 
         protected IInputProvider _inputProvider;
         protected Rectangle _boundingRectangle;
@@ -36,15 +42,6 @@ namespace Atomix
                 _position = value;
                 _boundingRectangle = new Rectangle((int)value.X, (int)value.Y, _width, _height);
             }
-        }
-        /// <summary>
-        /// Gets or sets input provider for accepting interactions from user.
-        /// </summary>
-        /// <returns>Current registered input provider for this button.</returns>
-        public IInputProvider InputProvider
-        {
-            get { return _inputProvider; }
-            set { _inputProvider = value; }
         }
         /// <summary>
         /// Gets or sets width of this button.
@@ -81,31 +78,83 @@ namespace Atomix
             get { return _content; }
             set { _content = value; }
         }
-
-        public int BorderThickness { get; set; }
-
-        public Color BorderColor { get; set; }
-        public Color Background { get; set; }
-
-        public Color ActiveBackground { get; set; }
-
-        public Color Foreground { get; set; }
-
-        public SpriteFont Font { get; set; }
-
-        public object Tag { get; set; }
-
-        public event EventHandler<EventArgs> Selected;
-
         /// <summary>
-        /// Fires <see cref="Selected"/> event.
+        /// Gets or sets the border thickness of a button.
         /// </summary>
-        protected void OnSelected()
+        /// <returns>Current thickness of border.</returns>
+        public int BorderThickness
         {
-            if (Selected != null)
-                Selected(this, new EventArgs());
+            get { return _borderThickness; }
+            set { _borderThickness = value; }
+        }
+        /// <summary>
+        /// Gets or sets color of button's border.
+        /// </summary>
+        /// <returns>Current color of the border.</returns>
+        public Color BorderColor
+        {
+            get { return _borderColor; }
+            set { _borderColor = value; }
+        }
+        /// <summary>
+        /// Gets or sets color of button's background when button is not hovered.
+        /// </summary>
+        /// <returns>Backgound color of button.</returns>
+        public Color Background
+        {
+            get { return _background; }
+            set { _background = value; }
+        }
+        /// <summary>
+        /// Gets or sets color of the button's background when button is hovered.
+        /// </summary>
+        /// <returns>Background color when hovered.</returns>
+        public Color ActiveBackground
+        {
+            get { return _activeBackground; }
+            set { _activeBackground = value; }
+        }
+        /// <summary>
+        /// Gets or sets foreground color of text in the button.
+        /// </summary>
+        /// <returns>Foreground color used in textbox.</returns>
+        public Color Foreground
+        {
+            get { return _foreground; }
+            set { _foreground = value; }
+        }
+        /// <summary>
+        /// Gets or sets font used for rendering content of the button.
+        /// </summary>
+        /// <returns>Current font.</returns>
+        public SpriteFont Font
+        {
+            get { return _font; }
+            set { _font = value; }
+        }
+        /// <summary>
+        /// Gets or sets an arbitrary object value that can be used to store custom information about this button.
+        /// </summary>
+        /// <returns></returns>
+        public object Tag
+        {
+            get { return _tag; }
+            set { _tag = value; }
+        }
+        /// <summary>
+        /// Gets or sets input provider for accepting interactions from user.
+        /// </summary>
+        /// <returns>Current registered input provider for this button.</returns>
+        public IInputProvider InputProvider
+        {
+            get { return _inputProvider; }
+            set { _inputProvider = value; }
         }
 
+        /// <summary>
+        /// Occurs when a <see cref="Button"/> is selected (eg. clicked).
+        /// </summary>
+        public event EventHandler<EventArgs> Selected;
 
         /// <summary>
         /// Constructs new instance of <see cref="Button"/>.
@@ -202,6 +251,23 @@ namespace Atomix
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Allows to fire selection of this button when selecting is processed manually.
+        /// </summary>
+        public void Select()
+        {
+            OnSelected();
+        }
+
+        /// <summary>
+        /// Fires <see cref="Selected"/> event.
+        /// </summary>
+        protected void OnSelected()
+        {
+            if (Selected != null)
+                Selected(this, new EventArgs());
         }
     }
 }
