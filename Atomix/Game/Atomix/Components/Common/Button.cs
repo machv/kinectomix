@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -157,7 +156,7 @@ namespace Atomix
         public event EventHandler<EventArgs> Selected;
 
         /// <summary>
-        /// Constructs new instance of <see cref="Button"/>.
+        /// Initializes a new instance of <see cref="Button"/>.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
         public Button(Game game)
@@ -185,12 +184,22 @@ namespace Atomix
         }
 
         /// <summary>
+        /// Initializes a button component.
+        /// </summary>
+        public override void Initialize()
+        {
+            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+
+            base.Initialize();
+        }
+
+        /// <summary>
         /// Loads required content for rendering.
         /// </summary>
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            _empty = Game.Content.Load<Texture2D>("Empty");
+            _empty = new Texture2D(_spriteBatch.GraphicsDevice, 1, 1);
+            _empty.SetData(new Color[] { Color.White });
 
             base.LoadContent();
         }
