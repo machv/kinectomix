@@ -10,43 +10,64 @@ namespace Atomix.Components
 {
     public class KinectCursor : DrawableGameComponent
     {
-        const int CursorPositionsBufferLenth = 1;
+        private const int CursorPositionsBufferLenth = 1;
+        private SpriteBatch spriteBatch;
+        private bool leftHanded;
+        private Vector2 _renderOffset;
+        private float _scale;
+        private Texture2D _handTexture;
+        private SpriteFont _font;
+        private Vector2[] cursorPositionsBuffer;
+        private int cursorPositionsBufferIndex;
+        private int frame;
+        private float distanceTolerance = 1;
+        private Vector2 lastHandPosition = new Vector2(0, 0);
+        private double lastHandTime;
+        private string _textToRender;
+        private IHandStateTracker _handTracker;
+        private bool _hideMouseCursorWhenHandTracked;
+
         protected KinectChooser _KinectChooser;
         protected Skeletons _skeletons;
-        SpriteBatch spriteBatch;
-        bool leftHanded = true;
-        Vector2 _renderOffset;
-        float _scale;
-        Texture2D _handTexture;
-        Texture2D _pointTextures;
-        SpriteFont _font;
-        Vector2[] cursorPositionsBuffer;
-        int cursorPositionsBufferIndex;
-
-        private IHandStateTracker _handTracker;
 
         public IHandStateTracker HandTracker
         {
             get { return _handTracker; }
             set { _handTracker = value; }
         }
-
-        private AnimatedTexture _animatedHand;
-        private const float Depth = 0.5f;
-        public VideoStreamComponent VideoStreamData { get; set; }
-
-        private bool _hideMouseCursorWhenHandTracked;
+        public VideoStreamComponent VideoStreamData
+        {
+            get;
+            set;
+        }
         public bool HideMouseCursorWhenHandTracked
         {
             get { return _hideMouseCursorWhenHandTracked; }
             set { _hideMouseCursorWhenHandTracked = value; }
         }
+        public float Scale
+        {
+            get { return _scale; }
+            set { _scale = value; }
+        }
+        public Vector2 RenderOffset
+        {
+            get { return _renderOffset; }
+            set { _renderOffset = value; }
+        }
+        public bool IsHandClosed { get; protected set; }
 
-        /// <summary>
-        /// Enables tracking of open/close hand.
-        /// </summary>
-        /// <returns></returns>
-        public bool EnableHandStatusTracking { get; set; }
+        public bool IsHandPressed { get; protected set; }
+
+        public Vector2 HandPosition { get { return new Vector2((int)cursorPosition.X, (int)cursorPosition.Y); } }
+
+        public Vector3 HandRealPosition { get; set; }
+
+        protected bool _isHandTracked = false;
+        public bool IsHandTracked
+        {
+            get { return _isHandTracked; }
+        }
 
         public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
             : base(game)
@@ -60,64 +81,15 @@ namespace Atomix.Components
 
             cursorPositionsBuffer = new Vector2[CursorPositionsBufferLenth];
             cursorPositionsBufferIndex = -1;
-
-            _animatedHand = new AnimatedTexture(Vector2.Zero, 0, 0.25f, Depth);
         }
-
-        public float Scale
-        {
-            get { return _scale; }
-            set { _scale = value; }
-        }
-
-        public Vector2 RenderOffset
-        {
-            get { return _renderOffset; }
-            set { _renderOffset = value; }
-        }
-
-        public bool IsHandClosed { get; protected set; }
-
-        public bool IsHandPressed { get; protected set; }
-
-        public Vector2 HandPosition { get { return new Vector2((int)cursorPosition.X, (int)cursorPosition.Y); } }
-
-        public Vector3 HandRealPosition { get;set; }
-
-        protected bool _isHandTracked = false;
-        public bool IsHandTracked
-        {
-            get { return _isHandTracked; }
-        }
-
-        private const int Frames = 10;
-        private const int FramesPerSec = 10;
 
         protected override void LoadContent()
         {
             _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
             _font = Game.Content.Load<SpriteFont>("Fonts/Normal");
-            _pointTextures = Game.Content.Load<Texture2D>("Images/Joint");
-            _animatedHand.Load(Game.Content, "HandAnimation", Frames, FramesPerSec);
 
             base.LoadContent();
         }
-
-        Vector2 lastHandPosition = new Vector2(0, 0);
-        double lastHandTime;
-
-        DepthImagePoint _handDepthPoint;
-        int[] _histogram;
-        int _handRadius;
-
-        Rectangle _handRect;
-        string _textToRender;
-        short[] lastDepthFrameData = null;
-
-        int top;
-        int left;
-        int bottom;
-        int right;
 
         public override void Update(GameTime gameTime)
         {
@@ -138,7 +110,7 @@ namespace Atomix.Components
 
                         //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
                         bool isTracked;
-                        var cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton, out isTracked);
+                        Vector2 cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton, out isTracked);
 
                         var handPoint = _skeletons.TrackedSkeleton.Joints[leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
                         HandRealPosition = new Vector3(handPoint.X, handPoint.Y, handPoint.Z);
@@ -152,7 +124,7 @@ namespace Atomix.Components
                             if (_hideMouseCursorWhenHandTracked)
                                 Game.IsMouseVisible = false;
                         }
-                        else if(!isTracked)
+                        else if (!isTracked)
                         {
                             _isHandTracked = false;
 
@@ -169,26 +141,16 @@ namespace Atomix.Components
                     }
                 }
 
-                using (DepthImageFrame depthFrame = _KinectChooser.Sensor.DepthStream.OpenNextFrame(0))
+                if (_handTracker != null)
                 {
-                    if (depthFrame != null)
+                    using (DepthImageFrame depthFrame = _KinectChooser.Sensor.DepthStream.OpenNextFrame(0))
                     {
-                        // Create array for pixel data and copy it from the image frame
-                        short[] pixelData = new short[depthFrame.PixelDataLength];
-                        depthFrame.CopyPixelDataTo(pixelData);
-
-                        lastDepthFrameData = pixelData;
-                        lastDepthFrameDataLength = depthFrame.PixelDataLength;
-
-                        if (_handTracker != null)
+                        if (depthFrame != null)
                         {
                             _handTracker.ProcessDepthData(depthFrame);
                         }
                     }
-                }
 
-                if (_handTracker != null)
-                {
                     using (SkeletonFrame skeletonFrame = _KinectChooser.Sensor.SkeletonStream.OpenNextFrame(0))
                     {
                         if (skeletonFrame != null)
@@ -197,10 +159,11 @@ namespace Atomix.Components
                         }
                     }
                 }
+            }
 
             if (_skeletons.TrackedSkeleton != null && _handTracker != null)
             {
-                _handTracker.Update(leftHanded);
+                _handTracker.Update(leftHanded, cursorPosition);
             }
 
             if (_skeletons.TrackedSkeleton != null)
@@ -208,7 +171,7 @@ namespace Atomix.Components
                 // check for hand
                 if (cursorPosition != Vector2.Zero)
                 {
-                    Vector2 handPosition = cursorPosition; // SkeletonToColorMap(_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position);
+                    Vector2 handPosition = cursorPosition;
 
                     if (Vector2.Distance(handPosition, lastHandPosition) > 5)
                     {
@@ -228,25 +191,7 @@ namespace Atomix.Components
                 // Avoid flickering
                 if (cursorPos != Vector2.Zero)
                 {
-                    // animate only if on same place
-                    if (Vector2.Distance(cursorPosition, cursorPos) > distanceTolerance)
-                    {
-                        _animatedHand.Reset();
-                        _animatedHand.Play();
-                        IsHandPressed = false;
-                    }
-
                     cursorPosition = cursorPos;
-                }
-
-
-                float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-                _animatedHand.UpdateFrame(elapsed);
-
-                if (_animatedHand.Frame == Frames - 1)
-                {
-                    IsHandPressed = true;
-                    _animatedHand.Pause();
                 }
             }
             else
@@ -257,9 +202,6 @@ namespace Atomix.Components
 
             base.Update(gameTime);
         }
-
-        int frame = 0;
-        float distanceTolerance = 1;
 
         protected void AddCursorPosition(Vector2 cursorPosition)
         {
@@ -309,16 +251,14 @@ namespace Atomix.Components
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
-            if (_handTracker != null)
-            {
-                _handTracker.Draw(gameTime, spriteBatch, _font, _scale, _renderOffset);
-            }
-
             if (cursorPosition != Vector2.Zero)
             {
                 spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
+            }
 
-                _animatedHand.DrawFrame(spriteBatch, cursorPosition);
+            if (_handTracker != null)
+            {
+                _handTracker.Draw(gameTime, spriteBatch, _font, _scale, _renderOffset);
             }
 
             spriteBatch.End();
@@ -395,7 +335,7 @@ namespace Atomix.Components
                 // the hand is sufficiently in front of the shoulder
                 if (sameShoulder.Position.Z - hand.Position.Z > 0.2)
                 {
-                    isHandTracked = true; 
+                    isHandTracked = true;
 
                     float xScaled = (hand.Position.X - oppositeShoulder.Position.X) / ((sameShoulder.Position.X - oppositeShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
 
