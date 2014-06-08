@@ -18,6 +18,44 @@ namespace Atomix
     /// </summary>
     public class LevelScreen : GameScreen
     {
+        private Texture2D wallTexture;
+        private Texture2D emptyTexture;
+        private Texture2D arrowTexture;
+        private Texture2D activeTexture;
+        private Texture2D idleTexture;
+        private MouseState mouseState;
+        private MouseState lastMouseState;
+        private SoundEffect applause;
+        private Vector2 boardPosition;
+        private SpriteFont normalFont;
+        private SpriteFont __splashFont;
+        private SpriteFont _levelFont;
+        private Point activeAtomIndex = new Point(-1, -1);
+
+        private int TileWidth = 64;
+        private int TileHeight = 64;
+
+        // Animation stuff
+        protected bool isMovementAnimation = false;
+        protected Vector2 atomPosition;
+        protected Vector2 finalPosition;
+        Point destination;
+        string atomToMove;
+        MoveDirection moveDirection;
+        float atomSpeed = 400f;
+
+        // Scoring
+        int moves;
+        DateTime gameStarted;
+        TimeSpan gameDuration;
+
+        bool isLevelFinished = false;
+
+        ContentManager _content;
+
+        Button _levelsButton;
+        Button _repeatButton;
+        Button _nextButton;
         private SwipeGesturesRecognizer _swipeGestures;
         Level levelDefinition;
         LevelViewModel level;
@@ -41,49 +79,11 @@ namespace Atomix
             base.Initialize();
         }
 
-        Texture2D wallTexture;
-        Texture2D emptyTexture;
-        Texture2D arrowTexture;
-        Texture2D activeTexture;
-        Texture2D idleTexture;
-        MouseState mouseState;
-        MouseState lastMouseState;
-        SoundEffect applause;
-        Vector2 boardPosition;
-        SpriteFont normalFont;
-        SpriteFont splashFont;
-        Point activeAtomIndex = new Point(-1, -1);
-
-        int TileWidth = 64;
-        int TileHeight = 64;
-
-        // Animation stuff
-        protected bool isMovementAnimation = false;
-        protected Vector2 atomPosition;
-        protected Vector2 finalPosition;
-        Point destination;
-        string atomToMove;
-        MoveDirection moveDirection;
-        float atomSpeed = 400f;
-
-        // Scoring
-        int moves;
-        DateTime gameStarted;
-        TimeSpan gameDuration;
-
-        bool isLevelFinished = false;
-
-        ContentManager _content;
-
-        Button _levelsButton;
-        Button _repeatButton;
-        Button _nextButton;
-
         public override void LoadContent()
         {
             int boardHeight = level.Board.RowsCount * TileHeight;
 
-            int startX = ScreenManager.GraphicsDevice.Viewport.Bounds.Width - (level.Board.ColumnsCount * TileWidth) - 2 * TileWidth;
+            int startX = ScreenManager.GraphicsDevice.Viewport.Bounds.Width - (level.Board.ColumnsCount * TileWidth) - 1 * TileWidth;
             int startY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - boardHeight / 2;
 
             boardPosition = new Vector2(startX, startY);
@@ -91,7 +91,7 @@ namespace Atomix
             CalculateBoardTilePositions(boardPosition, level.Board);
 
             //int offset = (int)boardPosition.X + level.Board.ColumnsCount * TileWidth + TileWidth;
-            int offset = 60;
+            int offset = 30;
             int moleculeWidth = level.Molecule.ColumnsCount * TileWidth;
             int moleculeHeight = level.Molecule.RowsCount * TileHeight;
             //int posX = (ScreenManager.GraphicsDevice.Viewport.Bounds.Width - offset) / 2 - moleculeWidth / 2;
@@ -109,7 +109,7 @@ namespace Atomix
             activeTexture = _content.Load<Texture2D>("Board/Active");
             applause = _content.Load<SoundEffect>("Sounds/Applause");
             normalFont = _content.Load<SpriteFont>("Fonts/Normal");
-            splashFont = _content.Load<SpriteFont>("Fonts/Splash");
+            __splashFont = _content.Load<SpriteFont>("Fonts/Splash");
             idleTexture = _content.Load<Texture2D>("Idle");
 
             _levelsButton = new Button(ScreenManager.Game, "levels");
@@ -320,7 +320,6 @@ namespace Atomix
                                 l = j;
                             }
                         }
-
                     }
                 }
             }
@@ -596,9 +595,9 @@ namespace Atomix
                 spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 230), Color.Brown);
 
                 string name = "level completed";
-                Vector2 size = splashFont.MeasureString(name);
+                Vector2 size = __splashFont.MeasureString(name);
 
-                spriteBatch.DrawString(splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
+                spriteBatch.DrawString(__splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
 
                 _repeatButton.Draw(gameTime);
                 _levelsButton.Draw(gameTime);
