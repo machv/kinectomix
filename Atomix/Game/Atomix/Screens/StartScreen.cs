@@ -4,11 +4,7 @@ using Atomix.Components.Kinect;
 using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Atomix
 {
@@ -22,7 +18,7 @@ namespace Atomix
         private KinectButton _levelsButton;
         private KinectButton _quitButton;
 
-        private MessageBox _quitMessageBox;
+        private KinectMessageBox _quitMessageBox;
         private KinectCursor _cursor;
 
         public StartScreen(SpriteBatch spriteBatch)
@@ -34,7 +30,8 @@ namespace Atomix
         {
             _cursor = (ScreenManager.Game as AtomixGame).Cursor;
 
-            _quitMessageBox = new MessageBox(ScreenManager.Game);
+            _quitMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, _cursor);
+            _quitMessageBox.Changed += _quitMessageBox_Changed;
 
             _startButton = new KinectButton(ScreenManager.Game, _cursor, "play game");
             _startButton.Selected += _startButton_Selected;
@@ -94,18 +91,15 @@ namespace Atomix
             base.LoadContent();
         }
 
-        void _quitButton_Selected(object sender, EventArgs e)
+        private void _quitButton_Selected(object sender, EventArgs e)
         {
             if (_quitMessageBox.IsVisible)
                 return;
-            //TODO: Add confirmation
 
             _quitMessageBox.Show("Do you really want to quit this game?", MessageBoxButtons.YesNo);
-
-            //ScreenManager.Game.Exit();
         }
 
-        void _levelsButton_Selected(object sender, EventArgs e)
+        private void _levelsButton_Selected(object sender, EventArgs e)
         {
             if (_quitMessageBox.IsVisible)
                 return;
@@ -116,7 +110,7 @@ namespace Atomix
             ScreenManager.Activate(screen);
         }
 
-        void _startButton_Selected(object sender, EventArgs e)
+        private void _startButton_Selected(object sender, EventArgs e)
         {
             if (_quitMessageBox.IsVisible)
                 return;
@@ -131,6 +125,14 @@ namespace Atomix
             ScreenManager.Activate(gameScreen);
         }
 
-        public override void UnloadContent() { }
+        private void _quitMessageBox_Changed(object sender, MessageBoxEventArgs e)
+        {
+            _quitMessageBox.Hide();
+
+            if (e.Result == MessageBoxResult.Yes)
+            {
+                ScreenManager.Game.Exit();
+            }
+        }
     }
 }

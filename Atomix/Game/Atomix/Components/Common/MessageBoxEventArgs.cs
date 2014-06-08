@@ -3,7 +3,7 @@
 namespace Atomix.Components.Common
 {
     /// <summary>
-    /// Provides data for the <see cref="MessageBox.Changed"/> event.
+    /// Provides data for the <see cref="KinectMessageBox.Changed"/> event.
     /// </summary>
     public class MessageBoxEventArgs : EventArgs
     {

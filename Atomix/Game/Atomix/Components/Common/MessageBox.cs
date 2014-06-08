@@ -1,13 +1,14 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Atomix.Components.Kinect;
 
 namespace Atomix.Components.Common
 {
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class MessageBox : DrawableGameComponent
+    public class KinectMessageBox : DrawableGameComponent
     {
         private SpriteFont _font;
         private bool _isVisible;
@@ -23,6 +24,15 @@ namespace Atomix.Components.Common
         private Rectangle _innerBox;
         private Vector2 _fontSize;
         private Vector2 _textPosition;
+        private KinectCursor _cursor;
+        private KinectButton _buttonOk;
+        private KinectButton _buttonCancel;
+        private KinectButton _buttonYes;
+        private KinectButton _buttonNo;
+        private int _buttonWidth;
+        private int _buttonHeight;
+        private Button[] _renderedButtons;
+        private IInputProvider _inputProvider;
 
         /// <summary>
         /// Gets or sets font used for rendering texts in message box.
@@ -31,7 +41,15 @@ namespace Atomix.Components.Common
         public SpriteFont Font
         {
             get { return _font; }
-            set { _font = value; }
+            set
+            {
+                _font = value;
+
+                _buttonOk.Font = _font;
+                _buttonCancel.Font = _font;
+                _buttonYes.Font = _font;
+                _buttonNo.Font = _font;
+            }
         }
         /// <summary>
         /// Gets if this message box is currently visible.
@@ -77,18 +95,23 @@ namespace Atomix.Components.Common
             }
         }
 
-        /// Occurs when a result inside <see cref="MessageBox"/> is selected.
+        /// Occurs when a result inside <see cref="KinectMessageBox"/> is selected.
         public event EventHandler<MessageBoxEventArgs> Changed;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MessageBox"/> component.
+        /// Initializes a new instance of the <see cref="KinectMessageBox"/> component.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
-        public MessageBox(Game game)
+        /// <param name="cursor">Kinect cursor used in game.</param>
+        public KinectMessageBox(Game game, IInputProvider inputProvider, KinectCursor cursor)
             : base(game)
         {
+            _inputProvider = inputProvider;
+            _cursor = cursor;
             _borderWidth = 4;
             _height = 250;
+            _buttonWidth = 130;
+            _buttonHeight = 80;
         }
 
         /// <summary>
@@ -108,6 +131,20 @@ namespace Atomix.Components.Common
         public override void Initialize()
         {
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            _buttonOk = new KinectButton(Game, _cursor, "OK") { Tag = MessageBoxResult.OK, Width = _buttonWidth, Height = _buttonHeight, InputProvider = _inputProvider, Background = Color.DarkGray, BorderColor = Color.White };
+            _buttonCancel = new KinectButton(Game, _cursor, "Cancel") { Tag = MessageBoxResult.Cancel, Width = _buttonWidth, Height = _buttonHeight, InputProvider = _inputProvider, Background = Color.DarkGray, BorderColor = Color.White };
+            _buttonYes = new KinectButton(Game, _cursor, "Yes") { Tag = MessageBoxResult.Yes, Width = _buttonWidth, Height = _buttonHeight, InputProvider = _inputProvider, Background = Color.DarkGray, BorderColor = Color.White };
+            _buttonNo = new KinectButton(Game, _cursor, "No") { Tag = MessageBoxResult.No, Width = _buttonWidth, Height = _buttonHeight, InputProvider = _inputProvider, Background = Color.DarkGray, BorderColor = Color.White };
+
+            _buttonOk.Selected += _button_Selected;
+            _buttonCancel.Selected += _button_Selected;
+            _buttonYes.Selected += _button_Selected;
+            _buttonNo.Selected += _button_Selected;
+
+            _buttonOk.Initialize();
+            _buttonCancel.Initialize();
+            _buttonYes.Initialize();
+            _buttonNo.Initialize();
 
             base.Initialize();
         }
@@ -139,6 +176,20 @@ namespace Atomix.Components.Common
                 _innerBox = new Rectangle(0, _borderWidth + (GraphicsDevice.Viewport.Bounds.Height - _height) / 2, GraphicsDevice.Viewport.Bounds.Width, _height - 2 * _borderWidth);
                 _fontSize = _font.MeasureString(_text);
                 _textPosition = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2 - _fontSize.X / 2, GraphicsDevice.Viewport.Bounds.Height / 2 - _height / 2 + _fontSize.Y / 2);
+
+                if (_renderedButtons != null)
+                {
+                    int x = GraphicsDevice.Viewport.Bounds.Width / 2 - (_renderedButtons.Length * (_buttonWidth + 5)) / 2;
+                    int y = GraphicsDevice.Viewport.Bounds.Height / 2 - _height / 8 + _buttonHeight / 2;
+
+                    foreach (Button button in _renderedButtons)
+                    {
+                        button.Position = new Vector2(x, y);
+                        button.Update(gameTime);
+
+                        x += _buttonWidth + 5;
+                    }
+                }
             }
 
             base.Update(gameTime);
@@ -162,6 +213,14 @@ namespace Atomix.Components.Common
                 _spriteBatch.DrawString(_font, _text, _textPosition, Color.White);
 
                 _spriteBatch.End();
+
+                if (_renderedButtons != null)
+                {
+                    foreach (Button button in _renderedButtons)
+                        button.Draw(gameTime);
+                }
+
+
             }
 
             base.Draw(gameTime);
@@ -180,6 +239,22 @@ namespace Atomix.Components.Common
             _isVisible = true;
             _text = text;
             _buttons = buttons;
+
+            switch (_buttons)
+            {
+                case MessageBoxButtons.OK:
+                    _renderedButtons = new Button[] { _buttonOk };
+                    break;
+                case MessageBoxButtons.OKCancel:
+                    _renderedButtons = new Button[] { _buttonOk, _buttonCancel };
+                    break;
+                case MessageBoxButtons.YesNo:
+                    _renderedButtons = new Button[] { _buttonYes, _buttonNo };
+                    break;
+                case MessageBoxButtons.YesNoCancel:
+                    _renderedButtons = new Button[] { _buttonYes, _buttonNo, _buttonCancel };
+                    break;
+            }
         }
 
         /// <summary>
@@ -189,6 +264,31 @@ namespace Atomix.Components.Common
         public void Show(string text)
         {
             Show(text, MessageBoxButtons.OK);
+        }
+
+        /// <summary>
+        /// Hides a message box.
+        /// </summary>
+        public void Hide()
+        {
+            _isVisible = false;
+        }
+
+        /// <summary>
+        /// Handles button selected event and eventually raises <see cref="Changed"/> event.
+        /// </summary>
+        /// <param name="sender">Which button raised this event.</param>
+        /// <param name="e">Not used parameters.</param>
+        private void _button_Selected(object sender, EventArgs e)
+        {
+            if ((sender is Button) == false)
+                return;
+
+            Button button = sender as Button;
+            MessageBoxResult result = (MessageBoxResult)button.Tag;
+
+            Hide();
+            OnChanged(result);
         }
     }
 }
