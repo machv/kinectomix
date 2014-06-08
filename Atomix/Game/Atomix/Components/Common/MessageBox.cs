@@ -10,68 +10,8 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 
-namespace Atomix.Components
+namespace Atomix.Components.Common
 {
-    /// <summary>
-    /// Specifies constants defining which buttons to display on a MessageBox.
-    /// </summary>
-    public enum MessageBoxButtons
-    {
-        /// <summary>
-        /// The message box contains an OK button.
-        /// </summary>
-        OK,
-        /// <summary>
-        /// The message box contains OK and Cancel buttons.
-        /// </summary>
-        OKCancel,
-        /// <summary>
-        /// The message box contains Yes and No buttons.
-        /// </summary>
-        YesNo,
-        /// <summary>
-        /// The message box contains Yes, No, and Cancel buttons.
-        /// </summary>
-        YesNoCancel,
-    }
-
-    /// <summary>
-    /// Specifies identifiers to indicate the return value of a message box.
-    /// </summary>
-    public enum MessageBoxResult
-    {
-        /// <summary>
-        /// The dialog box return value is Cancel (usually sent from a button labeled Cancel).
-        /// </summary>
-        Cancel,
-        /// <summary>
-        /// The dialog box return value is No (usually sent from a button labeled No).
-        /// </summary>
-        No,
-        /// <summary>
-        /// The dialog box return value is Yes (usually sent from a button labeled Yes).
-        /// </summary>
-        Yes,
-        /// <summary>
-        /// The dialog box return value is OK (usually sent from a button labeled OK).
-        /// </summary>
-        OK,
-    }
-
-    public class MessageBoxEventArgs : EventArgs
-    {
-        private MessageBoxResult _result;
-        public MessageBoxResult Result
-        {
-            get { return _result; }
-        }
-
-        public MessageBoxEventArgs(MessageBoxResult result)
-        {
-            _result = result;
-        }
-    }
-
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
