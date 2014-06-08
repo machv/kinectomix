@@ -98,7 +98,7 @@ namespace Atomix
             _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectChooser.Skeletons, _kinectDebugOffset, _scale);
             _cursor = new KinectCursor(this, _kinectChooser, _kinectChooser.Skeletons, _kinectDebugOffset, _scale) { HideMouseCursorWhenHandTracked = true };
             _videoStream = new VideoStreamComponent(this, _kinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
-            var background = new Background(this);
+            var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);
             var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _kinectChooser.Skeletons);
             _cursor.VideoStreamData = _videoStream;
