@@ -14,17 +14,17 @@ namespace Atomix
         /// <summary>
         /// The SpriteBatch used for rendering.
         /// </summary>
-        private SpriteBatch spriteBatch;
+        private SpriteBatch _spriteBatch;
 
         /// <summary>
         /// The font for rendering the state text.
         /// </summary>
-        private SpriteFont font;
+        private SpriteFont _font;
 
         /// <summary>
         /// Kinect Icon texture.
         /// </summary>
-        private Texture2D icon;
+        private Texture2D _iconTexture;
 
         public Skeletons Skeletons { get; private set; }
 
@@ -56,8 +56,6 @@ namespace Atomix
             this.DiscoverSensor();
         }
 
-        public InteractionStream Interactions { get; private set; }
-
         private void DiscoverSensor()
         {
             KinectSensor sensor = KinectSensor.KinectSensors.FirstOrDefault();
@@ -86,10 +84,6 @@ namespace Atomix
                         sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
 
                         //EnableSeatedMode(sensor);
-
-                        KinectInteractionClient ic = new KinectInteractionClient();
-                        Interactions = new Microsoft.Kinect.Toolkit.Interaction.InteractionStream(sensor, ic);
-
                         sensor.Start();
 
                         //sensor.ElevationAngle = 10;
@@ -121,9 +115,9 @@ namespace Atomix
         /// </summary>
         public override void Initialize()
         {
-            base.Initialize();
+            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            this.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            base.Initialize();
         }
 
         public Skeleton[] SkeletonData { get; set; }
@@ -158,44 +152,38 @@ namespace Atomix
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            // If the spritebatch is null, call initialize
-            if (spriteBatch == null)
-            {
-                Initialize();
-            }
-
             // If we don't have a sensor, or the sensor we have is not connected
             // then we will display the information text
-            if (this.Sensor == null || this.LastStatus != KinectStatus.Connected)
+            if (Sensor == null || this.LastStatus != KinectStatus.Connected)
             {
-                this.spriteBatch.Begin();
+                _spriteBatch.Begin();
 
                 float scale = 0.5f;
                 Vector2 position = new Vector2();
-                position.X = Game.GraphicsDevice.Viewport.Width - icon.Width - 20 + (icon.Width * scale / 2); // Centered
+                position.X = Game.GraphicsDevice.Viewport.Width - _iconTexture.Width - 20 + (_iconTexture.Width * scale / 2); // Centered
                 position.Y = 20;
 
-                spriteBatch.Draw(icon, position, null, Color.White, 0, new Vector2(), scale, SpriteEffects.None, 0);
+                _spriteBatch.Draw(_iconTexture, position, null, Color.White, 0, new Vector2(), scale, SpriteEffects.None, 0);
 
-                position.X -= icon.Width * scale / 2;
-                position.Y += icon.Height * scale + 10;
+                position.X -= _iconTexture.Width * scale / 2;
+                position.Y += _iconTexture.Height * scale + 10;
 
                 // Determine the text
                 string txt = "please connect sensor";
-                Vector2 size = font.MeasureString(txt);
+                Vector2 size = _font.MeasureString(txt);
                 if (this.Sensor != null)
                 {
                     txt = LastStatus.ToString();
                 }
 
                 // Render the text
-                this.spriteBatch.DrawString(
-                    this.font,
+                _spriteBatch.DrawString(
+                    _font,
                     txt,
                     position,
                     Color.Black);
 
-                this.spriteBatch.End();
+                _spriteBatch.End();
             }
 
             base.Draw(gameTime);
@@ -208,9 +196,8 @@ namespace Atomix
         {
             base.LoadContent();
 
-            //this.chooserBackground = Game.Content.Load<Texture2D>("ChooserBackground");
-            font = Game.Content.Load<SpriteFont>("Fonts/Normal");
-            icon = Game.Content.Load<Texture2D>("Images/KinectIcon");
+            _font = Game.Content.Load<SpriteFont>("Fonts/Normal");
+            _iconTexture = Game.Content.Load<Texture2D>("Images/KinectIcon");
         }
 
         /// <summary>
@@ -220,10 +207,9 @@ namespace Atomix
         {
             base.UnloadContent();
 
-            // Always stop the sensor when closing down
-            if (this.Sensor != null)
+            if (Sensor != null)
             {
-                this.Sensor.Stop();
+                Sensor.Stop();
             }
         }
     }

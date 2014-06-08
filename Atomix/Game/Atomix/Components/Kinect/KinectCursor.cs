@@ -186,7 +186,17 @@ namespace Atomix.Components
                         }
                     }
                 }
-            }
+
+                if (_handTracker != null)
+                {
+                    using (SkeletonFrame skeletonFrame = _KinectChooser.Sensor.SkeletonStream.OpenNextFrame(0))
+                    {
+                        if (skeletonFrame != null)
+                        {
+                            _handTracker.ProcessSkeletonData(skeletonFrame);
+                        }
+                    }
+                }
 
             if (_skeletons.TrackedSkeleton != null && _handTracker != null)
             {
