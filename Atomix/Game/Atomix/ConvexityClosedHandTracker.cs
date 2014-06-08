@@ -45,7 +45,7 @@ namespace Atomix
 
         public void ProcessSkeletonData(SkeletonFrame frame) { }
 
-        public void Update(bool leftHanded)
+        public void Update(bool leftHanded, Vector2 cursorPosition)
         {
             _isHandClosed = false; // Expect not closed
 

@@ -50,7 +50,7 @@ namespace Atomix
             }
         }
 
-        public void Update(bool leftHanded)
+        public void Update(bool leftHanded, Vector2 cursorPosition)
         {
             using (InteractionFrame frame = _interationsStream.OpenNextFrame(0))
             {

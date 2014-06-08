@@ -9,7 +9,7 @@ namespace Atomix
         bool IsStateActive { get; }
         void ProcessDepthData(DepthImageFrame depthFrame);
         void ProcessSkeletonData(SkeletonFrame frame);
-        void Update(bool leftHanded);
+        void Update(bool leftHanded, Vector2 cursorPosition);
         void Draw(GameTime gameTime, SpriteBatch spriteBatch, SpriteFont font, float scale, Vector2 renderOffset);
     }
 }
