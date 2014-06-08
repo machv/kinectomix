@@ -94,7 +94,6 @@
     <Compile Include="Components\Common\FrameRateInfo.cs" />
     <Compile Include="Components\Kinect\Gestures.cs" />
     <Compile Include="Components\Kinect\KinectCursor.cs" />
-    <Compile Include="Components\Kinect\KinectCursorInteractions.cs" />
     <Compile Include="Components\Common\KinectMessageBox.cs" />
     <Compile Include="Components\ScreenManager.cs" />
     <Compile Include="Components\Kinect\VideoStreamComponent.cs" />
@@ -106,6 +105,7 @@
     <Compile Include="Input\KinectInputProvider.cs" />
     <Compile Include="Input\KinectInputState.cs" />
     <Compile Include="Input\MutipleInputProvider.cs" />
+    <Compile Include="InteractionsClosedHandTracker.cs" />
     <Compile Include="KinectInteractionClient.cs" />
     <Compile Include="Input\MouseInputProvider.cs" />
     <Compile Include="Input\MouseInputState.cs" />

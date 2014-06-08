@@ -6,6 +6,7 @@ namespace Atomix
 {
     public interface IHandStateTracker
     {
+        bool IsStateActive { get; }
         void ProcessDepthData(DepthImageFrame depthFrame);
         void ProcessSkeletonData(SkeletonFrame frame);
         void Update(bool leftHanded);

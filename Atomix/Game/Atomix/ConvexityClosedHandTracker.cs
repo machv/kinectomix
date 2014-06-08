@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Atomix
 {
@@ -22,7 +20,7 @@ namespace Atomix
 
         public VideoStreamComponent VideoStreamData { get; set; }
 
-        public bool IsActive
+        public bool IsStateActive
         {
             get { return _isHandClosed; }
         }
@@ -45,9 +43,7 @@ namespace Atomix
             }
         }
 
-        public void ProcessSkeletonData(SkeletonFrame frame)
-        {
-        }
+        public void ProcessSkeletonData(SkeletonFrame frame) { }
 
         public void Update(bool leftHanded)
         {
