@@ -330,7 +330,10 @@ namespace Atomix
                 lastHoveredTileTime = DateTime.Now;
                 currentlyHoveredTile = newHoveredTileBefore;
 
-                ClearBoard();
+                if (cursor.IsHandTracked) // Only when is tracked hand via Kinect clear selected tiles.
+                {
+                    ClearBoard();
+                }
             }
 
             if (currentlyHoveredTile != null)
