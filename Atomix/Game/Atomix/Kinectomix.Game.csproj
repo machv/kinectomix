@@ -95,7 +95,7 @@
     <Compile Include="Components\Kinect\Gestures.cs" />
     <Compile Include="Components\Kinect\KinectCursor.cs" />
     <Compile Include="Components\Kinect\KinectCursorInteractions.cs" />
-    <Compile Include="Components\Common\MessageBox.cs" />
+    <Compile Include="Components\Common\KinectMessageBox.cs" />
     <Compile Include="Components\ScreenManager.cs" />
     <Compile Include="Components\Kinect\VideoStreamComponent.cs" />
     <Compile Include="ConvexityClosedHandTracker.cs" />
