@@ -8,6 +8,10 @@ namespace Kinectomix.Logic
     {
         public List<LevelAsset> Assets { get; set; }
 
+        /// <summary>
+        /// Gets or sets friendly name of the level.
+        /// </summary>
+        /// <returns>Friendly name of the level.</returns>
         public string Name { get; set; }
 
         public TilesCollection<BoardTile> Board { get; set; }
