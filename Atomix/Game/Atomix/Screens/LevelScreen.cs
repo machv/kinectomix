@@ -27,8 +27,8 @@ namespace Atomix
         private MouseState lastMouseState;
         private SoundEffect applause;
         private Vector2 boardPosition;
-        private SpriteFont normalFont;
-        private SpriteFont __splashFont;
+        private SpriteFont _normalFont;
+        private SpriteFont _splashFont;
         private SpriteFont _levelFont;
         private Point activeAtomIndex = new Point(-1, -1);
 
@@ -73,7 +73,7 @@ namespace Atomix
 
         public override void Initialize()
         {
-            level = LevelFactory.ToViewModel(levelDefinition, ScreenManager.GraphicsDevice);
+            level = LevelViewModel.FromModel(levelDefinition, ScreenManager.GraphicsDevice);
             highScore = new Highscore(AtomixGame.HighscoreFile);
 
             base.Initialize();
@@ -108,22 +108,23 @@ namespace Atomix
             arrowTexture = _content.Load<Texture2D>("Board/Arrow");
             activeTexture = _content.Load<Texture2D>("Board/Active");
             applause = _content.Load<SoundEffect>("Sounds/Applause");
-            normalFont = _content.Load<SpriteFont>("Fonts/Normal");
-            __splashFont = _content.Load<SpriteFont>("Fonts/Splash");
+            _normalFont = _content.Load<SpriteFont>("Fonts/Normal");
+            _splashFont = _content.Load<SpriteFont>("Fonts/Splash");
+            _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
             idleTexture = _content.Load<Texture2D>("Idle");
 
             _levelsButton = new Button(ScreenManager.Game, "levels");
-            _levelsButton.Font = normalFont;
+            _levelsButton.Font = _normalFont;
             _levelsButton.InputProvider = ScreenManager.InputProvider;
             _levelsButton.Selected += _levelsButton_Selected;
 
             _repeatButton = new Button(ScreenManager.Game, "play again");
-            _repeatButton.Font = normalFont;
+            _repeatButton.Font = _normalFont;
             _repeatButton.InputProvider = ScreenManager.InputProvider;
             _repeatButton.Selected += _repeatButton_Selected;
 
             _nextButton = new Button(ScreenManager.Game, "continue");
-            _nextButton.Font = normalFont;
+            _nextButton.Font = _normalFont;
             _nextButton.InputProvider = ScreenManager.InputProvider;
             _nextButton.Selected += _nextButton_Selected;
 
@@ -573,16 +574,21 @@ namespace Atomix
         {
             spriteBatch.Begin();
 
-            spriteBatch.DrawString(normalFont, _log, new Vector2(20, 600), Color.Red);
+            string levelName = string.IsNullOrEmpty(level.Name) == false ? level.Name : "game level";
+
+            spriteBatch.DrawString(_levelFont, levelName, new Vector2(21, 21), Color.Black * 0.8f);
+            spriteBatch.DrawString(_levelFont, levelName, new Vector2(20, 20), Color.Red);
+
+            spriteBatch.DrawString(_normalFont, _log, new Vector2(20, 600), Color.Red);
 
             DrawBoard(spriteBatch, level.Board, true);
             DrawBoard(spriteBatch, level.Molecule);
 
-            spriteBatch.DrawString(normalFont, string.Format("Score: {0}", moves), new Vector2(21, 21), Color.Black);
-            spriteBatch.DrawString(normalFont, string.Format("Score: {0}", moves), new Vector2(20, 20), Color.Red);
+            spriteBatch.DrawString(_normalFont, string.Format("Score: {0}", moves), new Vector2(21, 101), Color.Black * 0.8f);
+            spriteBatch.DrawString(_normalFont, string.Format("Score: {0}", moves), new Vector2(20, 100), Color.Red);
 
-            spriteBatch.DrawString(normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(201, 21), Color.Black);
-            spriteBatch.DrawString(normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(200, 20), Color.Red);
+            spriteBatch.DrawString(_normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(21, 141), Color.Black * 0.8f);
+            spriteBatch.DrawString(_normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(20, 140), Color.Red);
 
             if (isMovementAnimation)
             {
@@ -595,9 +601,9 @@ namespace Atomix
                 spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 230), Color.Brown);
 
                 string name = "level completed";
-                Vector2 size = __splashFont.MeasureString(name);
+                Vector2 size = _splashFont.MeasureString(name);
 
-                spriteBatch.DrawString(__splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
+                spriteBatch.DrawString(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
 
                 _repeatButton.Draw(gameTime);
                 _levelsButton.Draw(gameTime);
