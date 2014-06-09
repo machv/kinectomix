@@ -83,8 +83,8 @@ namespace Atomix.Components
 
             _spriteBatch.Begin();
 
-            _spriteBatch.DrawString(_font, fps, new Vector2(21, 53), Color.Black);
-            _spriteBatch.DrawString(_font, fps, new Vector2(20, 52), Color.Red);
+            _spriteBatch.DrawString(_font, fps, new Vector2(21, GraphicsDevice.Viewport.Bounds.Height - 51), Color.Black);
+            _spriteBatch.DrawString(_font, fps, new Vector2(20, GraphicsDevice.Viewport.Bounds.Height - 50), Color.Red);
 
             _spriteBatch.End();
         }
