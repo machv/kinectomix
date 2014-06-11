@@ -5,7 +5,8 @@ namespace Atomix.ViewModel
 {
     public class BoardTileViewModel
     {
-        BoardTile _tile;
+        private BoardTile _tile;
+        private float _opacity;
 
         public BoardTile Tile
         {
@@ -31,6 +32,12 @@ namespace Atomix.ViewModel
         {
             get { return _tile.IsFixed; }
             set { _tile.IsFixed = value; }
+        }
+
+        public float Opacity
+        {
+            get { return _opacity; }
+            set { _opacity = value; }
         }
 
         public bool IsEmpty
@@ -72,7 +79,7 @@ namespace Atomix.ViewModel
         /// <returns></returns>
         public Rectangle RenderRectangle { get; set; }
 
-        public BoardTileViewModel(BoardTile tile)
+        public BoardTileViewModel(BoardTile tile) :this()
         {
             _tile = tile;
             InvalidateAssetCode();
@@ -83,7 +90,10 @@ namespace Atomix.ViewModel
             _assetCode = GetAssetCode(_tile);
         }
 
-        public BoardTileViewModel() { }
+        public BoardTileViewModel()
+        {
+            _opacity = 1;
+        }
 
         public static string GetAssetCode(BoardTile tile)
         {

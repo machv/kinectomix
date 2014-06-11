@@ -18,6 +18,8 @@ namespace Atomix
     /// </summary>
     public class LevelScreen : GameScreen
     {
+        private int _activeTileOpacityDirection;
+        private float _activeTileOpacity;
         private Texture2D wallTexture;
         private Texture2D emptyTexture;
         private Texture2D arrowTexture;
@@ -75,6 +77,9 @@ namespace Atomix
         {
             level = LevelViewModel.FromModel(levelDefinition, ScreenManager.GraphicsDevice);
             highScore = new Highscore(AtomixGame.HighscoreFile);
+
+            _activeTileOpacity = 0.0f;
+            _activeTileOpacityDirection = 1;
 
             base.Initialize();
         }
@@ -446,7 +451,17 @@ namespace Atomix
 
             if (!isMovementAnimation && activeAtomIndex.X != -1 && activeAtomIndex.Y != -1)
             {
-                // We have selected atom which is not moved -> Detect gestures
+                // We have selected atom which is not moved 
+
+                    // update glowing
+                _activeTileOpacity += 0.02f * _activeTileOpacityDirection;
+                if (_activeTileOpacity > 1.0)
+                    _activeTileOpacityDirection = -1;
+                if (_activeTileOpacity < 0.5)
+                    _activeTileOpacityDirection = 1;
+
+                level.Board[activeAtomIndex.X, activeAtomIndex.Y].Opacity = _activeTileOpacity;
+
 
                 // Gestures will be recognized only when hand is closed
                 if (cursor.IsHandClosed)
@@ -755,6 +770,7 @@ namespace Atomix
             return newCoordinates;
         }
 
+        //TODO -> into the ViewModel
         private void ClearBoard()
         {
             for (int x = 0; x < level.Board.RowsCount; x++)
@@ -776,6 +792,7 @@ namespace Atomix
 
                     level.Board[x, y].IsSelected = false;
                     level.Board[x, y].Movements = MoveDirection.None;
+                    level.Board[x, y].Opacity = 1;
                 }
             }
         }
@@ -848,7 +865,7 @@ namespace Atomix
 
                     if (tile != null)
                     {
-                        spriteBatch.Draw(tile, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), null, Color.White, RotationAngle, origin, SpriteEffects.None, 0f);
+                        spriteBatch.Draw(tile, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), null, Color.White * board[i, j].Opacity, RotationAngle, origin, SpriteEffects.None, 0f);
 
                         if (board[i, j].IsHovered && (board[i, j].IsFixed == false || board[i, j].IsEmpty == true))
                         {
