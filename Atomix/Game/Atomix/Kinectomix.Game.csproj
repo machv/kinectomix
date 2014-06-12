@@ -97,6 +97,10 @@
     <Compile Include="Components\Common\KinectMessageBox.cs" />
     <Compile Include="Components\ScreenManager.cs" />
     <Compile Include="Components\Kinect\VideoStreamComponent.cs" />
+    <Compile Include="Hand State\ConvexityClosedHandTracker.cs" />
+    <Compile Include="Hand State\IHandStateTracker.cs" />
+    <Compile Include="Hand State\InteractionsClosedHandTracker.cs" />
+    <Compile Include="Hand State\PressedHandTracker.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\IInputState.cs" />
     <Compile Include="Components\Kinect\KinectChooser.cs" />

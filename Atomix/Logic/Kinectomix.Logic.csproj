@@ -89,10 +89,6 @@
     <Compile Include="Gestures\RecognizedGestureComparer.cs" />
     <Compile Include="Gestures\Recognizer.cs" />
     <Compile Include="Gestures\Recorder.cs" />
-    <Compile Include="Hand State\ConvexityClosedHandTracker.cs" />
-    <Compile Include="Hand State\IHandStateTracker.cs" />
-    <Compile Include="Hand State\InteractionsClosedHandTracker.cs" />
-    <Compile Include="Hand State\PressedHandTracker.cs" />
     <Compile Include="SwipeGesturesRecognizer.cs" />
     <Compile Include="Gestures\TrackingDimension.cs" />
     <Compile Include="DummyServiceProvider.cs" />
