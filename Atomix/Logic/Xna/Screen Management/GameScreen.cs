@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Kinectomix.Xna.ScreenManagement
 {
-    public abstract class GameScreen
+    public abstract class GameScreen : IDisposable
     {
         private ScreenManager _screenManager;
         private GameComponentCollection _components;
@@ -32,6 +33,11 @@ namespace Kinectomix.Xna.ScreenManagement
         /// </summary>
         public virtual void Initialize()
         {
+            if (_screenManager.Game.GraphicsDevice != null)
+            {
+                LoadContent();
+            }
+
             foreach (IGameComponent component in _components)
             {
                 component.Initialize();
@@ -76,5 +82,13 @@ namespace Kinectomix.Xna.ScreenManagement
         /// Unload content for the game screen.
         /// </summary>
         public virtual void UnloadContent() { }
+
+        /// <summary>
+        /// Releases used resources used by the DrawableGameComponent and optionally releases the managed resources.
+        /// </summary>
+        public void Dispose()
+        {
+            UnloadContent();
+        }
     }
 }
