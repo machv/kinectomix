@@ -7,111 +7,83 @@ using System.Linq;
 namespace Atomix
 {
     /// <summary>
-    /// Kinect status for user.
+    /// Handles Kinect initialization.
     /// </summary>
     public class KinectChooser : DrawableGameComponent
     {
-        /// <summary>
-        /// The SpriteBatch used for rendering.
-        /// </summary>
         private SpriteBatch _spriteBatch;
-
-        /// <summary>
-        /// The font for rendering the state text.
-        /// </summary>
         private SpriteFont _font;
-
-        /// <summary>
-        /// Kinect Icon texture.
-        /// </summary>
         private Texture2D _iconTexture;
-
-        public Skeletons Skeletons { get; private set; }
-
-        public KinectSensor Sensor { get; private set; }
+        private Skeletons _skeletons;
+        private KinectSensor _sensor;
+        private KinectStatus _lastStatus;
+        private bool _useSeatedMode;
+        private bool _startColorStream;
+        private bool _startDepthStream;
 
         /// <summary>
-        /// Gets the last known status of the KinectSensor.
+        /// Gets skeletons returned from the Kinect Sensor.
         /// </summary>
-        public KinectStatus LastStatus { get; private set; }
+        /// <returns>Skeletons tracked by the Kinect sensor.</returns>
+        public Skeletons Skeletons
+        {
+            get { return _skeletons; }
+        }
+        /// <summary>
+        /// Gets selected Kinect sensor.
+        /// </summary>
+        /// <returns>Selected Kinect sensor.</returns>
+        public KinectSensor Sensor
+        {
+            get { return _sensor; }
+        }
+        /// <summary>
+        /// Gets the last known status of the <see cref="KinectSensor"/>.
+        /// </summary>
+        ///<returns>Last known status of the <see cref="KinectSensor"/>.</returns>
+        public KinectStatus LastStatus
+        {
+            get { return _lastStatus; }
+        }
+        /// <summary>
+        /// Gets or sets if should be used seated or nomal mode.
+        /// </summary>
+        /// <returns>True if seated mode is used.</returns>
+        public bool UseSeatedMode
+        {
+            get { return _useSeatedMode; }
+            set
+            {
+                _useSeatedMode = value;
 
-        public KinectChooser(Game game)
+                if (_sensor != null)
+                {
+                    if (value == true)
+                        SetSeatedMode(_sensor);
+                    else
+                        SetDefaultMode(_sensor);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates new instance of <see cref="KinectChooser"/>.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        public KinectChooser(Game game, bool startColorStream, bool startDepthStream)
             : base(game)
         {
-            Skeletons = new Skeletons();
+            _skeletons = new Skeletons();
+            _startColorStream = startColorStream;
+            _startDepthStream = startDepthStream;
+
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
             DiscoverSensor();
 
         }
 
-        void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
-        {
-            // If the status is not connected, try to stop it
-            if (e.Status != KinectStatus.Connected)
-            {
-                e.Sensor.Stop();
-            }
-
-            this.LastStatus = e.Status;
-            this.DiscoverSensor();
-        }
-
-        private void DiscoverSensor()
-        {
-            KinectSensor sensor = KinectSensor.KinectSensors.FirstOrDefault();
-            if (sensor != null)
-            {
-                LastStatus = sensor.Status;
-
-                if (sensor.Status == KinectStatus.Connected)
-                {
-                    try
-                    {
-                        // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
-                        TransformSmoothParameters parameters = new TransformSmoothParameters();
-                        parameters.Smoothing = 0.5f;
-                        parameters.Correction = 0.5f;
-                        parameters.Prediction = 0.4f;
-                        parameters.JitterRadius = 1.0f;
-                        parameters.MaxDeviationRadius = 0.5f;
-
-                        parameters.Smoothing = 0.7f;
-                        parameters.Correction = 0.3f;
-
-                        sensor.SkeletonStream.Enable(parameters);
-
-                        sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                        sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
-
-                        //EnableSeatedMode(sensor);
-                        sensor.Start();
-
-                        //sensor.ElevationAngle = 10;
-                        //sensor.ElevationAngle = -5;
-                        //sensor.ElevationAngle = 0;
-
-                        Sensor = sensor;
-                    }
-                    catch
-                    {
-                        Sensor = null;
-                    }
-                }
-            }
-        }
-
-        private void EnableSeatedMode(KinectSensor sensor)
-        {
-            if (sensor != null && sensor.DepthStream != null && sensor.SkeletonStream != null)
-            {   
-                sensor.DepthStream.Range = DepthRange.Near; // Depth in near range enabled
-                sensor.SkeletonStream.EnableTrackingInNearRange = true; // enable returning skeletons while depth is in Near Range
-                sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated; // Use seated tracking
-            }
-        }
-
         /// <summary>
-        /// This method initializes necessary objects.
+        /// Initializes required objects for this component.
         /// </summary>
         public override void Initialize()
         {
@@ -120,9 +92,10 @@ namespace Atomix
             base.Initialize();
         }
 
-        public Skeleton[] SkeletonData { get; set; }
-        public long SkeletonTimestamp { get; set; }
-
+        /// <summary>
+        /// Updates <see cref="KinectChooser"/> for rendering phase.
+        /// </summary>
+        /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
             if (Sensor != null && Sensor.SkeletonStream.IsEnabled)
@@ -131,30 +104,26 @@ namespace Atomix
                 {
                     if (skeletonFrame != null)
                     {
-                        SkeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                        Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                        skeletonFrame.CopySkeletonDataTo(skeletonData);
 
-                        // Copy the skeleton data to our array
-                        skeletonFrame.CopySkeletonDataTo(SkeletonData);
-
-                        SkeletonTimestamp = skeletonFrame.Timestamp;
-
-                        Skeletons.SetSkeletonData(SkeletonData);
+                        _skeletons.SetSkeletonData(skeletonData, skeletonFrame.Timestamp);
                     }
                 }
             }
-            
+
             base.Update(gameTime);
         }
 
         /// <summary>
-        /// This method renders the current state of the KinectChooser.
+        /// This method renders the current state of the <see cref="KinectChooser"/>.
         /// </summary>
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
             // If we don't have a sensor, or the sensor we have is not connected
             // then we will display the information text
-            if (Sensor == null || this.LastStatus != KinectStatus.Connected)
+            if (Sensor == null || _lastStatus != KinectStatus.Connected)
             {
                 _spriteBatch.Begin();
 
@@ -190,7 +159,7 @@ namespace Atomix
         }
 
         /// <summary>
-        /// This method loads the textures and fonts.
+        /// Loads the textures and fonts.
         /// </summary>
         protected override void LoadContent()
         {
@@ -201,7 +170,7 @@ namespace Atomix
         }
 
         /// <summary>
-        /// This method ensures that the KinectSensor is stopped before exiting.
+        /// This method ensures that the <see cref="KinectSensor"/> is stopped.
         /// </summary>
         protected override void UnloadContent()
         {
@@ -210,6 +179,140 @@ namespace Atomix
             if (Sensor != null)
             {
                 Sensor.Stop();
+            }
+        }
+
+        private void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
+        {
+            // If the status is not connected, try to stop it
+            if (e.Status != KinectStatus.Connected)
+            {
+                e.Sensor.Stop();
+            }
+
+            _lastStatus = e.Status;
+
+            DiscoverSensor();
+        }
+
+        private string GetStatusDescription(KinectStatus kinectStatus)
+        {
+            string status = "Unknown";
+
+            switch (kinectStatus)
+            {
+                case KinectStatus.Undefined:
+                    status = "Status of the attached Kinect cannot be determined.";
+                    break;
+                case KinectStatus.Disconnected:
+                    status = "The Kinect is not connected to the USB connector.";
+                    break;
+                case KinectStatus.Connected:
+                    status = "The Kinect is fully connected and ready.";
+                    break;
+                case KinectStatus.Initializing:
+                    status = "The Kinect is initializing.";
+                    break;
+                case KinectStatus.Error:
+                    status = "Communication with the Kinect procudes errors.";
+                    break;
+                case KinectStatus.NotPowered:
+                    status = "The Kinect is not fully powered. An additional power adapter is required.";
+                    break;
+                case KinectStatus.NotReady:
+                    status = "Some part of the Kinect is not yet ready.";
+                    break;
+                case KinectStatus.DeviceNotGenuine:
+                    status = "The attached device is not genuine Kinect sensor.";
+                    break;
+                case KinectStatus.DeviceNotSupported:
+                    status = "The attached Kinect is not supported.";
+                    break;
+                case KinectStatus.InsufficientBandwidth:
+                    status = "The USB connector does not have sufficient bandwidth.";
+                    break;
+            }
+
+            return status;
+        }
+
+        private void DiscoverSensor()
+        {
+            KinectSensor sensor = null;
+
+            foreach (KinectSensor candidate in KinectSensor.KinectSensors)
+            {
+                if (candidate.Status == KinectStatus.Connected)
+                {
+                    sensor = candidate;
+                    break;
+                }
+            }
+
+            if (sensor != null)
+            {
+                _lastStatus = sensor.Status;
+
+                if (sensor.Status == KinectStatus.Connected)
+                {
+                    try
+                    {
+                        // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
+                        TransformSmoothParameters parameters = new TransformSmoothParameters();
+                        parameters.Smoothing = 0.5f;
+                        parameters.Correction = 0.5f;
+                        parameters.Prediction = 0.4f;
+                        parameters.JitterRadius = 1.0f;
+                        parameters.MaxDeviationRadius = 0.5f;
+
+                        parameters.Smoothing = 0.7f;
+                        parameters.Correction = 0.3f;
+
+                        sensor.SkeletonStream.Enable(parameters);
+
+                        if (_startDepthStream)
+                            sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+
+                        if (_startColorStream)
+                            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+
+                        sensor.Start();
+
+                        if (sensor.ElevationAngle != 0)
+                            sensor.ElevationAngle = 0;
+
+                        if (_useSeatedMode)
+                            SetSeatedMode(sensor);
+                        else
+                            SetDefaultMode(sensor);
+
+                        _sensor = sensor;
+                    }
+                    catch
+                    {
+                        _sensor = null;
+                    }
+                }
+            }
+        }
+
+        private void SetSeatedMode(KinectSensor sensor)
+        {
+            if (sensor != null && sensor.DepthStream != null && sensor.SkeletonStream != null)
+            {
+                sensor.DepthStream.Range = DepthRange.Near;
+                sensor.SkeletonStream.EnableTrackingInNearRange = true;
+                sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
+            }
+        }
+
+        private void SetDefaultMode(KinectSensor sensor)
+        {
+            if (sensor != null && sensor.DepthStream != null && sensor.SkeletonStream != null)
+            {
+                sensor.DepthStream.Range = DepthRange.Default;
+                sensor.SkeletonStream.EnableTrackingInNearRange = false;
+                sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
             }
         }
     }

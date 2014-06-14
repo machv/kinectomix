@@ -69,11 +69,11 @@ namespace Atomix.Components
             get { return _isHandTracked; }
         }
 
-        public KinectCursor(Game game, KinectChooser chooser, Skeletons skeletons, Vector2 offset, float scale)
+        public KinectCursor(Game game, KinectChooser chooser, Vector2 offset, float scale)
             : base(game)
         {
             _KinectChooser = chooser;
-            _skeletons = skeletons;
+            _skeletons = chooser.Skeletons;
             _renderOffset = offset;
             _scale = scale;
 
@@ -97,42 +97,32 @@ namespace Atomix.Components
 
             if (_KinectChooser.Sensor != null)
             {
-                if (_KinectChooser.SkeletonData != null)
+                if (_skeletons != null && _skeletons.TrackedSkeleton != null)
                 {
-                    if (_skeletons.TrackedSkeleton != null)
+                    leftHanded =
+                        (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                        _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
+                        ||
+                        (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                        _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
+
+                    //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
+                    bool isTracked;
+                    Vector2 cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton, out isTracked);
+
+                    var handPoint = _skeletons.TrackedSkeleton.Joints[leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
+                    HandRealPosition = new Vector3(handPoint.X, handPoint.Y, handPoint.Z);
+
+                    AddCursorPosition(cursor);
+
+                    if (cursor != Vector2.Zero)
                     {
-                        leftHanded =
-                            (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
-                            _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
-                            ||
-                            (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
-                            _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
+                        _isHandTracked = true;
 
-                        //cursorPosition = TrackHandMovementAbsolute(_skeletons.TrackedSkeleton);
-                        bool isTracked;
-                        Vector2 cursor = TrackHandMovementRelative(_skeletons.TrackedSkeleton, out isTracked);
-
-                        var handPoint = _skeletons.TrackedSkeleton.Joints[leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
-                        HandRealPosition = new Vector3(handPoint.X, handPoint.Y, handPoint.Z);
-
-                        AddCursorPosition(cursor);
-
-                        if (cursor != Vector2.Zero)
-                        {
-                            _isHandTracked = true;
-
-                            if (_hideMouseCursorWhenHandTracked)
-                                Game.IsMouseVisible = false;
-                        }
-                        else if (!isTracked)
-                        {
-                            _isHandTracked = false;
-
-                            if (_hideMouseCursorWhenHandTracked)
-                                Game.IsMouseVisible = true;
-                        }
+                        if (_hideMouseCursorWhenHandTracked)
+                            Game.IsMouseVisible = false;
                     }
-                    else
+                    else if (!isTracked)
                     {
                         _isHandTracked = false;
 
@@ -140,6 +130,14 @@ namespace Atomix.Components
                             Game.IsMouseVisible = true;
                     }
                 }
+                else
+                {
+                    _isHandTracked = false;
+
+                    if (_hideMouseCursorWhenHandTracked)
+                        Game.IsMouseVisible = true;
+                }
+
 
                 if (_handTracker != null)
                 {

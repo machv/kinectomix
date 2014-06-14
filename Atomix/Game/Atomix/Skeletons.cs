@@ -8,6 +8,8 @@ namespace Atomix
 {
     public class Skeletons
     {
+        private long _timestamp;
+
         public enum TrackingType { Nearest, FixById }
 
         public Skeleton[] Items { get; private set; }
@@ -42,9 +44,10 @@ namespace Atomix
             }
         }
 
-        public void SetSkeletonData(Skeleton[] skeletons)
+        public void SetSkeletonData(Skeleton[] skeletonData, long skeletonTimestamp)
         {
-            Items = skeletons;
+            Items = skeletonData;
+            _timestamp = skeletonTimestamp;
         }
 
         private void FixToFirstTrackedSkeleton()
