@@ -127,30 +127,21 @@ namespace Atomix
             {
                 _spriteBatch.Begin();
 
-                float scale = 0.5f;
-                Vector2 position = new Vector2();
-                position.X = Game.GraphicsDevice.Viewport.Width - _iconTexture.Width - 20 + (_iconTexture.Width * scale / 2); // Centered
-                position.Y = 20;
+                // Icon
+                float scale = 0.4f;
+                Vector2 iconPosition = new Vector2();
+                iconPosition.X = Game.GraphicsDevice.Viewport.Width - _iconTexture.Width - 20 + (_iconTexture.Width * scale / 2); // Centered
+                iconPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _iconTexture.Width * scale / 2; // - _iconTexture.Width * scale / 2;
+                iconPosition.Y = 20;
+                _spriteBatch.Draw(_iconTexture, iconPosition, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
 
-                _spriteBatch.Draw(_iconTexture, position, null, Color.White, 0, new Vector2(), scale, SpriteEffects.None, 0);
-
-                position.X -= _iconTexture.Width * scale / 2;
-                position.Y += _iconTexture.Height * scale + 10;
-
-                // Determine the text
-                string txt = "please connect sensor";
-                Vector2 size = _font.MeasureString(txt);
-                if (this.Sensor != null)
-                {
-                    txt = LastStatus.ToString();
-                }
-
-                // Render the text
-                _spriteBatch.DrawString(
-                    _font,
-                    txt,
-                    position,
-                    Color.Black);
+                // Text
+                string txt = _lastStatus == KinectStatus.Undefined ? "please connect sensor" : GetStatusDescription(_lastStatus);
+                Vector2 textSize = _font.MeasureString(txt);
+                Vector2 textPosition = new Vector2();
+                textPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - textSize.X / 2;
+                textPosition.Y = iconPosition.Y + _iconTexture.Height * scale + 10;
+                _spriteBatch.DrawString(_font, txt, textPosition, Color.Black);
 
                 _spriteBatch.End();
             }
@@ -190,6 +181,11 @@ namespace Atomix
                 e.Sensor.Stop();
             }
 
+            if (e.Status == KinectStatus.Disconnected)
+            {
+                _sensor = null;
+            }
+
             _lastStatus = e.Status;
 
             DiscoverSensor();
@@ -217,7 +213,7 @@ namespace Atomix
                     status = "Communication with the Kinect procudes errors.";
                     break;
                 case KinectStatus.NotPowered:
-                    status = "The Kinect is not fully powered. An additional power adapter is required.";
+                    status = "The Kinect is not fully powered.";
                     break;
                 case KinectStatus.NotReady:
                     status = "Some part of the Kinect is not yet ready.";
