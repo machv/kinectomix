@@ -74,9 +74,20 @@ namespace Atomix.Components
         }
 
         /// <summary>
-        /// Draws the clipped edges of tracked skeleton.
+        /// Updates the clipped edges of the currently tracked skeleton.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">The elapsed game time.</param>
+        public override void Update(GameTime gameTime)
+        {
+            InitializeEdges();
+
+            base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// Draws the clipped edges of the currently tracked skeleton.
+        /// </summary>
+        /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
