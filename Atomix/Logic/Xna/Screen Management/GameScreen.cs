@@ -5,20 +5,17 @@ namespace Kinectomix.Xna.ScreenManagement
 {
     public abstract class GameScreen : IDisposable
     {
-        private ScreenManager _screenManager;
         private GameComponentCollection _components;
+        private ScreenManager _screenManager;
 
         /// <summary>
         /// Gets components collection.
         /// </summary>
         /// <returns></returns>
-        public GameComponentCollection Components { get { return _components; } }
-
-        public GameScreen()
+        public GameComponentCollection Components
         {
-            _components = new GameComponentCollection();
+            get { return _components; }
         }
-
         /// <summary>
         /// Gets the manager that this screen belongs to.
         /// </summary>
@@ -26,6 +23,14 @@ namespace Kinectomix.Xna.ScreenManagement
         {
             get { return _screenManager; }
             internal set { _screenManager = value; }
+        }
+
+        /// <summary>
+        /// Initializes new instance of the <see cref="GameScreen"/> class.
+        /// </summary>
+        public GameScreen()
+        {
+            _components = new GameComponentCollection();
         }
 
         /// <summary>
@@ -76,7 +81,6 @@ namespace Kinectomix.Xna.ScreenManagement
         /// Load graphics content for the game screen.
         /// </summary>
         public virtual void LoadContent() { }
-
 
         /// <summary>
         /// Unload content for the game screen.
