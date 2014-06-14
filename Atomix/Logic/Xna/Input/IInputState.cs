@@ -19,6 +19,6 @@
         /// Gets status of the input device.
         /// </summary>
         /// <returns>True if observed state is active.</returns>
-        bool IsSelected { get; }
+        bool IsStateActive { get; }
     }
 }

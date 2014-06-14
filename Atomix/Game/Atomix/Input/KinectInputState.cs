@@ -12,14 +12,14 @@ namespace Kinectomix.Xna.Input
 
         public int Y { get; private set; }
 
-        public bool IsSelected { get; private set; }
+        public bool IsStateActive { get; private set; }
 
         public KinectInputState(KinectCursor cursor)
             : this()
         {
             X = (int)cursor.HandPosition.X;
             Y = (int)cursor.HandPosition.Y;
-            IsSelected = cursor.IsHandClosed; // || _cursor.IsHandPressed; 
+            IsStateActive = cursor.IsHandClosed; // || _cursor.IsHandPressed; 
         }
     }
 }

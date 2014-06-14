@@ -247,7 +247,7 @@ namespace Kinectomix.Xna.Components
                     _previousInputState = _currentInputState;
                     _currentInputState = inputState;
 
-                    if (_previousInputState != null && _previousInputState.IsSelected == false && _currentInputState.IsSelected == true)
+                    if (_previousInputState != null && _previousInputState.IsStateActive == false && _currentInputState.IsStateActive == true)
                     {
                         OnSelected();
                     }

@@ -29,7 +29,7 @@ namespace Kinectomix.Xna.Input
         /// Gets is left mouse button is pressed.
         /// </summary>
         /// <returns>True if left mouse button is pressed.</returns>
-        public bool IsSelected
+        public bool IsStateActive
         {
             get { return _state.LeftButton == ButtonState.Pressed; }
         }

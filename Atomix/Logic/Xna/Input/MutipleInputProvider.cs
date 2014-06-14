@@ -6,40 +6,50 @@ using System.Text;
 namespace Kinectomix.Xna.Input
 {
     /// <summary>
-    /// Returns first positive state selection.
+    /// Handles input from multiple input providers.
     /// </summary>
     public class MutipleInputProvider : IInputProvider
     {
-        protected List<IInputProvider> providers;
+        /// <summary>
+        /// List of observed <see cref="IInputProvider"/>s.
+        /// </summary>
+        protected List<IInputProvider> _providers;
 
+        /// <summary>
+        /// Initializes new instance of <see cref="MutipleInputProvider"/> class.
+        /// </summary>
         public MutipleInputProvider()
         {
-            providers = new List<IInputProvider>();
-        }
-
-        public void AddProvider(IInputProvider provider)
-        {
-            providers.Add(provider);
+            _providers = new List<IInputProvider>();
         }
 
         /// <summary>
-        /// Returns first input state with selection or from first provider or null if no provider is registered.
+        /// Adds <see cref="IInputProvider"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="provider">Provider to add.</param>
+        public void AddProvider(IInputProvider provider)
+        {
+            _providers.Add(provider);
+        }
+
+        /// <summary>
+        /// Returns first input state with active state from first provider or null if no provider is registered.
+        /// </summary>
+        /// <returns>Active <see cref="IInputState"/>.</returns>
         public IInputState GetState()
         {
-            if (providers.Count == 0)
+            if (_providers.Count == 0)
                 return null;
 
             List<IInputState> states = new List<IInputState>();
             // Find first with active selection.
-            foreach (var provider in providers)
+            foreach (var provider in _providers)
             {
                 IInputState state = provider.GetState();
                 if (state == null)
                     continue;
 
-                if (state.IsSelected)
+                if (state.IsStateActive)
                     return state;
 
                 states.Add(state);
@@ -56,7 +66,7 @@ namespace Kinectomix.Xna.Input
             }
 
             // Fallback to first state.
-            return providers[0].GetState();
+            return _providers[0].GetState();
         }
     }
 }
