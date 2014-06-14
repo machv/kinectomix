@@ -14,6 +14,7 @@ namespace Atomix.Components.Common
         private bool _isVisible;
         private bool _isFullscreen;
         private int _height;
+        private int _buttonSpace;
         private int _borderWidth;
         private SpriteBatch _spriteBatch;
         private Texture2D _empty;
@@ -94,6 +95,15 @@ namespace Atomix.Components.Common
                     _borderWidth = value;
             }
         }
+        /// <summary>
+        /// Gets or sets space between rendered buttons on the message box.
+        /// </summary>
+        /// <returns>Current space between buttons.</returns>
+        public int ButtonSpace
+        {
+            get { return _buttonSpace; }
+            set { _buttonSpace = value; }
+        }
 
         /// Occurs when a result inside <see cref="KinectMessageBox"/> is selected.
         public event EventHandler<MessageBoxEventArgs> Changed;
@@ -112,6 +122,7 @@ namespace Atomix.Components.Common
             _height = 250;
             _buttonWidth = 130;
             _buttonHeight = 80;
+            _buttonSpace = 50;
         }
 
         /// <summary>
@@ -179,7 +190,7 @@ namespace Atomix.Components.Common
 
                 if (_renderedButtons != null)
                 {
-                    int x = GraphicsDevice.Viewport.Bounds.Width / 2 - (_renderedButtons.Length * (_buttonWidth + 5)) / 2;
+                    int x = GraphicsDevice.Viewport.Bounds.Width / 2 - (_renderedButtons.Length * (_buttonWidth + _buttonSpace)) / 2;
                     int y = GraphicsDevice.Viewport.Bounds.Height / 2 - _height / 8 + _buttonHeight / 2;
 
                     foreach (Button button in _renderedButtons)
@@ -187,7 +198,7 @@ namespace Atomix.Components.Common
                         button.Position = new Vector2(x, y);
                         button.Update(gameTime);
 
-                        x += _buttonWidth + 5;
+                        x += _buttonWidth + _buttonSpace;
                     }
                 }
             }
