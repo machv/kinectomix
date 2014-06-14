@@ -157,8 +157,6 @@ namespace Atomix
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            // If we don't have a sensor, or the sensor we have is not connected
-            // then we will display the information text
             if (Sensor == null || _lastStatus != KinectStatus.Connected)
             {
                 _spriteBatch.Begin();
@@ -196,7 +194,6 @@ namespace Atomix
 
         private void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
         {
-            // If the status is not connected, try to stop it
             if (e.Status != KinectStatus.Connected)
             {
                 e.Sensor.Stop();
@@ -249,7 +246,7 @@ namespace Atomix
                     status = "The USB connector does not have sufficient bandwidth.";
                     break;
             }
-            status = "The USB connector does not have sufficient bandwidth.";
+
             return status;
         }
 

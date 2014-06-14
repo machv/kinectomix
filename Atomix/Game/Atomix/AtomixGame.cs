@@ -35,6 +35,7 @@ namespace Atomix
         private int _windowWidth = 1280;
         private int _windowHeight = 720;
         private bool _isFullScreen = false;
+        private KeyboardState _previousKeyboardState;
 
         /// <summary>
         /// Gets or sets if game is used full screen of windowed mode.
@@ -105,13 +106,11 @@ namespace Atomix
         {
             IsMouseVisible = true;
 
-            _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / _scale);
-
-            _kinectChooser = new KinectChooser(this, true, true);
+             _kinectChooser = new KinectChooser(this, true, true);
             _gestures = new Gestures(this, _kinectChooser.Skeletons, "Content/Gestures/");
             _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectDebugOffset, _scale);
             _cursor = new KinectCursor(this, _kinectChooser, _kinectDebugOffset, _scale) { HideMouseCursorWhenHandTracked = true };
-            _videoStream = new VideoStreamComponent(this, _kinectChooser, graphics, _kinectDebugOffset, _scale) { Type = VideoType.Depth };
+            _videoStream = new VideoStreamComponent(this, _kinectChooser) { StreamType = VideoStream.Depth };
             var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);
             var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _kinectChooser.Skeletons);
@@ -127,6 +126,8 @@ namespace Atomix
             _input = multipleInput;
 
             _gameScreenManager = new ScreenManager(this, _input);
+
+            UpdateScale(_scale);
 
             Components.Add(background);
             Components.Add(frameRate);
@@ -144,7 +145,7 @@ namespace Atomix
         protected void UpdateScale(float scale)
         {
             _scale = scale;
-            _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / _scale);
+            _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 * _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
 
             _skeletonRenderer.Scale = _scale;
             _skeletonRenderer.RenderOffset = _kinectDebugOffset;
@@ -152,8 +153,8 @@ namespace Atomix
             _cursor.Scale = _scale;
             _cursor.RenderOffset = _kinectDebugOffset;
 
-            _videoStream.Scale = _scale;
-            _videoStream.RenderOffset = _kinectDebugOffset;
+            _videoStream.RenderingScale = _scale;
+            _videoStream.RenderingOffset = _kinectDebugOffset;
         }
 
         /// <summary>
@@ -189,17 +190,20 @@ namespace Atomix
         protected override void Update(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
-            if (state.IsKeyDown(Keys.Q))
-                UpdateScale(_scale - 0.005f);
 
-            if (state.IsKeyDown(Keys.A))
-                UpdateScale(_scale + 0.005f);
+            if (state.IsKeyDown(Keys.Q) == true && _previousKeyboardState.IsKeyDown(Keys.Q) == false)
+                UpdateScale(_scale - 0.1f);
+
+            if (state.IsKeyDown(Keys.A) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
+                UpdateScale(_scale + 0.1f);
 
             if (state.IsKeyDown(Keys.D))
             {
                 Components.Remove(_videoStream);
                 Components.Remove(_skeletonRenderer);
             }
+            
+            _previousKeyboardState = state;
 
             base.Update(gameTime);
         }

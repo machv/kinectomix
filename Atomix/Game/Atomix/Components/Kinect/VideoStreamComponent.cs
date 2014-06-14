@@ -4,73 +4,107 @@ using Microsoft.Kinect;
 
 namespace Atomix
 {
-    public enum VideoType { Color, Depth }
+    /// <summary>
+    /// Type of stream from the Kinect sensor.
+    /// </summary>
+    public enum VideoStream
+    {
+        /// <summary>
+        /// Color video stream.
+        /// </summary>
+        Color,
+        /// <summary>
+        /// Depth video stream.
+        /// </summary>
+        Depth
+    }
 
     /// <summary>
-    /// This is a game component that implements IUpdateable.
+    /// Shows video stream from the Kinect sensor.
     /// </summary>
     public class VideoStreamComponent : DrawableGameComponent
     {
+        private Texture2D _videoFrame;
+        private VideoStream _streamType;
+        private float _renderingScale;
+        private Vector2 _renderingOffset;
+        private SpriteBatch _spriteBatch;
         private KinectChooser _chooser;
-        Vector2 _offset;
-        float _scale;
-        Game _game;
-        GraphicsDeviceManager _graphics;
-        Texture2D _colorVideo;
+        private Game _game;
+        private GraphicsDevice _graphicsDevice;
+        private Rectangle _position;
 
+        /// <summary>
+        /// Gets current video frame from the Kinect sensor.
+        /// </summary>
+        /// <returns>Current video frame from the Kinect sensor.</returns>
         public Texture2D VideoFrame
         {
-            get { return _colorVideo; }
+            get { return _videoFrame; }
+        }
+        /// <summary>
+        /// Gets or sets <see cref="VideoStream"/> type used to display.
+        /// </summary>
+        /// <returns><see cref="VideoStream"/> type used to display.</returns>
+        public VideoStream StreamType
+        {
+            get { return _streamType; }
+            set { _streamType = value; }
+        }
+        /// <summary>
+        /// Gets or sets in what scale should be video frames rendered.
+        /// </summary>
+        /// <returns>Scale which is used to render video frame.</returns>
+        public float RenderingScale
+        {
+            get { return _renderingScale; }
+            set { _renderingScale = value; }
+        }
+        /// <summary>
+        /// Gets or sets the position where will be video frames rendered on the screen.
+        /// </summary>
+        /// <returns>Position where will be video frames rendered on the screen.</returns>
+        public Vector2 RenderingOffset
+        {
+            get { return _renderingOffset; }
+            set { _renderingOffset = value; }
         }
 
-        public VideoType Type { get; set; }
-
-        public VideoStreamComponent(Game game, KinectChooser chooser, GraphicsDeviceManager graphics, Vector2 offset, float scale)
+        /// <summary>
+        /// Creates new instance of <see cref="KinectChooser"/>.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="chooser"><see cref="KinectChooser"/> which will be providing video stream.</param>
+        public VideoStreamComponent(Game game, KinectChooser chooser)
             : base(game)
         {
             _game = game;
             _chooser = chooser;
-            _offset = offset;
-            _scale = scale;
-            _graphics = graphics;
-        }
-
-        public float Scale
-        {
-            get { return _scale; }
-            set { _scale = value; }
-        }
-
-        public Vector2 RenderOffset
-        {
-            get { return _offset; }
-            set { _offset = value; }
+            _graphicsDevice = game.GraphicsDevice;
         }
 
         /// <summary>
-        /// The SpriteBatch used for rendering.
+        /// Initializes required objects for this component.
         /// </summary>
-        private SpriteBatch spriteBatch;
-
         public override void Initialize()
         {
-            base.Initialize();
+            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            this.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            base.Initialize();
         }
 
         /// <summary>
-        /// Allows the game component to update itself.
+        /// Updates data from the Kinect sensor for selected <see cref="VideoStream"/> type.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
             if (_chooser.Sensor != null)
             {
-                switch (Type)
+                switch (StreamType)
                 {
-                    case VideoType.Color:
-                        if(_chooser.Sensor.ColorStream.IsEnabled)
+                    case VideoStream.Color:
+                        if (_chooser.Sensor.ColorStream.IsEnabled)
                         {
                             using (ColorImageFrame colorVideoFrame = _chooser.Sensor.ColorStream.OpenNextFrame(0))
                             {
@@ -87,16 +121,18 @@ namespace Atomix
                                         bgraPixelData[i] = pixelData[i + 2];
                                         bgraPixelData[i + 1] = pixelData[i + 1];
                                         bgraPixelData[i + 2] = pixelData[i];
-                                        bgraPixelData[i + 3] = 255; // The video comes with 0 alpha so it is transparent
+                                        bgraPixelData[i + 3] = 255;
                                     }
 
-                                    _colorVideo = new Texture2D(_graphics.GraphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
-                                    _colorVideo.SetData(bgraPixelData);
+                                    _videoFrame = new Texture2D(_graphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
+                                    _videoFrame.SetData(bgraPixelData);
+
+                                    _position = new Rectangle((int)_renderingOffset.X, (int)_renderingOffset.Y, (int)(colorVideoFrame.Width * _renderingScale), (int)(colorVideoFrame.Height * _renderingScale));
                                 }
                             }
                         }
                         break;
-                    case VideoType.Depth:
+                    case VideoStream.Depth:
                         if (_chooser.Sensor.DepthStream.IsEnabled)
                         {
                             using (DepthImageFrame depthFrame = _chooser.Sensor.DepthStream.OpenNextFrame(0))
@@ -144,8 +180,10 @@ namespace Atomix
                                         colorPixels[colorPixelIndex++] = 255;
                                     }
 
-                                    _colorVideo = new Texture2D(_graphics.GraphicsDevice, depthFrame.Width, depthFrame.Height);
-                                    _colorVideo.SetData(colorPixels);
+                                    _videoFrame = new Texture2D(_graphicsDevice, depthFrame.Width, depthFrame.Height);
+                                    _videoFrame.SetData(colorPixels);
+
+                                    _position = new Rectangle((int)_renderingOffset.X, (int)_renderingOffset.Y, (int)(depthFrame.Width * _renderingScale), (int)(depthFrame.Height * _renderingScale));
                                 }
                             }
                         }
@@ -156,13 +194,17 @@ namespace Atomix
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Draws current output from the Kinect sensor of selected <see cref="VideoStream"/> type.
+        /// </summary>
+        /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            if (_colorVideo != null)
+            if (_videoFrame != null)
             {
-                spriteBatch.Begin();
-                spriteBatch.Draw(_colorVideo, new Rectangle((int)_offset.X, (int)_offset.Y, (int)(640 / _scale), (int)(480 / _scale)), Color.White);
-                spriteBatch.End();
+                _spriteBatch.Begin();
+                _spriteBatch.Draw(_videoFrame, _position, Color.White);
+                _spriteBatch.End();
             }
 
             base.Draw(gameTime);
