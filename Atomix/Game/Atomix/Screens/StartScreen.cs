@@ -35,13 +35,13 @@ namespace Atomix
             _quitMessageBox.Changed += _quitMessageBox_Changed;
 
             _startButton = new KinectButton(ScreenManager.Game, _cursor, "play game");
-            _startButton.Selected += _startButton_Selected;
+            _startButton.Selected += Start_Selected;
 
             _levelsButton = new KinectButton(ScreenManager.Game, _cursor, "levels");
-            _levelsButton.Selected += _levelsButton_Selected;
+            _levelsButton.Selected += Levels_Selected;
 
             _quitButton = new KinectButton(ScreenManager.Game, _cursor, "quit game");
-            _quitButton.Selected += _quitButton_Selected;
+            _quitButton.Selected += Quit_Selected;
 
             Components.Add(_startButton);
             Components.Add(_levelsButton);
@@ -104,43 +104,40 @@ namespace Atomix
             base.LoadContent();
         }
 
-        private void _quitButton_Selected(object sender, EventArgs e)
+        private void Levels_Selected(object sender, EventArgs e)
         {
-            if (_quitMessageBox.IsVisible)
-                return;
-
-            _quitMessageBox.Show("Do you really want to quit this game?", MessageBoxButtons.YesNo);
-        }
-
-        private void _levelsButton_Selected(object sender, EventArgs e)
-        {
-            if (_quitMessageBox.IsVisible)
-                return;
-
             GameScreen screen = new LevelsScreen(_spriteBatch);
 
             ScreenManager.Add(screen);
             ScreenManager.Activate(screen);
         }
 
-        private void _startButton_Selected(object sender, EventArgs e)
+        private void Start_Selected(object sender, EventArgs e)
         {
-            if (_quitMessageBox.IsVisible)
-                return;
-
             LevelDefinition levelInfo = AtomixGame.State.GetCurrentLevel();
-
             Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
-
             LevelScreen gameScreen = new LevelScreen(currentLevel, _spriteBatch);
 
             ScreenManager.Add(gameScreen);
             ScreenManager.Activate(gameScreen);
         }
 
+        private void Quit_Selected(object sender, EventArgs e)
+        {
+            _levelsButton.IsActive = false;
+            _quitButton.IsActive = false;
+            _startButton.IsActive = false;
+
+            _quitMessageBox.Show("Do you really want to quit this game?", MessageBoxButtons.YesNo);
+        }
+
         private void _quitMessageBox_Changed(object sender, MessageBoxEventArgs e)
         {
             _quitMessageBox.Hide();
+
+            _levelsButton.IsActive = true;
+            _quitButton.IsActive = true;
+            _startButton.IsActive = true;
 
             if (e.Result == MessageBoxResult.Yes)
             {

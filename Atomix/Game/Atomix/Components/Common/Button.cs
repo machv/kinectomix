@@ -25,6 +25,7 @@ namespace Atomix
         private Color _foreground;
         private SpriteFont _font;
         private object _tag;
+        private bool _isActive;
 
         protected IInputProvider _inputProvider;
         protected Rectangle _boundingRectangle;
@@ -149,6 +150,25 @@ namespace Atomix
             get { return _inputProvider; }
             set { _inputProvider = value; }
         }
+        /// <summary>
+        /// Gets or sets if this button is active and accepts input.
+        /// </summary>
+        /// <returns>True if is active and accepts input.</returns>
+        public bool IsActive
+        {
+            get { return _isActive; }
+            set
+            {
+                _isActive = value;
+
+                if (value == false)
+                {
+                    // Reset states
+                    _currentInputState = null;
+                    _previousInputState = null;
+                }
+            }
+        }
 
         /// <summary>
         /// Occurs when a <see cref="Button"/> is selected (eg. clicked).
@@ -170,6 +190,7 @@ namespace Atomix
             _width = 160;
             _height = 70;
             _content = string.Empty;
+            _isActive = true;
         }
 
         /// <summary>
@@ -213,17 +234,28 @@ namespace Atomix
             if (_inputProvider == null)
                 throw new Exception("No input provider is set.");
 
-            _previousInputState = _currentInputState;
-            _currentInputState = _inputProvider.GetState();
-
-            bool isOver = _boundingRectangle.Contains(_currentInputState.X, _currentInputState.Y);
-
-            _currentBackground = isOver ? ActiveBackground : Background;
-
-            if (_previousInputState != null && _previousInputState.IsSelected != _currentInputState.IsSelected && isOver)
+            if (_isActive)
             {
-                OnSelected();
+                IInputState inputState = _inputProvider.GetState();
+                bool isOver = _boundingRectangle.Contains(inputState.X, inputState.Y);
 
+                _currentBackground = isOver ? ActiveBackground : Background;
+
+                if (isOver)
+                {
+                    _previousInputState = _currentInputState;
+                    _currentInputState = inputState;
+
+                    if (_previousInputState != null && _previousInputState.IsSelected == false && _currentInputState.IsSelected == true)
+                    {
+                        OnSelected();
+                    }
+                }
+            }
+            else
+            {
+                // When button is not active we always use default background
+                _currentBackground = Background;
             }
 
             base.Update(gameTime);
