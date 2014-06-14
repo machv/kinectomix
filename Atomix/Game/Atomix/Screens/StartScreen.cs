@@ -4,6 +4,7 @@ using Atomix.Components.Kinect;
 using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace Atomix
@@ -56,6 +57,18 @@ namespace Atomix
             _startButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 80);
             _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 20);
             _quitButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _quitButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 50 + _quitButton.Height);
+
+            KeyboardState state = Keyboard.GetState();
+
+            // Toggle full screen mode
+            if (state.IsKeyDown(Keys.F11))
+            {
+                if (state.IsKeyDown(Keys.F11))
+                {
+                    AtomixGame game = (ScreenManager.Game as AtomixGame);
+                    game.IsFullScreen = !game.IsFullScreen;
+                }
+            }
 
             base.Update(gameTime);
         }

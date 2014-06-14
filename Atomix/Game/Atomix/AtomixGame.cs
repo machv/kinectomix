@@ -34,25 +34,39 @@ namespace Atomix
         private int _fullScreenHeight = 720;
         private int _windowWidth = 1280;
         private int _windowHeight = 720;
-        private bool _inFullScreen = false;
+        private bool _isFullScreen = false;
+
         /// <summary>
-        /// Toggle between fullscreen and windowed mode
+        /// Gets or sets if game is used full screen of windowed mode.
         /// </summary>
+        /// <returns>True if full screen mode is used.</returns>
+        public bool IsFullScreen
+        {
+            get { return _isFullScreen; }
+            set
+            {
+                if (_isFullScreen != value)
+                {
+                    _isFullScreen = value;
+                    UpdateScreenDimensions();
+                }
+            }
+        }
+
         private void UpdateScreenDimensions()
         {
-            // This sets the display resolution or window size to the desired size
-            // If windowed, it also forces a 4:3 ratio for height and adds 110 for header/footer
-            if (_inFullScreen)
+            if (_isFullScreen)
             {
                 foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
                 {
-                    // Check our requested FullScreenWidth and Height against each supported display mode and set if valid
                     if ((mode.Width == _fullScreenWidth) && (mode.Height == _fullScreenHeight))
                     {
                         graphics.PreferredBackBufferWidth = _fullScreenWidth;
                         graphics.PreferredBackBufferHeight = _fullScreenHeight;
                         graphics.IsFullScreen = true;
                         graphics.ApplyChanges();
+
+                        break;
                     }
                 }
             }
@@ -89,7 +103,7 @@ namespace Atomix
         /// </summary>
         protected override void Initialize()
         {
-            this.IsMouseVisible = true;
+            IsMouseVisible = true;
 
             _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 / _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 / _scale);
 
@@ -180,17 +194,6 @@ namespace Atomix
 
             if (state.IsKeyDown(Keys.A))
                 UpdateScale(_scale + 0.005f);
-
-            // Fullscreen on/off toggle
-            if (state.IsKeyDown(Keys.F11))
-            {
-                // If not down last update, key has just been pressed.
-                if (state.IsKeyDown(Keys.F11))
-                {
-                    _inFullScreen = !_inFullScreen;
-                    UpdateScreenDimensions();
-                }
-            }
 
             if (state.IsKeyDown(Keys.D))
             {
