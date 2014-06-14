@@ -251,7 +251,7 @@ namespace Atomix.Components
 
             if (cursorPosition != Vector2.Zero)
             {
-                spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.25f, SpriteEffects.None, 0);
+                spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
             }
 
             if (_handTracker != null)
