@@ -1,11 +1,6 @@
-﻿using Atomix.Components;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 
-namespace Atomix
+namespace Kinectomix.Xna.ScreenManagement
 {
     public abstract class GameScreen
     {

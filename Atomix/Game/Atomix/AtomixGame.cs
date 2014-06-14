@@ -3,7 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Kinectomix.Logic;
 using Atomix.Components;
-using Atomix.Input;
+using Kinectomix.Xna.ScreenManagement;
+using Kinectomix.Xna.Input;
 
 namespace Atomix
 {

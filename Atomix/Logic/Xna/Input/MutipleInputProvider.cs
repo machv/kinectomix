@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Atomix.Input
+namespace Kinectomix.Xna.Input
 {
     /// <summary>
     /// Returns first positive state selection.

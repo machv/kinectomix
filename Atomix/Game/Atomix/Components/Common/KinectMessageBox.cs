@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Atomix.Components.Kinect;
+using Kinectomix.Xna.Input;
 
 namespace Atomix.Components.Common
 {

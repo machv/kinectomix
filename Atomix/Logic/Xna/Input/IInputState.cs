@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Atomix
+namespace Kinectomix.Xna.Input
 {
     public interface IInputState
     {

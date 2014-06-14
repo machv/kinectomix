@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Kinectomix.Xna.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
 
-namespace Atomix.Components
+namespace Kinectomix.Xna.ScreenManagement
 {
     public class ScreenManager : DrawableGameComponent
     {
