@@ -168,6 +168,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\KinectBackground.png">
+      <Name>KinectBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Levels\original_level_01.atx">
       <Name>original_level_01</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -234,6 +239,13 @@
   <ItemGroup>
     <Compile Include="Fonts\LevelName.spritefont">
       <Name>LevelName</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fonts\KinectStatus.spritefont">
+      <Name>KinectStatus</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>

@@ -1,8 +1,6 @@
 ﻿using Microsoft.Kinect;
-using Microsoft.Kinect.Toolkit.Interaction;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
 
 namespace Atomix
 {
@@ -14,12 +12,20 @@ namespace Atomix
         private SpriteBatch _spriteBatch;
         private SpriteFont _font;
         private Texture2D _iconTexture;
+        private Texture2D _backgroundTexture;
         private Skeletons _skeletons;
         private KinectSensor _sensor;
         private KinectStatus _lastStatus;
         private bool _useSeatedMode;
         private bool _startColorStream;
         private bool _startDepthStream;
+        private Vector2 _iconPosition;
+        private Vector2 _textPosition;
+        private Vector2 _backgroundPosition;
+        private float _iconScale;
+        private string _description;
+        private bool _drawIcon;
+        private short _ticks;
 
         /// <summary>
         /// Gets skeletons returned from the Kinect Sensor.
@@ -76,10 +82,10 @@ namespace Atomix
             _skeletons = new Skeletons();
             _startColorStream = startColorStream;
             _startDepthStream = startDepthStream;
+            _iconScale = 0.4f;
 
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
             DiscoverSensor();
-
         }
 
         /// <summary>
@@ -90,6 +96,18 @@ namespace Atomix
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
             base.Initialize();
+        }
+
+        /// <summary>
+        /// Loads the textures and fonts.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            _font = Game.Content.Load<SpriteFont>("Fonts/KinectStatus");
+            _iconTexture = Game.Content.Load<Texture2D>("Images/KinectIcon");
+            _backgroundTexture = Game.Content.Load<Texture2D>("Images/KinectBackground");
+
+            base.LoadContent();
         }
 
         /// <summary>
@@ -112,6 +130,24 @@ namespace Atomix
                 }
             }
 
+            // Background
+            _backgroundPosition = new Vector2();
+            _backgroundPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _backgroundTexture.Width / 2;
+            _backgroundPosition.Y = 0;
+
+
+            // Icon
+            _iconPosition = new Vector2();
+            _iconPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _iconTexture.Width * _iconScale / 2;
+            _iconPosition.Y = 20;
+
+            // Text
+            _description = _lastStatus == KinectStatus.Undefined ? "please connect sensor" : GetStatusDescription(_lastStatus);
+            Vector2 textSize = _font.MeasureString(_description);
+            _textPosition = new Vector2();
+            _textPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - textSize.X / 2;
+            _textPosition.Y = _iconPosition.Y + _iconTexture.Height * _iconScale + 10;
+
             base.Update(gameTime);
         }
 
@@ -127,37 +163,22 @@ namespace Atomix
             {
                 _spriteBatch.Begin();
 
-                // Icon
-                float scale = 0.4f;
-                Vector2 iconPosition = new Vector2();
-                iconPosition.X = Game.GraphicsDevice.Viewport.Width - _iconTexture.Width - 20 + (_iconTexture.Width * scale / 2); // Centered
-                iconPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _iconTexture.Width * scale / 2; // - _iconTexture.Width * scale / 2;
-                iconPosition.Y = 20;
-                _spriteBatch.Draw(_iconTexture, iconPosition, null, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-
-                // Text
-                string txt = _lastStatus == KinectStatus.Undefined ? "please connect sensor" : GetStatusDescription(_lastStatus);
-                Vector2 textSize = _font.MeasureString(txt);
-                Vector2 textPosition = new Vector2();
-                textPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - textSize.X / 2;
-                textPosition.Y = iconPosition.Y + _iconTexture.Height * scale + 10;
-                _spriteBatch.DrawString(_font, txt, textPosition, Color.Black);
+                _spriteBatch.Draw(_backgroundTexture, _backgroundPosition, Color.White);
+                _spriteBatch.DrawString(_font, _description, _textPosition, Color.Black);
+                if (_drawIcon == true)
+                    _spriteBatch.Draw(_iconTexture, _iconPosition, null, Color.White, 0, Vector2.Zero, _iconScale, SpriteEffects.None, 0);
 
                 _spriteBatch.End();
+
+                _ticks++;
+                if (_ticks % 40 == 0)
+                {
+                    _ticks = 0;
+                    _drawIcon = !_drawIcon;
+                }
             }
 
             base.Draw(gameTime);
-        }
-
-        /// <summary>
-        /// Loads the textures and fonts.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-
-            _font = Game.Content.Load<SpriteFont>("Fonts/Normal");
-            _iconTexture = Game.Content.Load<Texture2D>("Images/KinectIcon");
         }
 
         /// <summary>
@@ -201,7 +222,7 @@ namespace Atomix
                     status = "Status of the attached Kinect cannot be determined.";
                     break;
                 case KinectStatus.Disconnected:
-                    status = "The Kinect is not connected to the USB connector.";
+                    status = "The Kinect has been disconnected.";
                     break;
                 case KinectStatus.Connected:
                     status = "The Kinect is fully connected and ready.";
@@ -228,7 +249,7 @@ namespace Atomix
                     status = "The USB connector does not have sufficient bandwidth.";
                     break;
             }
-
+            status = "The USB connector does not have sufficient bandwidth.";
             return status;
         }
 
@@ -260,7 +281,6 @@ namespace Atomix
                         parameters.Prediction = 0.4f;
                         parameters.JitterRadius = 1.0f;
                         parameters.MaxDeviationRadius = 0.5f;
-
                         parameters.Smoothing = 0.7f;
                         parameters.Correction = 0.3f;
 
