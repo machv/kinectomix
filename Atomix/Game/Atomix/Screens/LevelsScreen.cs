@@ -1,4 +1,5 @@
 ﻿using Kinectomix.Logic;
+using Kinectomix.Xna.Components;
 using Kinectomix.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

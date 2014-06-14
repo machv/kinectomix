@@ -85,7 +85,6 @@
   <ItemGroup>
     <Compile Include="AnimatedTexture.cs" />
     <Compile Include="Components\Common\Background.cs" />
-    <Compile Include="Components\Common\Button.cs" />
     <Compile Include="Components\Common\MessageBoxButtons.cs" />
     <Compile Include="Components\Common\MessageBoxEventArgs.cs" />
     <Compile Include="Components\Common\MessageBoxResult.cs" />

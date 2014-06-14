@@ -3,6 +3,7 @@ using Atomix.ViewModel;
 using AtomixData;
 using Kinectomix.Logic;
 using Kinectomix.Logic.Game;
+using Kinectomix.Xna.Components;
 using Kinectomix.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;

@@ -48,7 +48,6 @@ namespace Kinectomix.Xna.ScreenManagement
             _input = input;
         }
 
-
         /// <summary>
         /// Registers selected <see cref="GameScreen"/> with this game screen manager and intializes that <see cref="GameScreen"/>.
         /// </summary>

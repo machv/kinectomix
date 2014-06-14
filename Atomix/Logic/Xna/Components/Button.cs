@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Atomix
+namespace Kinectomix.Xna.Components
 {
     /// <summary>
     /// Basic button implementation for use in XNA game.

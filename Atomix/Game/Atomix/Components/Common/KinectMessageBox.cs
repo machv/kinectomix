@@ -1,8 +1,9 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Atomix.Components.Kinect;
 using Kinectomix.Xna.Input;
+using Kinectomix.Xna.Components;
+using Kinectomix.Xna.Components.Kinect;
 
 namespace Atomix.Components.Common
 {

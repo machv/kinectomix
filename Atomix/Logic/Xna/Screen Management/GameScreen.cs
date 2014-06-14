@@ -33,14 +33,14 @@ namespace Kinectomix.Xna.ScreenManagement
         /// </summary>
         public virtual void Initialize()
         {
-            if (_screenManager.Game.GraphicsDevice != null)
-            {
-                LoadContent();
-            }
-
             foreach (IGameComponent component in _components)
             {
                 component.Initialize();
+            }
+
+            if (_screenManager.Game.GraphicsDevice != null)
+            {
+                LoadContent();
             }
         }
 
