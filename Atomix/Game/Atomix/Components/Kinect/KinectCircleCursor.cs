@@ -46,7 +46,8 @@ namespace Atomix.Components.Kinect
         {
             base.Update(gameTime);
 
-            if (HandPosition != Vector2.Zero)
+            _frame = 0; // Except zero
+            if (HandPosition != Vector2.Zero && _progress > 0)
             {
                 _circlePosition = new Vector2(HandPosition.X - 20, HandPosition.Y - 20);
                 _frame = (int)(_progress * _framesCount);
