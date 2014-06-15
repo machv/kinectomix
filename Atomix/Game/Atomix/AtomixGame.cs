@@ -135,7 +135,7 @@ namespace Atomix
             Components.Add(frameRate);
             Components.Add(_gameScreenManager);
             Components.Add(_kinectChooser);
-            //Components.Add(_gestures);
+            Components.Add(_gestures);
             Components.Add(_videoStream);
             Components.Add(_skeletonRenderer);
             Components.Add(_cursor);

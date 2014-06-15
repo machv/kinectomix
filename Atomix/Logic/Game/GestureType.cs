@@ -10,5 +10,7 @@
         RightHandLeft,
         RightHandRight,
         RightHandDown,
+        LeftHandWave,
+        RightHandWave,
     }
 }
