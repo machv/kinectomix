@@ -1,4 +1,5 @@
 ﻿using Atomix.Components;
+using Atomix.Components.Common;
 using Atomix.ViewModel;
 using AtomixData;
 using Kinectomix.Logic;
@@ -77,13 +78,25 @@ namespace Atomix
 
         public override void Initialize()
         {
+            KinectCursor cursor = (ScreenManager.Game as AtomixGame).Cursor;
+
+            _pauseMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, cursor);
+            _pauseMessageBox.Changed += pause_Changed;
+
             level = LevelViewModel.FromModel(levelDefinition, ScreenManager.GraphicsDevice);
             highScore = new Highscore(AtomixGame.HighscoreFile);
 
             _activeTileOpacity = 0.0f;
             _activeTileOpacityDirection = 1;
 
+            Components.Add(_pauseMessageBox);
+
             base.Initialize();
+        }
+
+        private void pause_Changed(object sender, MessageBoxEventArgs e)
+        {
+            _pauseMessageBox.Hide();
         }
 
         public override void LoadContent()
@@ -134,6 +147,8 @@ namespace Atomix
             _nextButton.Font = _normalFont;
             _nextButton.InputProvider = ScreenManager.InputProvider;
             _nextButton.Selected += _nextButton_Selected;
+
+            _pauseMessageBox.Font = _normalFont;
 
             base.LoadContent();
         }
@@ -190,10 +205,23 @@ namespace Atomix
 
         BoardTileViewModel currentlyHoveredTile = null;
         DateTime lastHoveredTileTime = DateTime.MinValue;
+        private KeyboardState _previousKeyboardState;
+        private KinectMessageBox _pauseMessageBox;
 
+        private void PauseGame()
+        {
+            _pauseMessageBox.Show("game paused");
+        }
 
         public override void Update(GameTime gameTime)
         {
+            KeyboardState state = Keyboard.GetState();
+
+            if (state.IsKeyDown(Keys.Escape) == true && _previousKeyboardState.IsKeyDown(Keys.Escape) == false)
+                PauseGame();
+
+            _previousKeyboardState = state;
+
             bool clickOccurred = false;
             bool isGestureDetected = false;
 
