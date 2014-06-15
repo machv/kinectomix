@@ -5,6 +5,7 @@ using Kinectomix.Logic;
 using Atomix.Components;
 using Kinectomix.Xna.ScreenManagement;
 using Kinectomix.Xna.Input;
+using Atomix.Components.Kinect;
 
 namespace Atomix
 {
@@ -27,9 +28,9 @@ namespace Atomix
         Vector2 _kinectDebugOffset;
         float _scale = 1;
         public static GameState State { get { return _state; } }
-        KinectCursor _cursor;
+        KinectCircleCursor _cursor;
 
-        public KinectCursor Cursor { get { return _cursor; } }
+        public KinectCircleCursor Cursor { get { return _cursor; } }
 
         private int _fullScreenWidth = 1280;
         private int _fullScreenHeight = 720;
@@ -110,7 +111,7 @@ namespace Atomix
              _kinectChooser = new KinectChooser(this, true, true);
             _gestures = new Gestures(this, _kinectChooser.Skeletons, "Content/Gestures/");
             _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectDebugOffset, _scale);
-            _cursor = new KinectCursor(this, _kinectChooser) { HideMouseCursorWhenHandTracked = true };
+            _cursor = new KinectCircleCursor(this, _kinectChooser) { HideMouseCursorWhenHandTracked = true };
             _videoStream = new VideoStreamComponent(this, _kinectChooser) { StreamType = VideoStream.Depth };
             var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);
@@ -134,7 +135,7 @@ namespace Atomix
             Components.Add(frameRate);
             Components.Add(_gameScreenManager);
             Components.Add(_kinectChooser);
-            Components.Add(_gestures);
+            //Components.Add(_gestures);
             Components.Add(_videoStream);
             Components.Add(_skeletonRenderer);
             Components.Add(_cursor);

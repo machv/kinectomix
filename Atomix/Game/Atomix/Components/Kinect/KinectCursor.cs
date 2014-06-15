@@ -11,11 +11,11 @@ namespace Atomix.Components
     public class KinectCursor : DrawableGameComponent
     {
         private const int CursorPositionsBufferLenth = 1;
-        private SpriteBatch spriteBatch;
+        protected SpriteBatch _spriteBatch;
         private bool leftHanded;
         private Vector2 _renderOffset;
         private float _scale;
-        private Texture2D _handTexture;
+        protected Texture2D _handTexture;
         private SpriteFont _font;
         private Vector2[] cursorPositionsBuffer;
         private int cursorPositionsBufferIndex;
@@ -77,7 +77,7 @@ namespace Atomix.Components
             _renderOffset = Vector2.Zero;
             _scale = 1;
 
-            spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
             cursorPositionsBuffer = new Vector2[CursorPositionsBufferLenth];
             cursorPositionsBufferIndex = -1;
@@ -239,27 +239,27 @@ namespace Atomix.Components
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin();
+            _spriteBatch.Begin();
 
             if (_textToRender != null)
             {
                 Vector2 FontOrigin = _font.MeasureString(_textToRender) / 2;
 
-                spriteBatch.DrawString(_font, _textToRender, new Vector2(600, 20), Color.Red,
+                _spriteBatch.DrawString(_font, _textToRender, new Vector2(600, 20), Color.Red,
                     0, FontOrigin, 1.0f, SpriteEffects.None, 0.5f);
             }
 
             if (cursorPosition != Vector2.Zero)
             {
-                spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
+                _spriteBatch.Draw(_handTexture, cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
             }
 
             if (_handTracker != null)
             {
-                _handTracker.Draw(gameTime, spriteBatch, _font, _scale, _renderOffset);
+                _handTracker.Draw(gameTime, _spriteBatch, _font, _scale, _renderOffset);
             }
 
-            spriteBatch.End();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

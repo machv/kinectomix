@@ -92,6 +92,7 @@
     <Compile Include="Components\Kinect\ClippedEdgesVisualiser.cs" />
     <Compile Include="Components\Common\FrameRateInfo.cs" />
     <Compile Include="Components\Kinect\Gestures.cs" />
+    <Compile Include="Components\Kinect\KinectCircleCursor.cs" />
     <Compile Include="Components\Kinect\KinectCursor.cs" />
     <Compile Include="Components\Common\KinectMessageBox.cs" />
     <Compile Include="Components\Kinect\VideoStreamComponent.cs" />

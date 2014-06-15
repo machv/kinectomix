@@ -1,5 +1,6 @@
 ﻿using Atomix.Components;
 using Atomix.Components.Common;
+using Atomix.Components.Kinect;
 using Kinectomix.Logic;
 using Kinectomix.Xna.Components.Kinect;
 using Kinectomix.Xna.ScreenManagement;
@@ -21,7 +22,7 @@ namespace Atomix
         private KinectButton _quitButton;
 
         private KinectMessageBox _quitMessageBox;
-        private KinectCursor _cursor;
+        private KinectCircleCursor _cursor;
 
         public StartScreen(SpriteBatch spriteBatch)
         {

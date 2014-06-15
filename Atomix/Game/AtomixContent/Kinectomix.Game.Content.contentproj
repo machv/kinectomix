@@ -173,6 +173,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\HandCircle.png">
+      <Name>HandCircle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Levels\original_level_01.atx">
       <Name>original_level_01</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
