@@ -110,7 +110,7 @@ namespace Atomix
              _kinectChooser = new KinectChooser(this, true, true);
             _gestures = new Gestures(this, _kinectChooser.Skeletons, "Content/Gestures/");
             _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectDebugOffset, _scale);
-            _cursor = new KinectCursor(this, _kinectChooser, _kinectDebugOffset, _scale) { HideMouseCursorWhenHandTracked = true };
+            _cursor = new KinectCursor(this, _kinectChooser) { HideMouseCursorWhenHandTracked = true };
             _videoStream = new VideoStreamComponent(this, _kinectChooser) { StreamType = VideoStream.Depth };
             var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);

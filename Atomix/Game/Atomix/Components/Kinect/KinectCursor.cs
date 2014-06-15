@@ -69,13 +69,13 @@ namespace Atomix.Components
             get { return _isHandTracked; }
         }
 
-        public KinectCursor(Game game, KinectChooser chooser, Vector2 offset, float scale)
+        public KinectCursor(Game game, KinectChooser chooser)
             : base(game)
         {
             _KinectChooser = chooser;
             _skeletons = chooser.Skeletons;
-            _renderOffset = offset;
-            _scale = scale;
+            _renderOffset = Vector2.Zero;
+            _scale = 1;
 
             spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
