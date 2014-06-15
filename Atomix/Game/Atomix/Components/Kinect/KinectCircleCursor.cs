@@ -56,8 +56,6 @@ namespace Atomix.Components.Kinect
                 _frame = (int)(_progress * _framesCount);
                 if (_frame > _framesCount)
                     _frame = _framesCount - 1;
-
-                System.Diagnostics.Debug.Print( string.Format("[U] Frame: {0}, Progress: {1}, Ratio: {2}", _frame, _progress, (_progress * _framesCount)));
             }
         }
 
@@ -69,7 +67,6 @@ namespace Atomix.Components.Kinect
             {
                 _spriteBatch.Begin();
                 _animatedCircle.DrawFrame(_spriteBatch, _frame, _circlePosition);
-                System.Diagnostics.Debug.Print("Frame: " + _frame.ToString());
                 _spriteBatch.End();
             }
         }
