@@ -69,7 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BondDirection.cs" />
+    <Compile Include="Model\BondDirection.cs" />
     <Compile Include="DrawingContextExtensions.cs" />
     <Compile Include="Behavior\TileBonds.cs" />
     <Compile Include="Behavior\TilePainter.cs" />
@@ -86,7 +86,7 @@
     <Compile Include="Model\LevelFactory.cs" />
     <Compile Include="Model\LevelFileDialog.cs" />
     <Compile Include="Model\Tiles.cs" />
-    <Compile Include="TileSelectedEventArgs.cs" />
+    <Compile Include="Model\TileSelectedEventArgs.cs" />
     <Compile Include="ViewModel\AvailableTilesViewModel.cs" />
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
