@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <XnaContent xmlns:Game="Kinectomix.Logic.Game">
   <Asset Type="Game:KnownGesture[]">
+    <!-- 
     <Item>
       <Filename>LeftHandUp.gst</Filename>
       <Type>LeftHandUp</Type>
@@ -41,9 +42,10 @@
       <Filename>marketa_left_hand_left.gst</Filename>
       <Type>RightHandUp</Type>
     </Item>
+    -->
     <Item>
       <Filename>wave.gst</Filename>
-      <Type>RightHandUp</Type>
+      <Type>LeftHandWave</Type>
     </Item>
   </Asset>
 </XnaContent>
