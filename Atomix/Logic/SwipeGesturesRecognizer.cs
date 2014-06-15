@@ -153,7 +153,7 @@ namespace Kinectomix.Logic
             {
                 if (_totalDistanceY > _requiredDistance)
                 {
-                    gesture = new SwipeGesture(SwipeDirection.Down, _totalDistanceY);
+                    gesture = new SwipeGesture(SwipeDirection.Up, _totalDistanceY);
                     _verticalCandidate = false;
                 }
 
