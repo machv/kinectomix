@@ -6,11 +6,10 @@ using System;
 namespace Kinectomix.Xna.Components
 {
     /// <summary>
-    /// Basic button implementation for use in XNA game.
+    /// Basic button implementation for use in XNA framework.
     /// </summary>
     public class Button : DrawableGameComponent
     {
-        private SpriteBatch _spriteBatch;
         private Texture2D _empty;
         private IInputState _previousInputState;
         private IInputState _currentInputState;
@@ -28,8 +27,18 @@ namespace Kinectomix.Xna.Components
         private object _tag;
         private bool _isActive;
 
+        /// <summary>
+        /// Currently used <see cref="IInputProvider"/> for the input from user.
+        /// </summary>
         protected IInputProvider _inputProvider;
+        /// <summary>
+        /// Visible bounding rectangle of the button.
+        /// </summary>
         protected Rectangle _boundingRectangle;
+        /// <summary>
+        /// <see cref="SpriteBatch"/> used for rendering.
+        /// </summary>
+        protected SpriteBatch _spriteBatch;
 
         /// <summary>
         /// Gets or sets rendering position of this button.

@@ -1,21 +1,23 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Atomix.Components.Kinect;
 using Atomix.Components;
 
 namespace Kinectomix.Xna.Components.Kinect
 {
     /// <summary>
-    /// Extended implementation of <see cref="Button"/> class that interacts with Kinect using <see cref="KinectCursor"/>.
+    /// Extended implementation of <see cref="Button"/> class that interacts with Kinect using <see cref="KinectCursor"/> or <see cref="KinectCircleCursor"/>.
     /// </summary>
     public class KinectButton : Button
     {
         private KinectCursor _cursor;
+        private KinectCircleCursor _circleCursor;
         private bool _isHovering;
         private DateTime _hoverStart;
         private TimeSpan _minimalHoverDuration;
 
         /// <summary>
-        /// Gets or sets minimal required duration of cursor's hover over button to accept it as "click".
+        /// Gets or sets minimal required duration of cursor's hover over button to accept it as "click". Default hover duration is 1 second.
         /// </summary>
         /// <returns>Duration required to accept.</returns>
         public TimeSpan MinimalHoverDuration
@@ -24,20 +26,57 @@ namespace Kinectomix.Xna.Components.Kinect
             set { _minimalHoverDuration = value; }
         }
 
-        /// <summary>
-        /// Constructs new instance of <see cref="KinectButton"/> with cursor.
-        /// </summary>
-        /// <param name="game">Game containing this component.</param>
-        /// <param name="cursor">Cursor from which track position.</param>
-        public KinectButton(Game game, KinectCursor cursor)
+        private KinectButton(Game game)
             : base(game)
         {
-            _cursor = cursor;
             _minimalHoverDuration = TimeSpan.FromSeconds(1);
         }
 
         /// <summary>
-        /// Constructs new instance of <see cref="KinectButton"/> with cursor and text caption.
+        /// Initializes new instance of <see cref="KinectButton"/> with <see cref="KinectCircleCursor"/>. Default hover time is 1 second.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="cursor">Cursor from which track position.</param>
+        public KinectButton(Game game, KinectCircleCursor cursor)
+            : this(game)
+        {
+            if (cursor == null)
+                throw new ArgumentNullException("cursor");
+
+            _circleCursor = cursor;
+        }
+
+        /// <summary>
+        /// Initializes new instance of <see cref="KinectButton"/> with cursor and text caption.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="cursor">Cursor from which track position.</param>
+        /// <param name="content">Caption text for the button.</param>
+        public KinectButton(Game game, KinectCircleCursor cursor, string content)
+            : this(game, cursor)
+        {
+            Content = content;
+        }
+
+        /// <summary>
+        /// Initializes new instance of <see cref="KinectButton"/> with <see cref="KinectCursor"/>. Default hover time is 1 second.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="cursor">Cursor from which track position.</param>
+        public KinectButton(Game game, KinectCursor cursor)
+            : this(game)
+        {
+            if (cursor == null)
+                throw new ArgumentNullException("cursor");
+
+            if (cursor is KinectCircleCursor)
+                _circleCursor = cursor as KinectCircleCursor;
+            else
+                _cursor = cursor;
+        }
+
+        /// <summary>
+        /// Initializes new instance of <see cref="KinectButton"/> with cursor and text caption.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
         /// <param name="cursor">Cursor from which track position.</param>
@@ -56,7 +95,7 @@ namespace Kinectomix.Xna.Components.Kinect
         {
             base.Update(gameTime);
 
-            Vector2 handPosition = _cursor.HandPosition;
+            Vector2 handPosition = _circleCursor != null ? _circleCursor.HandPosition : _cursor.HandPosition;
 
             bool isOver = _boundingRectangle.Contains((int)handPosition.X, (int)handPosition.Y);
 
@@ -64,18 +103,36 @@ namespace Kinectomix.Xna.Components.Kinect
             {
                 _hoverStart = DateTime.Now;
                 _isHovering = true;
+
+                if (_circleCursor != null)
+                    _circleCursor.Progress = 0;
             }
 
-            if (isOver == false)
+            if (isOver == false && _isHovering == true)
             {
+                // Was hovering -> reset
                 _isHovering = false;
+
+                if (_circleCursor != null)
+                    _circleCursor.Progress = 0;
             }
 
-            if (_isHovering == true && DateTime.Now - _hoverStart > _minimalHoverDuration)
+            if (_isHovering == true)
             {
-                _isHovering = false;
+                TimeSpan elapsed = DateTime.Now - _hoverStart;
 
-                OnSelected();
+                if (_circleCursor != null)
+                    _circleCursor.Progress = elapsed.TotalMilliseconds / _minimalHoverDuration.TotalMilliseconds;
+
+                if (elapsed > _minimalHoverDuration)
+                {
+                    _isHovering = false;
+
+                    if (_circleCursor != null)
+                        _circleCursor.Progress = 0;
+
+                    OnSelected();
+                }
             }
         }
     }
