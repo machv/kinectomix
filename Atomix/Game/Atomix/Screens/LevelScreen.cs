@@ -1,5 +1,6 @@
 ﻿using Atomix.Components;
 using Atomix.Components.Common;
+using Atomix.Components.Kinect;
 using Atomix.ViewModel;
 using AtomixData;
 using Kinectomix.Logic;
@@ -21,6 +22,7 @@ namespace Atomix
     /// </summary>
     public class LevelScreen : GameScreen
     {
+        private TimeSpan _minimalHoverDuration = TimeSpan.FromSeconds(2);
         private int _activeTileOpacityDirection;
         private float _activeTileOpacity;
         private Texture2D wallTexture;
@@ -67,6 +69,8 @@ namespace Atomix
         SpriteBatch spriteBatch;
         Highscore highScore;
         string _log = "";
+        private KinectCircleCursor _cursor;
+
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
             _swipeGestures = new SwipeGesturesRecognizer();
@@ -79,6 +83,9 @@ namespace Atomix
         public override void Initialize()
         {
             KinectCursor cursor = (ScreenManager.Game as AtomixGame).Cursor;
+
+            if (cursor is KinectCircleCursor)
+                _cursor = cursor as KinectCircleCursor;
 
             _pauseMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, cursor);
             _pauseMessageBox.Changed += pause_Changed;
@@ -369,24 +376,40 @@ namespace Atomix
                 {
                     ClearBoard();
                 }
+
+                if (_cursor != null)
+                    _cursor.Progress = 0;
             }
 
             if (currentlyHoveredTile != null)
             {
                 currentlyHoveredTile.IsHovered = true;
 
-                if (currentlyHoveredTile.IsFixed == false && DateTime.Now - lastHoveredTileTime > TimeSpan.FromSeconds(2))
+                if (currentlyHoveredTile.IsFixed == false)
                 {
-                    ClearBoard();
+                    TimeSpan elapsedTime = DateTime.Now - lastHoveredTileTime;
 
-                    currentlyHoveredTile.IsSelected = true;
+                    if (_cursor != null)
+                    {
+                        _cursor.Progress = elapsedTime.TotalMilliseconds / _minimalHoverDuration.TotalMilliseconds;
+                    }
 
-                    activeAtomIndex = new Point(k, l);
-                    PrepareAvailableTileMovements(level.Board, k, l);
+                    if (elapsedTime > _minimalHoverDuration)
+                    {
+                        ClearBoard();
 
-                    // prepare for gesture
-                    _swipeGestures.Start(cursor.HandRealPosition, 0.1);
-                    _isGestureCandidate = true;
+                        currentlyHoveredTile.IsSelected = true;
+
+                        activeAtomIndex = new Point(k, l);
+                        PrepareAvailableTileMovements(level.Board, k, l);
+
+                        if (_cursor != null)
+                            _cursor.Progress = 0;
+
+                        // prepare for gesture
+                        _swipeGestures.Start(cursor.HandRealPosition, 0.05);
+                        _isGestureCandidate = true;
+                    }
                 }
             }
 
@@ -434,27 +457,9 @@ namespace Atomix
                                 {
                                     MoveDirection direction = GetDirectionFromAsset(level.Board[i, j].Asset);
                                     Point coordinates = new Point(i, j);
-                                    Point newCoordinates = NewPosition(coordinates, direction);
                                     Point atomCoordinates = GetAtomPosition(coordinates, direction);
 
-                                    BoardTileViewModel atom = level.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
-
-                                    // start animation
-                                    isMovementAnimation = true;
-                                    atomPosition = atom.RenderPosition;
-                                    destination = newCoordinates;
-                                    atomToMove = atom.Asset;
-                                    moveDirection = direction;
-
-                                    // instead of just switching do the animation
-                                    level.Board[atomCoordinates.X, atomCoordinates.Y] = level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
-                                    level.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
-                                    level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true; // but now will be rendered as empty
-                                    level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// but now will be rendered as empty
-
-                                    CalculateBoardTilePositions(boardPosition, level.Board);
-
-                                    moves += 1;
+                                    ProcessTileMove(atomCoordinates, direction);
 
                                     ClearBoard();
                                 }
@@ -475,6 +480,12 @@ namespace Atomix
                 _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandRealPosition, out recognizedGesture);
                 if (recognizedGesture != null)
                 {
+                    MoveDirection direction = SwipeToMoveDirection(recognizedGesture.Direction);
+
+                    ProcessTileMove(activeAtomIndex, direction);
+
+                    ClearBoard();
+
                     _log = "Detected swipe " + recognizedGesture.Direction.ToString();
                 }
             }
@@ -483,7 +494,7 @@ namespace Atomix
             {
                 // We have selected atom which is not moved 
 
-                    // update glowing
+                // update glowing
                 _activeTileOpacity += 0.02f * _activeTileOpacityDirection;
                 if (_activeTileOpacity > 1.0)
                     _activeTileOpacityDirection = -1;
@@ -529,6 +540,47 @@ namespace Atomix
             }
 
             base.Update(gameTime);
+        }
+
+        private void ProcessTileMove(Point atomCoordinates, MoveDirection direction)
+        {
+            Point newCoordinates = GetNewAtomPosition(atomCoordinates, direction);
+
+            BoardTileViewModel atom = level.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
+
+            // start animation
+            isMovementAnimation = true;
+            atomPosition = atom.RenderPosition;
+            destination = newCoordinates;
+            atomToMove = atom.Asset;
+            moveDirection = direction;
+
+            // instead of just switching do the animation
+            level.Board[atomCoordinates.X, atomCoordinates.Y] = level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
+            level.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
+            level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true; // but now will be rendered as empty
+            level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// but now will be rendered as empty
+
+            CalculateBoardTilePositions(boardPosition, level.Board);
+
+            moves += 1;
+        }
+
+        private MoveDirection SwipeToMoveDirection(SwipeDirection swipeDirection)
+        {
+            switch (swipeDirection)
+            {
+                case SwipeDirection.Left:
+                    return MoveDirection.Left;
+                case SwipeDirection.Right:
+                    return MoveDirection.Right;
+                case SwipeDirection.Up:
+                    return MoveDirection.Up;
+                case SwipeDirection.Down:
+                    return MoveDirection.Down;
+            }
+
+            return MoveDirection.None;
         }
 
         private void PrepareAvailableTileMovements(TilesCollection<BoardTileViewModel> board, int i, int j)
@@ -745,13 +797,14 @@ namespace Atomix
             return atomPosition;
         }
 
-        private Point NewPosition(Point coordinates, MoveDirection direction)
+        private Point GetNewAtomPosition(Point coordinates, MoveDirection direction)
         {
             Point newCoordinates = coordinates;
 
             switch (direction)
             {
                 case MoveDirection.Right:
+                    newCoordinates.Y++; // We started on the atom -> move one right
                     while (newCoordinates.Y < level.Board.ColumnsCount)
                     {
                         if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
@@ -763,6 +816,7 @@ namespace Atomix
                     if (newCoordinates.Y != coordinates.Y) newCoordinates.Y--; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
                 case MoveDirection.Left:
+                    newCoordinates.Y--; // We started on the atom -> move one left
                     while (newCoordinates.Y >= 0)
                     {
                         if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
@@ -774,6 +828,7 @@ namespace Atomix
                     if (newCoordinates.Y != coordinates.Y) newCoordinates.Y++; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
                 case MoveDirection.Down:
+                    newCoordinates.X++; // We started on the atom -> move one bottom
                     while (newCoordinates.X < level.Board.RowsCount)
                     {
                         if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
@@ -785,6 +840,7 @@ namespace Atomix
                     if (newCoordinates.X != coordinates.X) newCoordinates.X--; // pretekli jsme o jedno za (na zed) tak se vratime zpet, ale jen pokud je pohyb
                     break;
                 case MoveDirection.Up:
+                    newCoordinates.X--; // We started on the atom -> move one up
                     while (newCoordinates.X >= 0)
                     {
                         if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
