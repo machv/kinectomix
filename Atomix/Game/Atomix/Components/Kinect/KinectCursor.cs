@@ -1,13 +1,17 @@
-﻿using AtomixData;
-using Microsoft.Kinect;
+﻿using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Atomix.Components
 {
+    public enum HandMovementTracking
+    {
+        Relative,
+        Absolute,
+    }
+
     public class KinectCursor : DrawableGameComponent
     {
         private const int CursorPositionsBufferLenth = 1;
@@ -26,6 +30,30 @@ namespace Atomix.Components
         private string _textToRender;
         private IHandStateTracker _handTracker;
         private bool _hideMouseCursorWhenHandTracked;
+
+        Vector2 cursorPosition;
+        Vector2 cursorPositionInteraction;
+
+        delegate Vector2 TrackingFunctionDelegate(Skeleton skeleton);
+
+        TrackingFunctionDelegate _handTracking;
+
+        private HandMovementTracking _trackingType;
+        public HandMovementTracking HandTracking
+        {
+            get { return _trackingType; }
+            set { _trackingType = value; }
+        }
+
+        float xPrevious;
+        float yPrevious;
+        float MoveThreshold = 0.005f;
+
+        float handX;
+        float handY;
+        private int lastDepthFrameDataLength;
+        private Texture2D _colorVideo;
+
 
         protected KinectChooser _KinectChooser;
         protected Skeletons _skeletons;
@@ -264,17 +292,7 @@ namespace Atomix.Components
             base.Draw(gameTime);
         }
 
-        Vector2 cursorPosition;
-        Vector2 cursorPositionInteraction;
 
-        float xPrevious;
-        float yPrevious;
-        float MoveThreshold = 0.005f;
-
-        float handX;
-        float handY;
-        private int lastDepthFrameDataLength;
-        private Texture2D _colorVideo;
 
         private Vector2 TrackHandMovementAbsolute(Skeleton skeleton)
         {
