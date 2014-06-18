@@ -144,8 +144,8 @@ namespace Kinectomix.LevelEditor.ViewModel
                     }
 
                     LevelAsset levelAsset = new LevelAsset();
-                    levelAsset.AssetName = item.Value.AssetName;
-                    levelAsset.AssetCode = item.Key;
+                    levelAsset.Name = item.Value.AssetName;
+                    levelAsset.Code = item.Key;
                     levelAsset.HasBonds = item.Value.RenderWithBonds ? item.Value.Template.Tile.HasBonds : false;
                     levelAsset.IsFixed = item.Value.Template.IsFixed;
                     levelAsset.AssetContent = Convert.ToBase64String(bytes);

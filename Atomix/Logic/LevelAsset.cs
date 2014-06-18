@@ -3,14 +3,29 @@ using System.Xml.Serialization;
 
 namespace Kinectomix.Logic
 {
+    /// <summary>
+    /// Contains base64 coded asset used in the game level.
+    /// </summary>
     [Serializable]
     public class LevelAsset
     {
-        public string AssetName { get;set; }
+        private string _name;
+        private string _code;
+        private string _content;
+        private bool _hasBonds;
+        private bool _isFixed;
 
-        public string AssetCode { get; set; }
-
-        public string AssetContent { get;set; }
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+        public string Code
+        {
+            get { return _code; }
+            set { _code = value; }
+        }
+        public string AssetContent { get; set; }
 
         public bool HasBonds { get; set; }
 

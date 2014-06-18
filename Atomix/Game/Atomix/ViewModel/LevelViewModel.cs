@@ -112,7 +112,7 @@ namespace Atomix.ViewModel
                 {
                     Texture2D texture = Texture2D.FromStream(graphicsDevice, stream);
 
-                    string key = asset.AssetCode != null ? asset.AssetCode : asset.AssetName;
+                    string key = asset.Code != null ? asset.Code : asset.Name;
                     levelVm.Assets.Add(key, texture);
                 }
             }
