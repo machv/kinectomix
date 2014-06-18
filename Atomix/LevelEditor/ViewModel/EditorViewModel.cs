@@ -3,12 +3,25 @@ using Kinectomix.LevelEditor.Model;
 using System.IO;
 using System.Windows.Input;
 using Kinectomix.Wpf.Mvvm;
+using System;
+using System.Collections.ObjectModel;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
     public class EditorViewModel : NotifyPropertyBase
     {
         private Tiles _tiles;
+        private ObservableCollection<LevelDefinitionViewModel> _levelDefinitions;
+
+        public ObservableCollection<LevelDefinitionViewModel> LevelDefinitions
+        {
+            get { return _levelDefinitions; }
+            set
+            {
+                _levelDefinitions = value;
+                OnPropertyChanged();
+            }
+        }
 
         private IFileDialogService _levelFileDialog;
         public IFileDialogService LevelFileDialog
@@ -57,6 +70,45 @@ namespace Kinectomix.LevelEditor.ViewModel
 
             _tileSelector = new AvailableTilesViewModel(_tiles);
             _tileSelector.TileSelected += Selector_TileSelected;
+
+            _saveAsLevelsDefinitionCommand = new DelegateCommand(SaveAsLevelsDefinition, CanExecuteSaveAsLevelsDefinition);
+            _loadLevelsDefinitionCommand = new DelegateCommand(LoadLevelsDefinition);
+            _newLevelsDefinitionCommand = new DelegateCommand(NewLevelsDefinition);
+            _addNewLevelCommand = new DelegateCommand(AddNewLevel, CanExecuteAddNewLevel);
+        }
+
+        private bool CanExecuteAddNewLevel(object parameter)
+        {
+            return _levelDefinitions != null;
+        }
+
+        private void AddNewLevel()
+        {
+            LevelDefinitions.Add(new LevelDefinitionViewModel() { Name = "Kinectomix Level" });
+        }
+
+        private bool _isLevelDefinitionChanged;
+        private bool CanExecuteSaveAsLevelsDefinition(object parameter)
+        {
+            return _isLevelDefinitionChanged;
+        }
+
+        private void NewLevelsDefinition()
+        {
+            LevelDefinitions = new ObservableCollection<LevelDefinitionViewModel>();
+            LevelDefinitions.Add(new LevelDefinitionViewModel() { Name = "Test" });
+
+            _addNewLevelCommand.RaiseCanExecuteChanged();
+        }
+
+        private void LoadLevelsDefinition()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SaveAsLevelsDefinition()
+        {
+            throw new NotImplementedException();
         }
 
         private void Selector_TileSelected(object sender, TileSelectedEventArgs e)
@@ -66,6 +118,30 @@ namespace Kinectomix.LevelEditor.ViewModel
 
             if (Level.Molecule != null)
                 Level.Molecule.PaintTile = e.Tile;
+        }
+
+        private DelegateCommand _addNewLevelCommand;
+        public ICommand AddNewLevelCommand
+        {
+            get { return _addNewLevelCommand; }
+        }
+
+        private DelegateCommand _newLevelsDefinitionCommand;
+        public ICommand NewLevelsDefinitionCommand
+        {
+            get { return _newLevelsDefinitionCommand; }
+        }
+
+        private DelegateCommand _loadLevelsDefinitionCommand;
+        public ICommand LoadLevelsDefinitionCommand
+        {
+            get { return _loadLevelsDefinitionCommand; }
+        }
+
+        private DelegateCommand _saveAsLevelsDefinitionCommand;
+        public ICommand SaveAsLevelsDefinitionCommand
+        {
+            get { return _saveAsLevelsDefinitionCommand; }
         }
 
         public ICommand LoadLevelCommand

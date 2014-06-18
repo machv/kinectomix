@@ -18,26 +18,32 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <DockPanel Grid.Column="0" Margin="0">
+            <Border DockPanel.Dock="Bottom" Background="WhiteSmoke" BorderBrush="Silver" BorderThickness="0,1,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                    <Button Content="New" Margin="5" Padding="3" Command="{Binding NewLevelsDefinitionCommand}" />
+                    <Button Content="_Load..." Margin="5" Padding="3" Command="{Binding LoadLevelsDefinitionCommand}" />
+                    <Button Content="_Save as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsDefinitionCommand}" FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+            <Grid Margin="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="13">Game levels</TextBlock>
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="_Load..." Margin="5" Padding="3" Command="{Binding LoadLevelsCommand}" />
-                <Button Content="_Save as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsCommand}" FontWeight="Bold" />
-            </StackPanel>
-
-            <ListBox Grid.Row="2">
-                <ListBoxItem>Level 1</ListBoxItem>
-                <ListBoxItem>Level 2</ListBoxItem>
-                <ListBoxItem>Level 3</ListBoxItem>
-            </ListBox>
-        </Grid>
+                <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24">Game levels</TextBlock>
+                <ListBox ItemsSource="{Binding LevelDefinitions}" Grid.Row="1">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Grid.Row="2" Margin="2" Command="{Binding AddNewLevelCommand}" Content="Add new level" />
+            </Grid>
+        </DockPanel>
 
         <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" BorderBrush="Silver" BorderThickness="1,0" />
 
