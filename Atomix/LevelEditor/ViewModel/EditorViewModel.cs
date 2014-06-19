@@ -75,6 +75,9 @@ namespace Kinectomix.LevelEditor.ViewModel
             _loadLevelsDefinitionCommand = new DelegateCommand(LoadLevelsDefinition);
             _newLevelsDefinitionCommand = new DelegateCommand(NewLevelsDefinition);
             _addNewLevelCommand = new DelegateCommand(AddNewLevel, CanExecuteAddNewLevel);
+
+
+            NewLevel();
         }
 
         private bool CanExecuteAddNewLevel(object parameter)
