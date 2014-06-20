@@ -25,7 +25,7 @@ namespace Kinectomix.Logic
             get { return _code; }
             set { _code = value; }
         }
-        public string AssetContent { get; set; }
+        public string Content { get; set; }
 
         public bool HasBonds { get; set; }
 
@@ -36,7 +36,7 @@ namespace Kinectomix.Logic
         {
             get
             {
-                return System.Convert.FromBase64String(AssetContent);
+                return System.Convert.FromBase64String(Content);
             }
         }
     }
