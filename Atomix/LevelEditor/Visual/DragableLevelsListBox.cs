@@ -98,7 +98,6 @@ namespace Kinectomix.LevelEditor.Visual
             }
         }
 
-
         private void ListBoxDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DragDataDataName))
