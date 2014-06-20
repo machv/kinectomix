@@ -18,31 +18,40 @@ namespace Kinectomix.LevelEditor.Model
             get { return _filterIndex; }
         }
 
+        private string[] _fileNames;
         public string[] FileNames
         {
-            get { throw new NotImplementedException(); }
+            get { return _fileNames; }
         }
 
+        private bool _multiselect;
         public bool Multiselect
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return _multiselect; }
+            set { _multiselect = value; }
         }
 
         public bool OpenFileDialog()
         {
             OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = _multiselect;
             dialog.Filter = "Atomix level (*.xnb, *.xml, *.atb, *.atx)|*.xnb;*.xml;*.atb;*.atx|All files|*.*";
             dialog.Title = "Open Kinectomix level definition";
 
             if (dialog.ShowDialog() == true)
             {
                 _fileName = dialog.FileName;
+                _fileNames = dialog.FileNames;
 
                 return true;
             }
 
             return false;
+        }
+
+        public LevelFileDialog(bool multiselect)
+        {
+            _multiselect = multiselect;
         }
 
         public bool SaveFileDialog()

@@ -70,7 +70,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             _userAtomAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.AtomTilesDirectory);
             _userFixedAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.FixedTilesDirectory);
 
-            _levelFileDialog = new LevelFileDialog();
+            _levelFileDialog = new LevelFileDialog(true);
             _exportLevelCommand = new DelegateCommand<LevelViewModel>(ExportLevel, CanExecuteExportLevel);
 
             _tileSelector = new AvailableTilesViewModel();
@@ -319,7 +319,8 @@ namespace Kinectomix.LevelEditor.ViewModel
         {
             if (_levelFileDialog.OpenFileDialog())
             {
-                ImportLevel(_levelFileDialog.FileName);
+                foreach (string fileName in _levelFileDialog.FileNames)
+                    ImportLevel(fileName);
             }
         }
 
