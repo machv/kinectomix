@@ -85,6 +85,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
 
             LevelViewModel viewModel = new LevelViewModel();
+            viewModel.Name = level.Name;
             viewModel.Tiles = tiles;
             viewModel.Board = new BoardViewModel(level.Board, tiles) { EmptyTileTemplate = tiles["Empty"] };
             viewModel.Molecule = new BoardViewModel(level.Molecule, tiles) { EmptyTileTemplate = tiles["Empty"] };
@@ -92,11 +93,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             return viewModel;
         }
 
-        public static Level ToLevel(LevelViewModel levelViewModel, Tiles tiles)
+        public static Level ToLevel(LevelViewModel levelViewModel)
         {
             Dictionary<string, BuildAsset> required = new Dictionary<string, BuildAsset>();
 
             Level level = new Level();
+            level.Name = levelViewModel.Name;
 
             level.Board = new TilesCollection<BoardTile>(levelViewModel.Board.Tiles.RowsCount, levelViewModel.Board.Tiles.ColumnsCount);
             foreach (BoardTileViewModel tileViewModel in levelViewModel.Board.Tiles)
@@ -204,9 +206,9 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
-        public Level ToLevel(Tiles tiles)
+        public Level ToLevel()
         {
-            return ToLevel(this, tiles);
+            return ToLevel(this);
         }
     }
 }

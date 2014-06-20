@@ -14,17 +14,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         private int _newLevelIdnex;
         private Tiles _tiles;
         private ObservableCollection<LevelViewModel> _levels;
-        //private LevelViewModel _currentLevel;
 
-        //public LevelViewModel CurrentLevel
-        //{
-        //    get { return _currentLevel; }
-        //    set
-        //    {
-        //        _currentLevel = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
         public ObservableCollection<LevelViewModel> Levels
         {
             get { return _levels; }
@@ -60,9 +50,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _level; }
             set
             {
-                _level = value;
-
-                OnPropertyChanged();
+                if (_level != value)
+                {
+                    _level = value;
+                    ShowLevel(value);
+                    OnPropertyChanged();
+                }
             }
         }
         private DelegateCommand _importLevelCommand;
@@ -75,7 +68,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             _userFixedAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.FixedTilesDirectory);
 
             _levelFileDialog = new LevelFileDialog();
-            _saveAsLevelCommand = new DelegateCommand(SaveAsLevel, CanExecuteSaveAs);
+            _exportLevelCommand = new DelegateCommand(ExportLevel, CanExecuteExportLevel);
 
             _tileSelector = new AvailableTilesViewModel();
             _tileSelector.TileSelected += Selector_TileSelected;
@@ -172,13 +165,13 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _importLevelCommand; }
         }
 
-        private DelegateCommand _saveAsLevelCommand;
+        private DelegateCommand _exportLevelCommand;
         public ICommand SaveAsLevelCommand
         {
-            get { return _saveAsLevelCommand; }
+            get { return _exportLevelCommand; }
         }
 
-        private bool CanExecuteSaveAs(object parameter)
+        private bool CanExecuteExportLevel(object parameter)
         {
             return Level != null;
         }
@@ -190,9 +183,9 @@ namespace Kinectomix.LevelEditor.ViewModel
             _tileSelector.Tiles = levelViewModel.Tiles;
             _tiles = levelViewModel.Tiles;
             Level = levelViewModel;
-            SelectedTab = 0; // Reset to Board tab
+            SelectedTab = _selectedTab; // Reset tab
 
-            _saveAsLevelCommand.RaiseCanExecuteChanged();
+            _exportLevelCommand.RaiseCanExecuteChanged();
         }
 
         private LevelViewModel CreateNewLevel()
@@ -222,6 +215,7 @@ namespace Kinectomix.LevelEditor.ViewModel
                 _selectedTab = value;
 
                 UpdateAvailableTiles(_selectedTab);
+                OnPropertyChanged();
                 //RaisePropertyChangedEvent();
             }
         }
@@ -259,9 +253,9 @@ namespace Kinectomix.LevelEditor.ViewModel
             LevelsViewModel levels = new LevelsViewModel();
         }
 
-        private void SaveAsLevel()
+        private void ExportLevel()
         {
-            Level level = Level.ToLevel(_tiles);
+            Level level = Level.ToLevel();
 
             if (_levelFileDialog.SaveFileDialog())
             {
@@ -303,7 +297,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             Levels.Add(levelViewModel);
             ShowLevel(levelViewModel);
 
-            _saveAsLevelCommand.RaiseCanExecuteChanged();
+            _exportLevelCommand.RaiseCanExecuteChanged();
         }
     }
 }
