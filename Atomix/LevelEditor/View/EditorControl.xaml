@@ -20,7 +20,7 @@
                 </Grid.ColumnDefinitions>
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
                     <Button Content="_Add new level" Margin="5" Padding="3" Command="{Binding AddNewLevelCommand}" />
-                    <Button Content="_Import level..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
+                    <Button Content="_Import level..." Margin="5" Padding="3" Command="{Binding ImportLevelCommand}" />
                     <Button Content="_Export level..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" />
 
                 </WrapPanel>

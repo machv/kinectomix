@@ -53,7 +53,7 @@ namespace Kinectomix.LevelEditor.View
             {
                 string[] paths = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                (DataContext as EditorViewModel).LoadLevel(paths[0]);
+                (DataContext as EditorViewModel).ImportLevel(paths[0]);
             }
         }
     }

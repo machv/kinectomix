@@ -75,8 +75,15 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
-        public static LevelViewModel FromLevel(Level level, Tiles tiles)
+        public static LevelViewModel FromLevel(Level level, string _userFixedAssetsPath, string _userAtomAssetsPath)
         {
+            Tiles tiles = new Tiles();
+            tiles.Clear();
+            tiles.LoadSystemAssets();
+            tiles.LoadLevelAssets(level);
+            tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
+            tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
+
             LevelViewModel viewModel = new LevelViewModel();
             viewModel.Tiles = tiles;
             viewModel.Board = new BoardViewModel(level.Board, tiles) { EmptyTileTemplate = tiles["Empty"] };
@@ -173,7 +180,7 @@ namespace Kinectomix.LevelEditor.ViewModel
                     levelAsset.Code = item.Key;
                     levelAsset.HasBonds = item.Value.RenderWithBonds ? item.Value.Template.Tile.HasBonds : false;
                     levelAsset.IsFixed = item.Value.Template.IsFixed;
-                    levelAsset.AssetContent = Convert.ToBase64String(bytes);
+                    levelAsset.Content = Convert.ToBase64String(bytes);
                     level.Assets.Add(levelAsset);
                 }
             }

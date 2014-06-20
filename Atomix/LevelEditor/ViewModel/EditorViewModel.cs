@@ -65,7 +65,7 @@ namespace Kinectomix.LevelEditor.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        private DelegateCommand _importLevelCommand;
         private string _userAtomAssetsPath;
         private string _userFixedAssetsPath;
 
@@ -87,6 +87,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             _loadLevelsDefinitionCommand = new DelegateCommand(LoadLevelsDefinition);
             _newLevelsDefinitionCommand = new DelegateCommand(NewLevelsDefinition);
             _addNewLevelCommand = new DelegateCommand(AddNewLevel, CanExecuteAddNewLevel);
+            _importLevelCommand = new DelegateCommand(OpenLevelDialog);
 
 
             NewLevelsDefinition(); // Create new levels definition
@@ -167,9 +168,9 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _saveAsLevelsDefinitionCommand; }
         }
 
-        public ICommand LoadLevelCommand
+        public ICommand ImportLevelCommand
         {
-            get { return new DelegateCommand(LoadLevelDialog); }
+            get { return _importLevelCommand; }
         }
 
         private DelegateCommand _saveAsLevelCommand;
@@ -183,18 +184,13 @@ namespace Kinectomix.LevelEditor.ViewModel
             return Level != null;
         }
 
-        //public ICommand NewLevelCommand
-        //{
-        //    get { return new DelegateCommand(CreateNewLevel); }
-        //}
-
-        private void ShowLevel(LevelViewModel level)
+        private void ShowLevel(LevelViewModel levelViewModel)
         {
             //TODO check if field changed? if yes, allow save before new.
 
-            Level = level;
+            Level = levelViewModel;
             SelectedTab = 0; // Reset to Board tab
-            _tiles = level.Tiles;
+            _tiles = levelViewModel.Tiles;
 
             _saveAsLevelCommand.RaiseCanExecuteChanged();
         }
@@ -292,26 +288,21 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
-        private void LoadLevelDialog()
+        private void OpenLevelDialog()
         {
             if (_levelFileDialog.OpenFileDialog())
             {
-                LoadLevel(_levelFileDialog.FileName);
+                ImportLevel(_levelFileDialog.FileName);
             }
         }
 
-        public void LoadLevel(string path)
+        public void ImportLevel(string path)
         {
             Level level = LevelFactory.Load(path);
+            LevelViewModel levelViewModel = LevelViewModel.FromLevel(level, _userFixedAssetsPath, _userAtomAssetsPath);
 
-            _tiles.Clear();
-            _tiles.LoadSystemAssets();
-            _tiles.LoadLevelAssets(level);
-            _tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
-            _tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
-
-            Level = LevelViewModel.FromLevel(level, _tiles);
-            SelectedTab = 0;
+            Levels.Add(levelViewModel);
+            ShowLevel(levelViewModel);
 
             _saveAsLevelCommand.RaiseCanExecuteChanged();
         }
