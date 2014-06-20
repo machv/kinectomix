@@ -207,7 +207,7 @@ namespace Kinectomix.LevelEditor
 				ShowDraggedAdorner(e.GetPosition(this.topWindow));
 				CreateInsertionAdorner();
 			}
-			e.Handled = true;
+			//e.Handled = true;
 		}
 
 		private void DropTarget_PreviewDragOver(object sender, DragEventArgs e)
@@ -244,8 +244,10 @@ namespace Kinectomix.LevelEditor
 
 				RemoveDraggedAdorner();
 				RemoveInsertionAdorner();
-			}
-			e.Handled = true;
+
+                e.Handled = true;
+            }
+			//e.Handled = true;
 		}
 
 		private void DropTarget_PreviewDragLeave(object sender, DragEventArgs e)
@@ -308,7 +310,7 @@ namespace Kinectomix.LevelEditor
 			{
 				this.targetItemContainer = null;
 				this.insertionIndex = -1;
-				e.Effects = DragDropEffects.None;
+				//e.Effects = DragDropEffects.None;
 			}
 		}
 

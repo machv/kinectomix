@@ -69,7 +69,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             _userFixedAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.FixedTilesDirectory);
 
             _levelFileDialog = new LevelFileDialog();
-            _exportLevelCommand = new DelegateCommand(ExportLevel, CanExecuteExportLevel);
+            _exportLevelCommand = new DelegateCommand<LevelViewModel>(ExportLevel, CanExecuteExportLevel);
 
             _tileSelector = new AvailableTilesViewModel();
             _tileSelector.TileSelected += Selector_TileSelected;
@@ -177,8 +177,8 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _importLevelCommand; }
         }
 
-        private DelegateCommand _exportLevelCommand;
-        public ICommand SaveAsLevelCommand
+        private DelegateCommand<LevelViewModel> _exportLevelCommand;
+        public ICommand ExportLevelCommand
         {
             get { return _exportLevelCommand; }
         }
@@ -268,9 +268,9 @@ namespace Kinectomix.LevelEditor.ViewModel
             LevelsViewModel levels = new LevelsViewModel();
         }
 
-        private void ExportLevel()
+        private void ExportLevel(LevelViewModel levelViewModel)
         {
-            Level level = Level.ToLevel();
+            Level level = levelViewModel.ToLevel();
 
             if (_levelFileDialog.SaveFileDialog())
             {
