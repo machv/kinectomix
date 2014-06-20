@@ -32,13 +32,12 @@
                                                        BottomLeftBond="{Binding BottomLeftBond}"
                                                        LeftBond="{Binding LeftBond}" />
                             <Image Source="{Binding AssetSource}" 
-                                           Behavior:TilePainter.IsPaintEnabled="True"
-                                           Behavior:TilePainter.PaintTile="{Binding Path=DataContext.PaintTile, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                           Behavior:TilePainter.IsPaintEnabled="False"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Width="49"
                                            Height="49"
-                                           Stretch="Uniform">
+                                           Stretch="Fill">
                                 <Image.Style>
                                     <Style TargetType="Image">
                                         <Style.Triggers>

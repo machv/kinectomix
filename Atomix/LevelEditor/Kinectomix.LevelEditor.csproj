@@ -69,6 +69,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DragDropListBox\DragDropHelper.cs" />
+    <Compile Include="DragDropListBox\DraggedAdorner.cs" />
+    <Compile Include="DragDropListBox\InsertionAdorner.cs" />
+    <Compile Include="DragDropListBox\Utilities.cs" />
     <Compile Include="Model\BondDirection.cs" />
     <Compile Include="DrawingContextExtensions.cs" />
     <Compile Include="Behavior\TileBonds.cs" />
@@ -112,8 +116,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Visual\DragableLevelsListBox.cs" />
-    <Compile Include="Visual\DragAdorner.cs" />
     <Page Include="View\EditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
