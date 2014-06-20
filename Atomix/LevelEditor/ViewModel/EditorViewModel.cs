@@ -5,15 +5,17 @@ using System.Windows.Input;
 using Kinectomix.Wpf.Mvvm;
 using System;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
     public class EditorViewModel : NotifyPropertyBase
     {
         public const string DefaultLevelName = "Kinectomix Level";
-        private int _newLevelIdnex;
+        private int _newLevelIndex;
         private Tiles _tiles;
         private ObservableCollection<LevelViewModel> _levels;
+        private bool _isSomethingChanged;
 
         public ObservableCollection<LevelViewModel> Levels
         {
@@ -105,10 +107,12 @@ namespace Kinectomix.LevelEditor.ViewModel
         private void AddNewLevel()
         {
             LevelViewModel level = CreateNewLevel();
-            level.Name = string.Format("{0} {1}", DefaultLevelName, ++_newLevelIdnex);
+            level.Name = string.Format("{0} {1}", DefaultLevelName, ++_newLevelIndex);
 
             Levels.Add(level);
             ShowLevel(level);
+
+            _isSomethingChanged = true;
         }
 
         private bool _isLevelDefinitionChanged;
@@ -119,6 +123,14 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private void NewLevelsDefinition()
         {
+            if (_isSomethingChanged == true)
+            {
+                MessageBoxResult result = MessageBox.Show("Creating new levels definition will cancel you modifications on current levels definition.\n\nDo you want to continue with creating new level definition?", "Pending changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                    return;
+            }
+
+            _newLevelIndex = 0;
             Levels = new ObservableCollection<LevelViewModel>();
 
             AddNewLevel(); // Add new level inside it
@@ -128,6 +140,13 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private void LoadLevelsDefinition()
         {
+            if (_isSomethingChanged == true)
+            {
+                MessageBoxResult result = MessageBox.Show("Loading levels definition will cancel you modifications on current levels definition.\n\nDo you want to continue to load a new level definition?", "Pending changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                    return;
+            }
+
             throw new NotImplementedException();
         }
 
