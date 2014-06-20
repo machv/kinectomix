@@ -108,7 +108,7 @@ namespace Kinectomix.LevelEditor
             _visualChildren.Add(_content);
         }
 
-        protected override Visual GetVisualChild(int index)
+        protected override System.Windows.Media.Visual GetVisualChild(int index)
         {
             return _visualChildren[index];
         }

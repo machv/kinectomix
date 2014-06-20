@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:l="clr-namespace:Kinectomix.LevelEditor"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:Visual="clr-namespace:Kinectomix.LevelEditor.Visual"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400">
     <UserControl.Resources>
@@ -46,13 +47,13 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24">Game levels</TextBlock>
-                    <ListBox ItemsSource="{Binding Levels}" SelectedItem="{Binding Level}" Grid.Row="1">
-                        <ListBox.ItemTemplate>
+                    <Visual:DragableLevelsListBox ItemsSource="{Binding Levels}" SelectedItem="{Binding Level}" Grid.Row="1">
+                        <Visual:DragableLevelsListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}"/>
                             </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                        </Visual:DragableLevelsListBox.ItemTemplate>
+                    </Visual:DragableLevelsListBox>
                 </Grid>
             </DockPanel>
 

@@ -133,6 +133,9 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private void Selector_TileSelected(object sender, TileSelectedEventArgs e)
         {
+            if (Level == null)
+                return;
+
             if (Level.Board != null)
                 Level.Board.PaintTile = e.Tile;
 

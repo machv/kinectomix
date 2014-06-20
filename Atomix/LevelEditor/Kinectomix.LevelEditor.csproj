@@ -112,6 +112,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Visual\DragableLevelsListBox.cs" />
+    <Compile Include="Visual\DragAdorner.cs" />
     <Page Include="View\EditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
