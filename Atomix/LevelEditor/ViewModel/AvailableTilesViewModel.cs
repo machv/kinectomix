@@ -8,6 +8,16 @@ namespace Kinectomix.LevelEditor.ViewModel
     {
         private Tiles _tiles;
 
+        public Tiles Tiles
+        {
+            get { return _tiles; }
+            set
+            {
+                _tiles = value;
+                OnPropertyChanged();
+            }
+        }
+
         public delegate void TileSelectedEventHandler(object sender, TileSelectedEventArgs e);
         public event TileSelectedEventHandler TileSelected;
 
@@ -44,6 +54,12 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         public void UpdateAvailableTiles(Tiles.TileType type)
         {
+            if (_tiles == null)
+            {
+                AvailableTiles = null;
+                return;
+            }
+
             switch (type)
             {
                 case Tiles.TileType.Board:
@@ -53,6 +69,11 @@ namespace Kinectomix.LevelEditor.ViewModel
                     AvailableTiles = _tiles.Molecule;
                     break;
             }
+        }
+
+        public AvailableTilesViewModel()
+        {
+
         }
 
         public AvailableTilesViewModel(Tiles tiles)

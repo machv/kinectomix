@@ -73,14 +73,11 @@ namespace Kinectomix.LevelEditor.ViewModel
         {
             _userAtomAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.AtomTilesDirectory);
             _userFixedAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.FixedTilesDirectory);
-            _tiles = new Tiles();
-            _tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
-            _tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
 
             _levelFileDialog = new LevelFileDialog();
             _saveAsLevelCommand = new DelegateCommand(SaveAsLevel, CanExecuteSaveAs);
 
-            _tileSelector = new AvailableTilesViewModel(_tiles);
+            _tileSelector = new AvailableTilesViewModel();
             _tileSelector.TileSelected += Selector_TileSelected;
 
             _saveAsLevelsDefinitionCommand = new DelegateCommand(SaveAsLevelsDefinition, CanExecuteSaveAsLevelsDefinition);
@@ -88,7 +85,6 @@ namespace Kinectomix.LevelEditor.ViewModel
             _newLevelsDefinitionCommand = new DelegateCommand(NewLevelsDefinition);
             _addNewLevelCommand = new DelegateCommand(AddNewLevel, CanExecuteAddNewLevel);
             _importLevelCommand = new DelegateCommand(OpenLevelDialog);
-
 
             NewLevelsDefinition(); // Create new levels definition
         }
@@ -188,9 +184,10 @@ namespace Kinectomix.LevelEditor.ViewModel
         {
             //TODO check if field changed? if yes, allow save before new.
 
+            _tileSelector.Tiles = levelViewModel.Tiles;
+            _tiles = levelViewModel.Tiles;
             Level = levelViewModel;
             SelectedTab = 0; // Reset to Board tab
-            _tiles = levelViewModel.Tiles;
 
             _saveAsLevelCommand.RaiseCanExecuteChanged();
         }
@@ -198,18 +195,17 @@ namespace Kinectomix.LevelEditor.ViewModel
         private LevelViewModel CreateNewLevel()
         {
             LevelViewModel level = new LevelViewModel();
+            level.Tiles = new Tiles();
+            level.Tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
+            level.Tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
+
             level.Board = new BoardViewModel(Properties.Settings.Default.DefaultBoardRows, Properties.Settings.Default.DefaultBoardColumns);
-            level.Board.EmptyTileTemplate = _tiles["Empty"];
+            level.Board.EmptyTileTemplate = level.Tiles["Empty"];
             level.Board.PopulateEmptyTiles();
 
             level.Molecule = new BoardViewModel(Properties.Settings.Default.DefaultMoleculeRows, Properties.Settings.Default.DefaultMoleculeColumns);
-            level.Molecule.EmptyTileTemplate = _tiles["Empty"];
+            level.Molecule.EmptyTileTemplate = level.Tiles["Empty"];
             level.Molecule.PopulateEmptyTiles();
-
-            level.Tiles = new Tiles();
-            level.Tiles.LoadSystemAssets();
-            level.Tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
-            level.Tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
 
             return level;
         }
