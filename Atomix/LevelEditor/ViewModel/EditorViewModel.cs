@@ -11,14 +11,14 @@ namespace Kinectomix.LevelEditor.ViewModel
     public class EditorViewModel : NotifyPropertyBase
     {
         private Tiles _tiles;
-        private ObservableCollection<LevelDefinitionViewModel> _levelDefinitions;
+        private ObservableCollection<LevelViewModel> _levels;
 
-        public ObservableCollection<LevelDefinitionViewModel> LevelDefinitions
+        public ObservableCollection<LevelViewModel> Levels
         {
-            get { return _levelDefinitions; }
+            get { return _levels; }
             set
             {
-                _levelDefinitions = value;
+                _levels = value;
                 OnPropertyChanged();
             }
         }
@@ -83,14 +83,15 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private bool CanExecuteAddNewLevel(object parameter)
         {
-            return _levelDefinitions != null;
+            return _levels != null;
         }
 
         private void AddNewLevel()
         {
             LevelViewModel level = CreateNewLevel();
 
-            LevelDefinitions.Add(new LevelDefinitionViewModel() { Name = "Kinectomix Level" });
+
+            Levels.Add(new LevelDefinitionViewModel() { Name = "Kinectomix Level" });
 
             ShowLevel(level);
         }
@@ -103,8 +104,8 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private void NewLevelsDefinition()
         {
-            LevelDefinitions = new ObservableCollection<LevelDefinitionViewModel>();
-            LevelDefinitions.Add(new LevelDefinitionViewModel() { Name = "Test" });
+            Levels = new ObservableCollection<LevelDefinitionViewModel>();
+            Levels.Add(new LevelDefinitionViewModel() { Name = "Test" });
 
             _addNewLevelCommand.RaiseCanExecuteChanged();
         }
