@@ -10,12 +10,20 @@ using Kinectomix.Wpf.Mvvm;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
-    public class LevelViewModel : NotifyPropertyBase
+    /// <summary>
+    /// View Model for the definition of one game level.
+    /// </summary>
+    public partial class LevelViewModel : NotifyPropertyBase
     {
-        BoardViewModel _board;
-        BoardViewModel _molecule;
-        Tiles _tiles;
+        private BoardViewModel _board;
+        private BoardViewModel _molecule;
+        private Tiles _tiles;
+        private string _name;
 
+        /// <summary>
+        /// Gets or sets <see cref="Tiles"/> for use in the level.
+        /// </summary>
+        /// <returns>Tiles for use in the level.</returns>
         public Tiles Tiles
         {
             get { return _tiles; }
@@ -25,7 +33,10 @@ namespace Kinectomix.LevelEditor.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// Gets or sets <see cref="BoardViewModel"/> containing game tiles.
+        /// </summary>
+        /// <returns>Game tiles collection view model.</returns>
         public BoardViewModel Board
         {
             get { return _board; }
@@ -36,7 +47,10 @@ namespace Kinectomix.LevelEditor.ViewModel
                 OnPropertyChanged();
             }
         }
-
+        /// <summary>
+        /// Gets or sets <see cref="BoardViewModel"/> containing tiles describing molecule definition.
+        /// </summary>
+        /// <returns>Molecule definition view model.</returns>
         public BoardViewModel Molecule
         {
             get { return _molecule; }
@@ -47,6 +61,15 @@ namespace Kinectomix.LevelEditor.ViewModel
                 OnPropertyChanged();
             }
         }
+        /// <summary>
+        /// Gets or sets friendly name of the level.
+        /// </summary>
+        /// <returns>Friendly name of the level.</returns>
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
 
         public static LevelViewModel FromLevel(Level level, Tiles tiles)
         {
@@ -56,20 +79,6 @@ namespace Kinectomix.LevelEditor.ViewModel
             viewModel.Molecule = new BoardViewModel(level.Molecule, tiles) { EmptyTileTemplate = tiles["Empty"] };
 
             return viewModel;
-        }
-
-        class BuildAsset
-        {
-            public string AssetName { get; set; }
-            public BoardTileViewModel Template { get; set; }
-            public bool RenderWithBonds { get; set; }
-
-            public BuildAsset(string asset, BoardTileViewModel tile, bool renderWithBonds)
-            {
-                AssetName = asset;
-                Template = tile;
-                RenderWithBonds = renderWithBonds;
-            }
         }
 
         public static Level ToLevel(LevelViewModel levelViewModel, Tiles tiles)

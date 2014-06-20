@@ -17,7 +17,7 @@ namespace Kinectomix.Logic
         /// <summary>
         /// Gets or sets list of binary assets used in the level.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of assets used in the level.</returns>
         public List<LevelAsset> Assets
         {
             get { return _assets; }
