@@ -5,13 +5,19 @@ using System.Text;
 
 namespace Kinectomix.Logic
 {
-    public class GameLevels
+    [Serializable]
+    public class GameDefinition
     {
         private List<Level> _levels;
         public List<Level> Levels
         {
             get { return _levels; }
             set { _levels = value; }
+        }
+
+        public GameDefinition()
+        {
+            _levels = new List<Level>();
         }
     }
 }

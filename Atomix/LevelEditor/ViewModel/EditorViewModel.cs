@@ -6,6 +6,7 @@ using Kinectomix.Wpf.Mvvm;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Xml.Serialization;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {
@@ -16,6 +17,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         private Tiles _tiles;
         private ObservableCollection<LevelViewModel> _levels;
         private bool _isSomethingChanged;
+        private GameLevelsFileDialog _gameLevelsFileDialog;
 
         public ObservableCollection<LevelViewModel> Levels
         {
@@ -71,11 +73,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             _userFixedAssetsPath = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Properties.Settings.Default.FixedTilesDirectory);
 
             _levelFileDialog = new LevelFileDialog(true);
-            _exportLevelCommand = new DelegateCommand<LevelViewModel>(ExportLevel, CanExecuteExportLevel);
+            _gameLevelsFileDialog = new GameLevelsFileDialog();
 
             _tileSelector = new AvailableTilesViewModel();
             _tileSelector.TileSelected += Selector_TileSelected;
 
+            _exportLevelCommand = new DelegateCommand<LevelViewModel>(ExportLevel);
             _saveAsLevelsDefinitionCommand = new DelegateCommand(SaveAsLevelsDefinition, CanExecuteSaveAsLevelsDefinition);
             _loadLevelsDefinitionCommand = new DelegateCommand(LoadLevelsDefinition);
             _newLevelsDefinitionCommand = new DelegateCommand(NewLevelsDefinition);
@@ -84,6 +87,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             _removeLevelCommand = new DelegateCommand<LevelViewModel>(RemoveLevel);
 
             NewLevelsDefinition(); // Create new levels definition
+            //_isSomethingChanged = false; // When created first empty level, we do not accept this as created
         }
 
         public ICommand RemoveLevelCommand
@@ -113,12 +117,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             ShowLevel(level);
 
             _isSomethingChanged = true;
+            _saveAsLevelsDefinitionCommand.RaiseCanExecuteChanged();
         }
 
-        private bool _isLevelDefinitionChanged;
         private bool CanExecuteSaveAsLevelsDefinition(object parameter)
         {
-            return _isLevelDefinitionChanged;
+            return _levels != null &&_levels.Count > 0;
         }
 
         private void NewLevelsDefinition()
@@ -136,6 +140,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             AddNewLevel(); // Add new level inside it
 
             _addNewLevelCommand.RaiseCanExecuteChanged();
+            _saveAsLevelsDefinitionCommand.RaiseCanExecuteChanged();
         }
 
         private void LoadLevelsDefinition()
@@ -147,12 +152,56 @@ namespace Kinectomix.LevelEditor.ViewModel
                     return;
             }
 
-            throw new NotImplementedException();
+            if (_gameLevelsFileDialog.OpenFileDialog())
+            {
+                try
+                {
+                    XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
+
+                    using (Stream stream = File.Open(_gameLevelsFileDialog.FileName, FileMode.Open))
+                    {
+                        Levels.Clear();
+                        GameDefinition game = seralizer.Deserialize(stream) as GameDefinition;
+
+                        foreach (Level level in game.Levels)
+                        {
+                            LevelViewModel levelViewModel = LevelViewModel.FromLevel(level, _userFixedAssetsPath, _userAtomAssetsPath);
+
+                            Levels.Add(levelViewModel);
+                        }
+
+                        if (Levels.Count > 0)
+                            Level = Levels[0]; // Select first level
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Unable to load definition from selected file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void SaveAsLevelsDefinition()
         {
-            throw new NotImplementedException();
+            if (_gameLevelsFileDialog.SaveFileDialog())
+            {
+                GameDefinition game = new GameDefinition();
+
+                foreach (LevelViewModel levelVm in Levels)
+                {
+                    Level level = levelVm.ToLevel();
+                    game.Levels.Add(level);
+                }
+
+                FileMode mode = File.Exists(_gameLevelsFileDialog.FileName) ? FileMode.Truncate : FileMode.OpenOrCreate;
+                using (Stream stream = File.Open(_gameLevelsFileDialog.FileName, mode))
+                {
+                    XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
+                    seralizer.Serialize(stream, game);
+                }
+
+                _isSomethingChanged = false;
+            }
         }
 
         private void Selector_TileSelected(object sender, TileSelectedEventArgs e)
@@ -200,11 +249,6 @@ namespace Kinectomix.LevelEditor.ViewModel
         public ICommand ExportLevelCommand
         {
             get { return _exportLevelCommand; }
-        }
-
-        private bool CanExecuteExportLevel(object parameter)
-        {
-            return Level != null;
         }
 
         private void ShowLevel(LevelViewModel levelViewModel)
@@ -272,16 +316,6 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return new DelegateCommand(LoadLevels); }
         }
 
-        public ICommand TestCommand
-        {
-            get { return new DelegateCommand(Test); }
-        }
-
-        public void Test()
-        {
-
-        }
-
         private void LoadLevels()
         {
             LevelsViewModel levels = new LevelsViewModel();
@@ -331,8 +365,6 @@ namespace Kinectomix.LevelEditor.ViewModel
 
             Levels.Add(levelViewModel);
             ShowLevel(levelViewModel);
-
-            _exportLevelCommand.RaiseCanExecuteChanged();
         }
     }
 }

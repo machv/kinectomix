@@ -26,7 +26,7 @@ namespace Kinectomix.LevelEditor.Model
                 return LoadFromDefinition(path);
             else if (System.IO.Path.GetExtension(path).ToLower() == ".atb")
                 return LoadFromBinary(path);
-            else if (System.IO.Path.GetExtension(path).ToLower() == ".atx")
+            else if (System.IO.Path.GetExtension(path).ToLower() == ".atxl")
                 return LoadFromXmlSerialized(path);
             else
                 throw new ArgumentException("Unexpected file definition extension.");
