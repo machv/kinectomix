@@ -10,6 +10,8 @@ namespace Kinectomix.LevelEditor.ViewModel
 {
     public class EditorViewModel : NotifyPropertyBase
     {
+        public const string DefaultLevelName = "Kinectomix Level";
+
         private Tiles _tiles;
         private ObservableCollection<LevelViewModel> _levels;
 
@@ -78,7 +80,6 @@ namespace Kinectomix.LevelEditor.ViewModel
 
 
             NewLevelsDefinition(); // Create new levels definition
-            AddNewLevel(); // And add new level inside it
         }
 
         private bool CanExecuteAddNewLevel(object parameter)
@@ -86,13 +87,15 @@ namespace Kinectomix.LevelEditor.ViewModel
             return _levels != null;
         }
 
+        /// <summary>
+        /// Adds new level to the list of levels and shows it in the editor.
+        /// </summary>
         private void AddNewLevel()
         {
             LevelViewModel level = CreateNewLevel();
+            level.Name = DefaultLevelName;
 
-
-            Levels.Add(new LevelDefinitionViewModel() { Name = "Kinectomix Level" });
-
+            Levels.Add(level);
             ShowLevel(level);
         }
 
@@ -104,8 +107,9 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private void NewLevelsDefinition()
         {
-            Levels = new ObservableCollection<LevelDefinitionViewModel>();
-            Levels.Add(new LevelDefinitionViewModel() { Name = "Test" });
+            Levels = new ObservableCollection<LevelViewModel>();
+
+            AddNewLevel(); // Add new level inside it
 
             _addNewLevelCommand.RaiseCanExecuteChanged();
         }

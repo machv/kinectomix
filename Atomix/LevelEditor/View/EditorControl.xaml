@@ -28,7 +28,6 @@
                     <Button Content="New definition" Margin="5" Padding="3" Command="{Binding NewLevelsDefinitionCommand}" />
                     <Button Content="_Load definition..." Margin="5" Padding="3" Command="{Binding LoadLevelsDefinitionCommand}" />
                     <Button Content="_Save definition as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsDefinitionCommand}" FontWeight="Bold" />
-
                 </WrapPanel>
             </Grid>
         </Border>
@@ -47,7 +46,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24">Game levels</TextBlock>
-                    <ListBox ItemsSource="{Binding LevelDefinitions}" Grid.Row="1">
+                    <ListBox ItemsSource="{Binding Levels}" Grid.Row="1">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}"/>
@@ -60,40 +59,27 @@
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" BorderBrush="Silver" BorderThickness="1,0" />
 
             <Grid Grid.Column="2" Margin="3" AllowDrop="True" DragOver="OnFileDragOver" Drop="OnFileDrop">
-                <!-- 
-                <DockPanel Margin="0">
-                    <Border DockPanel.Dock="Bottom"  Background="WhiteSmoke" BorderBrush="Silver" BorderThickness="0,1,0,0">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                            <Button Content="_New level" Margin="5" Padding="3" Command="{Binding NewLevelCommand}" />
-                            <Button Content="_Load level..." Margin="5" Padding="3" Command="{Binding LoadLevelCommand}" />
-                            <Button Content="_Save level as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" FontWeight="Bold" />
-                        </StackPanel>
-                    </Border>
-                -->
-                    <Grid Margin="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                <Grid Margin="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
 
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24">Level</TextBlock>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Margin="0,0,0,5" FontWeight="ExtraLight" FontSize="24" Text="{Binding Level.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                        <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
-                            <TabItem Header="Board" Tag="Board">
-                                <ContentPresenter Content="{Binding Level.Board}"/>
-                            </TabItem>
-                            <TabItem Header="Molecule" Tag="Molecule">
-                                <ContentPresenter Content="{Binding Level.Molecule}"/>
-                            </TabItem>
-                        </TabControl>
+                    <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
+                        <TabItem Header="Board" Tag="Board">
+                            <ContentPresenter Content="{Binding Level.Board}"/>
+                        </TabItem>
+                        <TabItem Header="Molecule" Tag="Molecule">
+                            <ContentPresenter Content="{Binding Level.Molecule}"/>
+                        </TabItem>
+                    </TabControl>
 
-                        <ContentPresenter Content="{Binding TileSelector}" Grid.Row="3"/>
-                    </Grid>
-       <!--
-            </DockPanel>
-    -->
-    </Grid>
+                    <ContentPresenter Content="{Binding TileSelector}" Grid.Row="3"/>
+                </Grid>
+            </Grid>
         </Grid>
     </DockPanel>
 </UserControl>
