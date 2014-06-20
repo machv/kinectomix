@@ -14,7 +14,17 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private Tiles _tiles;
         private ObservableCollection<LevelViewModel> _levels;
+        //private LevelViewModel _currentLevel;
 
+        //public LevelViewModel CurrentLevel
+        //{
+        //    get { return _currentLevel; }
+        //    set
+        //    {
+        //        _currentLevel = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
         public ObservableCollection<LevelViewModel> Levels
         {
             get { return _levels; }

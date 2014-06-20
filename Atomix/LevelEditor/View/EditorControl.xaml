@@ -46,7 +46,7 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24">Game levels</TextBlock>
-                    <ListBox ItemsSource="{Binding Levels}" Grid.Row="1">
+                    <ListBox ItemsSource="{Binding Levels}" SelectedItem="{Binding Level}" Grid.Row="1">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}"/>
