@@ -14,6 +14,17 @@ namespace Kinectomix.LevelEditor.ViewModel
     {
         BoardViewModel _board;
         BoardViewModel _molecule;
+        Tiles _tiles;
+
+        public Tiles Tiles
+        {
+            get { return _tiles; }
+            set
+            {
+                _tiles = value;
+                OnPropertyChanged();
+            }
+        }
 
         public BoardViewModel Board
         {
@@ -40,6 +51,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         public static LevelViewModel FromLevel(Level level, Tiles tiles)
         {
             LevelViewModel viewModel = new LevelViewModel();
+            viewModel.Tiles = tiles;
             viewModel.Board = new BoardViewModel(level.Board, tiles) { EmptyTileTemplate = tiles["Empty"] };
             viewModel.Molecule = new BoardViewModel(level.Molecule, tiles) { EmptyTileTemplate = tiles["Empty"] };
 

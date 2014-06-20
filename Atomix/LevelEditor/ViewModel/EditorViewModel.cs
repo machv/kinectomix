@@ -77,7 +77,8 @@ namespace Kinectomix.LevelEditor.ViewModel
             _addNewLevelCommand = new DelegateCommand(AddNewLevel, CanExecuteAddNewLevel);
 
 
-            NewLevel();
+            NewLevelsDefinition(); // Create new levels definition
+            AddNewLevel(); // And add new level inside it
         }
 
         private bool CanExecuteAddNewLevel(object parameter)
@@ -87,7 +88,11 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private void AddNewLevel()
         {
+            LevelViewModel level = CreateNewLevel();
+
             LevelDefinitions.Add(new LevelDefinitionViewModel() { Name = "Kinectomix Level" });
+
+            ShowLevel(level);
         }
 
         private bool _isLevelDefinitionChanged;
@@ -163,15 +168,24 @@ namespace Kinectomix.LevelEditor.ViewModel
             return Level != null;
         }
 
-        public ICommand NewLevelCommand
-        {
-            get { return new DelegateCommand(NewLevel); }
-        }
+        //public ICommand NewLevelCommand
+        //{
+        //    get { return new DelegateCommand(CreateNewLevel); }
+        //}
 
-        private void NewLevel()
+        private void ShowLevel(LevelViewModel level)
         {
             //TODO check if field changed? if yes, allow save before new.
 
+            Level = level;
+            SelectedTab = 0; // Reset to Board tab
+            _tiles = level.Tiles;
+
+            _saveAsLevelCommand.RaiseCanExecuteChanged();
+        }
+
+        private LevelViewModel CreateNewLevel()
+        {
             LevelViewModel level = new LevelViewModel();
             level.Board = new BoardViewModel(Properties.Settings.Default.DefaultBoardRows, Properties.Settings.Default.DefaultBoardColumns);
             level.Board.EmptyTileTemplate = _tiles["Empty"];
@@ -181,17 +195,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             level.Molecule.EmptyTileTemplate = _tiles["Empty"];
             level.Molecule.PopulateEmptyTiles();
 
-            _tiles.Clear();
-            _tiles.LoadSystemAssets();
-            _tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
-            _tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
+            level.Tiles = new Tiles();
+            level.Tiles.LoadSystemAssets();
+            level.Tiles.LoadUserAssets(Tiles.AssetType.Fixed, _userFixedAssetsPath);
+            level.Tiles.LoadUserAssets(Tiles.AssetType.Atom, _userAtomAssetsPath);
 
-            Level = level;
-
-            // Reset to Board tab
-            SelectedTab = 0;
-
-            _saveAsLevelCommand.RaiseCanExecuteChanged();
+            return level;
         }
 
         private int _selectedTab = 0;
