@@ -19,12 +19,13 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
                     <Button Content="_Add new level" Margin="5" Padding="3" Command="{Binding AddNewLevelCommand}" />
                     <Button Content="_Export level..." Margin="5" Padding="3" Command="{Binding SaveAsLevelCommand}" />
                     <Button Content="_Import level..." Margin="5" Padding="3" Command="{Binding ImportLevelCommand}" />
-
                 </WrapPanel>
+
                 <WrapPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5">
                     <Button Content="New definition" Margin="5" Padding="3" Command="{Binding NewLevelsDefinitionCommand}" />
                     <Button Content="_Load definition..." Margin="5" Padding="3" Command="{Binding LoadLevelsDefinitionCommand}" />
@@ -57,9 +58,9 @@
                                     </Grid.ColumnDefinitions>
                                     <ContentPresenter Grid.Column="0" Width="64" Height="64" ContentTemplate="{StaticResource ViewOnlyBoard}" Content="{Binding Board}"/>
                                     <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Grid.Column="1" Text="{Binding Name}"/>
-                                  
+
                                 </Grid>
-                                
+
                             </DataTemplate>
                         </Visual:DragableLevelsListBox.ItemTemplate>
                     </Visual:DragableLevelsListBox>

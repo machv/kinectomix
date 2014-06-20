@@ -39,6 +39,15 @@
                                            Width="49"
                                            Height="49"
                                            Stretch="Uniform">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPreview}" Value="True">
+                                                <Setter Property="Opacity" Value="0.5"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
                             </Image>
                         </Grid>
                     </DataTemplate>
@@ -53,12 +62,10 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </DataTemplate>
-
+        
         <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto"
-                          VerticalAlignment="Center"
-                          HorizontalAlignment="Center">
+                          VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -167,49 +174,49 @@
                 <!--
                 <StackPanel Orientation="Horizontal">
                 -->
-                <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding SelectedTile}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.Template>
-                        <ControlTemplate TargetType="ListBox">
-                            <Border>
-                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                    <ItemsPresenter/>
-                                </ScrollViewer>
-                            </Border>
-                        </ControlTemplate>
-                    </ListBox.Template>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="Padding" Value="0,0,0,0"/>
-                            <Setter Property="Margin" Value="1"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <ToggleButton IsChecked="{Binding 
+                    <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding SelectedTile}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.Template>
+                            <ControlTemplate TargetType="ListBox">
+                                <Border>
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </ControlTemplate>
+                        </ListBox.Template>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Padding" Value="0,0,0,0"/>
+                                <Setter Property="Margin" Value="1"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <ToggleButton IsChecked="{Binding 
                                               RelativeSource={RelativeSource FindAncestor, 
                                               AncestorType={x:Type ListBoxItem}},
                                               Path=IsSelected}"
                                               Background="Transparent"
                                               Margin="0"
                                               BorderThickness="0">
-                                <Grid Margin="3">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
+                                    <Grid Margin="3">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
 
-                                    <Image Grid.Row="0" Source="{Binding AssetSource}" />
-                                    <TextBlock Grid.Row="1" Text="{Binding Name}" TextAlignment="Center"/>
-                                </Grid>
-                            </ToggleButton>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                                        <Image Grid.Row="0" Source="{Binding AssetSource}" />
+                                        <TextBlock Grid.Row="1" Text="{Binding Name}" TextAlignment="Center"/>
+                                    </Grid>
+                                </ToggleButton>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 <!--
                     <Button Command="{Binding AddTileCommand}">
                         <Grid>
