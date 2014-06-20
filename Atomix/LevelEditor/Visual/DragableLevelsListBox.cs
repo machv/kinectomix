@@ -75,7 +75,7 @@ namespace Kinectomix.LevelEditor.Visual
             ListBox.DragLeave += ListBoxDragLeave;
             ListBox.DragEnter += ListBoxDragEnter;
 
-            DataObject data = new DataObject("selectedLevelItem", item);
+            DataObject data = new DataObject(DragDataDataName, item);
             DragDropEffects de = DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
 
             //cleanup 

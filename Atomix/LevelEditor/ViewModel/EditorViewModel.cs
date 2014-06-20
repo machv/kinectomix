@@ -11,7 +11,7 @@ namespace Kinectomix.LevelEditor.ViewModel
     public class EditorViewModel : NotifyPropertyBase
     {
         public const string DefaultLevelName = "Kinectomix Level";
-
+        private int _newLevelIdnex;
         private Tiles _tiles;
         private ObservableCollection<LevelViewModel> _levels;
         //private LevelViewModel _currentLevel;
@@ -100,8 +100,8 @@ namespace Kinectomix.LevelEditor.ViewModel
         private void AddNewLevel()
         {
             LevelViewModel level = CreateNewLevel();
-            level.Name = DefaultLevelName;
-
+            level.Name = string.Format("{0} {1}", DefaultLevelName, ++_newLevelIdnex);
+            
             Levels.Add(level);
             ShowLevel(level);
         }
