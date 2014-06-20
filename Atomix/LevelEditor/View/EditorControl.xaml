@@ -51,7 +51,14 @@
                     <Visual:DragableLevelsListBox ItemsSource="{Binding Levels}" SelectedItem="{Binding Level}" Grid.Row="1">
                         <Visual:DragableLevelsListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid Tag="{Binding DataContext,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}">
+                                    <Grid.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Delete" 
+                                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.RemoveLevelCommand}" 
+                                                  CommandParameter="{Binding}" />
+                                        </ContextMenu>
+                                    </Grid.ContextMenu>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition/>

@@ -61,6 +61,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         private DelegateCommand _importLevelCommand;
         private string _userAtomAssetsPath;
         private string _userFixedAssetsPath;
+        private DelegateCommand<LevelViewModel> _removeLevelCommand;
 
         public EditorViewModel()
         {
@@ -78,8 +79,19 @@ namespace Kinectomix.LevelEditor.ViewModel
             _newLevelsDefinitionCommand = new DelegateCommand(NewLevelsDefinition);
             _addNewLevelCommand = new DelegateCommand(AddNewLevel, CanExecuteAddNewLevel);
             _importLevelCommand = new DelegateCommand(OpenLevelDialog);
+            _removeLevelCommand = new DelegateCommand<LevelViewModel>(RemoveLevel);
 
             NewLevelsDefinition(); // Create new levels definition
+        }
+
+        public ICommand RemoveLevelCommand
+        {
+            get { return _removeLevelCommand; }
+        }
+
+        private void RemoveLevel(LevelViewModel level)
+        {
+            Levels.Remove(level);
         }
 
         private bool CanExecuteAddNewLevel(object parameter)
@@ -94,7 +106,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         {
             LevelViewModel level = CreateNewLevel();
             level.Name = string.Format("{0} {1}", DefaultLevelName, ++_newLevelIdnex);
-            
+
             Levels.Add(level);
             ShowLevel(level);
         }
@@ -178,6 +190,9 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private void ShowLevel(LevelViewModel levelViewModel)
         {
+            if (levelViewModel == null)
+                return;
+
             //TODO check if field changed? if yes, allow save before new.
 
             _tileSelector.Tiles = levelViewModel.Tiles;
