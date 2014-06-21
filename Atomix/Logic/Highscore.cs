@@ -48,7 +48,7 @@ namespace AtomixData
         public LevelHighscore GetLevelHighscore(int levelIndex)
         {
             if (levelIndex >= _levels.Length || levelIndex < 0)
-                throw new ArgumentOutOfRangeException("levelIndex");
+                return null;
 
             return _levels[levelIndex];
         }
