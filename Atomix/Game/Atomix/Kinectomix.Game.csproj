@@ -134,6 +134,7 @@
     <Compile Include="Screens\StartScreen.cs" />
     <Compile Include="Components\Kinect\SkeletonRenderer.cs" />
     <Compile Include="Skeletons.cs" />
+    <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\Direction.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />

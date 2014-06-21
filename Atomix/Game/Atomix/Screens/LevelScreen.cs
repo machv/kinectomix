@@ -6,6 +6,7 @@ using AtomixData;
 using Kinectomix.Logic;
 using Kinectomix.Logic.Game;
 using Kinectomix.Xna.Components;
+using Kinectomix.Xna.Components.Kinect;
 using Kinectomix.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -14,6 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
+using Kinectomix;
 
 namespace Atomix
 {
@@ -70,6 +72,7 @@ namespace Atomix
         private Highscore highScore;
         private string _log = "";
         private KinectCircleCursor _cursor;
+        private KinectButton _pauseButton;
 
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
@@ -86,6 +89,11 @@ namespace Atomix
 
             if (cursor is KinectCircleCursor)
                 _cursor = cursor as KinectCircleCursor;
+
+            _pauseButton = new KinectButton(ScreenManager.Game, _cursor, "pause");
+            _pauseButton.Selected += Pause_Selected;
+
+            Components.Add(_pauseButton);
 
             _pauseMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, cursor);
             _pauseMessageBox.Changed += pause_Changed;
@@ -114,12 +122,22 @@ namespace Atomix
             Components.Add(_repeatButton);
             Components.Add(_nextButton);
 
+            lastDate = DateTime.Now;
+
             base.Initialize();
+        }
+
+        private void Pause_Selected(object sender, EventArgs e)
+        {
+            PauseGame();
         }
 
         private void pause_Changed(object sender, MessageBoxEventArgs e)
         {
             _pauseMessageBox.Hide();
+
+            _isPaused = false;
+            lastDate = DateTime.Now;
         }
 
         protected override void LoadContent()
@@ -156,7 +174,9 @@ namespace Atomix
             _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
             idleTexture = _content.Load<Texture2D>("Idle");
 
-            
+            _pauseButton.Font = _normalFont;
+            _pauseButton.InputProvider = ScreenManager.InputProvider;
+
             _levelsButton.Font = _normalFont;
             _levelsButton.Selected += _levelsButton_Selected;
 
@@ -223,222 +243,123 @@ namespace Atomix
         DateTime lastHoveredTileTime = DateTime.MinValue;
         private KeyboardState _previousKeyboardState;
         private KinectMessageBox _pauseMessageBox;
+        private bool _isPaused = false;
 
         private void PauseGame()
         {
+            _isPaused = true;
             _pauseMessageBox.Show("game paused");
         }
+
+        private DateTime lastDate;
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            KeyboardState state = Keyboard.GetState();
+            _pauseButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width + _pauseButton.BorderThickness - _pauseButton.Width, -_pauseButton.BorderThickness);
 
-            if (state.IsKeyDown(Keys.Escape) == true && _previousKeyboardState.IsKeyDown(Keys.Escape) == false)
-                PauseGame();
-
-            _previousKeyboardState = state;
-
-            bool clickOccurred = false;
-            bool isGestureDetected = false;
-
-            // The active state from the last frame is now old
-            lastMouseState = mouseState;
-
-            // Get the mouse state relevant for this frame
-            mouseState = Mouse.GetState();
-
-            // Recognize a single click of the left mouse button
-            if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
+            if (!_isPaused)
             {
-                // React to the click
-                clickOccurred = true;
-            }
+                KeyboardState state = Keyboard.GetState();
 
-            GesturesState gesturesState = Gestures.GetState();
-            if (gesturesState.RecognizedGestures != null && gesturesState.RecognizedGestures.Count() > 0)
-            //if (gesturesState.IsGestureRecognized(GestureType.RightHandUp))
-            {
-                clickOccurred = true;
-                isGestureDetected = true;
-                _log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString() + " / " + gesturesState.RecognizedGestures.ToArray()[0].Gesture.Name;
-            }
+                if (state.IsKeyDown(Keys.Escape) == true && _previousKeyboardState.IsKeyDown(Keys.Escape) == false)
+                    PauseGame();
 
-            KinectCursor cursor = ((AtomixGame)ScreenManager.Game).Cursor;
+                _previousKeyboardState = state;
 
-            if (isLevelFinished)
-            {
-                _repeatButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 - _repeatButton.Width - 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _repeatButton.IsVisible = true;
-                _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _levelsButton.IsVisible = true;
-                _nextButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 + _nextButton.Width + 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _nextButton.IsVisible = true;
-                return;
-            }
+                bool clickOccurred = false;
+                bool isGestureDetected = false;
 
-            gameDuration = DateTime.Now - gameStarted;
+                // The active state from the last frame is now old
+                lastMouseState = mouseState;
 
-            if (isMovementAnimation)
-            {
-                float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                // Get the mouse state relevant for this frame
+                mouseState = Mouse.GetState();
 
-                Vector2 destinationPosition = level.Board[destination.X, destination.Y].RenderPosition;
-
-                if (atomPosition.X == destinationPosition.X)
+                // Recognize a single click of the left mouse button
+                if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    int direction = moveDirection == MoveDirection.Up ? -1 : 1;
-                    atomPosition.Y += direction * atomSpeed * elapsed;
+                    // React to the click
+                    clickOccurred = true;
                 }
 
-                if (atomPosition.Y == destinationPosition.Y)
+                GesturesState gesturesState = Gestures.GetState();
+                if (gesturesState.RecognizedGestures != null && gesturesState.RecognizedGestures.Count() > 0)
+                //if (gesturesState.IsGestureRecognized(GestureType.RightHandUp))
                 {
-                    int direction = moveDirection == MoveDirection.Left ? -1 : 1;
-                    atomPosition.X += direction * atomSpeed * elapsed;
+                    clickOccurred = true;
+                    isGestureDetected = true;
+                    _log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString() + " / " + gesturesState.RecognizedGestures.ToArray()[0].Gesture.Name;
                 }
 
-                Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, TileWidth / 4, TileHeight / 4);
-                if (tile.Contains((int)atomPosition.X, (int)atomPosition.Y))
-                {
-                    isMovementAnimation = false;
-                    level.Board[destination.X, destination.Y].Asset = atomToMove;
-                    level.Board[destination.X, destination.Y].IsEmpty = false;
+                KinectCursor cursor = ((AtomixGame)ScreenManager.Game).Cursor;
 
-                    // Animation finished -> check victory
-                    bool isFinished = CheckFinish();
-                    if (isFinished)
+                if (isLevelFinished)
+                {
+                    _repeatButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 - _repeatButton.Width - 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
+                    _repeatButton.IsVisible = true;
+                    _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
+                    _levelsButton.IsVisible = true;
+                    _nextButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 + _nextButton.Width + 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
+                    _nextButton.IsVisible = true;
+                    return;
+                }
+
+                gameDuration += DateTime.Now - lastDate;
+
+                if (isMovementAnimation)
+                {
+                    float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                    Vector2 destinationPosition = level.Board[destination.X, destination.Y].RenderPosition;
+
+                    if (atomPosition.X == destinationPosition.X)
                     {
-                        applause.Play();
-                        isLevelFinished = true;
+                        int direction = moveDirection == MoveDirection.Up ? -1 : 1;
+                        atomPosition.Y += direction * atomSpeed * elapsed;
                     }
-                }
 
-                return;
-            }
-
-            // Detect hover
-            Point mousePosition = cursor.IsHandTracked ?
-                new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y) :
-                new Point(mouseState.X, mouseState.Y);
-
-            // Clear selection
-            foreach (BoardTileViewModel tile in level.Board.Where(t => t != null && t.IsHovered == true))
-            {
-                tile.IsHovered = false;
-            }
-
-            BoardTileViewModel newHoveredTileBefore = null;
-            DateTime lastHoveredTileTimeBefore = lastHoveredTileTime;
-            int k = -1;
-            int l = -1;
-
-            for (int i = 0; i < level.Board.RowsCount; i++)
-            {
-                for (int j = 0; j < level.Board.ColumnsCount; j++)
-                {
-                    if (level.Board[i, j] != null)
+                    if (atomPosition.Y == destinationPosition.Y)
                     {
-                        if (level.Board[i, j].RenderRectangle.Contains(mousePosition))
-                        {
-                            if (cursor.IsHandTracked)
-                            {
-                                // If we are tracking cursor via Kinect, we use some affinity
-                                if (level.Board[i, j].IsFixed == false)
-                                {
-                                    newHoveredTileBefore = level.Board[i, j];
-                                    k = i;
-                                    l = j;
-                                }
-                                else
-                                {
-                                    int m, n;
-                                    BoardTileViewModel tile = GetNeigbourMoleculeTile(level.Board, i, j, out m, out n);
+                        int direction = moveDirection == MoveDirection.Left ? -1 : 1;
+                        atomPosition.X += direction * atomSpeed * elapsed;
+                    }
 
-                                    if (tile != null)
-                                    {
-                                        newHoveredTileBefore = tile;
-                                        k = m;
-                                        l = n;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // In normal way (mouse) we use direct positions
-                                newHoveredTileBefore = level.Board[i, j];
-                                k = i;
-                                l = j;
-                            }
+                    Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, TileWidth / 4, TileHeight / 4);
+                    if (tile.Contains((int)atomPosition.X, (int)atomPosition.Y))
+                    {
+                        isMovementAnimation = false;
+                        level.Board[destination.X, destination.Y].Asset = atomToMove;
+                        level.Board[destination.X, destination.Y].IsEmpty = false;
+
+                        // Animation finished -> check victory
+                        bool isFinished = CheckFinish();
+                        if (isFinished)
+                        {
+                            applause.Play();
+                            isLevelFinished = true;
                         }
                     }
+
+                    return;
                 }
-            }
 
-            if (newHoveredTileBefore != currentlyHoveredTile)
-            {
-                lastHoveredTileTime = DateTime.Now;
-                currentlyHoveredTile = newHoveredTileBefore;
+                // Detect hover
+                Point mousePosition = cursor.IsHandTracked ?
+                    new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y) :
+                    new Point(mouseState.X, mouseState.Y);
 
-                if (cursor.IsHandTracked) // Only when is tracked hand via Kinect clear selected tiles.
+                // Clear selection
+                foreach (BoardTileViewModel tile in level.Board.Where(t => t != null && t.IsHovered == true))
                 {
-                    ClearBoard();
+                    tile.IsHovered = false;
                 }
 
-                if (_cursor != null)
-                    _cursor.Progress = 0;
-            }
-
-            if (currentlyHoveredTile != null)
-            {
-                currentlyHoveredTile.IsHovered = true;
-
-                if (currentlyHoveredTile.IsFixed == false)
-                {
-                    TimeSpan elapsedTime = DateTime.Now - lastHoveredTileTime;
-
-                    if (_cursor != null)
-                    {
-                        _cursor.Progress = elapsedTime.TotalMilliseconds / _minimalHoverDuration.TotalMilliseconds;
-                    }
-
-                    if (elapsedTime > _minimalHoverDuration)
-                    {
-                        ClearBoard();
-
-                        currentlyHoveredTile.IsSelected = true;
-
-                        activeAtomIndex = new Point(k, l);
-                        PrepareAvailableTileMovements(level.Board, k, l);
-
-                        if (_cursor != null)
-                            _cursor.Progress = 0;
-
-                        // prepare for gesture
-                        _swipeGestures.Start(cursor.HandRealPosition, 0.05);
-                        _isGestureCandidate = true;
-                    }
-                }
-            }
-
-            // Detect clicks
-            if (clickOccurred || isGestureDetected || cursor.IsHandClosed)
-            {
-                Point activityPosition;
-                if (clickOccurred && !isGestureDetected)
-                {
-                    activityPosition = new Point(mouseState.X, mouseState.Y);
-                }
-                else
-                {
-                    activityPosition = new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y);
-                }
-
-                // Find nearest point
-                Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);
-
-                // Reset active atom to none
-                activeAtomIndex = new Point(-1, -1);
+                BoardTileViewModel newHoveredTileBefore = null;
+                DateTime lastHoveredTileTimeBefore = lastHoveredTileTime;
+                int k = -1;
+                int l = -1;
 
                 for (int i = 0; i < level.Board.RowsCount; i++)
                 {
@@ -446,105 +367,180 @@ namespace Atomix
                     {
                         if (level.Board[i, j] != null)
                         {
-                            Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
-                            if (clickOccurred && tile.Contains(activityPosition))
+                            if (level.Board[i, j].RenderRectangle.Contains(mousePosition))
                             {
-                                if (level.Board[i, j].IsFixed == false)
+                                if (cursor.IsHandTracked)
                                 {
-                                    ClearBoard();
+                                    // If we are tracking cursor via Kinect, we use some affinity
+                                    if (level.Board[i, j].IsFixed == false)
+                                    {
+                                        newHoveredTileBefore = level.Board[i, j];
+                                        k = i;
+                                        l = j;
+                                    }
+                                    else
+                                    {
+                                        int m, n;
+                                        BoardTileViewModel tile = GetNeigbourMoleculeTile(level.Board, i, j, out m, out n);
 
-                                    level.Board[i, j].IsSelected = true;
-                                    activeAtomIndex = new Point(i, j);
-
-                                    PrepareAvailableTileMovements(level.Board, i, j);
+                                        if (tile != null)
+                                        {
+                                            newHoveredTileBefore = tile;
+                                            k = m;
+                                            l = n;
+                                        }
+                                    }
                                 }
-                                else if (level.Board[i, j].Asset == "Right" ||
-                                         level.Board[i, j].Asset == "Left" ||
-                                         level.Board[i, j].Asset == "Up" ||
-                                         level.Board[i, j].Asset == "Down")
+                                else
                                 {
-                                    MoveDirection direction = GetDirectionFromAsset(level.Board[i, j].Asset);
-                                    Point coordinates = new Point(i, j);
-                                    Point atomCoordinates = GetAtomPosition(coordinates, direction);
-
-                                    ProcessTileMove(atomCoordinates, direction);
-
-                                    ClearBoard();
+                                    // In normal way (mouse) we use direct positions
+                                    newHoveredTileBefore = level.Board[i, j];
+                                    k = i;
+                                    l = j;
                                 }
                             }
                         }
+                    }
+                }
 
-                        mPosition.X += TileWidth;
+                if (newHoveredTileBefore != currentlyHoveredTile)
+                {
+                    lastHoveredTileTime = DateTime.Now;
+                    currentlyHoveredTile = newHoveredTileBefore;
+
+                    if (cursor.IsHandTracked) // Only when is tracked hand via Kinect clear selected tiles.
+                    {
+                        ClearBoard();
                     }
 
-                    mPosition.X = boardPosition.X;
-                    mPosition.Y += TileHeight;
+                    if (_cursor != null)
+                        _cursor.Progress = 0;
                 }
-            }
 
-            if (_isGestureCandidate)
-            {
-                SwipeGesture recognizedGesture;
-                _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandRealPosition, out recognizedGesture);
-                if (recognizedGesture != null)
+                if (currentlyHoveredTile != null)
                 {
-                    MoveDirection direction = SwipeToMoveDirection(recognizedGesture.Direction);
+                    currentlyHoveredTile.IsHovered = true;
 
-                    ProcessTileMove(activeAtomIndex, direction);
-
-                    ClearBoard();
-
-                    _log = "Detected swipe " + recognizedGesture.Direction.ToString();
-                }
-            }
-
-            if (!isMovementAnimation && activeAtomIndex.X != -1 && activeAtomIndex.Y != -1)
-            {
-                // We have selected atom which is not moved 
-
-                // update glowing
-                _activeTileOpacity += 0.02f * _activeTileOpacityDirection;
-                if (_activeTileOpacity > 1.0)
-                    _activeTileOpacityDirection = -1;
-                if (_activeTileOpacity < 0.5)
-                    _activeTileOpacityDirection = 1;
-
-                level.Board[activeAtomIndex.X, activeAtomIndex.Y].Opacity = _activeTileOpacity;
-
-
-                // Gestures will be recognized only when hand is closed
-                if (cursor.IsHandClosed)
-                {
-                    /// Detect Right/Left
-
-                    // expect not
-                    isToRightGesture = false;
-                    isToLeftGesture = false;
-
-                    if (Math.Abs(lastHandPosition.Y - cursor.HandPosition.Y) < 10)
+                    if (currentlyHoveredTile.IsFixed == false)
                     {
-                        gestureAccumulatedDistanceX += lastHandPosition.X - cursor.HandPosition.X;
+                        TimeSpan elapsedTime = DateTime.Now - lastHoveredTileTime;
+
+                        if (_cursor != null)
+                        {
+                            _cursor.Progress = elapsedTime.TotalMilliseconds / _minimalHoverDuration.TotalMilliseconds;
+                        }
+
+                        if (elapsedTime > _minimalHoverDuration)
+                        {
+                            ClearBoard();
+
+                            currentlyHoveredTile.IsSelected = true;
+
+                            activeAtomIndex = new Point(k, l);
+                            PrepareAvailableTileMovements(level.Board, k, l);
+
+                            if (_cursor != null)
+                                _cursor.Progress = 0;
+
+                            // prepare for gesture
+                            _swipeGestures.Start(cursor.HandRealPosition, 0.05);
+                            _isGestureCandidate = true;
+                        }
+                    }
+                }
+
+                // Detect clicks
+                if (clickOccurred || isGestureDetected || cursor.IsHandClosed)
+                {
+                    Point activityPosition;
+                    if (clickOccurred && !isGestureDetected)
+                    {
+                        activityPosition = new Point(mouseState.X, mouseState.Y);
                     }
                     else
                     {
-                        // Reset acumulated info
-                        gestureAccumulatedDistanceX = 0;
+                        activityPosition = new Point((int)cursor.HandPosition.X, (int)cursor.HandPosition.Y);
                     }
 
-                    if (gestureAccumulatedDistanceX > gestureThreshold)
+                    // Find nearest point
+                    Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);
+
+                    // Reset active atom to none
+                    activeAtomIndex = new Point(-1, -1);
+
+                    for (int i = 0; i < level.Board.RowsCount; i++)
                     {
-                        isToRightGesture = true;
+                        for (int j = 0; j < level.Board.ColumnsCount; j++)
+                        {
+                            if (level.Board[i, j] != null)
+                            {
+                                Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
+                                if (clickOccurred && tile.Contains(activityPosition))
+                                {
+                                    if (level.Board[i, j].IsFixed == false)
+                                    {
+                                        ClearBoard();
+
+                                        level.Board[i, j].IsSelected = true;
+                                        activeAtomIndex = new Point(i, j);
+
+                                        PrepareAvailableTileMovements(level.Board, i, j);
+                                    }
+                                    else if (level.Board[i, j].Asset == "Right" ||
+                                             level.Board[i, j].Asset == "Left" ||
+                                             level.Board[i, j].Asset == "Up" ||
+                                             level.Board[i, j].Asset == "Down")
+                                    {
+                                        MoveDirection direction = GetDirectionFromAsset(level.Board[i, j].Asset);
+                                        Point coordinates = new Point(i, j);
+                                        Point atomCoordinates = GetAtomPosition(coordinates, direction);
+
+                                        ProcessTileMove(atomCoordinates, direction);
+
+                                        ClearBoard();
+                                    }
+                                }
+                            }
+
+                            mPosition.X += TileWidth;
+                        }
+
+                        mPosition.X = boardPosition.X;
+                        mPosition.Y += TileHeight;
                     }
-
-                    if (gestureAccumulatedDistanceX < gestureThreshold * -1)
-                    {
-                        isToLeftGesture = true;
-                    }
-
-                    // Detect Top
-
-                    // Detect Down
                 }
+
+                if (_isGestureCandidate)
+                {
+                    SwipeGesture recognizedGesture;
+                    _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandRealPosition, out recognizedGesture);
+                    if (recognizedGesture != null)
+                    {
+                        MoveDirection direction = SwipeToMoveDirection(recognizedGesture.Direction);
+
+                        ProcessTileMove(activeAtomIndex, direction);
+
+                        ClearBoard();
+
+                        _log = "Detected swipe " + recognizedGesture.Direction.ToString();
+                    }
+                }
+
+                if (!isMovementAnimation && activeAtomIndex.X != -1 && activeAtomIndex.Y != -1)
+                {
+                    // We have selected atom which is not moved 
+
+                    // update glowing
+                    _activeTileOpacity += 0.02f * _activeTileOpacityDirection;
+                    if (_activeTileOpacity > 1.0)
+                        _activeTileOpacityDirection = -1;
+                    if (_activeTileOpacity < 0.5)
+                        _activeTileOpacityDirection = 1;
+
+                    level.Board[activeAtomIndex.X, activeAtomIndex.Y].Opacity = _activeTileOpacity;
+                }
+
+                lastDate = DateTime.Now;
             }
         }
 
@@ -679,19 +675,28 @@ namespace Atomix
 
             string levelName = string.IsNullOrEmpty(level.Name) == false ? level.Name : "game level";
 
-            spriteBatch.DrawString(_levelFont, levelName, new Vector2(21, 21), Color.Black * 0.8f);
-            spriteBatch.DrawString(_levelFont, levelName, new Vector2(20, 20), Color.Red);
+            spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(20, 20), Color.Red);
 
             spriteBatch.DrawString(_normalFont, _log, new Vector2(20, 600), Color.Red);
 
             DrawBoard(spriteBatch, level.Board, true);
             DrawBoard(spriteBatch, level.Molecule);
 
-            spriteBatch.DrawString(_normalFont, string.Format("Score: {0}", moves), new Vector2(21, 101), Color.Black * 0.8f);
-            spriteBatch.DrawString(_normalFont, string.Format("Score: {0}", moves), new Vector2(20, 100), Color.Red);
+            spriteBatch.DrawStringWithShadow(_normalFont, "Current", new Vector2(21 + 105, 85), Color.Gray);
+            spriteBatch.DrawStringWithShadow(_normalFont, "Best", new Vector2(280, 85), Color.Gray);
 
-            spriteBatch.DrawString(_normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(21, 141), Color.Black * 0.8f);
-            spriteBatch.DrawString(_normalFont, string.Format("Time: {0}", gameDuration.ToString(@"mm\:ss")), new Vector2(20, 140), Color.Red);
+            string text = "Score:";
+            var scoreSize = _normalFont.MeasureString(text);
+
+            spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20, 120), Color.Red);
+            spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", moves), new Vector2(20 + 105, 120), Color.Red);
+
+            text = "Time:";
+            var timeSize = _normalFont.MeasureString(text);
+            float dif = scoreSize.X - timeSize.X;
+
+            spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20 + dif, 160), Color.Red);
+            spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", gameDuration.ToString(@"mm\:ss")), new Vector2(20 + 105, 160), Color.Red);
 
             if (isMovementAnimation)
             {
