@@ -11,8 +11,9 @@ namespace Kinectomix.LevelEditor.ViewModel
     {
         protected static ImageSourceConverter SourceConverter = new ImageSourceConverter();
 
-        BoardTile _tile;
-        string _assetFile;
+        private BoardTile _tile;
+        private string _assetFile;
+        private bool _isChanged;
 
         internal string AssetFile
         {
@@ -38,8 +39,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _tile.Asset; }
             set
             {
-                _tile.Asset = value;
-                OnPropertyChanged();
+                if (_tile.Asset != value)
+                {
+                    _tile.Asset = value;
+
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -48,8 +53,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _tile.Name; }
             set
             {
-                _tile.Name = value;
-                OnPropertyChanged();
+                if (_tile.Name != value)
+                {
+                    _tile.Name = value;
+
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -58,8 +67,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _tile.IsFixed; }
             set
             {
-                _tile.IsFixed = value;
-                OnPropertyChanged();
+                if (_tile.IsFixed != value)
+                {
+                    _tile.IsFixed = value;
+
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -68,8 +81,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _tile.IsEmpty; }
             set
             {
-                _tile.IsEmpty = value;
-                OnPropertyChanged();
+                if (_tile.IsEmpty != value)
+                {
+                    _tile.IsEmpty = value;
+
+                    OnPropertyChanged();
+                }
             }
         }
         public BondType TopLeftBond
@@ -183,9 +200,23 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
-        public BoardTileViewModel() { }
+        public bool IsChanged
+        {
+            get { return _isChanged; }
+            set { _isChanged = value; }
+        }
 
-        public BoardTileViewModel(BoardTile tile)
+        public BoardTileViewModel()
+        {
+            PropertyChanged += WhenPropertyChanged;
+        }
+
+        private void WhenPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            _isChanged = true;
+        }
+
+        public BoardTileViewModel(BoardTile tile) : this()
         {
             _tile = tile;
         }

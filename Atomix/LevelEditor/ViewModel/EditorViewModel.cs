@@ -16,7 +16,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         private int _newLevelIndex;
         private Tiles _tiles;
         private ObservableCollection<LevelViewModel> _levels;
-        private bool _isSomethingChanged;
+        private bool _areLevelsChanged;
         private GameLevelsFileDialog _gameLevelsFileDialog;
 
         public ObservableCollection<LevelViewModel> Levels
@@ -87,7 +87,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             _removeLevelCommand = new DelegateCommand<LevelViewModel>(RemoveLevel);
 
             NewLevelsDefinition(); // Create new levels definition
-            //_isSomethingChanged = false; // When created first empty level, we do not accept this as created
+            _areLevelsChanged = false; // When created first empty level, we do not accept this as created
         }
 
         public ICommand RemoveLevelCommand
@@ -112,22 +112,47 @@ namespace Kinectomix.LevelEditor.ViewModel
         {
             LevelViewModel level = CreateNewLevel();
             level.Name = string.Format("{0} {1}", DefaultLevelName, ++_newLevelIndex);
+            level.IsChanged = false;
 
             Levels.Add(level);
             ShowLevel(level);
 
-            _isSomethingChanged = true;
+            _areLevelsChanged = true;
             _saveAsLevelsDefinitionCommand.RaiseCanExecuteChanged();
         }
 
         private bool CanExecuteSaveAsLevelsDefinition(object parameter)
         {
-            return _levels != null &&_levels.Count > 0;
+            return _levels != null && _levels.Count > 0;
+        }
+
+        public bool IsAnyPendingChange
+        {
+            get
+            {
+                if (_areLevelsChanged == true)
+                    return true;
+
+                if (_levels == null)
+                    return false;
+
+                bool isAnyLevelChanged = false;
+                foreach (LevelViewModel level in _levels)
+                {
+                    if (level.IsChanged)
+                    {
+                        isAnyLevelChanged = true;
+                        break;
+                    }
+                }
+
+                return isAnyLevelChanged;
+            }
         }
 
         private void NewLevelsDefinition()
         {
-            if (_isSomethingChanged == true)
+            if (IsAnyPendingChange)
             {
                 MessageBoxResult result = MessageBox.Show("Creating new levels definition will cancel you modifications on current levels definition.\n\nDo you want to continue with creating new level definition?", "Pending changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
@@ -138,6 +163,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             Levels = new ObservableCollection<LevelViewModel>();
 
             AddNewLevel(); // Add new level inside it
+            _areLevelsChanged = false;
 
             _addNewLevelCommand.RaiseCanExecuteChanged();
             _saveAsLevelsDefinitionCommand.RaiseCanExecuteChanged();
@@ -145,7 +171,7 @@ namespace Kinectomix.LevelEditor.ViewModel
 
         private void LoadLevelsDefinition()
         {
-            if (_isSomethingChanged == true)
+            if (IsAnyPendingChange)
             {
                 MessageBoxResult result = MessageBox.Show("Opening levels definition will cancel you modifications on current levels definition.\n\nDo you want to continue with opening levels definition?", "Pending changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
@@ -200,7 +226,7 @@ namespace Kinectomix.LevelEditor.ViewModel
                     seralizer.Serialize(stream, game);
                 }
 
-                _isSomethingChanged = false;
+                _areLevelsChanged = false;
             }
         }
 
@@ -309,16 +335,6 @@ namespace Kinectomix.LevelEditor.ViewModel
                     _tileSelector.UpdateAvailableTiles(Tiles.TileType.Molecule);
                     break;
             }
-        }
-
-        public ICommand LoadLevelsCommand
-        {
-            get { return new DelegateCommand(LoadLevels); }
-        }
-
-        private void LoadLevels()
-        {
-            LevelsViewModel levels = new LevelsViewModel();
         }
 
         private void ExportLevel(LevelViewModel levelViewModel)

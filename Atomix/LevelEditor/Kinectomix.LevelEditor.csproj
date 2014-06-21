@@ -97,7 +97,6 @@
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\LevelDefinitionViewModel.cs" />
-    <Compile Include="ViewModel\LevelsViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
     <Compile Include="ViewModel\NewLevelViewModel.cs" />
     <Compile Include="ViewModel\BoardViewModel.cs" />

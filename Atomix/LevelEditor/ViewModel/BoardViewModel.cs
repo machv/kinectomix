@@ -19,6 +19,26 @@ namespace Kinectomix.LevelEditor.ViewModel
             }
         }
 
+        public bool IsChanged
+        {
+            get
+            {
+                foreach (BoardTileViewModel tile in _tiles)
+                {
+                    if (tile != null && tile.IsChanged == true)
+                        return true;
+                }
+
+                return false;
+            }
+            set
+            {
+                foreach (BoardTileViewModel tile in _tiles)
+                    if (tile != null)
+                        tile.IsChanged = value;
+            }
+        }
+
         private BoardTileViewModel _paintTile;
         public BoardTileViewModel PaintTile
         {

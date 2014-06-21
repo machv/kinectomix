@@ -95,8 +95,26 @@ namespace Kinectomix.LevelEditor.ViewModel
         /// <returns>True if anything was changed.</returns>
         public bool IsChanged
         {
-            get { return _isChanged; }
-            set { _isChanged = false; }
+            get
+            {
+                if (_board != null && _board.IsChanged == true)
+                    return true;
+
+                if (_molecule != null && _molecule.IsChanged == true)
+                    return true;
+
+                return _isChanged;
+            }
+            set
+            {
+                if (_board != null)
+                    _board.IsChanged = value;
+
+                if (_molecule != null)
+                    _molecule.IsChanged = value;
+
+                _isChanged = value;
+            }
         }
 
         /// <summary>
