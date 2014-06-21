@@ -165,16 +165,15 @@ namespace Atomix
             GameScreen gameScreen = null;
 
             // Load next level
-            LevelDefinition newLevelInfo = AtomixGame.State.SwitchToNextLevel();
+            Level newLevel = AtomixGame.State.SwitchToNextLevel();
 
-            if (newLevelInfo == null)
+            if (newLevel == null)
             {
                 // We are on last level -> go to main screen
                 gameScreen = new StartScreen(spriteBatch);
             }
             else
             {
-                Level newLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", newLevelInfo.AssetName));
                 gameScreen = new LevelScreen(newLevel, spriteBatch);
             }
 
@@ -187,8 +186,8 @@ namespace Atomix
             GameScreen gameScreen = null;
 
             // Load current level again
-            LevelDefinition newLevelInfo = AtomixGame.State.GetCurrentLevel();
-            Level newLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", newLevelInfo.AssetName));
+            Level newLevel = AtomixGame.State.GetCurrentLevel();
+            //Level newLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", newLevelInfo.AssetName));
             gameScreen = new LevelScreen(newLevel, spriteBatch);
 
             ScreenManager.Add(gameScreen);

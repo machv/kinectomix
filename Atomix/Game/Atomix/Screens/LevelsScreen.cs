@@ -54,7 +54,7 @@ namespace Atomix
         {
             _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
-            foreach (var level in AtomixGame.State.Levels)
+            foreach (Level level in AtomixGame.State.Levels)
             {
                 Button button = new Button(ScreenManager.Game);
                 button.Font = _normalFont;
@@ -71,10 +71,10 @@ namespace Atomix
         void button_Selected(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            LevelDefinition level = button.Tag as LevelDefinition;
+            Level level = button.Tag as Level;
 
-            Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", level.AssetName));
-            LevelScreen gameScreen = new LevelScreen(currentLevel, _spriteBatch);
+            //Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", level.AssetName));
+            LevelScreen gameScreen = new LevelScreen(level, _spriteBatch);
 
             AtomixGame.State.SetLevelToCurrent(level);
 

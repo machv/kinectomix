@@ -116,9 +116,9 @@ namespace Atomix
 
         private void Start_Selected(object sender, EventArgs e)
         {
-            LevelDefinition levelInfo = AtomixGame.State.GetCurrentLevel();
-            Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
-            LevelScreen gameScreen = new LevelScreen(currentLevel, _spriteBatch);
+            Level level = AtomixGame.State.GetCurrentLevel();
+            //Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
+            LevelScreen gameScreen = new LevelScreen(level, _spriteBatch);
 
             ScreenManager.Add(gameScreen);
             ScreenManager.Activate(gameScreen);

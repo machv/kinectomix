@@ -185,12 +185,12 @@ namespace Kinectomix.LevelEditor.ViewModel
         {
             if (_gameLevelsFileDialog.SaveFileDialog())
             {
-                GameDefinition game = new GameDefinition();
+                GameDefinition game = new GameDefinition(Levels.Count);
 
                 foreach (LevelViewModel levelVm in Levels)
                 {
                     Level level = levelVm.ToLevel();
-                    game.Levels.Add(level);
+                    game.AddLevel(level);
                 }
 
                 FileMode mode = File.Exists(_gameLevelsFileDialog.FileName) ? FileMode.Truncate : FileMode.OpenOrCreate;

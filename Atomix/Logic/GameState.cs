@@ -5,18 +5,18 @@ namespace Kinectomix.Logic
     [Serializable]
     public class GameState
     {
-        public LevelDefinition[] Levels { get; set; }
+        public Level[] Levels { get; set; }
 
         public int CurrentLevel { get; set; }
 
         public GameState() { }
 
-        public GameState(LevelDefinition[] levels)
+        public GameState(Level[] levels)
         {
             Levels = levels;
         }
 
-        public LevelDefinition SwitchToNextLevel()
+        public Level SwitchToNextLevel()
         {
             if (Levels.Length <= CurrentLevel + 1)
                 return null;
@@ -26,12 +26,12 @@ namespace Kinectomix.Logic
             return Levels[CurrentLevel];
         }
 
-        public LevelDefinition GetCurrentLevel()
+        public Level GetCurrentLevel()
         {
             return Levels[CurrentLevel];
         }
 
-        public void SetLevelToCurrent(LevelDefinition level)
+        public void SetLevelToCurrent(Level level)
         {
             int i = Array.IndexOf(Levels, level);
 

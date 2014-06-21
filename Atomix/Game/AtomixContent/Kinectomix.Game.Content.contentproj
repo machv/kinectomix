@@ -178,10 +178,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Content Include="Levels\original_level_01.atx">
-      <Name>original_level_01</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Levels\original_level_02.atx">
       <Name>original_level_02</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
