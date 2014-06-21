@@ -1,5 +1,7 @@
-﻿using Kinectomix.Logic;
+﻿using Atomix.Components;
+using Kinectomix.Logic;
 using Kinectomix.Xna.Components;
+using Kinectomix.Xna.Components.Kinect;
 using Kinectomix.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,68 +14,119 @@ namespace Atomix
 {
     public class LevelsScreen : GameScreen
     {
-        SpriteBatch _spriteBatch;
-        List<Button> _buttons = new List<Button>();
-        SpriteFont _normalFont;
+        public const int ButtonStep = 20;
+
+        private SpriteBatch _spriteBatch;
+        private List<KinectButton> _buttons = new List<KinectButton>();
+        private SpriteFont _normalFont;
+        private SpriteFont _splashFont;
+        private SwipeGesturesRecognizer swipe;
+        private KinectCursor cursor;
 
         public LevelsScreen(SpriteBatch spriteBatch)
         {
             _spriteBatch = spriteBatch;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Initialize()
         {
-            Vector2 position = new Vector2(30, 60);
+            cursor = (ScreenManager.Game as AtomixGame).Cursor;
 
-            foreach (Button b in _buttons)
+            foreach (Level level in AtomixGame.State.Levels)
             {
-                b.Position = position;
+                KinectButton button = new KinectButton(ScreenManager.Game, cursor);
+                button.Selected += button_Selected;
+                button.Tag = level;
+                button.Content = level.Name;
+                button.InputProvider = ScreenManager.InputProvider;
+                button.Width = 320;
 
-                position.Y += b.Height + 10;
-                position.X += 10;
+                _buttons.Add(button);
 
-                b.Update(gameTime);
+                Components.Add(button);
             }
 
-            base.Update(gameTime);
+            swipe = new SwipeGesturesRecognizer();
+
+            base.Initialize();
         }
 
         public override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
 
-            foreach (Button b in _buttons)
-                b.Draw(gameTime);
+            _spriteBatch.DrawString(_splashFont, "Game Levels", new Vector2(20, 30), Color.Red);
 
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            int xPos = 20;
+            int xDiff = 30;
+            int yPos = 20;
+
+            Vector2 position = new Vector2(xPos, 170);
+
+            int xTranslation = -150;
+
+            foreach (Button b in _buttons)
+            {
+                b.Position = position;
+
+                position.X += xDiff;
+                position.Y += b.Height + yPos;
+
+                if (position.Y + b.Height + yPos > ScreenManager.GraphicsDevice.Viewport.Bounds.Height)
+                {
+                    xPos += xDiff + b.Width;
+                    position.Y = 170;
+                    position.X = xPos;
+                }
+            }
+
+            foreach (Button b in _buttons)
+            {
+                var pos = b.Position;
+                pos.X += xTranslation;
+                b.Position = pos;
+            }
+
+            SwipeGesture recognized;
+            if (swipe.ProcessPosition(cursor.HandRealPosition, out recognized))
+            {
+                if (recognized != null)
+                {
+                    var direction = recognized.Direction;
+                }
+            }
+            else
+            {
+                swipe.Start(cursor.HandRealPosition, 0.05);
+            }
+
+
+            base.Update(gameTime);
+        }
+
         public override void LoadContent()
         {
+            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
             _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
-            foreach (Level level in AtomixGame.State.Levels)
-            {
-                Button button = new Button(ScreenManager.Game);
+            foreach (Button button in _buttons)
                 button.Font = _normalFont;
-                button.Selected += button_Selected;
-                button.Tag = level;
-                button.Content = level.Name;
-
-                _buttons.Add(button);
-            }
 
             base.LoadContent();
         }
 
-        void button_Selected(object sender, EventArgs e)
+        private void button_Selected(object sender, EventArgs e)
         {
             Button button = sender as Button;
             Level level = button.Tag as Level;
 
-            //Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", level.AssetName));
             LevelScreen gameScreen = new LevelScreen(level, _spriteBatch);
 
             AtomixGame.State.SetLevelToCurrent(level);

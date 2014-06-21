@@ -27,7 +27,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <ContentPresenter Grid.Column="0" Width="64" Height="64" ContentTemplate="{StaticResource ViewOnlyBoard}" Content="{Binding Board}"/>
-                <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Grid.Column="1" Text="{Binding Name}"/>
+                <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Grid.Column="1" Margin="5,0,0,0" Text="{Binding Name}"/>
 
             </Grid>
         </DataTemplate>
@@ -55,7 +55,7 @@
         </Border>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="185" />
+                <ColumnDefinition Width="190" />
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>

@@ -121,7 +121,7 @@ namespace Kinectomix.LevelEditor.Behavior
 
         private static void PaintTile(BoardTileViewModel template, BoardTileViewModel selectedTile, bool isPreview)
         {
-            if (_paintTile != null)
+            if (_paintTile != null && selectedTile != null)
             {
                 selectedTile.Asset = template.Asset;
                 selectedTile.Name = template.Name;
