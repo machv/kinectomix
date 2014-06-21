@@ -8,6 +8,8 @@ using Kinectomix.Xna.Input;
 using Atomix.Components.Kinect;
 using System.Xml.Serialization;
 using System.IO;
+using System.Security.Cryptography;
+using System;
 
 namespace Atomix
 {
@@ -196,8 +198,21 @@ namespace Atomix
             XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
             string path = string.Format("{0}/{1}.atx", Content.RootDirectory, GameDefinitionName);
 
-            using (Stream stream = TitleContainer.OpenStream(path))
-                return seralizer.Deserialize(stream) as GameDefinition;
+            using(var sha1 = SHA1.Create())
+            {
+                using (Stream stream = TitleContainer.OpenStream(path))
+                {
+                    byte[] rawHash = sha1.ComputeHash(stream);
+                    string definitionHash = Convert.ToBase64String(rawHash);
+
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    GameDefinition definition = seralizer.Deserialize(stream) as GameDefinition;
+                    definition.Hash = definitionHash;
+
+                    return definition;
+                }
+            }
         }
 
         /// <summary>
