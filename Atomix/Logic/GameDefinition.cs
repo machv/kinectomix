@@ -8,6 +8,7 @@ namespace Kinectomix.Logic
     [Serializable]
     public class GameDefinition
     {
+        private string _hash;
         private int _levelIndex;
         private Level[] _levels;
         public Level[] Levels
@@ -15,7 +16,11 @@ namespace Kinectomix.Logic
             get { return _levels; }
             set { _levels = value; }
         }
-
+        public string Hash
+        {
+            get { return _hash; }
+            set { _hash = value; }
+        }
         public GameDefinition(int levelsCount)
         {
             _levels = new Level[levelsCount];
