@@ -58,7 +58,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         {
             Tiles = new ObservableTilesCollection<BoardTileViewModel>(rowsCount, columnsCount);
         }
-        public BoardViewModel(TilesCollection<BoardTile> board, Tiles tiles)
+        public BoardViewModel(TilesCollection<BoardTile> board, Tiles tiles) : this()
         {
             Tiles = new ObservableTilesCollection<BoardTileViewModel>(board.RowsCount, board.ColumnsCount);
 
