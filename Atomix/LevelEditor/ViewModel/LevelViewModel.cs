@@ -19,6 +19,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         private BoardViewModel _molecule;
         private Tiles _tiles;
         private string _name;
+        private bool _isChanged;
 
         /// <summary>
         /// Gets or sets <see cref="Tiles"/> for use in the level.
@@ -29,8 +30,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _tiles; }
             set
             {
-                _tiles = value;
-                OnPropertyChanged();
+                if (_tiles != value)
+                {
+                    _tiles = value;
+
+                    OnPropertyChanged();
+                }
             }
         }
         /// <summary>
@@ -42,9 +47,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _board; }
             set
             {
-                _board = value;
+                if (_board != value)
+                {
+                    _board = value;
 
-                OnPropertyChanged();
+                    OnPropertyChanged();
+                }
             }
         }
         /// <summary>
@@ -56,9 +64,12 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _molecule; }
             set
             {
-                _molecule = value;
+                if (_molecule != value)
+                {
+                    _molecule = value;
 
-                OnPropertyChanged();
+                    OnPropertyChanged();
+                }
             }
         }
         /// <summary>
@@ -70,9 +81,44 @@ namespace Kinectomix.LevelEditor.ViewModel
             get { return _name; }
             set
             {
-                _name = value;
-                OnPropertyChanged();
+                if (_name != value)
+                {
+                    _name = value;
+
+                    OnPropertyChanged();
+                }
             }
+        }
+        /// <summary>
+        /// Gets or sets if anything in level definition is changed.
+        /// </summary>
+        /// <returns>True if anything was changed.</returns>
+        public bool IsChanged
+        {
+            get { return _isChanged; }
+            set { _isChanged = false; }
+        }
+
+        /// <summary>
+        /// Initializes new instance of <see cref="LevelViewModel"/> class.
+        /// </summary>
+        public LevelViewModel()
+        {
+            PropertyChanged += PropertyIsChanged;
+        }
+
+        /// <summary>
+        /// Creates <see cref="Level"/> definition from current <see cref="LevelViewModel"/> instance.
+        /// </summary>
+        /// <returns>Level definition.</returns>
+        public Level ToLevel()
+        {
+            return ToLevel(this);
+        }
+
+        private void PropertyIsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            _isChanged = true;
         }
 
         public static LevelViewModel FromLevel(Level level, string _userFixedAssetsPath, string _userAtomAssetsPath)
@@ -89,6 +135,7 @@ namespace Kinectomix.LevelEditor.ViewModel
             viewModel.Tiles = tiles;
             viewModel.Board = new BoardViewModel(level.Board, tiles) { EmptyTileTemplate = tiles["Empty"] };
             viewModel.Molecule = new BoardViewModel(level.Molecule, tiles) { EmptyTileTemplate = tiles["Empty"] };
+            viewModel.IsChanged = false;
 
             return viewModel;
         }
@@ -204,11 +251,6 @@ namespace Kinectomix.LevelEditor.ViewModel
                 if (!required.ContainsKey(key))
                     required.Add(key, new BuildAsset(tileViewModel.Tile.Name, tileViewModel, true));
             }
-        }
-
-        public Level ToLevel()
-        {
-            return ToLevel(this);
         }
     }
 }
