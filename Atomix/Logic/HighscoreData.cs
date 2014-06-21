@@ -16,6 +16,6 @@ namespace AtomixData
             get { return _definitionHash; }
             set { _definitionHash = value; }
         }
-        public List<LevelHighscore> Levels { get; set; }
+        public LevelHighscore[] Levels { get; set; }
     }
 }

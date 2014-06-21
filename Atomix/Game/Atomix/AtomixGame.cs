@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Security.Cryptography;
 using System;
+using AtomixData;
 
 namespace Atomix
 {
@@ -179,6 +180,7 @@ namespace Atomix
             {
                 GameDefinition definition = LoadDefinition();
                 _state.Levels = definition.Levels;
+                _state.DefinitionHash = definition.Hash;
 
                 screen = new StartScreen(spriteBatch);
             }
@@ -186,11 +188,13 @@ namespace Atomix
             {
                 screen = new ErrorScreen(spriteBatch, string.Format("Unable to load file '{0}' containing definitions of game levels.", GameDefinitionName));
             }
-            finally
-            {
-                _gameScreenManager.Add(screen);
-                _gameScreenManager.Activate(screen);
-            }
+
+            Highscore score = Highscore.Load(HighscoreFile);
+            score.DefinitionHash = _state.DefinitionHash;
+            score.Save();
+
+            _gameScreenManager.Add(screen);
+            _gameScreenManager.Activate(screen);
         }
 
         private GameDefinition LoadDefinition()
@@ -198,7 +202,7 @@ namespace Atomix
             XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
             string path = string.Format("{0}/{1}.atx", Content.RootDirectory, GameDefinitionName);
 
-            using(var sha1 = SHA1.Create())
+            using (var sha1 = SHA1.Create())
             {
                 using (Stream stream = TitleContainer.OpenStream(path))
                 {

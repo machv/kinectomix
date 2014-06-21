@@ -91,7 +91,7 @@ namespace Atomix
             _pauseMessageBox.Changed += pause_Changed;
 
             level = LevelViewModel.FromModel(levelDefinition, ScreenManager.GraphicsDevice);
-            highScore = new Highscore(AtomixGame.HighscoreFile);
+            //highScore = new Highscore(AtomixGame.HighscoreFile);
 
             _activeTileOpacity = 0.0f;
             _activeTileOpacityDirection = 1;

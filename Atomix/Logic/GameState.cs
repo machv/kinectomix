@@ -5,6 +5,7 @@ namespace Kinectomix.Logic
     [Serializable]
     public class GameState
     {
+        public string DefinitionHash { get; set; }
         public Level[] Levels { get; set; }
 
         public int CurrentLevel { get; set; }

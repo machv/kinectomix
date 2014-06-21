@@ -11,11 +11,15 @@ namespace AtomixData
 {
     public class Highscore
     {
-        private HighscoreData _data;
-        private string _path;
-        public string Path
+        public const string StorageContainerName = "State";
+        private HighscoreData _data = new HighscoreData();
+        private string _fileName;
+
+        [XmlIgnore]
+        public string FileName
         {
-            get { return _path; }
+            get { return _fileName; }
+            set { _fileName = value; }
         }
 
         public string DefinitionHash
@@ -23,58 +27,95 @@ namespace AtomixData
             get { return _data.DefinitionHash; }
             set { _data.DefinitionHash = value; }
         }
-        public List<LevelHighscore> Levels
+        public LevelHighscore[] Levels
         {
             get { return _data.Levels; }
             set { _data.Levels = value; }
         }
 
-        public Highscore(string file)
+        public static Highscore Load(string fileName)
         {
-            _path = file;
+            Highscore highscore = null;
 
-            Load();
+            StorageDevice device = GetStorageDevice();
 
-            if (_data == null)
+            IAsyncResult result = _device.BeginOpenContainer(StorageContainerName, null, null);
+            result.AsyncWaitHandle.WaitOne();
+
+            using (StorageContainer container = _device.EndOpenContainer(result))
             {
-                _data = new HighscoreData();
+                if (container.FileExists(fileName))
+                {
+                    try
+                    {
+                        using (Stream stream = container.OpenFile(fileName, FileMode.Open))
+                        {
+                            XmlSerializer serializer = new XmlSerializer(typeof(Highscore));
+                            highscore = (Highscore)serializer.Deserialize(stream);
+                        }
+                    }
+                    catch
+                    {
+                        highscore = null;
+                    }
+                }
             }
+
+            if (highscore == null)
+                highscore = new Highscore();
+
+            highscore.FileName = fileName;
+
+            return highscore;
         }
 
-        private HighscoreData Load()
-        {
-            using (Stream stream = TitleContainer.OpenStream(_path))
-            {
-                try
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(HighscoreData));
-                    _data = (HighscoreData)serializer.Deserialize(stream);
-                }
-                catch
-                {
-                    return null;
-                }
+        private static StorageDevice _device;
 
-                return _data;
+        private static StorageDevice GetStorageDevice()
+        {
+            if (_device == null || !_device.IsConnected)
+            {
+                IAsyncResult result = StorageDevice.BeginShowSelector(PlayerIndex.One, null, null);
+
+                result.AsyncWaitHandle.WaitOne();
+
+                _device = StorageDevice.EndShowSelector(result);
             }
+
+            return _device;
         }
 
         public bool Save()
         {
-            using (Stream stream = TitleContainer.OpenStream(_path))
+            StorageDevice device = GetStorageDevice();
+
+            IAsyncResult result = _device.BeginOpenContainer(StorageContainerName, null, null);
+            result.AsyncWaitHandle.WaitOne();
+
+            using (StorageContainer container = _device.EndOpenContainer(result))
             {
+                result.AsyncWaitHandle.Close();
+
+                if (container.FileExists(_fileName))
+                    container.DeleteFile(_fileName);
+
                 try
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(HighscoreData));
-                    serializer.Serialize(stream, _data);
+                    using (Stream stream = container.CreateFile(_fileName))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(Highscore));
+                        serializer.Serialize(stream, this);
+                    }
                 }
                 catch
                 {
+                    container.Dispose();
                     return false;
                 }
 
-                return true;
             }
+
+            return true;
         }
     }
 }
