@@ -182,9 +182,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Levels\New.atx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Kinectomix.Game_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

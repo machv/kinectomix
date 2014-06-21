@@ -12,8 +12,10 @@ namespace AtomixData
     public class Highscore
     {
         public const string StorageContainerName = "State";
-        private HighscoreData _data = new HighscoreData();
+
         private string _fileName;
+        private string _definitionHash;
+        private LevelHighscore[] _levels;
 
         [XmlIgnore]
         public string FileName
@@ -24,13 +26,79 @@ namespace AtomixData
 
         public string DefinitionHash
         {
-            get { return _data.DefinitionHash; }
-            set { _data.DefinitionHash = value; }
+            get { return _definitionHash; }
+            set { _definitionHash = value; }
         }
         public LevelHighscore[] Levels
         {
-            get { return _data.Levels; }
-            set { _data.Levels = value; }
+            get { return _levels; }
+            set { _levels = value; }
+        }
+
+        public Highscore()
+        {
+            _levels = new LevelHighscore[1];
+        }
+
+        public Highscore(string fileName) : this()
+        {
+            _fileName = fileName;
+        }
+
+        public LevelHighscore GetLevelHighscore(int levelIndex)
+        {
+            if (levelIndex >= _levels.Length || levelIndex < 0)
+                throw new ArgumentOutOfRangeException("levelIndex");
+
+            return _levels[levelIndex];
+        }
+
+        public void SetLevelHighscore(int levelIndex, LevelHighscore levelHighscore)
+        {
+            if (levelIndex < 0)
+                throw new ArgumentOutOfRangeException("levelIndex");
+
+            if (levelIndex >= _levels.Length)
+            {
+                LevelHighscore[] newLevels = new LevelHighscore[levelIndex + 1];
+                Array.Copy(_levels, newLevels, _levels.Length);
+                _levels = newLevels;
+            }
+
+            _levels[levelIndex] = levelHighscore;
+        }
+
+        public bool Save()
+        {
+            StorageDevice device = GetStorageDevice();
+
+            IAsyncResult result = _device.BeginOpenContainer(StorageContainerName, null, null);
+            result.AsyncWaitHandle.WaitOne();
+
+            using (StorageContainer container = _device.EndOpenContainer(result))
+            {
+                result.AsyncWaitHandle.Close();
+
+                if (container.FileExists(_fileName))
+                    container.DeleteFile(_fileName);
+
+                try
+                {
+                    using (Stream stream = container.CreateFile(_fileName))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(Highscore));
+                        serializer.Serialize(stream, this);
+                    }
+                }
+                catch
+                {
+                    container.Dispose();
+                    return false;
+                }
+
+            }
+
+            return true;
         }
 
         public static Highscore Load(string fileName)
@@ -83,39 +151,6 @@ namespace AtomixData
             }
 
             return _device;
-        }
-
-        public bool Save()
-        {
-            StorageDevice device = GetStorageDevice();
-
-            IAsyncResult result = _device.BeginOpenContainer(StorageContainerName, null, null);
-            result.AsyncWaitHandle.WaitOne();
-
-            using (StorageContainer container = _device.EndOpenContainer(result))
-            {
-                result.AsyncWaitHandle.Close();
-
-                if (container.FileExists(_fileName))
-                    container.DeleteFile(_fileName);
-
-                try
-                {
-                    using (Stream stream = container.CreateFile(_fileName))
-                    {
-                        XmlSerializer serializer = new XmlSerializer(typeof(Highscore));
-                        serializer.Serialize(stream, this);
-                    }
-                }
-                catch
-                {
-                    container.Dispose();
-                    return false;
-                }
-
-            }
-
-            return true;
         }
     }
 }

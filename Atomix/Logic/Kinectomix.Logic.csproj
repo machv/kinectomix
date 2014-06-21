@@ -95,7 +95,6 @@
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="Highscore.cs" />
-    <Compile Include="HighscoreData.cs" />
     <Compile Include="LevelHighscore.cs" />
     <Compile Include="TilesCollection.cs" />
     <Compile Include="GameState.cs" />

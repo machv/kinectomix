@@ -22,7 +22,7 @@ namespace Atomix
         public const string HighscoreFile = "atomix.highscore";
 
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        SpriteBatch _spriteBatch;
         ScreenManager _gameScreenManager;
         KinectChooser _kinectChooser;
         VideoStreamComponent _videoStream;
@@ -106,9 +106,11 @@ namespace Atomix
             Content.RootDirectory = "Content";
 
             _state = new GameState();
+
+            Exiting += Game_Exiting;
         }
 
-        /// <summary>
+         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
         /// related content.  Calling base.Initialize will enumerate through any components
@@ -176,26 +178,29 @@ namespace Atomix
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             GameScreen screen = null;
-
             try
             {
                 GameDefinition definition = GameDefinitionFactory.Load();
                 _state.Levels = definition.Levels;
                 _state.DefinitionHash = definition.Hash;
 
-                screen = new StartScreen(spriteBatch);
+                screen = new StartScreen(_spriteBatch);
             }
             catch
             {
-                screen = new ErrorScreen(spriteBatch, string.Format("Unable to load game levels."));
+                screen = new ErrorScreen(_spriteBatch, string.Format("Unable to load game levels."));
             }
 
             Highscore score = Highscore.Load(HighscoreFile);
+            if (score.DefinitionHash != null && score.DefinitionHash != _state.DefinitionHash)
+            {
+                score = new Highscore(HighscoreFile);
+            }
             score.DefinitionHash = _state.DefinitionHash;
-            score.Save();
+            _state.Highscore = score;
 
             _gameScreenManager.Add(screen);
             _gameScreenManager.Activate(screen);
@@ -262,6 +267,12 @@ namespace Atomix
             texture.SetData(colors);
 
             return texture;
+        }
+
+        private void Game_Exiting(object sender, EventArgs e)
+        {
+            if (_state != null && _state.Highscore != null)
+                _state.Highscore.Save();
         }
     }
 }

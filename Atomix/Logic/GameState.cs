@@ -1,10 +1,13 @@
-﻿using System;
+﻿using AtomixData;
+using System;
 
 namespace Kinectomix.Logic
 {
     [Serializable]
     public class GameState
     {
+        public Highscore Highscore { get; set; }
+
         public string DefinitionHash { get; set; }
         public Level[] Levels { get; set; }
 
@@ -30,6 +33,22 @@ namespace Kinectomix.Logic
         public Level GetCurrentLevel()
         {
             return Levels[CurrentLevel];
+        }
+
+        public LevelHighscore GetCurrentLevelHighscore()
+        {
+            if (Highscore == null)
+                return null;
+
+            return Highscore.GetLevelHighscore(CurrentLevel);
+        }
+
+        public void SetCurrentLevelHighscore(LevelHighscore levelHighscore)
+        {
+            if (Highscore == null)
+                return;
+
+            Highscore.SetLevelHighscore(CurrentLevel, levelHighscore);
         }
 
         public void SetLevelToCurrent(Level level)

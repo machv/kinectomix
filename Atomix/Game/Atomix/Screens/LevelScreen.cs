@@ -54,11 +54,11 @@ namespace Atomix
         private float atomSpeed = 400f;
 
         // Scoring
-        private int moves;
+        private int _moves;
         private DateTime gameStarted;
-        private TimeSpan gameDuration;
+        private TimeSpan _gameDuration;
 
-        private bool isLevelFinished = false;
+        private bool _isLevelFinished = false;
 
         private ContentManager _content;
 
@@ -69,10 +69,10 @@ namespace Atomix
         private Level levelDefinition;
         private LevelViewModel level;
         private SpriteBatch spriteBatch;
-        private Highscore highScore;
         private string _log = "";
         private KinectCircleCursor _cursor;
         private KinectButton _pauseButton;
+        private LevelHighscore _highscore;
 
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
@@ -99,7 +99,7 @@ namespace Atomix
             _pauseMessageBox.Changed += pause_Changed;
 
             level = LevelViewModel.FromModel(levelDefinition, ScreenManager.GraphicsDevice);
-            //highScore = new Highscore(AtomixGame.HighscoreFile);
+            _highscore = AtomixGame.State.GetCurrentLevelHighscore();
 
             _activeTileOpacity = 0.0f;
             _activeTileOpacityDirection = 1;
@@ -293,10 +293,16 @@ namespace Atomix
                     _log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString() + " / " + gesturesState.RecognizedGestures.ToArray()[0].Gesture.Name;
                 }
 
-                KinectCursor cursor = ((AtomixGame)ScreenManager.Game).Cursor;
+                KinectCursor cursor = (ScreenManager.Game as AtomixGame).Cursor;
 
-                if (isLevelFinished)
+                if (_isLevelFinished)
                 {
+                    if (_highscore == null)
+                        _highscore = new LevelHighscore();
+
+                    if (_highscore.UpdateIfBetter(_moves, _gameDuration))
+                        AtomixGame.State.SetCurrentLevelHighscore(_highscore);
+
                     _repeatButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 - _repeatButton.Width - 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
                     _repeatButton.IsVisible = true;
                     _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
@@ -306,7 +312,7 @@ namespace Atomix
                     return;
                 }
 
-                gameDuration += DateTime.Now - lastDate;
+                _gameDuration += DateTime.Now - lastDate;
 
                 if (isMovementAnimation)
                 {
@@ -338,7 +344,7 @@ namespace Atomix
                         if (isFinished)
                         {
                             applause.Play();
-                            isLevelFinished = true;
+                            _isLevelFinished = true;
                         }
                     }
 
@@ -565,7 +571,7 @@ namespace Atomix
 
             CalculateBoardTilePositions(boardPosition, level.Board);
 
-            moves += 1;
+            _moves += 1;
         }
 
         private MoveDirection SwipeToMoveDirection(SwipeDirection swipeDirection)
@@ -683,27 +689,33 @@ namespace Atomix
             DrawBoard(spriteBatch, level.Molecule);
 
             spriteBatch.DrawStringWithShadow(_normalFont, "Current", new Vector2(21 + 105, 85), Color.Gray);
-            spriteBatch.DrawStringWithShadow(_normalFont, "Best", new Vector2(280, 85), Color.Gray);
 
             string text = "Score:";
             var scoreSize = _normalFont.MeasureString(text);
-
             spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20, 120), Color.Red);
-            spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", moves), new Vector2(20 + 105, 120), Color.Red);
 
             text = "Time:";
             var timeSize = _normalFont.MeasureString(text);
             float dif = scoreSize.X - timeSize.X;
 
             spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20 + dif, 160), Color.Red);
-            spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", gameDuration.ToString(@"mm\:ss")), new Vector2(20 + 105, 160), Color.Red);
+
+            spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _moves), new Vector2(20 + 105, 120), Color.Red);
+            spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(20 + 105, 160), Color.Red);
+
+            if (_highscore != null)
+            {
+                spriteBatch.DrawStringWithShadow(_normalFont, "Best", new Vector2(280, 85), Color.Gray);
+                spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _highscore.Moves), new Vector2(280, 120), Color.Red);
+                spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _highscore.Time.ToString(@"mm\:ss")), new Vector2(280, 160), Color.Red);
+            }
 
             if (isMovementAnimation)
             {
                 spriteBatch.Draw(GetTileTexture(atomToMove), new Rectangle((int)atomPosition.X, (int)atomPosition.Y, TileWidth, TileHeight), Color.White);
             }
 
-            if (isLevelFinished)
+            if (_isLevelFinished)
             {
                 spriteBatch.Draw(idleTexture, new Rectangle(0, 0, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.GraphicsDevice.Viewport.Bounds.Height), Color.White);
                 spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 230), Color.Brown);
@@ -718,7 +730,6 @@ namespace Atomix
 
             base.Draw(gameTime);
         }
-
 
         private void CalculateBoardTilePositions(Vector2 startPosition, TilesCollection<BoardTileViewModel> board)
         {
