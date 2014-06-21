@@ -80,12 +80,16 @@ namespace Kinectomix.Xna.ScreenManagement
         /// <summary>
         /// Load graphics content for the game screen.
         /// </summary>
-        public virtual void LoadContent() { }
+        protected virtual void LoadContent() { }
 
         /// <summary>
         /// Unload content for the game screen.
         /// </summary>
-        public virtual void UnloadContent() { }
+        protected virtual void UnloadContent() { }
+
+        public virtual void Activated() { }
+
+        public virtual void Deactivated() { }
 
         /// <summary>
         /// Releases used resources used by the DrawableGameComponent and optionally releases the managed resources.

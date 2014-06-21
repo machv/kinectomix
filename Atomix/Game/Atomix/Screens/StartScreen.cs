@@ -87,7 +87,7 @@ namespace Atomix
             base.Draw(gameTime);
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
             _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
@@ -104,6 +104,20 @@ namespace Atomix
             _quitButton.InputProvider = ScreenManager.InputProvider;
 
             base.LoadContent();
+        }
+
+        public override void Activated()
+        {
+            (ScreenManager.Game as AtomixGame).KinectChooser.ShowConnectKinectAlert = true;
+
+            base.Activated();
+        }
+
+        public override void Deactivated()
+        {
+            (ScreenManager.Game as AtomixGame).KinectChooser.ShowConnectKinectAlert = false;
+
+            base.Deactivated();
         }
 
         private void Levels_Selected(object sender, EventArgs e)

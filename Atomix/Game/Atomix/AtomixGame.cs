@@ -35,6 +35,11 @@ namespace Atomix
         public static GameState State { get { return _state; } }
         KinectCircleCursor _cursor;
 
+        public KinectChooser KinectChooser
+        {
+            get { return _kinectChooser; }
+        }
+
         public KinectCircleCursor Cursor { get { return _cursor; } }
 
         private int _fullScreenWidth = 1280;

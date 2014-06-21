@@ -96,6 +96,11 @@ namespace Kinectomix.Xna.ScreenManagement
 
             _previousScreen = _activeScreen;
             _activeScreen = screen;
+
+            if (_previousScreen != null)
+                _previousScreen.Deactivated();
+
+            _activeScreen.Activated();
         }
 
         /// <summary>
@@ -127,7 +132,7 @@ namespace Kinectomix.Xna.ScreenManagement
 
             foreach (GameScreen screen in _screens)
             {
-                screen.UnloadContent();
+                screen.Dispose();
             }
         }
     }

@@ -122,7 +122,7 @@ namespace Atomix
             _pauseMessageBox.Hide();
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             int boardHeight = level.Board.RowsCount * TileHeight;
 
@@ -212,7 +212,7 @@ namespace Atomix
             ScreenManager.Activate(gameScreen);
         }
 
-        public override void UnloadContent()
+        protected override void UnloadContent()
         {
             _content.Unload();
 

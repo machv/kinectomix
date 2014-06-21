@@ -37,7 +37,7 @@ namespace Atomix
             base.Initialize();
         }
 
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
             _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
