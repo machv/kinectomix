@@ -6,6 +6,8 @@ using Atomix.Components;
 using Kinectomix.Xna.ScreenManagement;
 using Kinectomix.Xna.Input;
 using Atomix.Components.Kinect;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Atomix
 {
@@ -15,7 +17,7 @@ namespace Atomix
     public class AtomixGame : Game
     {
         public const string HighscoreFile = "atomix.highscore";
-        public const string GameDefinitionName = "Game";
+        public const string GameDefinitionName = "Definition";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -173,7 +175,7 @@ namespace Atomix
 
             try
             {
-                GameDefinition definition = Content.Load<GameDefinition>(GameDefinitionName);
+                GameDefinition definition = LoadDefinition();
                 _state.Levels = definition.Levels;
 
                 screen = new StartScreen(spriteBatch);
@@ -187,6 +189,15 @@ namespace Atomix
                 _gameScreenManager.Add(screen);
                 _gameScreenManager.Activate(screen);
             }
+        }
+
+        private GameDefinition LoadDefinition()
+        {
+            XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
+            string path = string.Format("{0}/{1}.atx", Content.RootDirectory, GameDefinitionName);
+
+            using (Stream stream = TitleContainer.OpenStream(path))
+                return seralizer.Deserialize(stream) as GameDefinition;
         }
 
         /// <summary>

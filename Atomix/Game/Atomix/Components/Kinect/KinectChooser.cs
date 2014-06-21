@@ -14,6 +14,8 @@ namespace Atomix
         private Texture2D _iconTexture;
         private Texture2D _backgroundTexture;
         private Skeletons _skeletons;
+        private bool _showConnectKinectAlert;
+        private bool _drawConnectKinectAlert;
         private KinectSensor _sensor;
         private KinectStatus _lastStatus;
         private bool _useSeatedMode;
@@ -27,6 +29,11 @@ namespace Atomix
         private bool _drawIcon;
         private short _ticks;
 
+        public bool ShowConnectKinectAlert
+        {
+            get { return _showConnectKinectAlert; }
+            set { _showConnectKinectAlert = value; }
+        }
         /// <summary>
         /// Gets skeletons returned from the Kinect Sensor.
         /// </summary>
@@ -83,6 +90,7 @@ namespace Atomix
             _startColorStream = startColorStream;
             _startDepthStream = startDepthStream;
             _iconScale = 0.4f;
+            _showConnectKinectAlert = true;
 
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
             DiscoverSensor();
@@ -130,23 +138,38 @@ namespace Atomix
                 }
             }
 
-            // Background
-            _backgroundPosition = new Vector2();
-            _backgroundPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _backgroundTexture.Width / 2;
-            _backgroundPosition.Y = 0;
+            if (_showConnectKinectAlert == true || (_lastStatus != KinectStatus.Undefined && _lastStatus != KinectStatus.Disconnected))
+            {
+                // Background
+                _backgroundPosition = new Vector2();
+                _backgroundPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _backgroundTexture.Width / 2;
+                _backgroundPosition.Y = 0;
 
+                // Icon
+                _iconPosition = new Vector2();
+                _iconPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _iconTexture.Width * _iconScale / 2;
+                _iconPosition.Y = 20;
 
-            // Icon
-            _iconPosition = new Vector2();
-            _iconPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _iconTexture.Width * _iconScale / 2;
-            _iconPosition.Y = 20;
+                // Text
+                _description = _lastStatus == KinectStatus.Undefined ? "please connect sensor" : GetStatusDescription(_lastStatus);
+                Vector2 textSize = _font.MeasureString(_description);
+                _textPosition = new Vector2();
+                _textPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - textSize.X / 2;
+                _textPosition.Y = _iconPosition.Y + _iconTexture.Height * _iconScale + 10;
 
-            // Text
-            _description = _lastStatus == KinectStatus.Undefined ? "please connect sensor" : GetStatusDescription(_lastStatus);
-            Vector2 textSize = _font.MeasureString(_description);
-            _textPosition = new Vector2();
-            _textPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - textSize.X / 2;
-            _textPosition.Y = _iconPosition.Y + _iconTexture.Height * _iconScale + 10;
+                _drawConnectKinectAlert = true;
+            }
+            else
+            {
+                _drawConnectKinectAlert = false;
+            }
+
+            _ticks++;
+            if (_ticks % 40 == 0)
+            {
+                _ticks = 0;
+                _drawIcon = !_drawIcon;
+            }
 
             base.Update(gameTime);
         }
@@ -159,20 +182,16 @@ namespace Atomix
         {
             if (Sensor == null || _lastStatus != KinectStatus.Connected)
             {
-                _spriteBatch.Begin();
-
-                _spriteBatch.Draw(_backgroundTexture, _backgroundPosition, Color.White);
-                _spriteBatch.DrawString(_font, _description, _textPosition, Color.Black);
-                if (_drawIcon == true)
-                    _spriteBatch.Draw(_iconTexture, _iconPosition, null, Color.White, 0, Vector2.Zero, _iconScale, SpriteEffects.None, 0);
-
-                _spriteBatch.End();
-
-                _ticks++;
-                if (_ticks % 40 == 0)
+                if (_drawConnectKinectAlert)
                 {
-                    _ticks = 0;
-                    _drawIcon = !_drawIcon;
+                    _spriteBatch.Begin();
+
+                    _spriteBatch.Draw(_backgroundTexture, _backgroundPosition, Color.White);
+                    _spriteBatch.DrawString(_font, _description, _textPosition, Color.Black);
+                    if (_drawIcon == true)
+                        _spriteBatch.Draw(_iconTexture, _iconPosition, null, Color.White, 0, Vector2.Zero, _iconScale, SpriteEffects.None, 0);
+
+                    _spriteBatch.End();
                 }
             }
 
@@ -304,6 +323,7 @@ namespace Atomix
                     catch
                     {
                         _sensor = null;
+                        _lastStatus = KinectStatus.Error;
                     }
                 }
             }
