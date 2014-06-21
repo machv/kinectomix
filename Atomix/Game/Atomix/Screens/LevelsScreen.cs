@@ -62,6 +62,9 @@ namespace Atomix
             base.Draw(gameTime);
         }
 
+        private int xTranslation;
+        private int xTranslationBuffer;
+        private int xStep = 10;
         public override void Update(GameTime gameTime)
         {
             int xPos = 20;
@@ -70,7 +73,7 @@ namespace Atomix
 
             Vector2 position = new Vector2(xPos, 170);
 
-            int xTranslation = -150;
+            //int xTranslation = -150;
 
             foreach (Button b in _buttons)
             {
@@ -94,19 +97,56 @@ namespace Atomix
                 b.Position = pos;
             }
 
-            SwipeGesture recognized;
-            if (swipe.ProcessPosition(cursor.HandRealPosition, out recognized))
+            int scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
+
+            if (cursor.IsHandTracked && xTranslationBuffer == 0)
             {
-                if (recognized != null)
+                SwipeGesture recognized;
+                if (swipe.ProcessPosition(cursor.HandRealPosition, out recognized))
                 {
-                    var direction = recognized.Direction;
+                    if (recognized != null)
+                    {
+                        var direction = recognized.Direction;
+                        switch (direction)
+                        {
+                            case SwipeDirection.Left:
+                                xTranslationBuffer = -scrollStep;
+                                break;
+                            case SwipeDirection.Right:
+                                xTranslationBuffer = scrollStep;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    swipe.Start(cursor.HandRealPosition, 0.08);
                 }
             }
-            else
-            {
-                swipe.Start(cursor.HandRealPosition, 0.05);
-            }
 
+            if (xTranslationBuffer != 0)
+            {
+                if (xTranslation >= 0)
+                {
+                    xTranslation = 0;
+                    xTranslationBuffer = 0;
+                }
+
+                if (xTranslationBuffer > 0)
+                {
+                    xTranslationBuffer -= xStep;
+                    xTranslation += xStep;
+                    if (xTranslationBuffer < 0)
+                        xTranslationBuffer = 0;
+                }
+                else
+                {
+                    xTranslationBuffer += xStep;
+                    xTranslation -= xStep;
+                    if (xTranslationBuffer > 0)
+                        xTranslationBuffer = 0;
+                }
+            }
 
             base.Update(gameTime);
         }
@@ -124,6 +164,8 @@ namespace Atomix
 
         private void button_Selected(object sender, EventArgs e)
         {
+            return;
+
             Button button = sender as Button;
             Level level = button.Tag as Level;
 
