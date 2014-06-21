@@ -13,6 +13,7 @@ namespace Kinectomix.Xna.ScreenManagement
     {
         private List<GameScreen> _screens;
         private GameScreen _activeScreen;
+        private GameScreen _previousScreen;
         private ContentManager _content;
         private IInputProvider _input;
 
@@ -33,6 +34,10 @@ namespace Kinectomix.Xna.ScreenManagement
         {
             get { return _input; }
             set { _input = value; }
+        }
+        public GameScreen PreviousScreen
+        {
+            get { return _previousScreen; }
         }
 
         /// <summary>
@@ -89,6 +94,7 @@ namespace Kinectomix.Xna.ScreenManagement
             if (!_screens.Contains(screen))
                 throw new ArgumentException("Requested screen is not added into screen manager yet.");
 
+            _previousScreen = _activeScreen;
             _activeScreen = screen;
         }
 
