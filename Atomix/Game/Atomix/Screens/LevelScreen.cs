@@ -46,29 +46,29 @@ namespace Atomix
         protected bool isMovementAnimation = false;
         protected Vector2 atomPosition;
         protected Vector2 finalPosition;
-        Point destination;
-        string atomToMove;
-        MoveDirection moveDirection;
-        float atomSpeed = 400f;
+        private Point destination;
+        private string atomToMove;
+        private MoveDirection moveDirection;
+        private float atomSpeed = 400f;
 
         // Scoring
-        int moves;
-        DateTime gameStarted;
-        TimeSpan gameDuration;
+        private int moves;
+        private DateTime gameStarted;
+        private TimeSpan gameDuration;
 
-        bool isLevelFinished = false;
+        private bool isLevelFinished = false;
 
-        ContentManager _content;
+        private ContentManager _content;
 
-        Button _levelsButton;
-        Button _repeatButton;
-        Button _nextButton;
+        private Button _levelsButton;
+        private Button _repeatButton;
+        private Button _nextButton;
         private SwipeGesturesRecognizer _swipeGestures;
-        Level levelDefinition;
-        LevelViewModel level;
-        SpriteBatch spriteBatch;
-        Highscore highScore;
-        string _log = "";
+        private Level levelDefinition;
+        private LevelViewModel level;
+        private SpriteBatch spriteBatch;
+        private Highscore highScore;
+        private string _log = "";
         private KinectCircleCursor _cursor;
 
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
@@ -97,6 +97,22 @@ namespace Atomix
             _activeTileOpacityDirection = 1;
 
             Components.Add(_pauseMessageBox);
+
+            _levelsButton = new Button(ScreenManager.Game, "levels");
+            _levelsButton.InputProvider = ScreenManager.InputProvider;
+            _levelsButton.IsVisible = false;
+
+            _repeatButton = new Button(ScreenManager.Game, "play again");
+            _repeatButton.InputProvider = ScreenManager.InputProvider;
+            _repeatButton.IsVisible = false;
+
+            _nextButton = new Button(ScreenManager.Game, "continue");
+            _nextButton.InputProvider = ScreenManager.InputProvider;
+            _nextButton.IsVisible = false;
+
+            Components.Add(_levelsButton);
+            Components.Add(_repeatButton);
+            Components.Add(_nextButton);
 
             base.Initialize();
         }
@@ -140,19 +156,14 @@ namespace Atomix
             _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
             idleTexture = _content.Load<Texture2D>("Idle");
 
-            _levelsButton = new Button(ScreenManager.Game, "levels");
+            
             _levelsButton.Font = _normalFont;
-            _levelsButton.InputProvider = ScreenManager.InputProvider;
             _levelsButton.Selected += _levelsButton_Selected;
 
-            _repeatButton = new Button(ScreenManager.Game, "play again");
             _repeatButton.Font = _normalFont;
-            _repeatButton.InputProvider = ScreenManager.InputProvider;
             _repeatButton.Selected += _repeatButton_Selected;
 
-            _nextButton = new Button(ScreenManager.Game, "continue");
             _nextButton.Font = _normalFont;
-            _nextButton.InputProvider = ScreenManager.InputProvider;
             _nextButton.Selected += _nextButton_Selected;
 
             _pauseMessageBox.Font = _normalFont;
@@ -187,7 +198,6 @@ namespace Atomix
 
             // Load current level again
             Level newLevel = AtomixGame.State.GetCurrentLevel();
-            //Level newLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", newLevelInfo.AssetName));
             gameScreen = new LevelScreen(newLevel, spriteBatch);
 
             ScreenManager.Add(gameScreen);
@@ -221,6 +231,8 @@ namespace Atomix
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             KeyboardState state = Keyboard.GetState();
 
             if (state.IsKeyDown(Keys.Escape) == true && _previousKeyboardState.IsKeyDown(Keys.Escape) == false)
@@ -258,14 +270,11 @@ namespace Atomix
             if (isLevelFinished)
             {
                 _repeatButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 - _repeatButton.Width - 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _repeatButton.Update(gameTime);
-
+                _repeatButton.IsVisible = true;
                 _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _levelsButton.Update(gameTime);
-
+                _levelsButton.IsVisible = true;
                 _nextButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 + _nextButton.Width + 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                _nextButton.Update(gameTime);
-
+                _nextButton.IsVisible = true;
                 return;
             }
 
@@ -537,8 +546,6 @@ namespace Atomix
                     // Detect Down
                 }
             }
-
-            base.Update(gameTime);
         }
 
         private void ProcessTileMove(Point atomCoordinates, MoveDirection direction)
@@ -700,10 +707,6 @@ namespace Atomix
                 Vector2 size = _splashFont.MeasureString(name);
 
                 spriteBatch.DrawString(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
-
-                _repeatButton.Draw(gameTime);
-                _levelsButton.Draw(gameTime);
-                _nextButton.Draw(gameTime);
             }
 
             spriteBatch.End();

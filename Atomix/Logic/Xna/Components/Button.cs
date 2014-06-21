@@ -26,6 +26,13 @@ namespace Kinectomix.Xna.Components
         private SpriteFont _font;
         private object _tag;
         private bool _isActive;
+        private bool _isVisible;
+
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set { _isVisible = value; }
+        }
 
         /// <summary>
         /// Currently used <see cref="IInputProvider"/> for the input from user.
@@ -201,6 +208,7 @@ namespace Kinectomix.Xna.Components
             _height = 70;
             _content = string.Empty;
             _isActive = true;
+            _isVisible = true;
         }
 
         /// <summary>
@@ -277,30 +285,30 @@ namespace Kinectomix.Xna.Components
         /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin();
+            if (_isVisible)
+            {
+                _spriteBatch.Begin();
 
-            if (Font == null)
-                throw new Exception("Font is not set.");
+                if (Font == null)
+                    throw new Exception("Font is not set.");
 
-            Rectangle innerDimensions = new Rectangle(
-                (int)Position.X + BorderThickness,
-                (int)Position.Y + BorderThickness,
-                _width - 2 * BorderThickness,
-                _height - 2 * BorderThickness);
+                Rectangle innerDimensions = new Rectangle(
+                    (int)Position.X + BorderThickness,
+                    (int)Position.Y + BorderThickness,
+                    _width - 2 * BorderThickness,
+                    _height - 2 * BorderThickness);
 
-            _spriteBatch.Draw(_empty, _boundingRectangle, BorderColor);
+                _spriteBatch.Draw(_empty, _boundingRectangle, BorderColor);
+                _spriteBatch.Draw(_empty, innerDimensions, _currentBackground);
 
-            _spriteBatch.Draw(_empty, innerDimensions, _currentBackground);
+                Vector2 textSize = Font.MeasureString(_content);
+                Vector2 textPosition = new Vector2(_boundingRectangle.Center.X, _boundingRectangle.Center.Y) - textSize / 2f;
+                textPosition.X = (int)textPosition.X;
+                textPosition.Y = (int)textPosition.Y;
+                _spriteBatch.DrawString(Font, _content, textPosition, Foreground);
 
-
-            Vector2 textSize = Font.MeasureString(_content);
-            Vector2 textPosition = new Vector2(_boundingRectangle.Center.X, _boundingRectangle.Center.Y) - textSize / 2f;
-            textPosition.X = (int)textPosition.X;
-            textPosition.Y = (int)textPosition.Y;
-            _spriteBatch.DrawString(Font, _content, textPosition, Foreground);
-
-            _spriteBatch.End();
-
+                _spriteBatch.End();
+            }
             base.Draw(gameTime);
         }
 
