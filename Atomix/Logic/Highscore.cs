@@ -11,26 +11,37 @@ namespace AtomixData
 {
     public class Highscore
     {
+        private HighscoreData _data;
         private string _path;
         public string Path
         {
             get { return _path; }
-            set { _path = value; }
         }
 
-        private HighscoreData _data;
-        public HighscoreData Data
+        public string DefinitionHash
         {
-            get { return _data; }
-            set { _data = value; }
+            get { return _data.DefinitionHash; }
+            set { _data.DefinitionHash = value; }
+        }
+        public List<LevelHighscore> Levels
+        {
+            get { return _data.Levels; }
+            set { _data.Levels = value; }
         }
 
         public Highscore(string file)
         {
             _path = file;
+
+            Load();
+
+            if (_data == null)
+            {
+                _data = new HighscoreData();
+            }
         }
 
-        public HighscoreData Load()
+        private HighscoreData Load()
         {
             using (Stream stream = TitleContainer.OpenStream(_path))
             {

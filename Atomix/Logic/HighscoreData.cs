@@ -10,6 +10,12 @@ namespace AtomixData
     [Serializable]
     public class HighscoreData
     {
-        public List<LevelHighscore> Highscores { get; set; }
+        private string _definitionHash;
+        public string DefinitionHash
+        {
+            get { return _definitionHash; }
+            set { _definitionHash = value; }
+        }
+        public List<LevelHighscore> Levels { get; set; }
     }
 }

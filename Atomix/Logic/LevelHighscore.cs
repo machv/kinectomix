@@ -8,9 +8,8 @@ namespace AtomixData
     [Serializable]
     public class LevelHighscore
     {
-        public string Level { get; set; }
         public TimeSpan Time { get; set; }
         public int Moves { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime When { get; set; }
     }
 }
