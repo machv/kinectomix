@@ -15,6 +15,7 @@ namespace Atomix
     public class AtomixGame : Game
     {
         public const string HighscoreFile = "atomix.highscore";
+        public const string GameDefinitionName = "Game";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -108,7 +109,7 @@ namespace Atomix
         {
             IsMouseVisible = true;
 
-             _kinectChooser = new KinectChooser(this, true, true);
+            _kinectChooser = new KinectChooser(this, true, true);
             _gestures = new Gestures(this, _kinectChooser.Skeletons, "Content/Gestures/");
             _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectDebugOffset, _scale);
             _cursor = new KinectCircleCursor(this, _kinectChooser) { HideMouseCursorWhenHandTracked = true };
@@ -135,7 +136,7 @@ namespace Atomix
             Components.Add(frameRate);
             Components.Add(_gameScreenManager);
             Components.Add(_kinectChooser);
-            Components.Add(_gestures);
+            //Components.Add(_gestures);
             Components.Add(_videoStream);
             Components.Add(_skeletonRenderer);
             Components.Add(_cursor);
@@ -168,11 +169,24 @@ namespace Atomix
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            GameScreen screen = new StartScreen(spriteBatch);
-            _gameScreenManager.Add(screen);
-            _gameScreenManager.Activate(screen);
+            GameScreen screen = null;
 
-            _state.Levels = Content.Load<LevelDefinition[]>("Levels");
+            try
+            {
+                GameDefinition definition = Content.Load<GameDefinition>(GameDefinitionName);
+                _state.Levels = definition.Levels;
+
+                screen = new StartScreen(spriteBatch);
+            }
+            catch
+            {
+                screen = new ErrorScreen(spriteBatch, string.Format("Unable to load file '{0}' containing definitions of game levels.", GameDefinitionName));
+            }
+            finally
+            {
+                _gameScreenManager.Add(screen);
+                _gameScreenManager.Activate(screen);
+            }
         }
 
         /// <summary>
@@ -204,7 +218,7 @@ namespace Atomix
                 Components.Remove(_videoStream);
                 Components.Remove(_skeletonRenderer);
             }
-            
+
             _previousKeyboardState = state;
 
             base.Update(gameTime);
