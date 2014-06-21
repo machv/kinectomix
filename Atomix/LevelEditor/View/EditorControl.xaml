@@ -48,8 +48,8 @@
 
                 <WrapPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5">
                     <Button Content="New definition" Margin="5" Padding="3" Command="{Binding NewLevelsDefinitionCommand}" />
-                    <Button Content="_Load definition..." Margin="5" Padding="3" Command="{Binding LoadLevelsDefinitionCommand}" />
-                    <Button Content="_Save definition as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsDefinitionCommand}" FontWeight="Bold" />
+                    <Button Content="_Open levels definition..." Margin="5" Padding="3" Command="{Binding LoadLevelsDefinitionCommand}" />
+                    <Button Content="_Save levels definition as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsDefinitionCommand}" FontWeight="Bold" />
                 </WrapPanel>
             </Grid>
         </Border>

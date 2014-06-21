@@ -147,7 +147,7 @@ namespace Kinectomix.LevelEditor.ViewModel
         {
             if (_isSomethingChanged == true)
             {
-                MessageBoxResult result = MessageBox.Show("Loading levels definition will cancel you modifications on current levels definition.\n\nDo you want to continue to load a new level definition?", "Pending changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult result = MessageBox.Show("Opening levels definition will cancel you modifications on current levels definition.\n\nDo you want to continue with opening levels definition?", "Pending changes", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
                     return;
             }
