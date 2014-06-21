@@ -79,7 +79,7 @@ namespace Kinectomix.Logic
         private double _totalDistanceY;
         private double _requiredDistance;
 
-        private double _depthTolerance = 0.02d;
+        private double _depthTolerance = 0.1d;
         private double _verticalTolerance = 0.03d;
         private double _horizontalTolerance = 0.03d;
 
