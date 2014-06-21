@@ -21,7 +21,8 @@ namespace Atomix
         private SpriteFont _normalFont;
         private SpriteFont _splashFont;
         private SwipeGesturesRecognizer swipe;
-        private KinectCursor cursor;
+        private KinectCursor _cursor;
+        private KinectButton _backButton;
 
         public LevelsScreen(SpriteBatch spriteBatch)
         {
@@ -30,11 +31,16 @@ namespace Atomix
 
         public override void Initialize()
         {
-            cursor = (ScreenManager.Game as AtomixGame).Cursor;
+            _cursor = (ScreenManager.Game as AtomixGame).Cursor;
+
+            _backButton = new KinectButton(ScreenManager.Game, _cursor, "go back");
+            _backButton.Selected += Back_Selected;
+
+            Components.Add(_backButton);
 
             foreach (Level level in AtomixGame.State.Levels)
             {
-                KinectButton button = new KinectButton(ScreenManager.Game, cursor);
+                KinectButton button = new KinectButton(ScreenManager.Game, _cursor);
                 button.Selected += button_Selected;
                 button.Tag = level;
                 button.Content = level.Name;
@@ -51,15 +57,18 @@ namespace Atomix
             base.Initialize();
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void LoadContent()
         {
-            _spriteBatch.Begin();
+            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
+            _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
-            _spriteBatch.DrawString(_splashFont, "Game Levels", new Vector2(20, 30), Color.Red);
+            _backButton.Font = _normalFont;
+            _backButton.InputProvider = ScreenManager.InputProvider;
 
-            _spriteBatch.End();
+            foreach (Button button in _buttons)
+                button.Font = _normalFont;
 
-            base.Draw(gameTime);
+            base.LoadContent();
         }
 
         private int xTranslation;
@@ -67,13 +76,13 @@ namespace Atomix
         private int xStep = 10;
         public override void Update(GameTime gameTime)
         {
+            _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width + _backButton.BorderThickness  - _backButton.Width, -_backButton.BorderThickness);
+
             int xPos = 20;
             int xDiff = 30;
             int yPos = 20;
 
             Vector2 position = new Vector2(xPos, 170);
-
-            //int xTranslation = -150;
 
             foreach (Button b in _buttons)
             {
@@ -99,10 +108,10 @@ namespace Atomix
 
             int scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
 
-            if (cursor.IsHandTracked && xTranslationBuffer == 0)
+            if (_cursor.IsHandTracked && xTranslationBuffer == 0)
             {
                 SwipeGesture recognized;
-                if (swipe.ProcessPosition(cursor.HandRealPosition, out recognized))
+                if (swipe.ProcessPosition(_cursor.HandRealPosition, out recognized))
                 {
                     if (recognized != null)
                     {
@@ -120,7 +129,7 @@ namespace Atomix
                 }
                 else
                 {
-                    swipe.Start(cursor.HandRealPosition, 0.08);
+                    swipe.Start(_cursor.HandRealPosition, 0.08);
                 }
             }
 
@@ -151,21 +160,24 @@ namespace Atomix
             base.Update(gameTime);
         }
 
-        public override void LoadContent()
+        public override void Draw(GameTime gameTime)
         {
-            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
-            _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
+            _spriteBatch.Begin();
 
-            foreach (Button button in _buttons)
-                button.Font = _normalFont;
+            _spriteBatch.DrawString(_splashFont, "Game Levels", new Vector2(20, 30), Color.Red);
 
-            base.LoadContent();
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+
+        private void Back_Selected(object sender, EventArgs e)
+        {
+            ScreenManager.Activate(ScreenManager.PreviousScreen);
         }
 
         private void button_Selected(object sender, EventArgs e)
         {
-            return;
-
             Button button = sender as Button;
             Level level = button.Tag as Level;
 

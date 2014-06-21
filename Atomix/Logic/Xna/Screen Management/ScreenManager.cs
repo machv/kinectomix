@@ -92,7 +92,7 @@ namespace Kinectomix.Xna.ScreenManagement
         public void Activate(GameScreen screen)
         {
             if (!_screens.Contains(screen))
-                throw new ArgumentException("Requested screen is not added into screen manager yet.");
+                throw new ArgumentException("Requested screen is not added into the screen manager yet.");
 
             _previousScreen = _activeScreen;
             _activeScreen = screen;
