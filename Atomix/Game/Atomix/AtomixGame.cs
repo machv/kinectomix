@@ -20,7 +20,6 @@ namespace Atomix
     public class AtomixGame : Game
     {
         public const string HighscoreFile = "atomix.highscore";
-        public const string GameDefinitionName = "Definition";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -178,7 +177,7 @@ namespace Atomix
 
             try
             {
-                GameDefinition definition = LoadDefinition();
+                GameDefinition definition = GameDefinitionFactory.Load();
                 _state.Levels = definition.Levels;
                 _state.DefinitionHash = definition.Hash;
 
@@ -186,7 +185,7 @@ namespace Atomix
             }
             catch
             {
-                screen = new ErrorScreen(spriteBatch, string.Format("Unable to load file '{0}' containing definitions of game levels.", GameDefinitionName));
+                screen = new ErrorScreen(spriteBatch, string.Format("Unable to load game levels."));
             }
 
             Highscore score = Highscore.Load(HighscoreFile);
@@ -195,28 +194,6 @@ namespace Atomix
 
             _gameScreenManager.Add(screen);
             _gameScreenManager.Activate(screen);
-        }
-
-        private GameDefinition LoadDefinition()
-        {
-            XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
-            string path = string.Format("{0}/{1}.atx", Content.RootDirectory, GameDefinitionName);
-
-            using (var sha1 = SHA1.Create())
-            {
-                using (Stream stream = TitleContainer.OpenStream(path))
-                {
-                    byte[] rawHash = sha1.ComputeHash(stream);
-                    string definitionHash = Convert.ToBase64String(rawHash);
-
-                    stream.Seek(0, SeekOrigin.Begin);
-
-                    GameDefinition definition = seralizer.Deserialize(stream) as GameDefinition;
-                    definition.Hash = definitionHash;
-
-                    return definition;
-                }
-            }
         }
 
         /// <summary>

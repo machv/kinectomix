@@ -75,7 +75,7 @@ namespace AtomixData
         {
             if (_device == null || !_device.IsConnected)
             {
-                IAsyncResult result = StorageDevice.BeginShowSelector(PlayerIndex.One, null, null);
+                IAsyncResult result = StorageDevice.BeginShowSelector(null, null);
 
                 result.AsyncWaitHandle.WaitOne();
 
