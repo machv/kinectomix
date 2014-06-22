@@ -37,6 +37,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>EditorIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -172,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Board\Clean.png" />
+    <Resource Include="EditorIcon.ico" />
     <Content Include="Tile\Fixed\Wall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
