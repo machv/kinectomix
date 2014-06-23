@@ -11,7 +11,7 @@ namespace Atomix
     {
         private InteractionStream _interationsStream;
         private int _skeletonArrayLength;
-        private KinectChooser _chooser;
+        private VisualKinectManager _chooser;
         private bool _isHandClosed;
 
         public bool IsStateActive
@@ -19,7 +19,7 @@ namespace Atomix
             get { return _isHandClosed; }
         }
 
-        public InteractionsClosedHandTracker(KinectChooser chooser)
+        public InteractionsClosedHandTracker(VisualKinectManager chooser)
         {
             KinectInteractionClient ic = new KinectInteractionClient();
             _interationsStream = new InteractionStream(chooser.Sensor, ic);

@@ -28,7 +28,7 @@ namespace Atomix.Components.Kinect
             }
         }
 
-        public KinectCircleCursor(Game game, KinectChooser chooser) : base(game, chooser)
+        public KinectCircleCursor(Game game, VisualKinectManager chooser) : base(game, chooser)
         {
             _animatedCircle = new AnimatedTexture(Vector2.Zero, 0, 0.5f);
         }

@@ -108,14 +108,14 @@ namespace Atomix
 
         public override void Activated()
         {
-            (ScreenManager.Game as AtomixGame).KinectChooser.ShowConnectKinectAlert = true;
+            (ScreenManager.Game as AtomixGame).KinectChooser.ShowConnectKinectPrompt = true;
 
             base.Activated();
         }
 
         public override void Deactivated()
         {
-            (ScreenManager.Game as AtomixGame).KinectChooser.ShowConnectKinectAlert = false;
+            (ScreenManager.Game as AtomixGame).KinectChooser.ShowConnectKinectPrompt = false;
 
             base.Deactivated();
         }

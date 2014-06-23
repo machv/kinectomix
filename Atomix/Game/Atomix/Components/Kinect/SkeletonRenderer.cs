@@ -15,7 +15,7 @@ namespace Atomix
         private Texture2D _jointTexture;
         private Texture2D _boneTexture;
         private SpriteBatch _spriteBatch;
-        private KinectChooser _chooser;
+        private VisualKinectManager _chooser;
         private Vector2 _offset;
         private float _scale;
         private readonly SkeletonPointMap _pointMapping;
@@ -60,9 +60,9 @@ namespace Atomix
         /// Creates a new instance of <see cref="SkeletonRenderer"/>.
         /// </summary>
         /// <param name="game">The <see cref="Game"/> that the game component should be attached to.</param>
-        /// <param name="chooser">The <see cref="KinectChooser"/> that manages Kinect sensor.</param>
+        /// <param name="chooser">The <see cref="VisualKinectManager"/> that manages Kinect sensor.</param>
         /// <param name="offset">The offset where rendering of the skeletons will start.</param>
-        public SkeletonRenderer(Game game, KinectChooser chooser, Vector2 offset)
+        public SkeletonRenderer(Game game, VisualKinectManager chooser, Vector2 offset)
             : this(game, chooser, offset, 1)
         {
         }
@@ -71,10 +71,10 @@ namespace Atomix
         /// Creates a new instance of <see cref="SkeletonRenderer"/>.
         /// </summary>
         /// <param name="game">The <see cref="Game"/> that the game component should be attached to.</param>
-        /// <param name="chooser">The <see cref="KinectChooser"/> that manages Kinect sensor.</param>
+        /// <param name="chooser">The <see cref="VisualKinectManager"/> that manages Kinect sensor.</param>
         /// <param name="offset">The offset where rendering of the skeletons will start.</param>
         /// <param name="scale">The scale ratio for rendering skeletons.</param>
-        public SkeletonRenderer(Game game, KinectChooser chooser, Vector2 offset, float scale)
+        public SkeletonRenderer(Game game, VisualKinectManager chooser, Vector2 offset, float scale)
             : base(game)
         {
             _chooser = chooser;
@@ -87,11 +87,11 @@ namespace Atomix
         /// Creates a new instance of <see cref="SkeletonRenderer"/>.
         /// </summary>
         /// <param name="game">The <see cref="Game"/> that the game component should be attached to.</param>
-        /// <param name="chooser">The <see cref="KinectChooser"/> that manages Kinect sensor.</param>
+        /// <param name="chooser">The <see cref="VisualKinectManager"/> that manages Kinect sensor.</param>
         /// <param name="offset">The offset where rendering of the skeletons will start.</param>
         /// <param name="scale">The scale ratio for rendering skeletons.</param>
         /// <param name="pointMapping">The <see cref="SkeletonPointMap"/> that is called when mapping from skeleton space to the target space is needed.</param>
-        public SkeletonRenderer(Game game, KinectChooser chooser, Vector2 offset, float scale, SkeletonPointMap pointMapping)
+        public SkeletonRenderer(Game game, VisualKinectManager chooser, Vector2 offset, float scale, SkeletonPointMap pointMapping)
             : base(game)
         {
             _chooser = chooser;

@@ -1,39 +1,25 @@
-﻿using Microsoft.Kinect;
+﻿using Atomix;
+using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace Atomix
+namespace Kinectomix.Components.Kinect
 {
     /// <summary>
-    /// Handles Kinect initialization.
+    /// Handles Kinect sensor initialization.
     /// </summary>
-    public class KinectChooser : DrawableGameComponent
+    public class KinectManager : IDisposable
     {
-        private SpriteBatch _spriteBatch;
-        private SpriteFont _font;
-        private Texture2D _iconTexture;
-        private Texture2D _backgroundTexture;
         private Skeletons _skeletons;
-        private bool _showConnectKinectAlert;
-        private bool _drawConnectKinectAlert;
         private KinectSensor _sensor;
         private KinectStatus _lastStatus;
         private bool _useSeatedMode;
         private bool _startColorStream;
         private bool _startDepthStream;
-        private Vector2 _iconPosition;
-        private Vector2 _textPosition;
-        private Vector2 _backgroundPosition;
-        private float _iconScale;
-        private string _description;
-        private bool _drawIcon;
-        private short _ticks;
 
-        public bool ShowConnectKinectAlert
-        {
-            get { return _showConnectKinectAlert; }
-            set { _showConnectKinectAlert = value; }
-        }
         /// <summary>
         /// Gets skeletons returned from the Kinect Sensor.
         /// </summary>
@@ -42,6 +28,7 @@ namespace Atomix
         {
             get { return _skeletons; }
         }
+
         /// <summary>
         /// Gets selected Kinect sensor.
         /// </summary>
@@ -50,6 +37,7 @@ namespace Atomix
         {
             get { return _sensor; }
         }
+
         /// <summary>
         /// Gets the last known status of the <see cref="KinectSensor"/>.
         /// </summary>
@@ -58,6 +46,7 @@ namespace Atomix
         {
             get { return _lastStatus; }
         }
+
         /// <summary>
         /// Gets or sets if should be used seated or nomal mode.
         /// </summary>
@@ -79,50 +68,21 @@ namespace Atomix
             }
         }
 
-        /// <summary>
-        /// Creates new instance of <see cref="KinectChooser"/>.
-        /// </summary>
-        /// <param name="game">Game containing this component.</param>
-        public KinectChooser(Game game, bool startColorStream, bool startDepthStream)
-            : base(game)
+        public delegate void KinectStatusChangedEventHandler(object sender, EventArgs e);
+
+        public event KinectStatusChangedEventHandler KinectStatusChanged;
+
+        public KinectManager(bool startColorStream, bool startDepthStream)
         {
             _skeletons = new Skeletons();
             _startColorStream = startColorStream;
             _startDepthStream = startDepthStream;
-            _iconScale = 0.4f;
-            _showConnectKinectAlert = true;
 
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
             DiscoverSensor();
         }
 
-        /// <summary>
-        /// Initializes required objects for this component.
-        /// </summary>
-        public override void Initialize()
-        {
-            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-
-            base.Initialize();
-        }
-
-        /// <summary>
-        /// Loads the textures and fonts.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            _font = Game.Content.Load<SpriteFont>("Fonts/KinectStatus");
-            _iconTexture = Game.Content.Load<Texture2D>("Images/KinectIcon");
-            _backgroundTexture = Game.Content.Load<Texture2D>("Images/KinectBackground");
-
-            base.LoadContent();
-        }
-
-        /// <summary>
-        /// Updates <see cref="KinectChooser"/> for rendering phase.
-        /// </summary>
-        /// <param name="gameTime">The elapsed game time.</param>
-        public override void Update(GameTime gameTime)
+        public void ProcessUpdate()
         {
             if (Sensor != null && Sensor.SkeletonStream.IsEnabled)
             {
@@ -136,78 +96,6 @@ namespace Atomix
                         _skeletons.SetSkeletonData(skeletonData, skeletonFrame.Timestamp);
                     }
                 }
-            }
-
-            if (_showConnectKinectAlert == true || (_lastStatus != KinectStatus.Undefined && _lastStatus != KinectStatus.Disconnected))
-            {
-                // Background
-                _backgroundPosition = new Vector2();
-                _backgroundPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _backgroundTexture.Width / 2;
-                _backgroundPosition.Y = 0;
-
-                // Icon
-                _iconPosition = new Vector2();
-                _iconPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _iconTexture.Width * _iconScale / 2;
-                _iconPosition.Y = 20;
-
-                // Text
-                _description = _lastStatus == KinectStatus.Undefined ? "please connect sensor" : GetStatusDescription(_lastStatus);
-                Vector2 textSize = _font.MeasureString(_description);
-                _textPosition = new Vector2();
-                _textPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - textSize.X / 2;
-                _textPosition.Y = _iconPosition.Y + _iconTexture.Height * _iconScale + 10;
-
-                _drawConnectKinectAlert = true;
-            }
-            else
-            {
-                _drawConnectKinectAlert = false;
-            }
-
-            _ticks++;
-            if (_ticks % 40 == 0)
-            {
-                _ticks = 0;
-                _drawIcon = !_drawIcon;
-            }
-
-            base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// This method renders the current state of the <see cref="KinectChooser"/>.
-        /// </summary>
-        /// <param name="gameTime">The elapsed game time.</param>
-        public override void Draw(GameTime gameTime)
-        {
-            if (Sensor == null || _lastStatus != KinectStatus.Connected)
-            {
-                if (_drawConnectKinectAlert)
-                {
-                    _spriteBatch.Begin();
-
-                    _spriteBatch.Draw(_backgroundTexture, _backgroundPosition, Color.White);
-                    _spriteBatch.DrawString(_font, _description, _textPosition, Color.Black);
-                    if (_drawIcon == true)
-                        _spriteBatch.Draw(_iconTexture, _iconPosition, null, Color.White, 0, Vector2.Zero, _iconScale, SpriteEffects.None, 0);
-
-                    _spriteBatch.End();
-                }
-            }
-
-            base.Draw(gameTime);
-        }
-
-        /// <summary>
-        /// This method ensures that the <see cref="KinectSensor"/> is stopped.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            base.UnloadContent();
-
-            if (Sensor != null)
-            {
-                Sensor.Stop();
             }
         }
 
@@ -228,7 +116,7 @@ namespace Atomix
             DiscoverSensor();
         }
 
-        private string GetStatusDescription(KinectStatus kinectStatus)
+        public string GetStatusDescription(KinectStatus kinectStatus)
         {
             string status = "Unknown";
 
@@ -286,6 +174,9 @@ namespace Atomix
             {
                 _lastStatus = sensor.Status;
 
+                if (KinectStatusChanged != null)
+                    KinectStatusChanged(this, EventArgs.Empty);
+
                 if (sensor.Status == KinectStatus.Connected)
                 {
                     try
@@ -324,6 +215,9 @@ namespace Atomix
                     {
                         _sensor = null;
                         _lastStatus = KinectStatus.Error;
+
+                        if (KinectStatusChanged != null)
+                            KinectStatusChanged(this, EventArgs.Empty);
                     }
                 }
             }
@@ -346,6 +240,14 @@ namespace Atomix
                 sensor.DepthStream.Range = DepthRange.Default;
                 sensor.SkeletonStream.EnableTrackingInNearRange = false;
                 sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_sensor != null)
+            {
+                _sensor.Stop();
             }
         }
     }

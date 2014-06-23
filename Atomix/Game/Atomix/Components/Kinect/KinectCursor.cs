@@ -55,7 +55,7 @@ namespace Atomix.Components
         private Texture2D _colorVideo;
 
 
-        protected KinectChooser _KinectChooser;
+        protected VisualKinectManager _KinectChooser;
         protected Skeletons _skeletons;
 
         public IHandStateTracker HandTracker
@@ -97,7 +97,7 @@ namespace Atomix.Components
             get { return _isHandTracked; }
         }
 
-        public KinectCursor(Game game, KinectChooser chooser)
+        public KinectCursor(Game game, VisualKinectManager chooser)
             : base(game)
         {
             _KinectChooser = chooser;

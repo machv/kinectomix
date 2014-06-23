@@ -29,7 +29,7 @@ namespace Atomix
         private float _renderingScale;
         private Vector2 _renderingOffset;
         private SpriteBatch _spriteBatch;
-        private KinectChooser _chooser;
+        private VisualKinectManager _chooser;
         private Game _game;
         private GraphicsDevice _graphicsDevice;
         private Rectangle _position;
@@ -71,11 +71,11 @@ namespace Atomix
         }
 
         /// <summary>
-        /// Creates new instance of <see cref="KinectChooser"/>.
+        /// Creates new instance of <see cref="VisualKinectManager"/>.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
-        /// <param name="chooser"><see cref="KinectChooser"/> which will be providing video stream.</param>
-        public VideoStreamComponent(Game game, KinectChooser chooser)
+        /// <param name="chooser"><see cref="VisualKinectManager"/> which will be providing video stream.</param>
+        public VideoStreamComponent(Game game, VisualKinectManager chooser)
             : base(game)
         {
             _game = game;

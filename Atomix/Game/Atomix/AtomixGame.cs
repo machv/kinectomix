@@ -24,7 +24,7 @@ namespace Atomix
         GraphicsDeviceManager graphics;
         SpriteBatch _spriteBatch;
         ScreenManager _gameScreenManager;
-        KinectChooser _kinectChooser;
+        VisualKinectManager _kinectChooser;
         VideoStreamComponent _videoStream;
         SkeletonRenderer _skeletonRenderer;
         Gestures _gestures;
@@ -35,7 +35,7 @@ namespace Atomix
         public static GameState State { get { return _state; } }
         KinectCircleCursor _cursor;
 
-        public KinectChooser KinectChooser
+        public VisualKinectManager KinectChooser
         {
             get { return _kinectChooser; }
         }
@@ -120,7 +120,7 @@ namespace Atomix
         {
             IsMouseVisible = true;
 
-            _kinectChooser = new KinectChooser(this, true, true);
+            _kinectChooser = new VisualKinectManager(this, true, true);
             _gestures = new Gestures(this, _kinectChooser.Skeletons, "Content/Gestures/");
             _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectDebugOffset, _scale);
             _cursor = new KinectCircleCursor(this, _kinectChooser) { HideMouseCursorWhenHandTracked = true };

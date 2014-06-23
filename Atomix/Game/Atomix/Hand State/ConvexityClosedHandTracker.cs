@@ -10,7 +10,7 @@ namespace Atomix
     public class ConvexityClosedHandTracker : IHandStateTracker
     {
         private List<Tuple<Point, Point>> _lines = new List<Tuple<Point, Point>>();
-        private KinectChooser _kinectChooser;
+        private VisualKinectManager _kinectChooser;
         private string _textToRender;
         private bool _isHandClosed;
         private Rectangle _handBoundingBox;
@@ -25,7 +25,7 @@ namespace Atomix
             get { return _isHandClosed; }
         }
 
-        public ConvexityClosedHandTracker(KinectChooser chooser)
+        public ConvexityClosedHandTracker(VisualKinectManager chooser)
         {
             _kinectChooser = chooser;
         }

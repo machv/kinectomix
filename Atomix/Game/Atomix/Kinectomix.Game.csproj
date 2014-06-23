@@ -115,12 +115,13 @@
     <Compile Include="Components\Kinect\KinectCircleCursor.cs" />
     <Compile Include="Components\Kinect\KinectCursor.cs" />
     <Compile Include="Components\Common\KinectMessageBox.cs" />
+    <Compile Include="Components\Kinect\KinectManager.cs" />
     <Compile Include="Components\Kinect\VideoStreamComponent.cs" />
     <Compile Include="Hand State\ConvexityClosedHandTracker.cs" />
     <Compile Include="Hand State\IHandStateTracker.cs" />
     <Compile Include="Hand State\InteractionsClosedHandTracker.cs" />
     <Compile Include="Hand State\PressedHandTracker.cs" />
-    <Compile Include="Components\Kinect\KinectChooser.cs" />
+    <Compile Include="Components\Kinect\VisualKinectManager.cs" />
     <Compile Include="Input\KinectInputProvider.cs" />
     <Compile Include="Input\KinectInputState.cs" />
     <Compile Include="KinectInteractionClient.cs" />
