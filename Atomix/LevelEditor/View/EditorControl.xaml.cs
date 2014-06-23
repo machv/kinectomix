@@ -37,7 +37,18 @@ namespace Kinectomix.LevelEditor.View
         {
             InitializeComponent();
 
-            //(DataContext as EditorViewModel).LoadLevel(@"D:\Documents\Workspaces\TFS15\atomix\Atomix\Atomix\AtomixContent\Levels\Level1.xml");
+            Loaded += Control_Loaded;
+        }
+
+        private void Control_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Any())
+            {
+                string[] activationData = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData;
+                var uri = new Uri(activationData[0]);
+
+                (DataContext as EditorViewModel).LoadLevelsDefinition(uri.LocalPath);
+            }
         }
 
         private void OnFileDragOver(object sender, DragEventArgs e)

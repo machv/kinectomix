@@ -80,7 +80,7 @@ namespace Kinectomix.LevelEditor.ViewModel
 
             _exportLevelCommand = new DelegateCommand<LevelViewModel>(ExportLevel);
             _saveAsLevelsDefinitionCommand = new DelegateCommand(SaveAsLevelsDefinition, CanExecuteSaveAsLevelsDefinition);
-            _loadLevelsDefinitionCommand = new DelegateCommand(LoadLevelsDefinition);
+            _loadLevelsDefinitionCommand = new DelegateCommand(DoLoadLevelsDefinition);
             _newLevelsDefinitionCommand = new DelegateCommand(NewLevelsDefinition);
             _addNewLevelCommand = new DelegateCommand(AddNewLevel, CanExecuteAddNewLevel);
             _importLevelCommand = new DelegateCommand(OpenLevelDialog);
@@ -169,7 +169,35 @@ namespace Kinectomix.LevelEditor.ViewModel
             _saveAsLevelsDefinitionCommand.RaiseCanExecuteChanged();
         }
 
-        private void LoadLevelsDefinition()
+        public void LoadLevelsDefinition(string path)
+        {
+            try
+            {
+                XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
+
+                using (Stream stream = File.Open(path, FileMode.Open))
+                {
+                    Levels.Clear();
+                    GameDefinition game = seralizer.Deserialize(stream) as GameDefinition;
+
+                    foreach (Level level in game.Levels)
+                    {
+                        LevelViewModel levelViewModel = LevelViewModel.FromLevel(level, _userFixedAssetsPath, _userAtomAssetsPath);
+
+                        Levels.Add(levelViewModel);
+                    }
+
+                    if (Levels.Count > 0)
+                        Level = Levels[0]; // Select first level
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Unable to load definition from selected file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void DoLoadLevelsDefinition()
         {
             if (IsAnyPendingChange)
             {
@@ -180,30 +208,7 @@ namespace Kinectomix.LevelEditor.ViewModel
 
             if (_gameLevelsFileDialog.OpenFileDialog())
             {
-                try
-                {
-                    XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
-
-                    using (Stream stream = File.Open(_gameLevelsFileDialog.FileName, FileMode.Open))
-                    {
-                        Levels.Clear();
-                        GameDefinition game = seralizer.Deserialize(stream) as GameDefinition;
-
-                        foreach (Level level in game.Levels)
-                        {
-                            LevelViewModel levelViewModel = LevelViewModel.FromLevel(level, _userFixedAssetsPath, _userAtomAssetsPath);
-
-                            Levels.Add(levelViewModel);
-                        }
-
-                        if (Levels.Count > 0)
-                            Level = Levels[0]; // Select first level
-                    }
-                }
-                catch
-                {
-                    MessageBox.Show("Unable to load definition from selected file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                LoadLevelsDefinition(_gameLevelsFileDialog.FileName);
             }
         }
 
