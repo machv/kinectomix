@@ -154,6 +154,10 @@
       <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
       <Name>Kinectomix.Logic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Mach.Xna.Tools\Mach.Xna.csproj">
+      <Project>{80c11a27-fe76-4bb2-9a61-d28afaf8aecd}</Project>
+      <Name>Mach.Xna</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AtomixContent\Kinectomix.Game.Content.contentproj">
       <Name>Kinectomix.Game.Content</Name>
       <XnaReferenceType>Content</XnaReferenceType>

@@ -1,14 +1,12 @@
 ﻿using Atomix.Components;
 using Kinectomix.Logic;
-using Kinectomix.Xna.Components;
 using Kinectomix.Xna.Components.Kinect;
-using Kinectomix.Xna.ScreenManagement;
+using Mach.Xna.Components;
+using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Atomix
 {

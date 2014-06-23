@@ -1,9 +1,9 @@
-﻿using Kinectomix.Xna.Input;
+﻿using Mach.Xna.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Kinectomix.Xna.Components
+namespace Mach.Xna.Components
 {
     /// <summary>
     /// Basic button implementation for use in XNA framework.

@@ -15,11 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelEditor", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.GestureRecorder", "GestureRecorder\Kinectomix.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Wpf.Mvvm", "Wpf.Mvvm\Kinectomix.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Wpf.Mvvm", "Wpf.Mvvm\Mach.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna", "Mach.Xna.Tools\Mach.Xna.csproj", "{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
@@ -35,15 +37,18 @@ Global
 		SccProjectUniqueName4 = Game\\Atomix\\Kinectomix.Game.csproj
 		SccProjectName4 = Game/Atomix
 		SccLocalPath4 = Game\\Atomix
-		SccProjectUniqueName5 = Wpf.Mvvm\\Kinectomix.Wpf.Mvvm.csproj
-		SccProjectName5 = Wpf.Mvvm
-		SccLocalPath5 = Wpf.Mvvm
-		SccProjectUniqueName6 = GestureRecorder\\Kinectomix.GestureRecorder.csproj
-		SccProjectName6 = GestureRecorder
-		SccLocalPath6 = GestureRecorder
-		SccProjectUniqueName7 = LevelEditor\\Kinectomix.LevelEditor.csproj
-		SccProjectName7 = LevelEditor
-		SccLocalPath7 = LevelEditor
+		SccProjectUniqueName5 = GestureRecorder\\Kinectomix.GestureRecorder.csproj
+		SccProjectName5 = GestureRecorder
+		SccLocalPath5 = GestureRecorder
+		SccProjectUniqueName6 = LevelEditor\\Kinectomix.LevelEditor.csproj
+		SccProjectName6 = LevelEditor
+		SccLocalPath6 = LevelEditor
+		SccProjectUniqueName7 = Wpf.Mvvm\\Mach.Wpf.Mvvm.csproj
+		SccProjectName7 = Wpf.Mvvm
+		SccLocalPath7 = Wpf.Mvvm
+		SccProjectUniqueName8 = Mach.Xna.Tools\\Mach.Xna.csproj
+		SccProjectName8 = Mach.Xna.Tools
+		SccLocalPath8 = Mach.Xna.Tools
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +125,16 @@ Global
 		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|x86.ActiveCfg = Release|Any CPU
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Debug|x86.ActiveCfg = Debug|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Debug|x86.Build.0 = Debug|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Release|Any CPU.ActiveCfg = Release|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Release|Mixed Platforms.Build.0 = Release|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Release|x86.ActiveCfg = Release|x86
+		{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

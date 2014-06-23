@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 
-namespace Kinectomix.Xna.ScreenManagement
+namespace Mach.Xna.ScreenManagement
 {
     public abstract class GameScreen : IDisposable
     {

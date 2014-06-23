@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Kinectomix.Xna.Input
+namespace Mach.Xna.Input
 {
     /// <summary>
     /// Handles input from multiple input providers.

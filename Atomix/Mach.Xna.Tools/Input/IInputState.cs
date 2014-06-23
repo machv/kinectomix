@@ -1,4 +1,4 @@
-﻿namespace Kinectomix.Xna.Input
+﻿namespace Mach.Xna.Input
 {
     /// <summary>
     /// Represents a state recorded by a input device.

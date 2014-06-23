@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace Kinectomix.Xna.Input
+namespace Mach.Xna.Input
 {
     /// <summary>
     /// Input provider for mouse state.

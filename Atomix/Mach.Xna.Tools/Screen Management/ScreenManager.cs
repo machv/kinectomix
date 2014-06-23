@@ -1,10 +1,10 @@
-﻿using Kinectomix.Xna.Input;
+﻿using Mach.Xna.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.Generic;
 
-namespace Kinectomix.Xna.ScreenManagement
+namespace Mach.Xna.ScreenManagement
 {
     /// <summary>
     /// Provides basic screen management to the XNA framework. Inspired by the Game State Management demo by Microsoft, http://xbox.create.msdn.com/en-US/education/catalog/sample/game_state_management.

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Atomix.Components.Kinect;
 using Atomix.Components;
+using Mach.Xna.Components;
 
 namespace Kinectomix.Xna.Components.Kinect
 {

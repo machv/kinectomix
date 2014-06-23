@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}</ProjectGuid>
+    <ProjectGuid>{80C11A27-FE76-4BB2-9A61-D28AFAF8AECD}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Kinectomix.Logic</RootNamespace>
-    <AssemblyName>Kinectomix.Logic</AssemblyName>
+    <RootNamespace>Mach.Xna</RootNamespace>
+    <AssemblyName>Mach.Xna</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
-    <XnaCrossPlatformGroupID>6577f655-ad5e-490c-9825-da276c3d0df2</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>67e2e598-fc14-492c-8a53-cda59d0b7ae5</XnaCrossPlatformGroupID>
     <XnaOutputType>Library</XnaOutputType>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -47,21 +47,10 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Kinect, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Microsoft SDKs\Kinect\v1.8\Assemblies\Microsoft.Kinect.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Kinect.Toolkit.Interaction">
-      <HintPath>C:\Program Files\Microsoft SDKs\Kinect\Developer Toolkit v1.8.0\Assemblies\Microsoft.Kinect.Toolkit.Interaction.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Storage.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -74,35 +63,16 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoardTile.cs" />
-    <Compile Include="BondType.cs" />
-    <Compile Include="Bresenham.cs" />
-    <Compile Include="GameDefinition.cs" />
-    <Compile Include="Game\GesturesState.cs" />
-    <Compile Include="Game\GestureType.cs" />
-    <Compile Include="Game\KnownGesture.cs" />
-    <Compile Include="Gestures\DynamicTimeWarping.cs" />
-    <Compile Include="Gestures\GestureFrame.cs" />
-    <Compile Include="Gestures\FrameData.cs" />
-    <Compile Include="Gestures\Gesture.cs" />
-    <Compile Include="Gestures\GestureProcessor.cs" />
-    <Compile Include="Gestures\RecognizedGesture.cs" />
-    <Compile Include="Gestures\RecognizedGestureComparer.cs" />
-    <Compile Include="Gestures\Recognizer.cs" />
-    <Compile Include="Gestures\Recorder.cs" />
-    <Compile Include="SwipeGesturesRecognizer.cs" />
-    <Compile Include="Gestures\TrackingDimension.cs" />
-    <Compile Include="DummyServiceProvider.cs" />
-    <Compile Include="EnumHelper.cs" />
-    <Compile Include="Highscore.cs" />
-    <Compile Include="LevelHighscore.cs" />
-    <Compile Include="TilesCollection.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="Level.cs" />
-    <Compile Include="LevelAsset.cs" />
-    <Compile Include="LevelDefinition.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Components\Button.cs" />
+    <Compile Include="Input\IInputProvider.cs" />
+    <Compile Include="Input\IInputState.cs" />
+    <Compile Include="Input\MouseInputProvider.cs" />
+    <Compile Include="Input\MouseInputState.cs" />
+    <Compile Include="Input\MutipleInputProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializer.cs" />
+    <Compile Include="Screen Management\GameScreen.cs" />
+    <Compile Include="Screen Management\ScreenManager.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

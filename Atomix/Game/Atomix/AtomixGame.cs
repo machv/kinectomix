@@ -3,14 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Kinectomix.Logic;
 using Atomix.Components;
-using Kinectomix.Xna.ScreenManagement;
 using Kinectomix.Xna.Input;
 using Atomix.Components.Kinect;
-using System.Xml.Serialization;
-using System.IO;
-using System.Security.Cryptography;
 using System;
 using AtomixData;
+using Mach.Xna.Input;
+using Mach.Xna.ScreenManagement;
 
 namespace Atomix
 {

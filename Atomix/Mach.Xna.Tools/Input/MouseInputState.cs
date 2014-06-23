@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace Kinectomix.Xna.Input
+namespace Mach.Xna.Input
 {
     /// <summary>
     /// Represents the state of a mouse input device, including mouse cursor position and left button state.

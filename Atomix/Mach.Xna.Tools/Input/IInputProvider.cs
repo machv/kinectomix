@@ -1,4 +1,4 @@
-﻿namespace Kinectomix.Xna.Input
+﻿namespace Mach.Xna.Input
 {
     /// <summary>
     /// Provides interface for reading state of the input method.

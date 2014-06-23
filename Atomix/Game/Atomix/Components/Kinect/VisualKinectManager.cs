@@ -13,8 +13,10 @@ namespace Atomix
         private SpriteBatch _spriteBatch;
         private SpriteFont _font;
         private Texture2D _iconTexture;
+        private Texture2D _connectedKinectTexture;
         private Texture2D _backgroundTexture;
         private bool _showConnectKinectPrompt;
+        private bool _showConnectedKinectIcon;
         private bool _drawConnectKinectAlert;
         private Vector2 _iconPosition;
         private Vector2 _textPosition;
@@ -29,6 +31,12 @@ namespace Atomix
         {
             get { return _showConnectKinectPrompt; }
             set { _showConnectKinectPrompt = value; }
+        }
+
+        public bool ShowConnectedKinectIcon
+        {
+            get { return _showConnectedKinectIcon; }
+            set { _showConnectedKinectIcon = value; }
         }
         /// <summary>
         /// Gets Kinect manager.
@@ -68,6 +76,7 @@ namespace Atomix
         {
             _iconScale = 0.4f;
             _showConnectKinectPrompt = true;
+            _showConnectedKinectIcon = true;
         }
 
         public VisualKinectManager(Game game, KinectManager kinectManager)
@@ -104,6 +113,7 @@ namespace Atomix
             _font = Game.Content.Load<SpriteFont>("Fonts/KinectStatus");
             _iconTexture = Game.Content.Load<Texture2D>("Images/KinectIcon");
             _backgroundTexture = Game.Content.Load<Texture2D>("Images/KinectBackground");
+            _connectedKinectTexture = Game.Content.Load<Texture2D>("Images/ConnectedKinect");
 
             base.LoadContent();
         }
@@ -160,7 +170,7 @@ namespace Atomix
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
-            if (Sensor == null || _manager.LastStatus != KinectStatus.Connected)
+            if (_manager.Sensor == null || _manager.LastStatus != KinectStatus.Connected)
             {
                 if (_drawConnectKinectAlert)
                 {
@@ -171,6 +181,16 @@ namespace Atomix
                     if (_drawIcon == true)
                         _spriteBatch.Draw(_iconTexture, _iconPosition, null, Color.White, 0, Vector2.Zero, _iconScale, SpriteEffects.None, 0);
 
+                    _spriteBatch.End();
+                }
+            }
+
+            if (_manager.Sensor != null && _manager.Sensor.Status == KinectStatus.Connected)
+            {
+                if (_showConnectedKinectIcon == true)
+                {
+                    _spriteBatch.Begin();
+                    _spriteBatch.Draw(_connectedKinectTexture, _iconPosition, null, Color.Green, 0, Vector2.Zero, _iconScale * 0.5f, SpriteEffects.None, 0);
                     _spriteBatch.End();
                 }
             }

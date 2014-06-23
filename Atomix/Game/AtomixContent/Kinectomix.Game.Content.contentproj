@@ -171,6 +171,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Images\ConnectedKinect.png">
+      <Name>ConnectedKinect</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Levels\original_level_02.atx">
       <Name>original_level_02</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

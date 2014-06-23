@@ -5,9 +5,7 @@ using Atomix.ViewModel;
 using AtomixData;
 using Kinectomix.Logic;
 using Kinectomix.Logic.Game;
-using Kinectomix.Xna.Components;
 using Kinectomix.Xna.Components.Kinect;
-using Kinectomix.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -16,6 +14,8 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
 using Kinectomix;
+using Mach.Xna.ScreenManagement;
+using Mach.Xna.Components;
 
 namespace Atomix
 {
