@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:View="clr-namespace:Kinectomix.LevelEditor.View"
         xmlns:ViewModel="clr-namespace:Kinectomix.LevelEditor.ViewModel"
-        Title="Kinectomix Level Editor" Height="650" Width="675" Icon="EditorIcon.ico">
+        Title="Kinectomix Level Editor" Height="650" Width="675" Icon="/FileIcon.ico">
     <Window.DataContext>
         <ViewModel:EditorViewModel/>
     </Window.DataContext>
