@@ -1,6 +1,6 @@
 ﻿using Kinectomix.GestureRecorder.Model;
-using Kinectomix.Logic.Gestures;
 using Kinectomix.Wpf.Mvvm;
+using Mach.Kinect.Gestures;
 using Microsoft.Kinect;
 using System;
 using System.Collections.Concurrent;
@@ -8,9 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
@@ -326,7 +324,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
         }
 
         private DateTime _recordingStarted;
-        private Logic.Gestures.Recorder _recorder;
+        private Recorder _recorder;
         private Recognizer _recognizer;
         private void StartRecording()
         {

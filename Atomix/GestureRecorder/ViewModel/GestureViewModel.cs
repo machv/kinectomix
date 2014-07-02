@@ -1,5 +1,5 @@
-﻿using Kinectomix.Logic.Gestures;
-using Kinectomix.Wpf.Mvvm;
+﻿using Kinectomix.Wpf.Mvvm;
+using Mach.Kinect.Gestures;
 using Microsoft.Kinect;
 using System.Collections.Generic;
 

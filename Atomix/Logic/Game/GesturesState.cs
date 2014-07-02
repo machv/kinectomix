@@ -1,4 +1,4 @@
-using Kinectomix.Logic.Gestures;
+using Mach.Kinect.Gestures;
 using System.Collections.Generic;
 using System.Linq;
 

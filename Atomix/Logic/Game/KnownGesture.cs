@@ -1,4 +1,4 @@
-﻿using Kinectomix.Logic.Gestures;
+﻿using Mach.Kinect.Gestures;
 using Microsoft.Xna.Framework.Content;
 using System;
 using System.Collections.ObjectModel;
