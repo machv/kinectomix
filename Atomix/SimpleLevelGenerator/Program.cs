@@ -140,17 +140,6 @@ namespace SimpleLevelGenerator
       fs, level4, TargetPlatform.Windows, GraphicsProfile.Reach, false/*true*/, fullPath, fullPath
       });
             }
-
-            LevelDefinition[] levels = new LevelDefinition[3];
-
-            levels[0] = new LevelDefinition() { FileName = "Level1.xml", Name = "Level 1" };
-            levels[1] = new LevelDefinition() { FileName = "Level2.xml", Name = "Level 2" };
-            levels[2] = new LevelDefinition() { FileName = "Level4.xnb", Name = "Level 4" };
-
-            using (XmlWriter writer = XmlWriter.Create("../../../Atomix/AtomixContent/Levels.xml", settings))
-            {
-                IntermediateSerializer.Serialize(writer, levels, null);
-            }
         }
     }
 }

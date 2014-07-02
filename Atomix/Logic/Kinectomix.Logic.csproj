@@ -74,24 +74,22 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoardTile.cs" />
-    <Compile Include="BondType.cs" />
+    <Compile Include="Definition\BoardTile.cs" />
+    <Compile Include="Definition\BondType.cs" />
     <Compile Include="Bresenham.cs" />
-    <Compile Include="GameDefinition.cs" />
-    <Compile Include="Game\GesturesState.cs" />
-    <Compile Include="Game\GestureType.cs" />
-    <Compile Include="Game\KnownGesture.cs" />
+    <Compile Include="Definition\GameDefinition.cs" />
+    <Compile Include="Gestures\GesturesState.cs" />
+    <Compile Include="Gestures\GestureType.cs" />
+    <Compile Include="Gestures\KnownGesture.cs" />
     <Compile Include="DummyServiceProvider.cs" />
-    <Compile Include="EnumHelper.cs" />
-    <Compile Include="Highscore.cs" />
-    <Compile Include="LevelHighscore.cs" />
-    <Compile Include="TilesCollection.cs" />
-    <Compile Include="GameState.cs" />
-    <Compile Include="Level.cs" />
-    <Compile Include="LevelAsset.cs" />
-    <Compile Include="LevelDefinition.cs" />
+    <Compile Include="State\Highscore.cs" />
+    <Compile Include="State\LevelHighscore.cs" />
+    <Compile Include="Definition\TilesCollection.cs" />
+    <Compile Include="State\GameState.cs" />
+    <Compile Include="Definition\Level.cs" />
+    <Compile Include="Definition\LevelAsset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializer.cs" />
+    <Compile Include="Definition\Serializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Library\Mach.Kinect\Mach.Kinect.csproj">
