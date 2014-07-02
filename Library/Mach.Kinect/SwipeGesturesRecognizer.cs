@@ -1,34 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Kinect;
 
-namespace Kinectomix.Logic
+namespace Mach.Kinect
 {
-    /// <summary>
-    /// Direction of detected swipe gesture.
-    /// </summary>
-    public enum SwipeDirection
-    {
-        /// <summary>
-        /// Unknown swipe position.
-        /// </summary>
-        Unknown,
-        /// <summary>
-        /// Swipe up.
-        /// </summary>
-        Up,
-        /// <summary>
-        /// Swipe to right.
-        /// </summary>
-        Right,
-        /// <summary>
-        /// Swipe down.
-        /// </summary>
-        Down,
-        /// <summary>
-        /// Swipe to left.
-        /// </summary>
-        Left,
-    }
-
     /// <summary>
     /// Represents recognized swipe gesture.
     /// </summary>
@@ -71,8 +44,8 @@ namespace Kinectomix.Logic
     {
         private bool _verticalCandidate;
         private bool _horizontalCandidate;
-        private Vector3 _startPosition;
-        private Vector3 _previousPosition;
+        private SkeletonPoint _startPosition;
+        private SkeletonPoint _previousPosition;
         private double _previousDiffX;
         private double _previousDiffY;
         private double _totalDistanceX;
@@ -116,7 +89,7 @@ namespace Kinectomix.Logic
         /// </summary>
         /// <param name="startPosition">3D position of start swipe gesture in meters from .</param>
         /// <param name="requiredDistance">Required distance of swipe gestures in meters.</param>
-        public void Start(Vector3 startPosition, double requiredDistance)
+        public void Start(SkeletonPoint startPosition, double requiredDistance)
         {
             _startPosition = startPosition;
             _previousPosition = startPosition;
@@ -135,7 +108,7 @@ namespace Kinectomix.Logic
         /// <param name="position">New position to process, in meters.</param>
         /// <param name="gesture">Recognized gesture.</param>
         /// <returns>True if this added position is valid candidate for swipe gesture. False if position does not belong to swipe gesture.</returns>
-        public bool ProcessPosition(Vector3 position, out SwipeGesture gesture)
+        public bool ProcessPosition(SkeletonPoint position, out SwipeGesture gesture)
         {
             gesture = null;
 
@@ -187,7 +160,7 @@ namespace Kinectomix.Logic
             return true;
         }
 
-        private bool ProcessVerticalDirection(Vector3 position)
+        private bool ProcessVerticalDirection(SkeletonPoint position)
         {
             // Vertical gesture is within tolerance.
             if (position.X < _startPosition.X - _verticalTolerance || position.X > _startPosition.X + _verticalTolerance)
@@ -204,7 +177,7 @@ namespace Kinectomix.Logic
             return true;
         }
 
-        private bool ProcessHorizontalDirection(Vector3 position)
+        private bool ProcessHorizontalDirection(SkeletonPoint position)
         {
             // horizontal gesture is within tolerance
             if (position.Y < _startPosition.Y - _horizontalTolerance || position.Y > _startPosition.Y + _horizontalTolerance)

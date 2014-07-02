@@ -90,7 +90,6 @@
     <Compile Include="Gestures\RecognizedGestureComparer.cs" />
     <Compile Include="Gestures\Recognizer.cs" />
     <Compile Include="Gestures\Recorder.cs" />
-    <Compile Include="SwipeGesturesRecognizer.cs" />
     <Compile Include="Gestures\TrackingDimension.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="EnumHelper.cs" />

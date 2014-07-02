@@ -150,13 +150,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Library\Mach.Kinect\Mach.Kinect.csproj">
+      <Project>{efc015b9-f516-4258-a4fd-759f4933104a}</Project>
+      <Name>Mach.Kinect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Library\Mach.Xna\Mach.Xna.Windows.csproj">
+      <Project>{2b9b0242-de91-4989-9f3e-574feb47fc4c}</Project>
+      <Name>Mach.Xna.Windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Logic\Kinectomix.Logic.csproj">
       <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
       <Name>Kinectomix.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Mach.Xna.Tools\Mach.Xna.csproj">
-      <Project>{80c11a27-fe76-4bb2-9a61-d28afaf8aecd}</Project>
-      <Name>Mach.Xna</Name>
     </ProjectReference>
     <ProjectReference Include="..\AtomixContent\Kinectomix.Game.Content.contentproj">
       <Name>Kinectomix.Game.Content</Name>

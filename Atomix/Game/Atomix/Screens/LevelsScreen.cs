@@ -1,6 +1,7 @@
 ﻿using Atomix.Components;
 using Kinectomix.Logic;
 using Kinectomix.Xna.Components.Kinect;
+using Mach.Kinect;
 using Mach.Xna.Components;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
@@ -109,7 +110,7 @@ namespace Atomix
             if (_cursor.IsHandTracked && xTranslationBuffer == 0)
             {
                 SwipeGesture recognized;
-                if (swipe.ProcessPosition(_cursor.HandRealPosition, out recognized))
+                if (swipe.ProcessPosition(_cursor.HandRealPositionPoint, out recognized))
                 {
                     if (recognized != null)
                     {
@@ -127,7 +128,7 @@ namespace Atomix
                 }
                 else
                 {
-                    swipe.Start(_cursor.HandRealPosition, 0.08);
+                    swipe.Start(_cursor.HandRealPositionPoint, 0.08);
                 }
             }
 

@@ -16,6 +16,7 @@ using System.Linq;
 using Kinectomix;
 using Mach.Xna.ScreenManagement;
 using Mach.Xna.Components;
+using Mach.Kinect;
 
 namespace Atomix
 {
@@ -449,7 +450,7 @@ namespace Atomix
                                 _cursor.Progress = 0;
 
                             // prepare for gesture
-                            _swipeGestures.Start(cursor.HandRealPosition, 0.05);
+                            _swipeGestures.Start(cursor.HandRealPositionPoint, 0.05);
                             _isGestureCandidate = true;
                         }
                     }
@@ -519,7 +520,7 @@ namespace Atomix
                 if (_isGestureCandidate)
                 {
                     SwipeGesture recognizedGesture;
-                    _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandRealPosition, out recognizedGesture);
+                    _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandRealPositionPoint, out recognizedGesture);
                     if (recognizedGesture != null)
                     {
                         MoveDirection direction = SwipeToMoveDirection(recognizedGesture.Direction);
