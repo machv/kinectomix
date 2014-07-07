@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Microsoft.Kinect;
 using Mach.Kinect.Gestures;
+using Mach.Kinect;
 
 namespace Atomix.Components
 {

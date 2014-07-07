@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect;
+using Mach.Xna.Kinect;
 
 namespace Atomix
 {

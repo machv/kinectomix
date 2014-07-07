@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Mach.Xna.Kinect;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Atomix.Components.Kinect

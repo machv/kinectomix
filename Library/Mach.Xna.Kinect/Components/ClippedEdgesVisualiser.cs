@@ -2,8 +2,10 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect;
+using Mach.Kinect;
+using Microsoft.Xna.Framework.Content;
 
-namespace Atomix.Components
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Visualises clipped edges of currently tracked Skeleton from Kinect sensor.
@@ -29,6 +31,7 @@ namespace Atomix.Components
         private Vector2 _bottomEdgePosition;
         private Vector2 _leftEdgePosition;
         private Vector2 _rightEdgePosition;
+        private ContentManager _content;
 
         /// <summary>
         /// Gets or sets width of edge displayed when part of skeleton is clipped.
@@ -49,6 +52,20 @@ namespace Atomix.Components
             : base(game)
         {
             _skeletons = skeletons;
+            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+        }
+
+        /// <summary>
+        /// Creates new instance of clipped edge visualiser.
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="skeletons"></param>
+        /// <param name="content">ContentManager containing required assets.</param>
+        public ClippedEdgesVisualiser(Game game, Skeletons skeletons, ContentManager content)
+            : base(game)
+        {
+            _skeletons = skeletons;
+            _content = content;
         }
 
         /// <summary>
@@ -66,7 +83,7 @@ namespace Atomix.Components
         /// </summary>
         protected override void LoadContent()
         {
-            _edgeTexture = Game.Content.Load<Texture2D>("Images/Edge");
+            _edgeTexture = _content.Load<Texture2D>("Edge");
 
             InitializeEdges();
 

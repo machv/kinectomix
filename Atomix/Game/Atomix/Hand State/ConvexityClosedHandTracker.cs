@@ -1,4 +1,5 @@
 ﻿using AtomixData;
+using Mach.Xna.Kinect;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

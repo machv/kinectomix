@@ -20,12 +20,19 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Windows", "..\Library\Mach.Xna\Mach.Xna.Windows.csproj", "{2B9B0242-DE91-4989-9F3E-574FEB47FC4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Kinect.Windows", "..\Library\Mach.Xna.Kinect\Mach.Xna.Kinect.Windows.csproj", "{9F5B44D8-6E3B-40B6-B89D-EE3AC01E6660}"
+	ProjectSection(ProjectDependencies) = postProject
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA} = {60EC2377-558D-49A4-BF8A-992D0DA1C9DA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect", "..\Library\Mach.Kinect\Mach.Kinect.csproj", "{EFC015B9-F516-4258-A4FD-759F4933104A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Kinect.ContentCompile", "..\Library\Mach.Xna.Kinect.ContentCompile\Mach.Xna.Kinect.ContentCompile.csproj", "{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "Mach.Xna.Kinect.Content", "..\Library\Mach.Xna.Kinect.Content\Mach.Xna.Kinect.Content.contentproj", "{486929D8-978B-4DBB-A838-5B2439DF7047}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
@@ -59,6 +66,12 @@ Global
 		SccProjectUniqueName10 = ..\\Library\\Mach.Kinect\\Mach.Kinect.csproj
 		SccProjectName10 = ../Library/Mach.Kinect
 		SccLocalPath10 = ..\\Library\\Mach.Kinect
+		SccProjectUniqueName11 = ..\\Library\\Mach.Xna.Kinect.Content\\Mach.Xna.Kinect.ContentCompile.csproj
+		SccProjectName11 = ../Library/Mach.Xna.Kinect.Content
+		SccLocalPath11 = ..\\Library\\Mach.Xna.Kinect.Content
+		SccProjectUniqueName12 = ..\\Library\\Mach.Xna.Kinect.Content\\Mach.Xna.Kinect.Content.contentproj
+		SccProjectName12 = ../Library/Mach.Xna.Kinect.Content
+		SccLocalPath12 = ..\\Library\\Mach.Xna.Kinect.Content
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -191,6 +204,26 @@ Global
 		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|x86.ActiveCfg = Release|Any CPU
 		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|Xbox 360.ActiveCfg = Release|Any CPU
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|x86.ActiveCfg = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|x86.Build.0 = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|Xbox 360.ActiveCfg = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|Any CPU.ActiveCfg = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|Mixed Platforms.Build.0 = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|x86.ActiveCfg = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|x86.Build.0 = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|Xbox 360.ActiveCfg = Release|x86
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Debug|Xbox 360.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Release|x86.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Release|Xbox 360.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

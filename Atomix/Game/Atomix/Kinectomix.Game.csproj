@@ -109,7 +109,6 @@
     <Compile Include="Components\Common\MessageBoxEventArgs.cs" />
     <Compile Include="Components\Common\MessageBoxResult.cs" />
     <Compile Include="Components\Kinect\KinectButton.cs" />
-    <Compile Include="Components\Kinect\ClippedEdgesVisualiser.cs" />
     <Compile Include="Components\Common\FrameRateInfo.cs" />
     <Compile Include="Components\Kinect\Gestures.cs" />
     <Compile Include="Components\Kinect\KinectCircleCursor.cs" />
@@ -120,7 +119,6 @@
     <Compile Include="Hand State\IHandStateTracker.cs" />
     <Compile Include="Hand State\InteractionsClosedHandTracker.cs" />
     <Compile Include="Hand State\PressedHandTracker.cs" />
-    <Compile Include="Components\Kinect\VisualKinectManager.cs" />
     <Compile Include="Input\KinectInputProvider.cs" />
     <Compile Include="Input\KinectInputState.cs" />
     <Compile Include="KinectInteractionClient.cs" />
@@ -151,6 +149,10 @@
     <ProjectReference Include="..\..\..\Library\Mach.Kinect\Mach.Kinect.csproj">
       <Project>{efc015b9-f516-4258-a4fd-759f4933104a}</Project>
       <Name>Mach.Kinect</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Library\Mach.Xna.Kinect\Mach.Xna.Kinect.Windows.csproj">
+      <Project>{9f5b44d8-6e3b-40b6-b89d-ee3ac01e6660}</Project>
+      <Name>Mach.Xna.Kinect.Windows</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Library\Mach.Xna\Mach.Xna.Windows.csproj">
       <Project>{2b9b0242-de91-4989-9f3e-574feb47fc4c}</Project>

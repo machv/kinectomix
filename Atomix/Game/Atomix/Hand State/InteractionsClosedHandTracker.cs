@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect.Toolkit.Interaction;
 using System.Linq;
+using Mach.Xna.Kinect;
 
 namespace Atomix
 {

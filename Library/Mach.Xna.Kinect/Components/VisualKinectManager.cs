@@ -1,9 +1,10 @@
-﻿using Kinectomix.Components.Kinect;
+﻿using Mach.Kinect;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Atomix
+namespace Mach.Xna.Kinect
 {
     /// <summary>
     /// Handles Kinect sensor initialization.
@@ -26,6 +27,7 @@ namespace Atomix
         private bool _drawIcon;
         private short _ticks;
         private KinectManager _manager;
+        private ContentManager _content;
 
         public bool ShowConnectKinectPrompt
         {
@@ -71,6 +73,16 @@ namespace Atomix
             get { return _manager.LastStatus; }
         }
 
+        /// <summary>
+        /// Gets or sets <see cref="SpriteFont"/> that is used for rendering status information.
+        /// </summary>
+        /// <returns>Font used for rendering status information.</returns>
+        public SpriteFont Font
+        {
+            get { return _font; }
+            set { _font = value; }
+        }
+
         VisualKinectManager(Game game)
             : base(game)
         {
@@ -83,6 +95,7 @@ namespace Atomix
            : this(game)
         {
             _manager = kinectManager;
+            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
         }
 
         /// <summary>
@@ -93,6 +106,19 @@ namespace Atomix
             : this(game)
         {
             _manager = new KinectManager(startColorStream, startDepthStream);
+            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+        }
+
+        /// <summary>
+        /// Creates new instance of <see cref="VisualKinectManager"/>.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="content">ContentManager containing required assets.</param>
+        public VisualKinectManager(Game game, ContentManager content, bool startColorStream, bool startDepthStream)
+            : this(game)
+        {
+            _manager = new KinectManager(startColorStream, startDepthStream);
+            _content = content;
         }
 
         /// <summary>
@@ -110,10 +136,10 @@ namespace Atomix
         /// </summary>
         protected override void LoadContent()
         {
-            _font = Game.Content.Load<SpriteFont>("Fonts/KinectStatus");
-            _iconTexture = Game.Content.Load<Texture2D>("Images/KinectIcon");
-            _backgroundTexture = Game.Content.Load<Texture2D>("Images/KinectBackground");
-            _connectedKinectTexture = Game.Content.Load<Texture2D>("Images/ConnectedKinect");
+            _font = _content.Load<SpriteFont>("KinectStatusFont");
+            _iconTexture = _content.Load<Texture2D>("KinectIcon");
+            _backgroundTexture = _content.Load<Texture2D>("KinectBackground");
+            _connectedKinectTexture = _content.Load<Texture2D>("ConnectedKinect");
 
             base.LoadContent();
         }
