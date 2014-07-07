@@ -103,6 +103,16 @@ namespace Mach.Xna.Kinect {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] HandCircle {
+            get {
+                object obj = ResourceManager.GetObject("HandCircle", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] Joint {
             get {
                 object obj = ResourceManager.GetObject("Joint", resourceCulture);

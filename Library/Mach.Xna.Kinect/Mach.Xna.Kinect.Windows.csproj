@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Bresenham.cs" />
     <Compile Include="Components\ClippedEdgesVisualiser.cs" />
+    <Compile Include="Components\KinectCircleCursor.cs" />
     <Compile Include="Components\KinectCursor.cs" />
     <Compile Include="Components\SkeletonRenderer.cs" />
     <Compile Include="Components\VideoStreamComponent.cs" />
@@ -109,6 +110,7 @@
     <None Include="Resources\ConnectedKinect.xnb" />
     <None Include="Resources\Edge.xnb" />
     <None Include="Resources\Hand.xnb" />
+    <None Include="Resources\HandCircle.xnb" />
     <None Include="Resources\Joint.xnb" />
     <None Include="Resources\KinectBackground.xnb" />
     <None Include="Resources\KinectIcon.xnb" />

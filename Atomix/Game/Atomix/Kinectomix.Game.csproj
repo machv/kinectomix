@@ -110,7 +110,6 @@
     <Compile Include="Components\Kinect\KinectButton.cs" />
     <Compile Include="Components\Common\FrameRateInfo.cs" />
     <Compile Include="Components\Kinect\Gestures.cs" />
-    <Compile Include="Components\Kinect\KinectCircleCursor.cs" />
     <Compile Include="Components\Common\KinectMessageBox.cs" />
     <Compile Include="Input\KinectInputProvider.cs" />
     <Compile Include="Input\KinectInputState.cs" />

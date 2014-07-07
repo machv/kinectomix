@@ -102,6 +102,7 @@ namespace Atomix
             _pointMapping = pointMapping;
             _offset = offset;
             _scale = scale;
+            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
         }
 
         /// <summary>

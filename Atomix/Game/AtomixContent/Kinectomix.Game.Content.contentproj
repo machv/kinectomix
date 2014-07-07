@@ -132,11 +132,6 @@
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>
-    <Compile Include="Images\HandCircle.png">
-      <Name>HandCircle</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Content Include="Levels\original_level_02.atx">
       <Name>original_level_02</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

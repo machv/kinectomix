@@ -1,6 +1,7 @@
 ﻿using Mach.Xna;
 using Mach.Xna.Kinect;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Atomix.Components.Kinect
@@ -13,6 +14,7 @@ namespace Atomix.Components.Kinect
         private int _frame;
         private int _framesCount;
         private Vector2 _circlePosition;
+        private ContentManager _content;
 
         public double Progress
         {
@@ -33,6 +35,13 @@ namespace Atomix.Components.Kinect
         public KinectCircleCursor(Game game, VisualKinectManager chooser) : base(game, chooser)
         {
             _animatedCircle = new AnimatedTexture(Vector2.Zero, 0, 0.5f);
+            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+        }
+
+        public KinectCircleCursor(Game game, ContentManager content, VisualKinectManager chooser) : base(game, chooser)
+        {
+            _animatedCircle = new AnimatedTexture(Vector2.Zero, 0, 0.5f);
+            _content = content;
         }
 
         protected override void LoadContent()
@@ -40,7 +49,7 @@ namespace Atomix.Components.Kinect
             base.LoadContent();
 
             _framesCount = 18;
-            _cicle = Game.Content.Load<Texture2D>("Images/HandCircle");
+            _cicle = _content.Load<Texture2D>("HandCircle");
             _animatedCircle.Load(_cicle, _framesCount, _framesCount);
         }
 
