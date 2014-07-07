@@ -58,7 +58,9 @@
     <Compile Include="Gestures\Recognizer.cs" />
     <Compile Include="Gestures\Recorder.cs" />
     <Compile Include="Gestures\TrackingDimension.cs" />
+    <Compile Include="KinectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Skeletons.cs" />
     <Compile Include="SwipeDirection.cs" />
     <Compile Include="SwipeGesturesRecognizer.cs" />
   </ItemGroup>

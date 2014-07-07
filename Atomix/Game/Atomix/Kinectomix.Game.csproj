@@ -115,7 +115,6 @@
     <Compile Include="Components\Kinect\KinectCircleCursor.cs" />
     <Compile Include="Components\Kinect\KinectCursor.cs" />
     <Compile Include="Components\Common\KinectMessageBox.cs" />
-    <Compile Include="Components\Kinect\KinectManager.cs" />
     <Compile Include="Components\Kinect\VideoStreamComponent.cs" />
     <Compile Include="Hand State\ConvexityClosedHandTracker.cs" />
     <Compile Include="Hand State\IHandStateTracker.cs" />
@@ -134,7 +133,6 @@
     <Compile Include="Screens\LevelsScreen.cs" />
     <Compile Include="Screens\StartScreen.cs" />
     <Compile Include="Components\Kinect\SkeletonRenderer.cs" />
-    <Compile Include="Skeletons.cs" />
     <Compile Include="SpriteBatchExtensions.cs" />
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\Direction.cs" />

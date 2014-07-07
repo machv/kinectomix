@@ -1,12 +1,7 @@
-﻿using Atomix;
-using Microsoft.Kinect;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Kinect;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Kinectomix.Components.Kinect
+namespace Mach.Kinect
 {
     /// <summary>
     /// Handles Kinect sensor initialization.
