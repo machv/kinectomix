@@ -6,7 +6,7 @@ using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Atomix
+namespace Mach.Xna.Kinect.HandState
 {
     public class HoverHandTracker : IHandStateTracker
     {

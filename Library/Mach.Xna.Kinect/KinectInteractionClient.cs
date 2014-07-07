@@ -1,10 +1,6 @@
 ﻿using Microsoft.Kinect.Toolkit.Interaction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Atomix
+namespace Mach.Xna.Kinect
 {
     //http://blogs.msdn.com/b/k4wdev/archive/2013/05/01/using-kinect-interactionstream-outside-of-wpf.aspx
     /// <summary>

@@ -1,12 +1,11 @@
-﻿using AtomixData;
-using Mach.Xna.Kinect;
+﻿using Mach.Xna.Kinect.Algorithms;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace Atomix
+namespace Mach.Xna.Kinect.HandState
 {
     public class ConvexityClosedHandTracker : IHandStateTracker
     {
@@ -359,7 +358,7 @@ namespace Atomix
 
         private int GetLineParts(Point start, Point end, short[] frame, int stride, int realDepth, int tolerance)
         {
-            _lines.Add(Tuple.Create<Point, Point>(start, end));
+            _lines.Add(Tuple.Create(start, end));
 
             int changes = 0;
             int previousPixel = 0;

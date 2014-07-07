@@ -17,6 +17,7 @@ using Kinectomix;
 using Mach.Xna.ScreenManagement;
 using Mach.Xna.Components;
 using Mach.Kinect;
+using Mach.Xna.Kinect;
 
 namespace Atomix
 {

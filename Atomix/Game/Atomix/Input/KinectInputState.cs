@@ -1,5 +1,6 @@
 ﻿using Atomix.Components;
 using Mach.Xna.Input;
+using Mach.Xna.Kinect;
 
 namespace Kinectomix.Xna.Input
 {

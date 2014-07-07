@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Kinectomix.Xna.Components.Kinect;
 using Mach.Xna.Input;
 using Mach.Xna.Components;
+using Mach.Xna.Kinect;
 
 namespace Atomix.Components.Common
 {

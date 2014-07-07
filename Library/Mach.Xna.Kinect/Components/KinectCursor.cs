@@ -1,12 +1,14 @@
 ﻿using Mach.Kinect;
 using Mach.Xna.Kinect;
+using Mach.Xna.Kinect.HandState;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 
-namespace Atomix.Components
+namespace Mach.Xna.Kinect
 {
     public enum HandMovementTracking
     {
@@ -32,6 +34,7 @@ namespace Atomix.Components
         private string _textToRender;
         private IHandStateTracker _handTracker;
         private bool _hideMouseCursorWhenHandTracked;
+        private ContentManager _content;
 
         Vector2 cursorPosition;
         Vector2 cursorPositionInteraction;
@@ -101,6 +104,12 @@ namespace Atomix.Components
             get { return _isHandTracked; }
         }
 
+        public Texture2D HandTexture
+        {
+            get { return _handTexture; }
+            set { _handTexture = value; }
+        }
+
         public KinectCursor(Game game, VisualKinectManager chooser)
             : base(game)
         {
@@ -113,12 +122,28 @@ namespace Atomix.Components
 
             cursorPositionsBuffer = new Vector2[CursorPositionsBufferLenth];
             cursorPositionsBufferIndex = -1;
+            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+        }
+
+        public KinectCursor(Game game, ContentManager content, VisualKinectManager chooser)
+            : base(game)
+        {
+            _KinectChooser = chooser;
+            _skeletons = chooser.Skeletons;
+            _renderOffset = Vector2.Zero;
+            _scale = 1;
+
+            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+
+            cursorPositionsBuffer = new Vector2[CursorPositionsBufferLenth];
+            cursorPositionsBufferIndex = -1;
+            _content = content;
         }
 
         protected override void LoadContent()
         {
-            _handTexture = Game.Content.Load<Texture2D>("Images/Hand");
-            _font = Game.Content.Load<SpriteFont>("Fonts/Normal");
+            _handTexture = _content.Load<Texture2D>("Hand");
+            _font = _content.Load<SpriteFont>("Normal");
 
             base.LoadContent();
         }

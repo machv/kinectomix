@@ -1,9 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect;
-using Mach.Xna.Kinect;
 
-namespace Atomix
+namespace Mach.Xna.Kinect
 {
     /// <summary>
     /// Type of stream from the Kinect sensor.

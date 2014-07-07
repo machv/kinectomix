@@ -83,6 +83,16 @@ namespace Mach.Xna.Kinect {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] Hand {
+            get {
+                object obj = ResourceManager.GetObject("Hand", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] KinectBackground {
             get {
                 object obj = ResourceManager.GetObject("KinectBackground", resourceCulture);
@@ -106,6 +116,16 @@ namespace Mach.Xna.Kinect {
         public static byte[] KinectStatusFont {
             get {
                 object obj = ResourceManager.GetObject("KinectStatusFont", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] NormalFont {
+            get {
+                object obj = ResourceManager.GetObject("NormalFont", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Atomix
+namespace Mach.Xna.Kinect.HandState
 {
     public interface IHandStateTracker
     {

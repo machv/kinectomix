@@ -63,6 +63,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimatedTexture.cs" />
     <Compile Include="Components\Button.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\IInputState.cs" />

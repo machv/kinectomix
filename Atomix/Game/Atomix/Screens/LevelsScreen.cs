@@ -3,6 +3,7 @@ using Kinectomix.Logic;
 using Kinectomix.Xna.Components.Kinect;
 using Mach.Kinect;
 using Mach.Xna.Components;
+using Mach.Xna.Kinect;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

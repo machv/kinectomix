@@ -6,7 +6,7 @@ using Microsoft.Kinect.Toolkit.Interaction;
 using System.Linq;
 using Mach.Xna.Kinect;
 
-namespace Atomix
+namespace Mach.Xna.Kinect.HandState
 {
     public class InteractionsClosedHandTracker : IHandStateTracker
     {

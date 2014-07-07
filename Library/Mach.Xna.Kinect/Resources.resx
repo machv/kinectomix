@@ -124,6 +124,9 @@
   <data name="Edge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Edge.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Hand" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Hand.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="KinectBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\KinectBackground.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -132,5 +135,8 @@
   </data>
   <data name="KinectStatusFont" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\KinectStatusFont.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NormalFont" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\NormalFont.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
