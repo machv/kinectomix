@@ -63,6 +63,16 @@ namespace Mach.Xna.Kinect {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] Bone {
+            get {
+                object obj = ResourceManager.GetObject("Bone", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] ConnectedKinect {
             get {
                 object obj = ResourceManager.GetObject("ConnectedKinect", resourceCulture);
@@ -86,6 +96,16 @@ namespace Mach.Xna.Kinect {
         public static byte[] Hand {
             get {
                 object obj = ResourceManager.GetObject("Hand", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Joint {
+            get {
+                object obj = ResourceManager.GetObject("Joint", resourceCulture);
                 return ((byte[])(obj));
             }
         }

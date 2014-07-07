@@ -1,6 +1,7 @@
 ﻿using Mach.Xna.Kinect;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -20,6 +21,7 @@ namespace Atomix
         private Vector2 _offset;
         private float _scale;
         private readonly SkeletonPointMap _pointMapping;
+        private ContentManager _content;
 
         /// <summary>
         /// A delegate method explaining how to map a SkeletonPoint from one space to another.
@@ -82,6 +84,7 @@ namespace Atomix
             _pointMapping = SkeletonToColorMap;
             _offset = offset;
             _scale = scale;
+            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
         }
 
         /// <summary>
@@ -118,10 +121,10 @@ namespace Atomix
         {
             base.LoadContent();
 
-            _jointTexture = Game.Content.Load<Texture2D>("Images/Joint");
+            _jointTexture = _content.Load<Texture2D>("Joint");
             _jointOrigin = new Vector2(_jointTexture.Width * _scale, _jointTexture.Height * _scale);
 
-            _boneTexture = Game.Content.Load<Texture2D>("Images/Bone");
+            _boneTexture = _content.Load<Texture2D>("Bone");
             _boneOrigin = new Vector2(0.5f, 0.0f);
         }
 

@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Bone" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Bone.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="ConnectedKinect" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ConnectedKinect.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -126,6 +129,9 @@
   </data>
   <data name="Hand" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Hand.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Joint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Joint.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="KinectBackground" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\KinectBackground.xnb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

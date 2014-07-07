@@ -73,6 +73,7 @@
     <Compile Include="Algorithms\Bresenham.cs" />
     <Compile Include="Components\ClippedEdgesVisualiser.cs" />
     <Compile Include="Components\KinectCursor.cs" />
+    <Compile Include="Components\SkeletonRenderer.cs" />
     <Compile Include="Components\VideoStreamComponent.cs" />
     <Compile Include="Components\VisualKinectManager.cs" />
     <Compile Include="Hand State\ConvexityClosedHandTracker.cs" />
@@ -104,9 +105,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Bone.xnb" />
     <None Include="Resources\ConnectedKinect.xnb" />
     <None Include="Resources\Edge.xnb" />
     <None Include="Resources\Hand.xnb" />
+    <None Include="Resources\Joint.xnb" />
     <None Include="Resources\KinectBackground.xnb" />
     <None Include="Resources\KinectIcon.xnb" />
     <None Include="Resources\KinectStatusFont.xnb" />
