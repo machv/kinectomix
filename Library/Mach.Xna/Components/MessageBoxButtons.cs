@@ -1,4 +1,4 @@
-﻿namespace Atomix.Components.Common
+﻿namespace Mach.Xna.Components
 {
     /// <summary>
     /// Specifies constants defining which buttons to display on a MessageBox.

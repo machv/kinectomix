@@ -76,6 +76,7 @@
     <Compile Include="Components\KinectButton.cs" />
     <Compile Include="Components\KinectCircleCursor.cs" />
     <Compile Include="Components\KinectCursor.cs" />
+    <Compile Include="Components\KinectMessageBox.cs" />
     <Compile Include="Components\SkeletonRenderer.cs" />
     <Compile Include="Components\VideoStreamComponent.cs" />
     <Compile Include="Components\VisualKinectManager.cs" />

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Atomix.Components.Common
+namespace Mach.Xna.Components
 {
     /// <summary>
     /// Provides data for the <see cref="KinectMessageBox.Changed"/> event.

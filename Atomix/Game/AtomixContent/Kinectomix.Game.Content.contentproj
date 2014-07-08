@@ -114,11 +114,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HandAnimation.png">
-      <Name>HandAnimation</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Images\Dot.png">
       <Name>Dot</Name>
       <Importer>TextureImporter</Importer>
@@ -136,10 +131,6 @@
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>
-    <Content Include="Levels\original_level_02.atx">
-      <Name>original_level_02</Name>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gestures\LeftHandUp.gst">

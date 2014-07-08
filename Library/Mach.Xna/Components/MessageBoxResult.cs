@@ -1,4 +1,4 @@
-﻿namespace Atomix.Components.Common
+﻿namespace Mach.Xna.Components
 {
     /// <summary>
     /// Specifies identifiers to indicate the return value of a message box.

@@ -1,16 +1,11 @@
-using System;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mach.Xna.Input;
-using Mach.Xna.Components;
-using Mach.Xna.Kinect.Components;
 
-namespace Atomix.Components.Common
+namespace Mach.Xna.Components
 {
-    /// <summary>
-    /// This is a game component that implements IUpdateable.
-    /// </summary>
-    public class KinectMessageBox : DrawableGameComponent
+    public abstract class MessageBoxBase : DrawableGameComponent
     {
         private SpriteFont _font;
         private bool _isVisible;
@@ -27,15 +22,15 @@ namespace Atomix.Components.Common
         private Rectangle _innerBox;
         private Vector2 _fontSize;
         private Vector2 _textPosition;
-        private KinectCursor _cursor;
-        private KinectButton _buttonOk;
-        private KinectButton _buttonCancel;
-        private KinectButton _buttonYes;
-        private KinectButton _buttonNo;
         private int _buttonWidth;
         private int _buttonHeight;
         private Button[] _renderedButtons;
         private IInputProvider _inputProvider;
+
+        protected Button _buttonOk;
+        protected Button _buttonCancel;
+        protected Button _buttonYes;
+        protected Button _buttonNo;
 
         /// <summary>
         /// Gets or sets font used for rendering texts in message box.
@@ -106,20 +101,29 @@ namespace Atomix.Components.Common
             get { return _buttonSpace; }
             set { _buttonSpace = value; }
         }
+        public int ButtonsWidth
+        {
+            get { return _buttonWidth; }
+            set { _buttonWidth = value; }
+        }
+        public int ButtonsHeight
+        {
+            get { return _buttonHeight; }
+            set { _buttonHeight = value; }
+        }
+        public IInputProvider InputProvider
+        {
+            get { return _inputProvider; }
+        }
 
         /// Occurs when a result inside <see cref="KinectMessageBox"/> is selected.
         public event EventHandler<MessageBoxEventArgs> Changed;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="KinectMessageBox"/> component.
-        /// </summary>
-        /// <param name="game">Game containing this component.</param>
-        /// <param name="cursor">Kinect cursor used in game.</param>
-        public KinectMessageBox(Game game, IInputProvider inputProvider, KinectCursor cursor)
+        protected MessageBoxBase(Game game, IInputProvider inputProvider)
             : base(game)
         {
             _inputProvider = inputProvider;
-            _cursor = cursor;
+
             _borderWidth = 4;
             _height = 250;
             _buttonWidth = 130;
@@ -144,10 +148,6 @@ namespace Atomix.Components.Common
         public override void Initialize()
         {
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-            _buttonOk = new KinectButton(Game, _cursor, "OK") { Tag = MessageBoxResult.OK, Width = _buttonWidth, Height = _buttonHeight, InputProvider = _inputProvider, Background = Color.DarkGray, BorderColor = Color.White };
-            _buttonCancel = new KinectButton(Game, _cursor, "Cancel") { Tag = MessageBoxResult.Cancel, Width = _buttonWidth, Height = _buttonHeight, InputProvider = _inputProvider, Background = Color.DarkGray, BorderColor = Color.White };
-            _buttonYes = new KinectButton(Game, _cursor, "Yes") { Tag = MessageBoxResult.Yes, Width = _buttonWidth, Height = _buttonHeight, InputProvider = _inputProvider, Background = Color.DarkGray, BorderColor = Color.White };
-            _buttonNo = new KinectButton(Game, _cursor, "No") { Tag = MessageBoxResult.No, Width = _buttonWidth, Height = _buttonHeight, InputProvider = _inputProvider, Background = Color.DarkGray, BorderColor = Color.White };
 
             _buttonOk.Selected += _button_Selected;
             _buttonCancel.Selected += _button_Selected;

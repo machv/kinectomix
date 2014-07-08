@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Atomix.Components
+namespace Mach.Xna.Components
 {
     /// <summary>
     /// Component that displays current frame rate of the game.
@@ -28,14 +28,23 @@ namespace Atomix.Components
         }
 
         /// <summary>
-        /// Creates new instance of frame rate component.
+        /// Creates new instance of <see cref="FrameRateInfo"/> component.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
         public FrameRateInfo(Game game)
             : base(game)
         {
-            _content = new ContentManager(game.Services);
-            _content.RootDirectory = "Content";
+            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+        }
+
+        /// <summary>
+        /// Creates new instance of <see cref="FrameRateInfo"/> component.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        public FrameRateInfo(Game game, ContentManager contentManager)
+            : base(game)
+        {
+            _content = contentManager;
         }
 
         /// <summary>
@@ -44,7 +53,7 @@ namespace Atomix.Components
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _font = _content.Load<SpriteFont>("Fonts/Normal");
+            _font = _content.Load<SpriteFont>("NormalFont");
         }
 
         /// <summary>

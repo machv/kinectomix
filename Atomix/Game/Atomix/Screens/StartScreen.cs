@@ -1,5 +1,6 @@
 ﻿using Atomix.Components.Common;
 using Kinectomix.Logic;
+using Mach.Xna.Components;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;

@@ -1,10 +1,7 @@
-﻿using Atomix.ViewModel;
-using Kinectomix.Logic;
+﻿using Kinectomix.Logic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Storage;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Xml.Serialization;

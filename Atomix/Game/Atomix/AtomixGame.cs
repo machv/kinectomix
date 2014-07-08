@@ -8,6 +8,7 @@ using AtomixData;
 using Mach.Xna.Input;
 using Mach.Xna.ScreenManagement;
 using Mach.Xna.Kinect.Components;
+using Mach.Xna.Components;
 
 namespace Atomix
 {
