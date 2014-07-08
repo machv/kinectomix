@@ -275,7 +275,7 @@ namespace Mach.Xna.Components
             if (buttons == null)
                 throw new ArgumentNullException("buttons");
 
-            foreach (Button button in _renderedButtons)
+            foreach (Button button in buttons)
             {
                 button.Selected += button_Selected;
 

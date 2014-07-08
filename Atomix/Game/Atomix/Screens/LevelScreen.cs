@@ -247,7 +247,16 @@ namespace Atomix
         private void PauseGame()
         {
             _isPaused = true;
-            _pauseMessageBox.Show("game paused");
+
+            KinectButton[] buttons = new KinectButton[] {
+                new KinectButton(ScreenManager.Game, _cursor, "main menu") { Tag = MessageBoxResult.Custom1, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
+                new KinectButton(ScreenManager.Game, _cursor, "continue") { Tag = MessageBoxResult.OK, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
+            };
+
+            foreach (Button button in buttons)
+                button.Initialize();
+
+            _pauseMessageBox.Show("game paused", buttons);
         }
 
         private DateTime lastDate;
