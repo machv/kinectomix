@@ -275,14 +275,18 @@ namespace Mach.Xna.Components
             if (buttons == null)
                 throw new ArgumentNullException("buttons");
 
-            _isVisible = true;
-            _text = text;
-            _renderedButtons = buttons;
-
             foreach (Button button in _renderedButtons)
             {
                 button.Selected += button_Selected;
+
+                // If no input provider is set use default.
+                if (button.InputProvider == null)
+                    button.InputProvider = _inputProvider;
             }
+
+            _text = text;
+            _renderedButtons = buttons;
+            _isVisible = true;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using Mach.Xna.Input;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -228,6 +229,13 @@ namespace Mach.Xna.Components
         public override void Initialize()
         {
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+
+            if (_font == null)
+            {
+                // Loads default font from library resources.
+                ContentManager content = new ResourceContentManager(Game.Services, Resources.ResourceManager);
+                _font = content.Load<SpriteFont>("NormalFont");
+            }
 
             base.Initialize();
         }
