@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="AnimatedTexture.cs" />
     <Compile Include="Components\Button.cs" />
+    <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\IInputState.cs" />
     <Compile Include="Input\MouseInputProvider.cs" />

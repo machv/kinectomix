@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.Kinect;
+﻿using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect.Toolkit.Interaction;
 using System.Linq;
-using Mach.Xna.Kinect;
+using Mach.Xna.Kinect.Components;
 
 namespace Mach.Xna.Kinect.HandState
 {

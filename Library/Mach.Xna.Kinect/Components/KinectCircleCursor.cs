@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Atomix.Components.Kinect
+namespace Mach.Xna.Kinect.Components
 {
     public class KinectCircleCursor : KinectCursor
     {

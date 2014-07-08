@@ -1,4 +1,4 @@
-﻿namespace Kinectomix.Logic.Game
+﻿namespace Mach.Xna.Kinect.Gestures
 {
     public enum GestureType
     {

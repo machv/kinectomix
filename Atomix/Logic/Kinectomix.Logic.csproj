@@ -78,9 +78,6 @@
     <Compile Include="Definition\BondType.cs" />
     <Compile Include="Bresenham.cs" />
     <Compile Include="Definition\GameDefinition.cs" />
-    <Compile Include="Gestures\GesturesState.cs" />
-    <Compile Include="Gestures\GestureType.cs" />
-    <Compile Include="Gestures\KnownGesture.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="State\Highscore.cs" />
     <Compile Include="State\LevelHighscore.cs" />

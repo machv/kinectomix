@@ -1,8 +1,6 @@
-﻿using Atomix.Components;
-using Mach.Xna.Input;
-using Mach.Xna.Kinect;
+﻿using Mach.Xna.Kinect.Components;
 
-namespace Kinectomix.Xna.Input
+namespace Mach.Xna.Input
 {
     public struct KinectInputState : IInputState
     {

@@ -3,14 +3,14 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using System.Xml.Serialization;
 using System.IO;
-using Kinectomix.Logic.Game;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Microsoft.Kinect;
 using Mach.Kinect.Gestures;
 using Mach.Kinect;
+using Mach.Xna.Kinect.Gestures;
 
-namespace Atomix.Components
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Recognizes gestures against prerecorded gestures.

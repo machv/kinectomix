@@ -1,11 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Atomix.Components.Kinect;
-using Atomix.Components;
 using Mach.Xna.Components;
-using Mach.Xna.Kinect;
 
-namespace Kinectomix.Xna.Components.Kinect
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Extended implementation of <see cref="Button"/> class that interacts with Kinect using <see cref="KinectCursor"/> or <see cref="KinectCircleCursor"/>.

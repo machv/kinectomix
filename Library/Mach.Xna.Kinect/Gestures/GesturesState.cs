@@ -2,7 +2,7 @@ using Mach.Kinect.Gestures;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kinectomix.Logic.Game
+namespace Mach.Xna.Kinect.Gestures
 {
     public struct GesturesState
     {

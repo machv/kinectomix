@@ -4,7 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Kinectomix.Logic.Game
+namespace Mach.Xna.Kinect.Gestures
 {
     public class KnownGesture
     {

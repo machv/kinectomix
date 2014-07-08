@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect;
 
-namespace Mach.Xna.Kinect
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Type of stream from the Kinect sensor.

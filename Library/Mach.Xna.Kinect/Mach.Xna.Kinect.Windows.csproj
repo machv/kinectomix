@@ -72,15 +72,22 @@
   <ItemGroup>
     <Compile Include="Algorithms\Bresenham.cs" />
     <Compile Include="Components\ClippedEdgesVisualiser.cs" />
+    <Compile Include="Components\Gestures.cs" />
+    <Compile Include="Components\KinectButton.cs" />
     <Compile Include="Components\KinectCircleCursor.cs" />
     <Compile Include="Components\KinectCursor.cs" />
     <Compile Include="Components\SkeletonRenderer.cs" />
     <Compile Include="Components\VideoStreamComponent.cs" />
     <Compile Include="Components\VisualKinectManager.cs" />
+    <Compile Include="Gestures\GesturesState.cs" />
+    <Compile Include="Gestures\GestureType.cs" />
+    <Compile Include="Gestures\KnownGesture.cs" />
     <Compile Include="Hand State\ConvexityClosedHandTracker.cs" />
     <Compile Include="Hand State\IHandStateTracker.cs" />
     <Compile Include="Hand State\InteractionsClosedHandTracker.cs" />
     <Compile Include="Hand State\PressedHandTracker.cs" />
+    <Compile Include="Input\KinectInputProvider.cs" />
+    <Compile Include="Input\KinectInputState.cs" />
     <Compile Include="KinectInteractionClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">

@@ -1,4 +1,5 @@
 ﻿using Mach.Xna.Kinect.Algorithms;
+using Mach.Xna.Kinect.Components;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

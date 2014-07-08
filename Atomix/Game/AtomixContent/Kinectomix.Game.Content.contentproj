@@ -48,6 +48,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Library\Mach.Xna.Kinect\Mach.Xna.Kinect.Windows.csproj">
+      <Project>{9f5b44d8-6e3b-40b6-b89d-ee3ac01e6660}</Project>
+      <Name>Mach.Xna.Kinect.Windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Logic\Kinectomix.Logic.csproj">
       <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
       <Name>Kinectomix.Logic</Name>

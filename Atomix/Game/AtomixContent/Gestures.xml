@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XnaContent xmlns:Game="Kinectomix.Logic.Game">
-  <Asset Type="Game:KnownGesture[]">
+<XnaContent xmlns:g="Mach.Xna.Kinect.Gestures">
+  <Asset Type="g:KnownGesture[]">
     <!-- 
     <Item>
       <Filename>LeftHandUp.gst</Filename>

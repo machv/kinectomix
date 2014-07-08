@@ -1,5 +1,4 @@
 ﻿using Mach.Kinect;
-using Mach.Xna.Kinect;
 using Mach.Xna.Kinect.HandState;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
@@ -8,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 
-namespace Mach.Xna.Kinect
+namespace Mach.Xna.Kinect.Components
 {
     public enum HandMovementTracking
     {
@@ -143,7 +142,7 @@ namespace Mach.Xna.Kinect
         protected override void LoadContent()
         {
             _handTexture = _content.Load<Texture2D>("Hand");
-            _font = _content.Load<SpriteFont>("Normal");
+            _font = _content.Load<SpriteFont>("NormalFont");
 
             base.LoadContent();
         }

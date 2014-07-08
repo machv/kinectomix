@@ -1,12 +1,6 @@
-﻿using Atomix.Components;
-using Mach.Xna.Input;
-using Mach.Xna.Kinect;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Mach.Xna.Kinect.Components;
 
-namespace Kinectomix.Xna.Input
+namespace Mach.Xna.Input
 {
     public class KinectInputProvider : IInputProvider
     {

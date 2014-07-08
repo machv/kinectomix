@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mach.Xna.Kinect
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Handles Kinect sensor initialization.
