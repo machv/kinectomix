@@ -149,11 +149,6 @@ namespace Mach.Xna.Components
         {
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            _buttonOk.Selected += _button_Selected;
-            _buttonCancel.Selected += _button_Selected;
-            _buttonYes.Selected += _button_Selected;
-            _buttonNo.Selected += _button_Selected;
-
             _buttonOk.Initialize();
             _buttonCancel.Initialize();
             _buttonYes.Initialize();
@@ -232,8 +227,6 @@ namespace Mach.Xna.Components
                     foreach (Button button in _renderedButtons)
                         button.Draw(gameTime);
                 }
-
-
             }
 
             base.Draw(gameTime);
@@ -246,12 +239,9 @@ namespace Mach.Xna.Components
         /// <param name="buttons">One of the <see cref="MessageBoxButtons"/> values that specifies which buttons to display in the message box.</param>
         public void Show(string text, MessageBoxButtons buttons)
         {
-            if (text == null)
-                throw new ArgumentNullException("text");
-
-            _isVisible = true;
-            _text = text;
             _buttons = buttons;
+
+            Button[] buttonsToDisplay = null;
 
             switch (_buttons)
             {
@@ -267,6 +257,31 @@ namespace Mach.Xna.Components
                 case MessageBoxButtons.YesNoCancel:
                     _renderedButtons = new Button[] { _buttonYes, _buttonNo, _buttonCancel };
                     break;
+            }
+
+            Show(text, buttonsToDisplay);
+        }
+
+        /// <summary>
+        /// Displays a message box with specified text and custom defined buttons. Buttons have to be initialized and in Tag property has to have value from <see cref="MessageBoxResult"/>.
+        /// </summary>
+        /// <param name="text">The text to display in the message box.</param>
+        /// <param name="buttons">Array of <see cref="Button"/> containing custom initialized buttons to be rendered in the message box.</param>
+        public void Show(string text, Button[] buttons)
+        {
+            if (text == null)
+                throw new ArgumentNullException("text");
+
+            if (buttons == null)
+                throw new ArgumentNullException("buttons");
+
+            _isVisible = true;
+            _text = text;
+            _renderedButtons = buttons;
+
+            foreach (Button button in _renderedButtons)
+            {
+                button.Selected += button_Selected;
             }
         }
 
@@ -284,6 +299,11 @@ namespace Mach.Xna.Components
         /// </summary>
         public void Hide()
         {
+            foreach (Button button in _renderedButtons)
+            {
+                button.Selected -= button_Selected;
+            }
+
             _isVisible = false;
         }
 
@@ -292,15 +312,21 @@ namespace Mach.Xna.Components
         /// </summary>
         /// <param name="sender">Which button raised this event.</param>
         /// <param name="e">Not used parameters.</param>
-        private void _button_Selected(object sender, EventArgs e)
+        private void button_Selected(object sender, EventArgs e)
         {
             if ((sender is Button) == false)
                 return;
 
             Button button = sender as Button;
-            MessageBoxResult result = (MessageBoxResult)button.Tag;
+            MessageBoxResult result = MessageBoxResult.Cancel;
+
+            if (button.Tag is MessageBoxResult)
+            {
+                result = (MessageBoxResult)button.Tag;
+            }
 
             Hide();
+
             OnChanged(result);
         }
     }

@@ -76,7 +76,6 @@
   <ItemGroup>
     <Compile Include="Definition\BoardTile.cs" />
     <Compile Include="Definition\BondType.cs" />
-    <Compile Include="Bresenham.cs" />
     <Compile Include="Definition\GameDefinition.cs" />
     <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="State\Highscore.cs" />

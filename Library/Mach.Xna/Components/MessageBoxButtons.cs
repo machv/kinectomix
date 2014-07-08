@@ -21,5 +21,9 @@
         /// The message box contains Yes, No, and Cancel buttons.
         /// </summary>
         YesNoCancel,
+        /// <summary>
+        /// The message box contains custom defined buttons.
+        /// </summary>
+        Custom,
     }
 }
