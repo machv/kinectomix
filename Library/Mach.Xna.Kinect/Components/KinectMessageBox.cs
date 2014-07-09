@@ -1,9 +1,8 @@
 using Microsoft.Xna.Framework;
 using Mach.Xna.Input;
-using Mach.Xna.Kinect.Components;
 using Mach.Xna.Components;
 
-namespace Atomix.Components.Common
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// This is a game component that implements IUpdateable.

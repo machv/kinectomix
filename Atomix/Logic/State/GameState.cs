@@ -1,7 +1,6 @@
-﻿using AtomixData;
-using System;
+﻿using System;
 
-namespace Kinectomix.Logic
+namespace Mach.Kinectomix.Logic
 {
     [Serializable]
     public class GameState

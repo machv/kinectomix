@@ -1,12 +1,11 @@
-﻿using Kinectomix.Logic;
-using Kinectomix.LevelEditor.Model;
+﻿using Kinectomix.LevelEditor.Model;
 using System.IO;
 using System.Windows.Input;
 using Kinectomix.Wpf.Mvvm;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Xml.Serialization;
+using Mach.Kinectomix.Logic;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {

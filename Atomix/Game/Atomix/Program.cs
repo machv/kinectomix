@@ -1,6 +1,4 @@
-using System;
-
-namespace Atomix
+namespace Mach.Kinectomix
 {
 #if WINDOWS || XBOX
     static class Program
@@ -10,7 +8,7 @@ namespace Atomix
         /// </summary>
         static void Main(string[] args)
         {
-            using (AtomixGame game = new AtomixGame())
+            using (KinectomixGame game = new KinectomixGame())
             {
                 game.Run();
             }

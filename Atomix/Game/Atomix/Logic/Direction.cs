@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Atomix
+namespace Mach.Kinectomix
 {
     /// <summary>
     /// Flag indicating in which directions can be tile moved on the board.

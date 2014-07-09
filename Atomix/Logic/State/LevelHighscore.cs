@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace AtomixData
+namespace Mach.Kinectomix.Logic
 {
     [Serializable]
     public class LevelHighscore

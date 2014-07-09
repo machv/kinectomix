@@ -1,16 +1,12 @@
-﻿using Kinectomix.Logic;
+﻿using Mach.Kinectomix.Logic;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -36,7 +32,7 @@ namespace Kinectomix.LevelEditor.Model
         {
             XmlSerializer seralizer = new XmlSerializer(typeof(Level));
 
-            using (Stream stream = System.IO.File.Open(path, FileMode.Open))
+            using (Stream stream = File.Open(path, FileMode.Open))
                 return seralizer.Deserialize(stream) as Level;
         }
 
@@ -44,22 +40,22 @@ namespace Kinectomix.LevelEditor.Model
         {
             BinaryFormatter bf = new BinaryFormatter();
 
-            using (Stream stream = System.IO.File.Open(path, FileMode.Open))
+            using (Stream stream = File.Open(path, FileMode.Open))
                 return bf.Deserialize(stream) as Level;
         }
 
         public static Level LoadFromDefinition(string path)
         {
             using (XmlReader reader = XmlReader.Create(path))
-                return IntermediateSerializer.Deserialize<Kinectomix.Logic.Level>(reader, null);
+                return IntermediateSerializer.Deserialize<Level>(reader, null);
         }
 
         public static Level LoadFromCompiled(string path)
         {
-            Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new Kinectomix.Logic.DummyServiceProvider());
-            cm.RootDirectory = System.IO.Path.GetDirectoryName(path);
+            Microsoft.Xna.Framework.Content.ContentManager cm = new Microsoft.Xna.Framework.Content.ContentManager(new Mach.Kinectomix.Logic.DummyServiceProvider());
+            cm.RootDirectory = Path.GetDirectoryName(path);
 
-            return cm.Load<Kinectomix.Logic.Level>(System.IO.Path.GetFileNameWithoutExtension(path));
+            return cm.Load<Level>(Path.GetFileNameWithoutExtension(path));
         }
 
         public static void SaveLevelDefinition(Level level, Stream stream)

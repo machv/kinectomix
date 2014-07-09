@@ -1,4 +1,4 @@
-﻿namespace Kinectomix.Logic
+﻿namespace Mach.Kinectomix.Logic
 {
 
     //http://en.wikipedia.org/wiki/Sextuple_bond

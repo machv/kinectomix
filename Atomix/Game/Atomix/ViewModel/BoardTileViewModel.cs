@@ -1,7 +1,7 @@
-﻿using Kinectomix.Logic;
+﻿using Mach.Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 
-namespace Atomix.ViewModel
+namespace Mach.Kinectomix.ViewModel
 {
     public class BoardTileViewModel
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Kinectomix.Logic
+namespace Mach.Kinectomix.Logic
 {
     [Serializable]
     public class GameDefinition

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Atomix
+namespace Mach.Kinectomix.Screens
 {
     class ErrorScreen : GameScreen
     {
@@ -23,7 +23,7 @@ namespace Atomix
 
         public override void Initialize()
         {
-            _cursor = (ScreenManager.Game as AtomixGame).Cursor;
+            _cursor = (ScreenManager.Game as KinectomixGame).Cursor;
 
             _quitButton = new KinectButton(ScreenManager.Game, _cursor, "quit game");
             _quitButton.Selected += Quit_Selected;

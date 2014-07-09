@@ -1,4 +1,4 @@
-﻿using Kinectomix.Logic;
+﻿using Mach.Kinectomix.Logic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 using System;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 
-namespace Atomix
+namespace Mach.Kinectomix
 {
     public static class GameDefinitionFactory
     {

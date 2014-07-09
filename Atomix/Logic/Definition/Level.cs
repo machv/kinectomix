@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Kinectomix.Logic
+namespace Mach.Kinectomix.Logic
 {
     /// <summary>
     /// Definition of one game level.

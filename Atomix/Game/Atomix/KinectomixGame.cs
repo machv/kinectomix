@@ -1,21 +1,21 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Kinectomix.Logic;
-using Atomix.Components;
 using System;
-using AtomixData;
 using Mach.Xna.Input;
 using Mach.Xna.ScreenManagement;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.Components;
+using Mach.Kinectomix.Logic;
+using Mach.Kinectomix.Screens;
+using Mach.Kinectomix.Components;
 
-namespace Atomix
+namespace Mach.Kinectomix
 {
     /// <summary>
     /// This is the main class for the Atomix game.
     /// </summary>
-    public class AtomixGame : Game
+    public class KinectomixGame : Game
     {
         public const string HighscoreFile = "atomix.highscore";
 
@@ -93,7 +93,7 @@ namespace Atomix
             }
         }
 
-        public AtomixGame()
+        public KinectomixGame()
         {
             graphics = new GraphicsDeviceManager(this);
 

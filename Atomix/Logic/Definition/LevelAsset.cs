@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Kinectomix.Logic
+namespace Mach.Kinectomix.Logic
 {
     /// <summary>
     /// Contains base64 coded asset used in the game level.

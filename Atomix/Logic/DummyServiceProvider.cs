@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kinectomix.Logic
+namespace Mach.Kinectomix.Logic
 {
 
     public class DummyServiceProvider : IServiceProvider

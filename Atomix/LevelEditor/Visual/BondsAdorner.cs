@@ -1,5 +1,4 @@
-﻿using Kinectomix.Logic;
-using Kinectomix.LevelEditor.ViewModel;
+﻿using Kinectomix.LevelEditor.ViewModel;
 using System;
 using System.IO;
 using System.Windows;
@@ -8,6 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml;
+using Mach.Kinectomix.Logic;
 
 namespace Kinectomix.LevelEditor
 {

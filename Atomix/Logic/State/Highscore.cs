@@ -1,13 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Storage;
+﻿using Microsoft.Xna.Framework.Storage;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
-namespace AtomixData
+namespace Mach.Kinectomix.Logic
 {
     public class Highscore
     {

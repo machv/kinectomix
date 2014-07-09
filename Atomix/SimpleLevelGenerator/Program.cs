@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
-using Kinectomix.Logic;
+using Mach.Kinectomix.Logic;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using System.Reflection;
 using System.IO;
@@ -32,22 +32,22 @@ namespace SimpleLevelGenerator
             }
 
             List<Tuple<int, int>> walls = new List<Tuple<int, int>>();
-            walls.Add(Tuple.Create<int, int>(1, 3));
-            walls.Add(Tuple.Create<int, int>(2, 3));
-            walls.Add(Tuple.Create<int, int>(3, 3));
-            walls.Add(Tuple.Create<int, int>(3, 2));
-            walls.Add(Tuple.Create<int, int>(4, 2));
-            walls.Add(Tuple.Create<int, int>(4, 5));
-            walls.Add(Tuple.Create<int, int>(4, 7));
-            walls.Add(Tuple.Create<int, int>(4, 8));
-            walls.Add(Tuple.Create<int, int>(4, 9));
+            walls.Add(Tuple.Create(1, 3));
+            walls.Add(Tuple.Create(2, 3));
+            walls.Add(Tuple.Create(3, 3));
+            walls.Add(Tuple.Create(3, 2));
+            walls.Add(Tuple.Create(4, 2));
+            walls.Add(Tuple.Create(4, 5));
+            walls.Add(Tuple.Create(4, 7));
+            walls.Add(Tuple.Create(4, 8));
+            walls.Add(Tuple.Create(4, 9));
 
-            walls.Add(Tuple.Create<int, int>(6, 1));
-            walls.Add(Tuple.Create<int, int>(6, 2));
-            walls.Add(Tuple.Create<int, int>(6, 4));
-            walls.Add(Tuple.Create<int, int>(5, 5));
+            walls.Add(Tuple.Create(6, 1));
+            walls.Add(Tuple.Create(6, 2));
+            walls.Add(Tuple.Create(6, 4));
+            walls.Add(Tuple.Create(5, 5));
 
-            walls.Add(Tuple.Create<int, int>(7, 6));
+            walls.Add(Tuple.Create(7, 6));
 
             foreach (var wall in walls)
             {

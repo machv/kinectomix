@@ -1,4 +1,4 @@
-﻿using Kinectomix.Logic;
+﻿using Mach.Kinectomix.Logic;
 using System.Windows;
 using System.Windows.Media;
 

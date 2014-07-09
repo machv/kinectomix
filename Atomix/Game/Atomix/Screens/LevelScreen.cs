@@ -1,8 +1,4 @@
-﻿using Atomix.Components.Common;
-using Atomix.ViewModel;
-using AtomixData;
-using Kinectomix.Logic;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -15,8 +11,10 @@ using Mach.Xna.Components;
 using Mach.Kinect;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.Kinect.Gestures;
+using Mach.Kinectomix.Logic;
+using Mach.Kinectomix.ViewModel;
 
-namespace Atomix
+namespace Mach.Kinectomix.Screens
 {
     /// <summary>
     /// Screen for current game level.
@@ -84,7 +82,7 @@ namespace Atomix
 
         public override void Initialize()
         {
-            KinectCursor cursor = (ScreenManager.Game as AtomixGame).Cursor;
+            KinectCursor cursor = (ScreenManager.Game as KinectomixGame).Cursor;
 
             if (cursor is KinectCircleCursor)
                 _cursor = cursor as KinectCircleCursor;
@@ -98,7 +96,7 @@ namespace Atomix
             _pauseMessageBox.Changed += pause_Changed;
 
             level = LevelViewModel.FromModel(levelDefinition, ScreenManager.GraphicsDevice);
-            _highscore = AtomixGame.State.GetCurrentLevelHighscore();
+            _highscore = KinectomixGame.State.GetCurrentLevelHighscore();
 
             _activeTileOpacity = 0.0f;
             _activeTileOpacityDirection = 1;
@@ -195,7 +193,7 @@ namespace Atomix
             GameScreen gameScreen = null;
 
             // Load next level
-            Level newLevel = AtomixGame.State.SwitchToNextLevel();
+            Level newLevel = KinectomixGame.State.SwitchToNextLevel();
 
             if (newLevel == null)
             {
@@ -216,7 +214,7 @@ namespace Atomix
             GameScreen gameScreen = null;
 
             // Load current level again
-            Level newLevel = AtomixGame.State.GetCurrentLevel();
+            Level newLevel = KinectomixGame.State.GetCurrentLevel();
             gameScreen = new LevelScreen(newLevel, spriteBatch);
 
             ScreenManager.Add(gameScreen);
@@ -301,7 +299,7 @@ namespace Atomix
                     _log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString() + " / " + gesturesState.RecognizedGestures.ToArray()[0].Gesture.Name;
                 }
 
-                KinectCursor cursor = (ScreenManager.Game as AtomixGame).Cursor;
+                KinectCursor cursor = (ScreenManager.Game as KinectomixGame).Cursor;
 
                 if (_isLevelFinished)
                 {
@@ -309,7 +307,7 @@ namespace Atomix
                         _highscore = new LevelHighscore();
 
                     if (_highscore.UpdateIfBetter(_moves, _gameDuration))
-                        AtomixGame.State.SetCurrentLevelHighscore(_highscore);
+                        KinectomixGame.State.SetCurrentLevelHighscore(_highscore);
 
                     _repeatButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 - _repeatButton.Width - 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
                     _repeatButton.IsVisible = true;

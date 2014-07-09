@@ -1,4 +1,4 @@
-﻿using Kinectomix.Logic;
+﻿using Mach.Kinectomix.Logic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

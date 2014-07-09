@@ -1,5 +1,5 @@
-﻿using Kinectomix.Logic;
-using Mach.Kinect;
+﻿using Mach.Kinect;
+using Mach.Kinectomix.Logic;
 using Mach.Xna.Components;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.ScreenManagement;
@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace Atomix
+namespace Mach.Kinectomix.Screens
 {
     public class LevelsScreen : GameScreen
     {
@@ -29,14 +29,14 @@ namespace Atomix
 
         public override void Initialize()
         {
-            _cursor = (ScreenManager.Game as AtomixGame).Cursor;
+            _cursor = (ScreenManager.Game as KinectomixGame).Cursor;
 
             _backButton = new KinectButton(ScreenManager.Game, _cursor, "go back");
             _backButton.Selected += Back_Selected;
 
             Components.Add(_backButton);
 
-            foreach (Level level in AtomixGame.State.Levels)
+            foreach (Level level in KinectomixGame.State.Levels)
             {
                 KinectButton button = new KinectButton(ScreenManager.Game, _cursor);
                 button.Selected += button_Selected;
@@ -181,7 +181,7 @@ namespace Atomix
 
             LevelScreen gameScreen = new LevelScreen(level, _spriteBatch);
 
-            AtomixGame.State.SetLevelToCurrent(level);
+            KinectomixGame.State.SetLevelToCurrent(level);
 
             ScreenManager.Add(gameScreen);
             ScreenManager.Activate(gameScreen);

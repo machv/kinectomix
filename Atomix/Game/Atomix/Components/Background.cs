@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Atomix.Components
+namespace Mach.Kinectomix.Components
 {
     /// <summary>
     /// Component that renders background image over all available screen area.

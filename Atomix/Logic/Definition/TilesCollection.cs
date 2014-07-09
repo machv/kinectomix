@@ -7,7 +7,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Kinectomix.Logic
+namespace Mach.Kinectomix.Logic
 {
     [Serializable]
     public class TilesCollection<T> : ICollection<T>, IXmlSerializable where T : new()

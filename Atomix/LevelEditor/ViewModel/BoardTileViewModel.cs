@@ -1,5 +1,5 @@
-﻿using Kinectomix.Logic;
-using Kinectomix.Wpf.Mvvm;
+﻿using Kinectomix.Wpf.Mvvm;
+using Mach.Kinectomix.Logic;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;

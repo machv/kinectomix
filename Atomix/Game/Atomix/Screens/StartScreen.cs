@@ -1,5 +1,4 @@
-﻿using Atomix.Components.Common;
-using Kinectomix.Logic;
+﻿using Mach.Kinectomix.Logic;
 using Mach.Xna.Components;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.ScreenManagement;
@@ -8,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace Atomix
+namespace Mach.Kinectomix.Screens
 {
     public class StartScreen : GameScreen
     {
@@ -30,7 +29,7 @@ namespace Atomix
 
         public override void Initialize()
         {
-            _cursor = (ScreenManager.Game as AtomixGame).Cursor;
+            _cursor = (ScreenManager.Game as KinectomixGame).Cursor;
 
             _quitMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, _cursor);
             _quitMessageBox.Changed += _quitMessageBox_Changed;
@@ -66,7 +65,7 @@ namespace Atomix
             {
                 if (state.IsKeyDown(Keys.F11))
                 {
-                    AtomixGame game = (ScreenManager.Game as AtomixGame);
+                    KinectomixGame game = (ScreenManager.Game as KinectomixGame);
                     game.IsFullScreen = !game.IsFullScreen;
                 }
             }
@@ -107,14 +106,14 @@ namespace Atomix
 
         public override void Activated()
         {
-            (ScreenManager.Game as AtomixGame).KinectChooser.ShowConnectKinectPrompt = true;
+            (ScreenManager.Game as KinectomixGame).KinectChooser.ShowConnectKinectPrompt = true;
 
             base.Activated();
         }
 
         public override void Deactivated()
         {
-            (ScreenManager.Game as AtomixGame).KinectChooser.ShowConnectKinectPrompt = false;
+            (ScreenManager.Game as KinectomixGame).KinectChooser.ShowConnectKinectPrompt = false;
 
             base.Deactivated();
         }
@@ -129,7 +128,7 @@ namespace Atomix
 
         private void Start_Selected(object sender, EventArgs e)
         {
-            Level level = AtomixGame.State.GetCurrentLevel();
+            Level level = KinectomixGame.State.GetCurrentLevel();
             //Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
             LevelScreen gameScreen = new LevelScreen(level, _spriteBatch);
 

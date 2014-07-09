@@ -1,11 +1,11 @@
-﻿using Kinectomix.Logic;
-using Kinectomix.LevelEditor.ViewModel;
+﻿using Kinectomix.LevelEditor.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using Mach.Kinectomix.Logic;
 
 namespace Kinectomix.LevelEditor.Model
 {
