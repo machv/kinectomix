@@ -5,6 +5,7 @@ using Mach.Xna.Kinect.Components;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
@@ -69,6 +70,7 @@ namespace Mach.Kinectomix.Screens
             base.LoadContent();
         }
 
+        private KeyboardState _previousKeyboardState;
         private int xTranslation;
         private int xTranslationBuffer;
         private int xStep = 10;
@@ -104,7 +106,20 @@ namespace Mach.Kinectomix.Screens
                 b.Position = pos;
             }
 
-            int scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
+            int scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 1;
+
+            KeyboardState state = Keyboard.GetState();
+
+            if (state.IsKeyDown(Keys.Left) == true && _previousKeyboardState.IsKeyDown(Keys.Left) == false)
+                xTranslationBuffer = scrollStep;
+
+            if (state.IsKeyDown(Keys.Right) == true && _previousKeyboardState.IsKeyDown(Keys.Right) == false)
+                xTranslationBuffer = -scrollStep;
+
+            _previousKeyboardState = state;
+
+            // Scrolling for gestures is larger
+            scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
 
             if (_cursor.IsHandTracked && xTranslationBuffer == 0)
             {
