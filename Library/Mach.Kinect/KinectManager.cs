@@ -69,7 +69,7 @@ namespace Mach.Kinect
 
         public KinectManager(bool startColorStream, bool startDepthStream)
         {
-            _skeletons = new Skeletons();
+            _skeletons = new Skeletons(Skeletons.SkeletonType.NearestFullyTracked);
             _startColorStream = startColorStream;
             _startDepthStream = startDepthStream;
 
