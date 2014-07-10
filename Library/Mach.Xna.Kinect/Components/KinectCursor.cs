@@ -367,6 +367,7 @@ namespace Mach.Xna.Kinect.Components
             Joint leftShoulder = skeleton.Joints[JointType.ShoulderLeft];
             Joint rightShoulder = skeleton.Joints[JointType.ShoulderRight];
 
+            Joint centerShoulder = skeleton.Joints[JointType.ShoulderCenter];
             Joint oppositeShoulder = leftHanded ? rightShoulder : leftShoulder;
             Joint sameShoulder = leftHanded ? leftShoulder : rightShoulder;
             Joint hip = leftHanded ? skeleton.Joints[JointType.HipLeft] : skeleton.Joints[JointType.HipRight];
@@ -382,7 +383,7 @@ namespace Mach.Xna.Kinect.Components
                 {
                     isHandTracked = true;
 
-                    float xScaled = (hand.Position.X - oppositeShoulder.Position.X) / ((sameShoulder.Position.X - oppositeShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
+                    float xScaled = (hand.Position.X - centerShoulder.Position.X) / ((sameShoulder.Position.X - centerShoulder.Position.X) * 2) * GraphicsDevice.Viewport.Bounds.Width;
 
                     if (leftHanded)
                         xScaled = GraphicsDevice.Viewport.Bounds.Width - xScaled;
