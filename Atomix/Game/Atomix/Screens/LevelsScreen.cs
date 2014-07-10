@@ -77,7 +77,7 @@ namespace Mach.Kinectomix.Screens
         private int xStep = 10;
         public override void Update(GameTime gameTime)
         {
-            _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width + _backButton.BorderThickness  - _backButton.Width, -_backButton.BorderThickness);
+            _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width + _backButton.BorderThickness - _backButton.Width, -_backButton.BorderThickness);
 
             int xPos = 20;
             int xDiff = 30;
@@ -100,11 +100,19 @@ namespace Mach.Kinectomix.Screens
                 }
             }
 
+            bool anyButtonOverflows = false;
+            int rightOverflow = 0;
             foreach (Button b in _buttons)
             {
                 var pos = b.Position;
                 pos.X += xTranslation;
                 b.Position = pos;
+
+                if (b.Position.X + b.Width > ScreenManager.GraphicsDevice.Viewport.Bounds.Width)
+                {
+                    anyButtonOverflows = true;
+                    rightOverflow = Math.Max(rightOverflow, (int)b.Position.X + b.Width - ScreenManager.GraphicsDevice.Viewport.Bounds.Width);
+                }
             }
 
             int scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 1;
@@ -116,7 +124,8 @@ namespace Mach.Kinectomix.Screens
                     xTranslationBuffer = scrollStep;
 
             if (keyboardState.IsKeyDown(Keys.Right) == true && _previousKeyboardState.IsKeyDown(Keys.Right) == false)
-                xTranslationBuffer = -scrollStep;
+                if (anyButtonOverflows)
+                    xTranslationBuffer = -scrollStep;
 
             _previousKeyboardState = keyboardState;
 
@@ -127,17 +136,14 @@ namespace Mach.Kinectomix.Screens
                     xTranslationBuffer = scrollStep;
 
             if (mouseState.ScrollWheelValue < _previousMouseState.ScrollWheelValue)
-                xTranslationBuffer = -scrollStep;
+                if (anyButtonOverflows)
+                    xTranslationBuffer = -scrollStep;
 
             _previousMouseState = mouseState;
 
             // Scrolling for gestures is larger
             scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
 
-            
-            if (xTranslation < 0 && xTranslationBuffer > 0) // If we scroll to left...
-                if (xTranslation + xTranslationBuffer > 0)  // ...and buffer contains more than starting alignment...
-                    xTranslationBuffer = xTranslation * -1; // ...we crop it to correct alignment.
 
             if (_cursor.IsHandTracked && xTranslationBuffer == 0)
             {
@@ -150,7 +156,8 @@ namespace Mach.Kinectomix.Screens
                         switch (direction)
                         {
                             case SwipeDirection.Left:
-                                xTranslationBuffer = -scrollStep;
+                                if (anyButtonOverflows)
+                                    xTranslationBuffer = -scrollStep;
                                 break;
                             case SwipeDirection.Right:
                                 if (xTranslation < 0)
@@ -164,6 +171,14 @@ namespace Mach.Kinectomix.Screens
                     swipe.Start(_cursor.HandRealPositionPoint, 0.08);
                 }
             }
+
+            if (xTranslationBuffer > 0 && xTranslation < 0) // If we scroll to right...
+                if (xTranslation + xTranslationBuffer > 0)  // ...and buffer contains more than starting alignment...
+                    xTranslationBuffer = xTranslation * -1; // ...we crop buffer it to correct alignment.
+
+            if (xTranslationBuffer < 0) // If we scroll to left...
+                if (xTranslationBuffer * -1 > rightOverflow + xDiff) // ...and buffer contains more than maximal right overflow...
+                    xTranslationBuffer = rightOverflow * -1 - xDiff; // we crop buffer to right overflow + margin.
 
             if (xTranslationBuffer != 0)
             {
