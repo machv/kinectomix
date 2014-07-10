@@ -112,7 +112,8 @@ namespace Mach.Kinectomix.Screens
             KeyboardState keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Left) == true && _previousKeyboardState.IsKeyDown(Keys.Left) == false)
-                xTranslationBuffer = scrollStep;
+                if (xTranslation < 0)
+                    xTranslationBuffer = scrollStep;
 
             if (keyboardState.IsKeyDown(Keys.Right) == true && _previousKeyboardState.IsKeyDown(Keys.Right) == false)
                 xTranslationBuffer = -scrollStep;
@@ -122,7 +123,8 @@ namespace Mach.Kinectomix.Screens
             MouseState mouseState = Mouse.GetState();
 
             if (mouseState.ScrollWheelValue > _previousMouseState.ScrollWheelValue)
-                xTranslationBuffer = scrollStep;
+                if (xTranslation < 0)
+                    xTranslationBuffer = scrollStep;
 
             if (mouseState.ScrollWheelValue < _previousMouseState.ScrollWheelValue)
                 xTranslationBuffer = -scrollStep;
@@ -131,6 +133,11 @@ namespace Mach.Kinectomix.Screens
 
             // Scrolling for gestures is larger
             scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
+
+            
+            if (xTranslation < 0 && xTranslationBuffer > 0) // If we scroll to left...
+                if (xTranslation + xTranslationBuffer > 0)  // ...and buffer contains more than starting alignment...
+                    xTranslationBuffer = xTranslation * -1; // ...we crop it to correct alignment.
 
             if (_cursor.IsHandTracked && xTranslationBuffer == 0)
             {
@@ -146,7 +153,8 @@ namespace Mach.Kinectomix.Screens
                                 xTranslationBuffer = -scrollStep;
                                 break;
                             case SwipeDirection.Right:
-                                xTranslationBuffer = scrollStep;
+                                if (xTranslation < 0)
+                                    xTranslationBuffer = scrollStep;
                                 break;
                         }
                     }
@@ -159,11 +167,11 @@ namespace Mach.Kinectomix.Screens
 
             if (xTranslationBuffer != 0)
             {
-                if (xTranslation >= 0)
-                {
-                    xTranslation = 0;
-                    xTranslationBuffer = 0;
-                }
+                //if (xTranslation >= 0)
+                //{
+                //    xTranslation = 0;
+                //    xTranslationBuffer = 0;
+                //}
 
                 if (xTranslationBuffer > 0)
                 {
