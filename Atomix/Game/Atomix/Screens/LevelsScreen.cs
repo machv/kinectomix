@@ -70,6 +70,7 @@ namespace Mach.Kinectomix.Screens
             base.LoadContent();
         }
 
+        private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
         private int xTranslation;
         private int xTranslationBuffer;
@@ -108,15 +109,25 @@ namespace Mach.Kinectomix.Screens
 
             int scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 1;
 
-            KeyboardState state = Keyboard.GetState();
+            KeyboardState keyboardState = Keyboard.GetState();
 
-            if (state.IsKeyDown(Keys.Left) == true && _previousKeyboardState.IsKeyDown(Keys.Left) == false)
+            if (keyboardState.IsKeyDown(Keys.Left) == true && _previousKeyboardState.IsKeyDown(Keys.Left) == false)
                 xTranslationBuffer = scrollStep;
 
-            if (state.IsKeyDown(Keys.Right) == true && _previousKeyboardState.IsKeyDown(Keys.Right) == false)
+            if (keyboardState.IsKeyDown(Keys.Right) == true && _previousKeyboardState.IsKeyDown(Keys.Right) == false)
                 xTranslationBuffer = -scrollStep;
 
-            _previousKeyboardState = state;
+            _previousKeyboardState = keyboardState;
+
+            MouseState mouseState = Mouse.GetState();
+
+            if (mouseState.ScrollWheelValue > _previousMouseState.ScrollWheelValue)
+                xTranslationBuffer = scrollStep;
+
+            if (mouseState.ScrollWheelValue < _previousMouseState.ScrollWheelValue)
+                xTranslationBuffer = -scrollStep;
+
+            _previousMouseState = mouseState;
 
             // Scrolling for gestures is larger
             scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
