@@ -246,16 +246,16 @@ namespace Mach.Xna.Components
             switch (_buttons)
             {
                 case MessageBoxButtons.OK:
-                    _renderedButtons = new Button[] { _buttonOk };
+                    buttonsToDisplay = new Button[] { _buttonOk };
                     break;
                 case MessageBoxButtons.OKCancel:
-                    _renderedButtons = new Button[] { _buttonOk, _buttonCancel };
+                    buttonsToDisplay = new Button[] { _buttonOk, _buttonCancel };
                     break;
                 case MessageBoxButtons.YesNo:
-                    _renderedButtons = new Button[] { _buttonYes, _buttonNo };
+                    buttonsToDisplay = new Button[] { _buttonYes, _buttonNo };
                     break;
                 case MessageBoxButtons.YesNoCancel:
-                    _renderedButtons = new Button[] { _buttonYes, _buttonNo, _buttonCancel };
+                    buttonsToDisplay = new Button[] { _buttonYes, _buttonNo, _buttonCancel };
                     break;
             }
 
