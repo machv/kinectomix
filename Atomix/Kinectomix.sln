@@ -5,15 +5,15 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game", "Game\Atomix\Kinectomix.Game.csproj", "{50576933-926E-4951-92FD-9FE370386BC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Game.Content", "Game\AtomixContent\Kinectomix.Game.Content.contentproj", "{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Content", "Game\AtomixContent\Kinectomix.Content.contentproj", "{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.SimpleLevelGenerator", "SimpleLevelGenerator\Kinectomix.SimpleLevelGenerator.csproj", "{ADCA21F7-83B0-43CC-A4C5-78C412F592AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Logic", "Logic\Kinectomix.Logic.csproj", "{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.LevelEditor", "LevelEditor\Kinectomix.LevelEditor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.Editor", "LevelEditor\Kinectomix.Editor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kinectomix.GestureRecorder", "GestureRecorder\Kinectomix.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect.GestureRecorder", "GestureRecorder\Mach.Kinect.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Wpf.Mvvm", "Wpf.Mvvm\Mach.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
 EndProject
@@ -26,9 +26,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Kinect.Windows", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect", "..\Library\Mach.Kinect\Mach.Kinect.csproj", "{EFC015B9-F516-4258-A4FD-759F4933104A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Kinect.ContentCompile", "..\Library\Mach.Xna.Kinect.ContentCompile\Mach.Xna.Kinect.ContentCompile.csproj", "{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Content.Compiler", "..\Library\Mach.Xna.Kinect.ContentCompile\Mach.Xna.Content.Compiler.csproj", "{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "Mach.Xna.Kinect.Content", "..\Library\Mach.Xna.Kinect.Content\Mach.Xna.Kinect.Content.contentproj", "{486929D8-978B-4DBB-A838-5B2439DF7047}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Content", "..\Library\Mach.Xna.Kinect.Content\Mach.Xna.Content.contentproj", "{486929D8-978B-4DBB-A838-5B2439DF7047}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -42,36 +42,36 @@ Global
 		SccProjectUniqueName2 = Logic\\Kinectomix.Logic.csproj
 		SccProjectName2 = Logic
 		SccLocalPath2 = Logic
-		SccProjectUniqueName3 = Game\\AtomixContent\\Kinectomix.Game.Content.contentproj
-		SccProjectName3 = Game/AtomixContent
-		SccLocalPath3 = Game\\AtomixContent
-		SccProjectUniqueName4 = Game\\Atomix\\Kinectomix.Game.csproj
-		SccProjectName4 = Game/Atomix
-		SccLocalPath4 = Game\\Atomix
-		SccProjectUniqueName5 = GestureRecorder\\Kinectomix.GestureRecorder.csproj
-		SccProjectName5 = GestureRecorder
-		SccLocalPath5 = GestureRecorder
-		SccProjectUniqueName6 = LevelEditor\\Kinectomix.LevelEditor.csproj
-		SccProjectName6 = LevelEditor
-		SccLocalPath6 = LevelEditor
-		SccProjectUniqueName7 = Wpf.Mvvm\\Mach.Wpf.Mvvm.csproj
-		SccProjectName7 = Wpf.Mvvm
-		SccLocalPath7 = Wpf.Mvvm
-		SccProjectUniqueName8 = ..\\Library\\Mach.Xna\\Mach.Xna.Windows.csproj
-		SccProjectName8 = ../Library/Mach.Xna
-		SccLocalPath8 = ..\\Library\\Mach.Xna
-		SccProjectUniqueName9 = ..\\Library\\Mach.Xna.Kinect\\Mach.Xna.Kinect.Windows.csproj
-		SccProjectName9 = ../Library/Mach.Xna.Kinect
-		SccLocalPath9 = ..\\Library\\Mach.Xna.Kinect
-		SccProjectUniqueName10 = ..\\Library\\Mach.Kinect\\Mach.Kinect.csproj
-		SccProjectName10 = ../Library/Mach.Kinect
-		SccLocalPath10 = ..\\Library\\Mach.Kinect
-		SccProjectUniqueName11 = ..\\Library\\Mach.Xna.Kinect.Content\\Mach.Xna.Kinect.ContentCompile.csproj
-		SccProjectName11 = ../Library/Mach.Xna.Kinect.Content
-		SccLocalPath11 = ..\\Library\\Mach.Xna.Kinect.Content
-		SccProjectUniqueName12 = ..\\Library\\Mach.Xna.Kinect.Content\\Mach.Xna.Kinect.Content.contentproj
-		SccProjectName12 = ../Library/Mach.Xna.Kinect.Content
-		SccLocalPath12 = ..\\Library\\Mach.Xna.Kinect.Content
+		SccProjectUniqueName3 = Game\\Atomix\\Kinectomix.Game.csproj
+		SccProjectName3 = Game/Atomix
+		SccLocalPath3 = Game\\Atomix
+		SccProjectUniqueName4 = Wpf.Mvvm\\Mach.Wpf.Mvvm.csproj
+		SccProjectName4 = Wpf.Mvvm
+		SccLocalPath4 = Wpf.Mvvm
+		SccProjectUniqueName5 = ..\\Library\\Mach.Xna\\Mach.Xna.Windows.csproj
+		SccProjectName5 = ../Library/Mach.Xna
+		SccLocalPath5 = ..\\Library\\Mach.Xna
+		SccProjectUniqueName6 = ..\\Library\\Mach.Xna.Kinect\\Mach.Xna.Kinect.Windows.csproj
+		SccProjectName6 = ../Library/Mach.Xna.Kinect
+		SccLocalPath6 = ..\\Library\\Mach.Xna.Kinect
+		SccProjectUniqueName7 = ..\\Library\\Mach.Kinect\\Mach.Kinect.csproj
+		SccProjectName7 = ../Library/Mach.Kinect
+		SccLocalPath7 = ..\\Library\\Mach.Kinect
+		SccProjectUniqueName8 = ..\\Library\\Mach.Xna.Kinect.Content\\Mach.Xna.Content.contentproj
+		SccProjectName8 = ../Library/Mach.Xna.Kinect.Content
+		SccLocalPath8 = ..\\Library\\Mach.Xna.Kinect.Content
+		SccProjectUniqueName9 = ..\\Library\\Mach.Xna.Kinect.ContentCompile\\Mach.Xna.Content.Compiler.csproj
+		SccProjectName9 = ../Library/Mach.Xna.Kinect.ContentCompile
+		SccLocalPath9 = ..\\Library\\Mach.Xna.Kinect.ContentCompile
+		SccProjectUniqueName10 = Game\\AtomixContent\\Kinectomix.Content.contentproj
+		SccProjectName10 = Game/AtomixContent
+		SccLocalPath10 = Game\\AtomixContent
+		SccProjectUniqueName11 = GestureRecorder\\Mach.Kinect.GestureRecorder.csproj
+		SccProjectName11 = GestureRecorder
+		SccLocalPath11 = GestureRecorder
+		SccProjectUniqueName12 = LevelEditor\\Kinectomix.Editor.csproj
+		SccProjectName12 = LevelEditor
+		SccLocalPath12 = LevelEditor
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

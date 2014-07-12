@@ -66,9 +66,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mach.Xna.Kinect.Content\Mach.Xna.Kinect.Content.contentproj">
+    <ProjectReference Include="..\Mach.Xna.Kinect.Content\Mach.Xna.Content.contentproj">
       <Project>{486929D8-978B-4DBB-A838-5B2439DF7047}</Project>
-      <Name>Mach.Xna.Kinect.Content</Name>
+      <Name>Mach.Xna.Content</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
