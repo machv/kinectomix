@@ -19,7 +19,7 @@ namespace Mach.Kinectomix.Screens
         private List<KinectButton> _buttons = new List<KinectButton>();
         private SpriteFont _normalFont;
         private SpriteFont _splashFont;
-        private SwipeGesturesRecognizer swipe;
+        private SwipeRecognizer swipe;
         private KinectCursor _cursor;
         private KinectButton _backButton;
 
@@ -51,7 +51,7 @@ namespace Mach.Kinectomix.Screens
                 Components.Add(button);
             }
 
-            swipe = new SwipeGesturesRecognizer();
+            swipe = new SwipeRecognizer();
 
             base.Initialize();
         }

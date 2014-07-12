@@ -62,7 +62,7 @@ namespace Mach.Kinectomix.Screens
         private Button _levelsButton;
         private Button _repeatButton;
         private Button _nextButton;
-        private SwipeGesturesRecognizer _swipeGestures;
+        private SwipeRecognizer _swipeGestures;
         private Level levelDefinition;
         private LevelViewModel level;
         private SpriteBatch spriteBatch;
@@ -73,7 +73,7 @@ namespace Mach.Kinectomix.Screens
 
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
-            _swipeGestures = new SwipeGesturesRecognizer();
+            _swipeGestures = new SwipeRecognizer();
             levelDefinition = currentLevel;
             this.spriteBatch = spriteBatch;
 

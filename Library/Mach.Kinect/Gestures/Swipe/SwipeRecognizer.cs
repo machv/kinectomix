@@ -5,7 +5,7 @@ namespace Mach.Kinect.Gestures
     /// <summary>
     /// Simple swipe gestures recognizer which can recognize 4 directions of swiping.
     /// </summary>
-    public class SwipeGesturesRecognizer
+    public class SwipeRecognizer
     {
         private bool _verticalCandidate;
         private bool _horizontalCandidate;

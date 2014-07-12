@@ -65,7 +65,7 @@
     <Compile Include="Skeletons.cs" />
     <Compile Include="Skeletons.SkeletonTrackingType.cs" />
     <Compile Include="Gestures\Swipe\SwipeDirection.cs" />
-    <Compile Include="Gestures\Swipe\SwipeGesturesRecognizer.cs" />
+    <Compile Include="Gestures\Swipe\SwipeRecognizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Kinect Manager\" />
