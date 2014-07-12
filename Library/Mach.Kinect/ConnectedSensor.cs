@@ -90,5 +90,25 @@ namespace Mach.Kinect
                 _skeletons.SetSkeletonData(skeletonData, skeletonFrame.Timestamp);
             }
         }
+
+        public void SetSeatedMode()
+        {
+            if (_sensor != null && _sensor.DepthStream != null && _sensor.SkeletonStream != null)
+            {
+                _sensor.DepthStream.Range = DepthRange.Near;
+                _sensor.SkeletonStream.EnableTrackingInNearRange = true;
+                _sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
+            }
+        }
+
+        public void SetDefaultMode()
+        {
+            if (_sensor != null && _sensor.DepthStream != null && _sensor.SkeletonStream != null)
+            {
+                _sensor.DepthStream.Range = DepthRange.Default;
+                _sensor.SkeletonStream.EnableTrackingInNearRange = false;
+                _sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
+            }
+        }
     }
 }

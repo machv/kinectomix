@@ -9,6 +9,10 @@
             /// </summary>
             First,
             /// <summary>
+            /// The skeleton that is first returned from the sensor.
+            /// </summary>
+            FirstFullyTracked,
+            /// <summary>
             /// The nearest skeleton that has at least known position from the sensor.
             /// </summary>
             Nearest,

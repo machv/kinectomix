@@ -6,8 +6,12 @@ namespace Mach.Kinect
     public partial class Skeletons
     {
         private long _timestamp;
+        private Skeleton[] _items;
 
-        public Skeleton[] Items { get; private set; }
+        public Skeleton[] Items
+        {
+            get { return _items; }
+        }
 
         private SkeletonTrackingType _trackingType;
         public SkeletonTrackingType SkeletonTrackingMode
@@ -32,6 +36,10 @@ namespace Mach.Kinect
 
                 switch (_trackingType)
                 {
+                    case SkeletonTrackingType.First:
+                        return GetAnyKnownkeleton();
+                    case SkeletonTrackingType.FirstFullyTracked:
+                        return GetAnyTrackedSkeleton();
                     case SkeletonTrackingType.Nearest:
                         return GetNearestKnownSkeleton();
                     case SkeletonTrackingType.NearestFullyTracked:
@@ -74,7 +82,7 @@ namespace Mach.Kinect
 
         public void SetSkeletonData(Skeleton[] skeletonData, long skeletonTimestamp)
         {
-            Items = skeletonData;
+            _items = skeletonData;
             _timestamp = skeletonTimestamp;
         }
 

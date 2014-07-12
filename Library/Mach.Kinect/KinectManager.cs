@@ -121,11 +121,11 @@ namespace Mach.Kinect
                     {
                         if (value == true)
                         {
-                            SetSeatedMode(sensor.Sensor);
+                            sensor.SetSeatedMode();
                         }
                         else
                         {
-                            SetDefaultMode(sensor.Sensor);
+                            sensor.SetDefaultMode();
                         }
                     }
                 }
@@ -309,16 +309,17 @@ namespace Mach.Kinect
                         sensor.ElevationAngle = 0;
                     }
 
+                    ConnectedSensor connectedSensor = new ConnectedSensor(sensor, _skeletonsTrackingType);
+
                     if (_useSeatedMode)
                     {
-                        SetSeatedMode(sensor);
+                        connectedSensor.SetSeatedMode();
                     }
                     else
                     {
-                        SetDefaultMode(sensor);
+                        connectedSensor.SetDefaultMode();
                     }
 
-                    ConnectedSensor connectedSensor = new ConnectedSensor(sensor, _skeletonsTrackingType);
                     _sensors.Add(connectedSensor);
                 }
                 catch
@@ -328,26 +329,6 @@ namespace Mach.Kinect
                     if (KinectStatusChanged != null)
                         KinectStatusChanged(this, EventArgs.Empty);
                 }
-            }
-        }
-
-        private void SetSeatedMode(KinectSensor sensor)
-        {
-            if (sensor != null && sensor.DepthStream != null && sensor.SkeletonStream != null)
-            {
-                sensor.DepthStream.Range = DepthRange.Near;
-                sensor.SkeletonStream.EnableTrackingInNearRange = true;
-                sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Seated;
-            }
-        }
-
-        private void SetDefaultMode(KinectSensor sensor)
-        {
-            if (sensor != null && sensor.DepthStream != null && sensor.SkeletonStream != null)
-            {
-                sensor.DepthStream.Range = DepthRange.Default;
-                sensor.SkeletonStream.EnableTrackingInNearRange = false;
-                sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
             }
         }
 
