@@ -8,7 +8,7 @@ namespace Mach.Kinect
     /// <summary>
     /// Handles Kinect sensor initialization.
     /// </summary>
-    public partial class KinectManager : IDisposable
+    public class KinectManager : IDisposable
     {
         private KinectStatus _lastStatus;
         private bool _useSeatedMode;
