@@ -1,4 +1,4 @@
-﻿using Mach.Kinect;
+﻿using Mach.Kinect.Gestures;
 using Mach.Kinectomix.Logic;
 using Mach.Xna.Components;
 using Mach.Xna.Kinect.Components;

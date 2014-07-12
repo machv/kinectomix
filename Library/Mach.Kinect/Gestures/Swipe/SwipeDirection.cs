@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mach.Kinect
+﻿namespace Mach.Kinect.Gestures
 {
     /// <summary>
     /// Direction of detected swipe gesture.

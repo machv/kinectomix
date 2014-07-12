@@ -8,11 +8,11 @@ using System.Linq;
 using Mach.Xna.Input.Extensions;
 using Mach.Xna.ScreenManagement;
 using Mach.Xna.Components;
-using Mach.Kinect;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.Kinect.Gestures;
 using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.ViewModel;
+using Mach.Kinect.Gestures;
 
 namespace Mach.Kinectomix.Screens
 {
