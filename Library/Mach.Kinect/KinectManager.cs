@@ -14,6 +14,7 @@ namespace Mach.Kinect
         private bool _useSeatedMode;
         private bool _startColorStream;
         private bool _startDepthStream;
+        private bool _startSkeletonStream;
         private List<ConnectedSensor> _sensors;
         private Skeletons.SkeletonType _skeletonsTrackingType;
         private int _connectedSensorsLimit;
@@ -129,15 +130,27 @@ namespace Mach.Kinect
 
         }
 
+        public KinectManager(bool startColorStream, bool startDepthStream, bool startSkeletonStream)
+            : this(startColorStream, startDepthStream, startSkeletonStream, int.MaxValue, Skeletons.SkeletonType.NearestFullyTracked)
+        {
+
+        }
+
         public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit)
             :  this(startColorStream, startDepthStream, connectedSensorsLimit, Skeletons.SkeletonType.NearestFullyTracked)
         {
         }
 
         public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit, Skeletons.SkeletonType skeletonsTrackingType)
+            : this(startColorStream, startDepthStream, true, connectedSensorsLimit, skeletonsTrackingType)
+        {
+        }
+
+        public KinectManager(bool startColorStream, bool startDepthStream, bool startSkeletonStream, int connectedSensorsLimit, Skeletons.SkeletonType skeletonsTrackingType)
         {
             _startColorStream = startColorStream;
             _startDepthStream = startDepthStream;
+            _startSkeletonStream = startSkeletonStream;
             _connectedSensorsLimit = connectedSensorsLimit;
             _skeletonsTrackingType = skeletonsTrackingType;
 
@@ -266,33 +279,46 @@ namespace Mach.Kinect
             {
                 try
                 {
-                    // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
-                    TransformSmoothParameters parameters = new TransformSmoothParameters();
-                    parameters.Smoothing = 0.5f;
-                    parameters.Correction = 0.5f;
-                    parameters.Prediction = 0.4f;
-                    parameters.JitterRadius = 1.0f;
-                    parameters.MaxDeviationRadius = 0.5f;
-                    parameters.Smoothing = 0.7f;
-                    parameters.Correction = 0.3f;
+                    if (_startSkeletonStream)
+                    {
+                        // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
+                        TransformSmoothParameters parameters = new TransformSmoothParameters();
+                        parameters.Smoothing = 0.5f;
+                        parameters.Correction = 0.5f;
+                        parameters.Prediction = 0.4f;
+                        parameters.JitterRadius = 1.0f;
+                        parameters.MaxDeviationRadius = 0.5f;
+                        parameters.Smoothing = 0.7f;
+                        parameters.Correction = 0.3f;
 
-                    sensor.SkeletonStream.Enable(parameters);
+                        sensor.SkeletonStream.Enable(parameters);
+                    }
 
                     if (_startDepthStream)
+                    {
                         sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                    }
 
                     if (_startColorStream)
+                    {
                         sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                    }
 
                     sensor.Start();
 
                     if (sensor.ElevationAngle != 0)
+                    {
                         sensor.ElevationAngle = 0;
+                    }
 
                     if (_useSeatedMode)
+                    {
                         SetSeatedMode(sensor);
+                    }
                     else
+                    {
                         SetDefaultMode(sensor);
+                    }
 
                     ConnectedSensor connectedSensor = new ConnectedSensor(sensor, _skeletonsTrackingType);
                     _sensors.Add(connectedSensor);
