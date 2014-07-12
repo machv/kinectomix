@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Mach.Kinect.Gestures
+﻿namespace Mach.Kinect.Gestures
 {
-    public class SwipeGesture
+    public struct SwipeGesture
     {
         private SwipeDirection _direction;
         private double _distance;

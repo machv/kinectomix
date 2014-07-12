@@ -16,7 +16,6 @@ namespace Mach.Kinect.Gestures
         private double _totalDistanceX;
         private double _totalDistanceY;
         private double _requiredDistance;
-
         private double _depthTolerance = 0.1d;
         private double _verticalTolerance = 0.03d;
         private double _horizontalTolerance = 0.03d;
@@ -66,7 +65,7 @@ namespace Mach.Kinect.Gestures
             _totalDistanceY = 0;
             _requiredDistance = requiredDistance;
         }
-
+        
         /// <summary>
         /// Adds current position to the recognizer to detect swipe gesture. If is false returned, processing can stop as recorded path of positions does not create swipe gesture.
         /// </summary>
