@@ -78,6 +78,15 @@ namespace Mach.Kinect
         }
 
         /// <summary>
+        /// Gets the first available initialized <see cref="ConnectedSensor"/>.
+        /// </summary>
+        /// <returns>Initialized Kinect sensor.</returns>
+        public ConnectedSensor ConnectedSensor
+        {
+            get { return _sensors.FirstOrDefault(); }
+        }
+
+        /// <summary>
         /// Gets the list of all connected and initialized Kinect sensors.
         /// </summary>
         /// <returns>List of all connected and initialized Kinect sensors.</returns>
