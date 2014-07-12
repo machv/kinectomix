@@ -15,7 +15,8 @@ namespace Mach.Kinect
         private bool _startColorStream;
         private bool _startDepthStream;
         private List<ConnectedSensor> _sensors;
-        private Skeletons.SkeletonType _skeletonTrackingType;
+        private Skeletons.SkeletonType _skeletonsTrackingType;
+        private int _connectedSensorsLimit;
 
         /// <summary>
         /// Gets skeletons for the first connected Kinect Sensor.
@@ -110,18 +111,24 @@ namespace Mach.Kinect
         }
 
         public KinectManager(bool startColorStream, bool startDepthStream)
-            : this(startColorStream, startDepthStream, Skeletons.SkeletonType.NearestFullyTracked)
+            : this(startColorStream, startDepthStream, int.MaxValue)
         {
 
         }
 
-        public KinectManager(bool startColorStream, bool startDepthStream, Skeletons.SkeletonType trackingType)
+        public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit)
+            :  this(startColorStream, startDepthStream, connectedSensorsLimit, Skeletons.SkeletonType.NearestFullyTracked)
         {
-            _sensors = new List<ConnectedSensor>();
-            _skeletonTrackingType = trackingType;
-            //_skeletons = new Skeletons(Skeletons.SkeletonType.NearestFullyTracked);
+        }
+
+        public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit, Skeletons.SkeletonType skeletonsTrackingType)
+        {
             _startColorStream = startColorStream;
             _startDepthStream = startDepthStream;
+            _connectedSensorsLimit = connectedSensorsLimit;
+            _skeletonsTrackingType = skeletonsTrackingType;
+
+            _sensors = new List<ConnectedSensor>();
 
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
 
@@ -234,6 +241,9 @@ namespace Mach.Kinect
 
         private void DoInitialization(KinectSensor sensor)
         {
+            if (_sensors.Count >= _connectedSensorsLimit)
+                return;
+
             _lastStatus = sensor.Status;
 
             if (KinectStatusChanged != null)
@@ -271,7 +281,7 @@ namespace Mach.Kinect
                     else
                         SetDefaultMode(sensor);
 
-                    ConnectedSensor connectedSensor = new ConnectedSensor(sensor, _skeletonTrackingType);
+                    ConnectedSensor connectedSensor = new ConnectedSensor(sensor, _skeletonsTrackingType);
                     _sensors.Add(connectedSensor);
                 }
                 catch
