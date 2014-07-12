@@ -1,6 +1,6 @@
 ﻿namespace Mach.Kinect.Gestures
 {
-    public struct SwipeGesture
+    public class SwipeGesture
     {
         private SwipeDirection _direction;
         private double _distance;
