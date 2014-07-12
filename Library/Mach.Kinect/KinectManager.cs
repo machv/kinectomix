@@ -1,36 +1,65 @@
 ﻿using Microsoft.Kinect;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mach.Kinect
 {
     /// <summary>
     /// Handles Kinect sensor initialization.
     /// </summary>
-    public class KinectManager : IDisposable
+    public partial class KinectManager : IDisposable
     {
-        private Skeletons _skeletons;
-        private KinectSensor _sensor;
         private KinectStatus _lastStatus;
         private bool _useSeatedMode;
         private bool _startColorStream;
         private bool _startDepthStream;
+        private List<ConnectedSensor> _sensors;
+        private Skeletons.SkeletonType _skeletonTrackingType;
 
         /// <summary>
-        /// Gets skeletons returned from the Kinect Sensor.
+        /// Gets skeletons for the first connected Kinect Sensor.
         /// </summary>
         /// <returns>Skeletons tracked by the Kinect sensor.</returns>
         public Skeletons Skeletons
         {
-            get { return _skeletons; }
+            get { return _sensors.Select(s => s.Skeletons).FirstOrDefault(); }
         }
 
         /// <summary>
-        /// Gets selected Kinect sensor.
+        /// Gets the skeletons for all connected sensors.
         /// </summary>
-        /// <returns>Selected Kinect sensor.</returns>
+        /// <returns>List of the skeletons for all connected sensors.</returns>
+        public IEnumerable<Skeletons> AllSkeletons
+        {
+            get { return _sensors.Select(s => s.Skeletons); }
+        }
+
+        /// <summary>
+        /// Gets the first available initialized Kinect sensor.
+        /// </summary>
+        /// <returns>Initialized Kinect sensor.</returns>
         public KinectSensor Sensor
         {
-            get { return _sensor; }
+            get { return _sensors.Select(s => s.Sensor).FirstOrDefault(); }
+        }
+
+        /// <summary>
+        /// Gets the list of all connected and initialized Kinect sensors.
+        /// </summary>
+        /// <returns>List of all connected and initialized Kinect sensors.</returns>
+        public IEnumerable<KinectSensor> Sensors
+        {
+            get { return _sensors.Select(s => s.Sensor); }
+        }
+
+        /// <summary>
+        /// Gets the list of all connected and initialized Kinect sensors with corresponding skeletons.
+        /// </summary>
+        /// <returns>List of all connected and initialized Kinect sensors with corresponding skeletons.</returns>
+        public IList<ConnectedSensor> ConnectedSensors
+        {
+            get { return _sensors.AsReadOnly(); }
         }
 
         /// <summary>
@@ -53,12 +82,19 @@ namespace Mach.Kinect
             {
                 _useSeatedMode = value;
 
-                if (_sensor != null)
+                if (_sensors != null)
                 {
-                    if (value == true)
-                        SetSeatedMode(_sensor);
-                    else
-                        SetDefaultMode(_sensor);
+                    foreach (ConnectedSensor sensor in _sensors)
+                    {
+                        if (value == true)
+                        {
+                            SetSeatedMode(sensor.Sensor);
+                        }
+                        else
+                        {
+                            SetDefaultMode(sensor.Sensor);
+                        }
+                    }
                 }
             }
         }
@@ -67,28 +103,54 @@ namespace Mach.Kinect
 
         public event KinectStatusChangedEventHandler KinectStatusChanged;
 
-        public KinectManager(bool startColorStream, bool startDepthStream)
+        public KinectManager()
+            : this(true, true)
         {
-            _skeletons = new Skeletons(Skeletons.SkeletonType.NearestFullyTracked);
+
+        }
+
+        public KinectManager(bool startColorStream, bool startDepthStream)
+            : this(startColorStream, startDepthStream, Skeletons.SkeletonType.NearestFullyTracked)
+        {
+
+        }
+
+        public KinectManager(bool startColorStream, bool startDepthStream, Skeletons.SkeletonType trackingType)
+        {
+            _sensors = new List<ConnectedSensor>();
+            _skeletonTrackingType = trackingType;
+            //_skeletons = new Skeletons(Skeletons.SkeletonType.NearestFullyTracked);
             _startColorStream = startColorStream;
             _startDepthStream = startDepthStream;
 
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
+
             DiscoverSensor();
         }
 
         public void ProcessUpdate()
         {
-            if (Sensor != null && Sensor.SkeletonStream.IsEnabled)
+            foreach (ConnectedSensor sensor in _sensors)
             {
-                using (SkeletonFrame skeletonFrame = Sensor.SkeletonStream.OpenNextFrame(0))
+                ProcessUpdate(sensor);
+            }
+        }
+
+        public void ProcessUpdate(ConnectedSensor sensor)
+        {
+            if (sensor == null)
+                return;
+
+            if (sensor.Sensor != null && sensor.Sensor.SkeletonStream.IsEnabled)
+            {
+                using (SkeletonFrame skeletonFrame = sensor.Sensor.SkeletonStream.OpenNextFrame(0))
                 {
                     if (skeletonFrame != null)
                     {
                         Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
                         skeletonFrame.CopySkeletonDataTo(skeletonData);
 
-                        _skeletons.SetSkeletonData(skeletonData, skeletonFrame.Timestamp);
+                        sensor.Skeletons.SetSkeletonData(skeletonData, skeletonFrame.Timestamp);
                     }
                 }
             }
@@ -103,7 +165,11 @@ namespace Mach.Kinect
 
             if (e.Status == KinectStatus.Disconnected)
             {
-                _sensor = null;
+                ConnectedSensor sensor = _sensors.Where(s => s.Sensor.DeviceConnectionId == e.Sensor.DeviceConnectionId).FirstOrDefault();
+                if (sensor != null)
+                {
+                    _sensors.Remove(sensor);
+                }
             }
 
             _lastStatus = e.Status;
@@ -154,66 +220,66 @@ namespace Mach.Kinect
 
         private void DiscoverSensor()
         {
-            KinectSensor sensor = null;
-
             foreach (KinectSensor candidate in KinectSensor.KinectSensors)
             {
                 if (candidate.Status == KinectStatus.Connected)
                 {
-                    sensor = candidate;
-                    break;
+                    if (candidate != null)
+                    {
+                        DoInitialization(candidate);
+                    }
                 }
             }
+        }
 
-            if (sensor != null)
+        private void DoInitialization(KinectSensor sensor)
+        {
+            _lastStatus = sensor.Status;
+
+            if (KinectStatusChanged != null)
+                KinectStatusChanged(this, EventArgs.Empty);
+
+            if (sensor.Status == KinectStatus.Connected)
             {
-                _lastStatus = sensor.Status;
-
-                if (KinectStatusChanged != null)
-                    KinectStatusChanged(this, EventArgs.Empty);
-
-                if (sensor.Status == KinectStatus.Connected)
+                try
                 {
-                    try
-                    {
-                        // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
-                        TransformSmoothParameters parameters = new TransformSmoothParameters();
-                        parameters.Smoothing = 0.5f;
-                        parameters.Correction = 0.5f;
-                        parameters.Prediction = 0.4f;
-                        parameters.JitterRadius = 1.0f;
-                        parameters.MaxDeviationRadius = 0.5f;
-                        parameters.Smoothing = 0.7f;
-                        parameters.Correction = 0.3f;
+                    // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
+                    TransformSmoothParameters parameters = new TransformSmoothParameters();
+                    parameters.Smoothing = 0.5f;
+                    parameters.Correction = 0.5f;
+                    parameters.Prediction = 0.4f;
+                    parameters.JitterRadius = 1.0f;
+                    parameters.MaxDeviationRadius = 0.5f;
+                    parameters.Smoothing = 0.7f;
+                    parameters.Correction = 0.3f;
 
-                        sensor.SkeletonStream.Enable(parameters);
+                    sensor.SkeletonStream.Enable(parameters);
 
-                        if (_startDepthStream)
-                            sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                    if (_startDepthStream)
+                        sensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
 
-                        if (_startColorStream)
-                            sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
+                    if (_startColorStream)
+                        sensor.ColorStream.Enable(ColorImageFormat.RgbResolution640x480Fps30);
 
-                        sensor.Start();
+                    sensor.Start();
 
-                        if (sensor.ElevationAngle != 0)
-                            sensor.ElevationAngle = 0;
+                    if (sensor.ElevationAngle != 0)
+                        sensor.ElevationAngle = 0;
 
-                        if (_useSeatedMode)
-                            SetSeatedMode(sensor);
-                        else
-                            SetDefaultMode(sensor);
+                    if (_useSeatedMode)
+                        SetSeatedMode(sensor);
+                    else
+                        SetDefaultMode(sensor);
 
-                        _sensor = sensor;
-                    }
-                    catch
-                    {
-                        _sensor = null;
-                        _lastStatus = KinectStatus.Error;
+                    ConnectedSensor connectedSensor = new ConnectedSensor(sensor, _skeletonTrackingType);
+                    _sensors.Add(connectedSensor);
+                }
+                catch
+                {
+                    _lastStatus = KinectStatus.Error;
 
-                        if (KinectStatusChanged != null)
-                            KinectStatusChanged(this, EventArgs.Empty);
-                    }
+                    if (KinectStatusChanged != null)
+                        KinectStatusChanged(this, EventArgs.Empty);
                 }
             }
         }
@@ -240,9 +306,15 @@ namespace Mach.Kinect
 
         public void Dispose()
         {
-            if (_sensor != null)
+            if (_sensors != null)
             {
-                _sensor.Stop();
+                foreach (ConnectedSensor sensor in _sensors)
+                {
+                    if (sensor.Sensor != null)
+                    {
+                        sensor.Sensor.Stop();
+                    }
+                }
             }
         }
     }
