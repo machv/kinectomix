@@ -19,6 +19,19 @@ namespace Mach.Kinect
         private int _connectedSensorsLimit;
 
         /// <summary>
+        /// Gets the <see cref="ConnectedSensor"/> from the supplied instance identifier.
+        /// </summary>
+        /// <param name="deviceConnectionId"></param>
+        /// <returns>The connected Kinect sensor.</returns>
+        public ConnectedSensor this[string deviceConnectionId]
+        {
+            get
+            {
+                return _sensors.Where(s => s.Sensor != null && s.Sensor.DeviceConnectionId == deviceConnectionId).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Gets skeletons for the first connected Kinect Sensor.
         /// </summary>
         /// <returns>Skeletons tracked by the Kinect sensor.</returns>
