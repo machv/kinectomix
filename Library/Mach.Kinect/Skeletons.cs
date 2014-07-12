@@ -3,42 +3,14 @@ using System.Linq;
 
 namespace Mach.Kinect
 {
-    public class Skeletons
+    public partial class Skeletons
     {
         private long _timestamp;
 
-        public enum SkeletonType
-        {
-            /// <summary>
-            /// The skeleton that is first returned from the sensor.
-            /// </summary>
-            First,
-            /// <summary>
-            /// The nearest skeleton that has at least known position from the sensor.
-            /// </summary>
-            Nearest,
-            /// <summary>
-            /// The nearest fully tracked skeleton from the sensor.
-            /// </summary>
-            NearestFullyTracked,
-            /// <summary>
-            /// The skeleton with corresponding ID.
-            /// </summary>
-            FixById,
-            /// <summary>
-            /// The skeleton with corresponding ID and if that ID is not tracked it tries to find first alternative with at least known position.
-            /// </summary>
-            FixByIdOrFirst,
-            /// <summary>
-            /// The skeleton with corresponding ID and if that ID is not tracked it tries to find first fully tracked alternative.
-            /// </summary>
-            FixByIdOrFirstFullyTracked,
-        }
-
         public Skeleton[] Items { get; private set; }
 
-        private SkeletonType _trackingType;
-        public SkeletonType TrackingType
+        private SkeletonTrackingType _trackingType;
+        public SkeletonTrackingType SkeletonTrackingMode
         {
             get { return _trackingType; }
             set { _trackingType = value; }
@@ -60,13 +32,13 @@ namespace Mach.Kinect
 
                 switch (_trackingType)
                 {
-                    case SkeletonType.Nearest:
+                    case SkeletonTrackingType.Nearest:
                         return GetNearestKnownSkeleton();
-                    case SkeletonType.NearestFullyTracked:
+                    case SkeletonTrackingType.NearestFullyTracked:
                         return GetNearestTrackedSkeleton();
-                    case SkeletonType.FixById:
+                    case SkeletonTrackingType.FixById:
                         return GetSkeleton(_trackedSkeletonId);
-                    case SkeletonType.FixByIdOrFirst:
+                    case SkeletonTrackingType.FixByIdOrFirst:
                         skeleton = GetSkeleton(_trackedSkeletonId);
                         if (skeleton == null)
                         {
@@ -75,7 +47,7 @@ namespace Mach.Kinect
                         }
 
                         return skeleton;
-                    case SkeletonType.FixByIdOrFirstFullyTracked:
+                    case SkeletonTrackingType.FixByIdOrFirstFullyTracked:
                         skeleton = GetSkeleton(_trackedSkeletonId);
                         if (skeleton == null)
                         {
@@ -95,7 +67,7 @@ namespace Mach.Kinect
 
         }
 
-        public Skeletons(SkeletonType trackingType)
+        public Skeletons(SkeletonTrackingType trackingType)
         {
             _trackingType = trackingType;
         }

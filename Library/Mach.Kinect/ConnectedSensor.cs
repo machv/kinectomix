@@ -47,12 +47,12 @@ namespace Mach.Kinect
         }
 
         public ConnectedSensor(KinectSensor sensor)
-            : this(sensor, Skeletons.SkeletonType.NearestFullyTracked)
+            : this(sensor, Skeletons.SkeletonTrackingType.NearestFullyTracked)
         {
 
         }
 
-        public ConnectedSensor(KinectSensor sensor, Skeletons.SkeletonType trackingType)
+        public ConnectedSensor(KinectSensor sensor, Skeletons.SkeletonTrackingType trackingType)
         {
             if (sensor == null)
                 throw new ArgumentNullException("sensor");

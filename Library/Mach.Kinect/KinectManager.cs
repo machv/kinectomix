@@ -16,7 +16,7 @@ namespace Mach.Kinect
         private bool _startDepthStream;
         private bool _startSkeletonStream;
         private List<ConnectedSensor> _sensors;
-        private Skeletons.SkeletonType _skeletonsTrackingType;
+        private Skeletons.SkeletonTrackingType _skeletonsTrackingType;
         private int _connectedSensorsLimit;
         private bool _processSkeletonsAutomatically;
 
@@ -149,22 +149,22 @@ namespace Mach.Kinect
         }
 
         public KinectManager(bool startColorStream, bool startDepthStream, bool startSkeletonStream)
-                : this(startColorStream, startDepthStream, startSkeletonStream, int.MaxValue, Skeletons.SkeletonType.NearestFullyTracked)
+                : this(startColorStream, startDepthStream, startSkeletonStream, int.MaxValue, Skeletons.SkeletonTrackingType.NearestFullyTracked)
         {
 
         }
 
         public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit)
-                : this(startColorStream, startDepthStream, connectedSensorsLimit, Skeletons.SkeletonType.NearestFullyTracked)
+                : this(startColorStream, startDepthStream, connectedSensorsLimit, Skeletons.SkeletonTrackingType.NearestFullyTracked)
         {
         }
 
-        public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit, Skeletons.SkeletonType skeletonsTrackingType)
+        public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit, Skeletons.SkeletonTrackingType skeletonsTrackingType)
                 : this(startColorStream, startDepthStream, true, connectedSensorsLimit, skeletonsTrackingType)
         {
         }
 
-        public KinectManager(bool startColorStream, bool startDepthStream, bool startSkeletonStream, int connectedSensorsLimit, Skeletons.SkeletonType skeletonsTrackingType)
+        public KinectManager(bool startColorStream, bool startDepthStream, bool startSkeletonStream, int connectedSensorsLimit, Skeletons.SkeletonTrackingType skeletonsTrackingType)
         {
             _startColorStream = startColorStream;
             _startDepthStream = startDepthStream;
