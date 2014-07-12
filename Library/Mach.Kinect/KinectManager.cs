@@ -18,6 +18,24 @@ namespace Mach.Kinect
         private List<ConnectedSensor> _sensors;
         private Skeletons.SkeletonType _skeletonsTrackingType;
         private int _connectedSensorsLimit;
+        private bool _processSkeletonsAutomatically;
+
+        public bool ProcessSkeletonsAutomatically
+        {
+            get
+            {
+                return _processSkeletonsAutomatically;
+            }
+            set
+            {
+                foreach (ConnectedSensor sensor in _sensors)
+                {
+                    sensor.ProcessSkeletonsAutomatically = value;
+                }
+
+                _processSkeletonsAutomatically = value;
+            }
+        }
 
         /// <summary>
         /// Gets the <see cref="ConnectedSensor"/> from the supplied instance identifier.
@@ -119,30 +137,30 @@ namespace Mach.Kinect
         public event KinectStatusChangedEventHandler KinectStatusChanged;
 
         public KinectManager()
-            : this(true, true)
+                : this(true, true)
         {
 
         }
 
         public KinectManager(bool startColorStream, bool startDepthStream)
-            : this(startColorStream, startDepthStream, int.MaxValue)
+                : this(startColorStream, startDepthStream, int.MaxValue)
         {
 
         }
 
         public KinectManager(bool startColorStream, bool startDepthStream, bool startSkeletonStream)
-            : this(startColorStream, startDepthStream, startSkeletonStream, int.MaxValue, Skeletons.SkeletonType.NearestFullyTracked)
+                : this(startColorStream, startDepthStream, startSkeletonStream, int.MaxValue, Skeletons.SkeletonType.NearestFullyTracked)
         {
 
         }
 
         public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit)
-            :  this(startColorStream, startDepthStream, connectedSensorsLimit, Skeletons.SkeletonType.NearestFullyTracked)
+                : this(startColorStream, startDepthStream, connectedSensorsLimit, Skeletons.SkeletonType.NearestFullyTracked)
         {
         }
 
         public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit, Skeletons.SkeletonType skeletonsTrackingType)
-            : this(startColorStream, startDepthStream, true, connectedSensorsLimit, skeletonsTrackingType)
+                : this(startColorStream, startDepthStream, true, connectedSensorsLimit, skeletonsTrackingType)
         {
         }
 
@@ -165,27 +183,7 @@ namespace Mach.Kinect
         {
             foreach (ConnectedSensor sensor in _sensors)
             {
-                ProcessUpdate(sensor);
-            }
-        }
-
-        public void ProcessUpdate(ConnectedSensor sensor)
-        {
-            if (sensor == null)
-                return;
-
-            if (sensor.Sensor != null && sensor.Sensor.SkeletonStream.IsEnabled)
-            {
-                using (SkeletonFrame skeletonFrame = sensor.Sensor.SkeletonStream.OpenNextFrame(0))
-                {
-                    if (skeletonFrame != null)
-                    {
-                        Skeleton[] skeletonData = new Skeleton[skeletonFrame.SkeletonArrayLength];
-                        skeletonFrame.CopySkeletonDataTo(skeletonData);
-
-                        sensor.Skeletons.SetSkeletonData(skeletonData, skeletonFrame.Timestamp);
-                    }
-                }
+                sensor.ProcessSkeletons();
             }
         }
 
