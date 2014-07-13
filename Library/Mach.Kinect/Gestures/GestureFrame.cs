@@ -1,12 +1,21 @@
 ﻿using Microsoft.Kinect;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace Mach.Kinect.Gestures
 {
+    /// <summary>
+    /// Frame containing normalized positions of tracked joints for gesture.
+    /// </summary>
     public class GestureFrame : Collection<SkeletonPoint>
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="GestureFrame"/> from recorded <see cref="FrameData"/>.
+        /// </summary>
+        /// <param name="frameData">Recorded data.</param>
+        /// <param name="trackedJoints">Which points should be included in the gesture.</param>
+        /// <param name="dimension">Dimension for tracked points.</param>
+        /// <returns></returns>
         public static GestureFrame FromFrameData(FrameData frameData, IEnumerable<JointType> trackedJoints, TrackingDimension dimension = TrackingDimension.Three)
         {
             GestureFrame frame = new GestureFrame();
