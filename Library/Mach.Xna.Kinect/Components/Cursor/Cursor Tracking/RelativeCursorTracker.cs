@@ -5,24 +5,44 @@ using System;
 
 namespace Mach.Xna.Kinect.Components
 {
+    /// <summary>
+    /// Maps relatively cursor position to defined rectangle.
+    /// </summary>
     public class RelativeCursorTracker : ICursorTracker
     {
         private KinectManager _kinectManager;
         private SkeletonPoint _previousPosition;
         private float _moveThreshold = 0.005f;
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="RelativeCursorTracker"/> class.
+        /// </summary>
+        /// <param name="kinectManager">Manager handling connected Kinect sensor.</param>
         public RelativeCursorTracker(KinectManager kinectManager)
         {
             _kinectManager = kinectManager;
             _moveThreshold = 0.005f;
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="RelativeCursorTracker"/> class and sets movement threshold.
+        /// </summary>
+        /// <param name="kinectManager">Manager handling connected Kinect sensor.</param>
+        /// <param name="moveThreshold">Minimal distance that has to be reached to return new cursor position.</param>
         public RelativeCursorTracker(KinectManager kinectManager, float moveThreshold)
         {
             _kinectManager = kinectManager;
             _moveThreshold = moveThreshold;
         }
 
+        /// <summary>
+        /// Gets mapped cursor position with respect to bounding limits based current <see cref="Skeleton"/> data.
+        /// </summary>
+        /// <param name="skeleton">Skeleton data to parse.</param>
+        /// <param name="leftHanded">True if left hand is tracked.</param>
+        /// <param name="width">Width of the mapping area.</param>
+        /// <param name="height">Height of the mapping area.</param>
+        /// <returns>Mapped cursor position.</returns>
         public Vector2 GetCursorPosition(Skeleton skeleton, bool leftHanded, int width, int height)
         {
             bool isHandTracked;
@@ -31,17 +51,17 @@ namespace Mach.Xna.Kinect.Components
         }
 
         /// <summary>
-        /// http://stackoverflow.com/questions/12569706/how-to-use-skeletal-joint-to-act-as-cursor-using-bounds-no-gestures
-        /// Shoulders = top of screen
-        /// Hips = bottom of screen
-        /// Left Should = left most on screen
+        /// Gets mapped cursor position with respect to bounding limits based current <see cref="Skeleton"/> data.
+        /// Limits:
+        ///   * Shoulders = top of screen
+        ///   * Hips = bottom of screen
         /// </summary>
-        /// <param name="skeleton"></param>
-        /// <param name="leftHanded"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="isHandTracked"></param>
-        /// <returns></returns>
+        /// <param name="skeleton">Skeleton data to parse.</param>
+        /// <param name="leftHanded">True if left hand is tracked.</param>
+        /// <param name="width">Width of the mapping area.</param>
+        /// <param name="height">Height of the mapping area.</param>
+        /// <param name="isHandTracked">Output parameter containing true if selected hand is active.</param>
+        /// <returns>Mapped cursor position.</returns>
         public Vector2 GetCursorPosition(Skeleton skeleton, bool leftHanded, int width, int height, out bool isHandTracked)
         {
             isHandTracked = false;

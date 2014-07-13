@@ -7,6 +7,9 @@ using Mach.Xna.Kinect.Components;
 
 namespace Mach.Xna.Kinect.HandState
 {
+    /// <summary>
+    /// Tracks if active hand is closed.
+    /// </summary>
     public class InteractionsClosedHandTracker : IHandStateTracker
     {
         private InteractionStream _interationsStream;
@@ -14,19 +17,30 @@ namespace Mach.Xna.Kinect.HandState
         private VisualKinectManager _chooser;
         private bool _isHandClosed;
 
+        /// <summary>
+        /// Gets if tracked hand is closed.
+        /// </summary>
+        /// <returns>True if tracked hand is closed.</returns>
         public bool IsStateActive
         {
             get { return _isHandClosed; }
         }
 
-        public InteractionsClosedHandTracker(VisualKinectManager chooser)
+        /// <summary>
+        /// Initializes a new instance of <see cref="InteractionsClosedHandTracker"/> class.
+        /// </summary>
+        /// <param name="kinectManager">Kinect manager handling Kinect.</param>
+        public InteractionsClosedHandTracker(VisualKinectManager kinectManager)
         {
             KinectInteractionClient ic = new KinectInteractionClient();
-            _interationsStream = new InteractionStream(chooser.Sensor, ic);
-            _chooser = chooser;
+            _interationsStream = new InteractionStream(kinectManager.Sensor, ic);
+            _chooser = kinectManager;
         }
 
-
+        /// <summary>
+        /// Processes depth frame.
+        /// </summary>
+        /// <param name="frame">Depth frame to process.</param>
         public void ProcessDepthData(DepthImageFrame depthFrame)
         {
             if (depthFrame != null)
@@ -38,6 +52,10 @@ namespace Mach.Xna.Kinect.HandState
             }
         }
 
+        /// <summary>
+        /// Processes skeleton frame.
+        /// </summary>
+        /// <param name="depthFrame">Skeleton frame to process.</param>
         public void ProcessSkeletonData(SkeletonFrame skeletonFrame)
         {
             if (skeletonFrame != null)
@@ -50,6 +68,11 @@ namespace Mach.Xna.Kinect.HandState
             }
         }
 
+        /// <summary>
+        /// Updates status of the tracked closed/open hand.
+        /// </summary>
+        /// <param name="leftHanded">True if left hand is tracked.</param>
+        /// <param name="cursorPosition">Current position of the cursor.</param>
         public void Update(bool leftHanded, Vector2 cursorPosition)
         {
             using (InteractionFrame frame = _interationsStream.OpenNextFrame(0))
@@ -81,6 +104,14 @@ namespace Mach.Xna.Kinect.HandState
             }
         }
 
+        /// <summary>
+        /// Not used in this implementation.
+        /// </summary>
+        /// <param name="gameTime">The elapsed game time.</param>
+        /// <param name="spriteBatch"><see cref="SpriteBatch"/> used for drawing.</param>
+        /// <param name="font">Font for drawing debug information.</param>
+        /// <param name="scale">Scale for displayed information.</param>
+        /// <param name="renderOffset">Offset for displayed information.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, SpriteFont font, float scale, Vector2 renderOffset) { }
     }
 }
