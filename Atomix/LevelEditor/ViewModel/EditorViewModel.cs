@@ -1,7 +1,7 @@
 ﻿using Kinectomix.LevelEditor.Model;
 using System.IO;
 using System.Windows.Input;
-using Kinectomix.Wpf.Mvvm;
+using Mach.Wpf.Mvvm;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Xml.Serialization;

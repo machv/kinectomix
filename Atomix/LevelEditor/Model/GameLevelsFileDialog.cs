@@ -1,4 +1,4 @@
-﻿using Kinectomix.Wpf.Mvvm;
+﻿using Mach.Wpf.Mvvm;
 using Microsoft.Win32;
 using System;
 using System.IO;

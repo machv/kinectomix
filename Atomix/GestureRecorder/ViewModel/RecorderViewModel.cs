@@ -1,5 +1,5 @@
 ﻿using Kinectomix.GestureRecorder.Model;
-using Kinectomix.Wpf.Mvvm;
+using Mach.Wpf.Mvvm;
 using Mach.Kinect.Gestures;
 using Microsoft.Kinect;
 using System;

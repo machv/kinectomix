@@ -1,6 +1,6 @@
 ﻿using Kinectomix.LevelEditor.Model;
 using System.Collections.Generic;
-using Kinectomix.Wpf.Mvvm;
+using Mach.Wpf.Mvvm;
 
 namespace Kinectomix.LevelEditor.ViewModel
 {

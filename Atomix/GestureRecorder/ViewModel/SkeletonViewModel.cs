@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Kinectomix.Wpf.Mvvm;
+using Mach.Wpf.Mvvm;
 using Microsoft.Kinect;
 
 namespace Kinectomix.GestureRecorder.ViewModel

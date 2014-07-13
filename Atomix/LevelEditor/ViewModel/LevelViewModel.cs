@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Kinectomix.Wpf.Mvvm;
+using Mach.Wpf.Mvvm;
 using Mach.Kinectomix.Logic;
 
 namespace Kinectomix.LevelEditor.ViewModel

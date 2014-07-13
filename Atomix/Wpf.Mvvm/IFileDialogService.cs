@@ -1,4 +1,4 @@
-﻿namespace Kinectomix.Wpf.Mvvm
+﻿namespace Mach.Wpf.Mvvm
 {
     /// <summary>
     /// Provides abstraction for File picker dialog.

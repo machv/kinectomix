@@ -1,4 +1,4 @@
-﻿using Kinectomix.Wpf.Mvvm;
+﻿using Mach.Wpf.Mvvm;
 using System.Windows.Input;
 
 namespace Kinectomix.LevelEditor.ViewModel

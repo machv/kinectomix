@@ -1,4 +1,4 @@
-﻿using Kinectomix.Wpf.Mvvm;
+﻿using Mach.Wpf.Mvvm;
 using Mach.Kinectomix.Logic;
 using System.IO;
 using System.Linq;

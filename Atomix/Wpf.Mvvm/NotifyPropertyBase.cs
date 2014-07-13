@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Kinectomix.Wpf.Mvvm
+namespace Mach.Wpf.Mvvm
 {
     /// <summary>
     /// Base class that implements <see cref="INotifyPropertyChanged"/> interface.
