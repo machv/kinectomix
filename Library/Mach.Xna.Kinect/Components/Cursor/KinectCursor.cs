@@ -4,6 +4,7 @@ using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
 
@@ -24,6 +25,7 @@ namespace Mach.Xna.Kinect.Components
         private int _cursorPositionsBufferIndex;
         private IHandStateTracker _handStateTracker;
         private bool _hideMouseCursorWhenHandTracked;
+        private bool _setMouseCursorLocation;
         private ICursorMapper _cursorMapper;
         private Vector2 _cursorPosition;
         private SkeletonPoint _handRealPosition;
@@ -107,6 +109,15 @@ namespace Mach.Xna.Kinect.Components
             set { _hideMouseCursorWhenHandTracked = value; }
         }
         /// <summary>
+        /// Gets or sets if location of OS mouse cursor should be updated by this component.
+        /// </summary>
+        /// <returns>If true location of OS mouse cursor is updated by this component.</returns>
+        public bool SetMouseCursorLocation
+        {
+            get { return _setMouseCursorLocation; }
+            set { _setMouseCursorLocation = value; }
+        }
+        /// <summary>
         /// Gets if tracked hand state is active.
         /// </summary>
         /// <returns>True if tracked hand state is active.</returns>
@@ -126,7 +137,7 @@ namespace Mach.Xna.Kinect.Components
         /// <returns>Position of the cursor on the screen.</returns>
         public Vector2 CursorPosition
         {
-            get { return new Vector2((int)_cursorPosition.X, (int)_cursorPosition.Y); }
+            get { return _cursorPosition; }
         }
         /// <summary>
         /// Gets position of tracked hand in real world coordinate space.
@@ -288,6 +299,11 @@ namespace Mach.Xna.Kinect.Components
                 if (cursorPos != Vector2.Zero)
                 {
                     _cursorPosition = cursorPos;
+
+                    if (_setMouseCursorLocation)
+                    {
+                        Mouse.SetPosition((int)_cursorPosition.X, (int)_cursorPosition.Y);
+                    }
                 }
             }
             else
