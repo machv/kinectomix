@@ -366,16 +366,5 @@ namespace Mach.Xna.Kinect.Components
 
             return new Vector2(x, y);
         }
-
-        private float GetDistanceBetweenJoints(Skeleton skeleton, JointType join1, JointType join2)
-        {
-            DepthImagePoint join1DepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(skeleton.Joints[join1].Position, _KinectChooser.Sensor.DepthStream.Format);
-            DepthImagePoint join2DepthPoint = _KinectChooser.Sensor.CoordinateMapper.MapSkeletonPointToDepthPoint(skeleton.Joints[join2].Position, _KinectChooser.Sensor.DepthStream.Format);
-
-            Vector2 joint1Position = new Vector2(join1DepthPoint.X, join1DepthPoint.Y);
-            Vector2 joint2Position = new Vector2(join2DepthPoint.X, join2DepthPoint.Y);
-
-            return Vector2.Distance(joint1Position, joint2Position);
-        }
     }
 }
