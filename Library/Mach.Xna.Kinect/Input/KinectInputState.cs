@@ -13,9 +13,9 @@ namespace Mach.Xna.Input
         public KinectInputState(KinectCursor cursor)
             : this()
         {
-            X = (int)cursor.HandPosition.X;
-            Y = (int)cursor.HandPosition.Y;
-            IsStateActive = cursor.IsHandClosed; // || _cursor.IsHandPressed; 
+            X = (int)cursor.CursorPosition.X;
+            Y = (int)cursor.CursorPosition.Y;
+            IsStateActive = cursor.IsHandStateActive; // || _cursor.IsHandPressed; 
         }
     }
 }

@@ -58,9 +58,9 @@ namespace Mach.Xna.Kinect.Components
             base.Update(gameTime);
 
             _frame = 0; // Except zero
-            if (HandPosition != Vector2.Zero && _progress > 0)
+            if (CursorPosition != Vector2.Zero && _progress > 0)
             {
-                _circlePosition = new Vector2(HandPosition.X - 20, HandPosition.Y - 20);
+                _circlePosition = new Vector2(CursorPosition.X - 20, CursorPosition.Y - 20);
                 _frame = (int)(_progress * _framesCount);
                 if (_frame > _framesCount)
                     _frame = _framesCount - 1;
@@ -71,7 +71,7 @@ namespace Mach.Xna.Kinect.Components
         {
             base.Draw(gameTime);
 
-            if (HandPosition != Vector2.Zero && _frame > 0)
+            if (CursorPosition != Vector2.Zero && _frame > 0)
             {
                 _spriteBatch.Begin();
                 _animatedCircle.DrawFrame(_spriteBatch, _frame, _circlePosition);

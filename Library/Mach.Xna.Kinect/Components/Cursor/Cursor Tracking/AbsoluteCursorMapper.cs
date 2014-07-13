@@ -1,5 +1,4 @@
-﻿using System;
-using Mach.Kinect;
+﻿using Mach.Kinect;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 
@@ -8,15 +7,15 @@ namespace Mach.Xna.Kinect.Components
     /// <summary>
     /// Maps absolutely cursor position to defined rectangle.
     /// </summary>
-    public class AbsoluteCursorTracker : ICursorTracker
+    public class AbsoluteCursorMapper : ICursorMapper
     {
         private KinectManager _kinectManager;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="AbsoluteCursorTracker"/> class.
+        /// Initializes a new instance of <see cref="AbsoluteCursorMapper"/> class.
         /// </summary>
         /// <param name="kinectManager">Manager handling connected Kinect sensor.</param>
-        public AbsoluteCursorTracker(KinectManager kinectManager)
+        public AbsoluteCursorMapper(KinectManager kinectManager)
         {
             _kinectManager = kinectManager;
         }
@@ -35,7 +34,6 @@ namespace Mach.Xna.Kinect.Components
 
             return GetCursorPosition(skeleton, leftHanded, width, height, out isHandTracked);
         }
-
 
         /// <summary>
         /// Gets mapped cursor position with respect to bounding limits based current <see cref="Skeleton"/> data.

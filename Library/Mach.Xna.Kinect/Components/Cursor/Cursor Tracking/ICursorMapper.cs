@@ -6,7 +6,7 @@ namespace Mach.Xna.Kinect.Components
     /// <summary>
     /// Maps cursor position to defined rectangle.
     /// </summary>
-    public interface ICursorTracker
+    public interface ICursorMapper
     {
         /// <summary>
         /// Gets mapped cursor position with respect to bounding limits based current <see cref="Skeleton"/> data.

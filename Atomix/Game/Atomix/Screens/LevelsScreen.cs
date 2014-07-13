@@ -148,7 +148,7 @@ namespace Mach.Kinectomix.Screens
             if (_cursor.IsHandTracked && xTranslationBuffer == 0)
             {
                 SwipeGesture recognized;
-                if (swipe.ProcessPosition(_cursor.HandRealPositionPoint, out recognized))
+                if (swipe.ProcessPosition(_cursor.HandRealPosition, out recognized))
                 {
                     if (recognized != null)
                     {
@@ -168,7 +168,7 @@ namespace Mach.Kinectomix.Screens
                 }
                 else
                 {
-                    swipe.Start(_cursor.HandRealPositionPoint, 0.08);
+                    swipe.Start(_cursor.HandRealPosition, 0.08);
                 }
             }
 

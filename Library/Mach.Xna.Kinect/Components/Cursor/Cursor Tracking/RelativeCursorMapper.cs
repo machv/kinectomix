@@ -8,28 +8,28 @@ namespace Mach.Xna.Kinect.Components
     /// <summary>
     /// Maps relatively cursor position to defined rectangle.
     /// </summary>
-    public class RelativeCursorTracker : ICursorTracker
+    public class RelativeCursorMapper : ICursorMapper
     {
         private KinectManager _kinectManager;
         private SkeletonPoint _previousPosition;
         private float _moveThreshold = 0.005f;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="RelativeCursorTracker"/> class.
+        /// Initializes a new instance of <see cref="RelativeCursorMapper"/> class.
         /// </summary>
         /// <param name="kinectManager">Manager handling connected Kinect sensor.</param>
-        public RelativeCursorTracker(KinectManager kinectManager)
+        public RelativeCursorMapper(KinectManager kinectManager)
         {
             _kinectManager = kinectManager;
             _moveThreshold = 0.005f;
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="RelativeCursorTracker"/> class and sets movement threshold.
+        /// Initializes a new instance of <see cref="RelativeCursorMapper"/> class and sets movement threshold.
         /// </summary>
         /// <param name="kinectManager">Manager handling connected Kinect sensor.</param>
         /// <param name="moveThreshold">Minimal distance that has to be reached to return new cursor position.</param>
-        public RelativeCursorTracker(KinectManager kinectManager, float moveThreshold)
+        public RelativeCursorMapper(KinectManager kinectManager, float moveThreshold)
         {
             _kinectManager = kinectManager;
             _moveThreshold = moveThreshold;

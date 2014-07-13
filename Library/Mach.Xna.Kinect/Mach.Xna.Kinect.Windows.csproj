@@ -72,9 +72,9 @@
   <ItemGroup>
     <Compile Include="Algorithms\Bresenham.cs" />
     <Compile Include="Components\ClippedEdgesVisualiser.cs" />
-    <Compile Include="Components\Cursor\Cursor Tracking\AbsoluteCursorTracker.cs" />
-    <Compile Include="Components\Cursor\Cursor Tracking\ICursorTracker.cs" />
-    <Compile Include="Components\Cursor\Cursor Tracking\RelativeCursorTracker.cs" />
+    <Compile Include="Components\Cursor\Cursor Tracking\AbsoluteCursorMapper.cs" />
+    <Compile Include="Components\Cursor\Cursor Tracking\ICursorMapper.cs" />
+    <Compile Include="Components\Cursor\Cursor Tracking\RelativeCursorMapper.cs" />
     <Compile Include="Components\Gestures.cs" />
     <Compile Include="Components\KinectButton.cs" />
     <Compile Include="Components\Cursor\KinectCircleCursor.cs" />

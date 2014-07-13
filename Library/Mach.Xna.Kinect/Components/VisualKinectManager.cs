@@ -83,6 +83,10 @@ namespace Mach.Xna.Kinect.Components
             set { _font = value; }
         }
 
+        /// <summary>
+        /// Creates new instance of <see cref="VisualKinectManager"/>.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
         VisualKinectManager(Game game)
             : base(game)
         {
@@ -91,6 +95,11 @@ namespace Mach.Xna.Kinect.Components
             _showConnectedKinectIcon = true;
         }
 
+        /// <summary>
+        /// Creates new instance of <see cref="VisualKinectManager"/>.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="kinectManager">Manager handling connected sensor.</param>
         public VisualKinectManager(Game game, KinectManager kinectManager)
            : this(game)
         {
@@ -102,6 +111,8 @@ namespace Mach.Xna.Kinect.Components
         /// Creates new instance of <see cref="VisualKinectManager"/>.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
+        /// <param name="startColorStream">If true, color stream will be started.</param>
+        /// /// <param name="startDepthStream">If true, depth stream will be started.</param>
         public VisualKinectManager(Game game, bool startColorStream, bool startDepthStream)
             : this(game)
         {
