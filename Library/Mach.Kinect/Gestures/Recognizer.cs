@@ -154,7 +154,7 @@ namespace Mach.Kinect.Gestures
 
                         if (cost < _gestureMatchThreshold)
                         {
-                            _recognizedGesture = new RecognizedGesture() { Gesture = candidate, Cost = cost, Distance = distance, Matching = recordedGesture };
+                            _recognizedGesture = new RecognizedGesture(candidate, recordedGesture, cost, distance);
                             _recognizedGestures.Add(_recognizedGesture);
                         }
                         else
