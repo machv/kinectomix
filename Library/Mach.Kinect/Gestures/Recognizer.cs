@@ -174,7 +174,7 @@ namespace Mach.Kinect.Gestures
             {
                 GestureFrame frame = GestureFrame.FromFrameData(lastFrame, gesture.TrackedJoints, gesture.Dimension);
 
-                double frameDistance = DynamicTimeWarping.AccumulatedEuclidianDistance(frame, gesture.Sequence[gesture.Sequence.Count - 1], gesture.Dimension);
+                double frameDistance = DynamicTimeWarping.FrameDistance(frame, gesture.Sequence[gesture.Sequence.Count - 1], gesture.Dimension);
                 if (frameDistance < _lastFrameMatchThreshold)
                 {
                     yield return Tuple.Create(frameDistance, gesture);

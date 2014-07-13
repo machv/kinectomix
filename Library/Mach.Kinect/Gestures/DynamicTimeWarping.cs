@@ -1,43 +1,63 @@
-﻿using System;
+﻿using Microsoft.Kinect;
+using System;
 using System.Linq;
 
 namespace Mach.Kinect.Gestures
 {
+    /// <summary>
+    /// Provides implementation of Dynamic Time Warping algorithm for comparing two recorded <see cref="Gesture"/>s.
+    /// </summary>
     public static class DynamicTimeWarping
     {
-        public static double EuclidianDistance(double x, double y)
+        /// <summary>
+        /// Calculates Euclidian distance between two <see cref="SkeletonPoint"/>s.
+        /// </summary>
+        /// <param name="point1">First point.</param>
+        /// <param name="point2">Second point.</param>
+        /// <param name="dimension">Tracking dimension for points.</param>
+        /// <returns>Euclidian distance between <see cref="SkeletonPoint"/>s.</returns>
+        public static double EuclidianDistance(SkeletonPoint point1, SkeletonPoint point2, TrackingDimension dimension)
         {
-            return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
+            return dimension == TrackingDimension.Two ?
+                Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2)) :
+                Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2) + Math.Pow(point1.Z - point2.Z, 2)) ;
         }
 
-        public static double EuclidianDistance(double x, double y, double z)
-        {
-            return Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
-        }
-
-        public static double AccumulatedEuclidianDistance(GestureFrame a, GestureFrame b, TrackingDimension dimension)
+        /// <summary>
+        /// Calculates Euclidian distance between two <see cref="GestureFrame"/>s.
+        /// </summary>
+        /// <param name="frame1">First frame.</param>
+        /// <param name="frame2">Second frame.</param>
+        /// <param name="dimension">Tracking dimension for points.</param>
+        /// <returns>distance between two <see cref="GestureFrame"/>s.</returns>
+        public static double FrameDistance(GestureFrame frame1, GestureFrame frame2, TrackingDimension dimension)
         {
             double accumulatedDistance = 0;
 
-            for (int i = 0; i < Math.Min(a.Count, b.Count); i++)
+            for (int i = 0; i < Math.Min(frame1.Count, frame2.Count); i++)
             {
-                double x = a[i].X - b[i].X;
-                double y = a[i].Y - b[i].Y;
-                double z = a[i].Z - b[i].Z;
-
-                accumulatedDistance += dimension == TrackingDimension.Two ? 
-                    EuclidianDistance(x, y) : 
-                    EuclidianDistance(x, y, z);
+                accumulatedDistance += EuclidianDistance(frame1[i], frame2[i], dimension);
             }
 
             return accumulatedDistance;
         }
 
+        /// <summary>
+        /// Returns minimal value from passed values.
+        /// </summary>
+        /// <param name="values">Values to evaluate.</param>
+        /// <returns>Minimal value.</returns>
         public static double Minimum(params double[] values)
         {
             return Enumerable.Min(values);
         }
 
+        /// <summary>
+        /// Calculates DTW distance between two <see cref="Gesture"/>s.
+        /// </summary>
+        /// <param name="gesture1">First gesture.</param>
+        /// <param name="gesture2">Second gesture.</param>
+        /// <returns>DTW distance between two <see cref="Gesture"/>s.</returns>
         public static double CalculateDistance(Gesture gesture1, Gesture gesture2)
         {
             double[,] matrix = new double[gesture1.Sequence.Count + 1, gesture2.Sequence.Count + 1];
@@ -54,7 +74,7 @@ namespace Mach.Kinect.Gestures
             {
                 for (int j = 1; j < gesture2.Sequence.Count + 1; j++)
                 {
-                    matrix[i, j] = AccumulatedEuclidianDistance(gesture1.Sequence[i - 1], gesture2.Sequence[j - 1], gesture1.Dimension) +
+                    matrix[i, j] = FrameDistance(gesture1.Sequence[i - 1], gesture2.Sequence[j - 1], gesture1.Dimension) +
                         Minimum(matrix[i - 1, j],
                                 matrix[i, j - 1],
                                 matrix[i - 1, j - 1]);
