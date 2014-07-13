@@ -5,48 +5,105 @@ using System.Linq;
 
 namespace Mach.Kinect.Gestures
 {
+    /// <summary>
+    /// Recognizes registered gestures from skeletons.
+    /// </summary>
     public class Recognizer : GestureProcessor
     {
         private double _lastFrameMatchThreshold = 2.5;
         private double _gestureMatchThreshold = 2;
+        private List<Gesture> _gestures;
+        private bool _isStarted;
+        private List<RecognizedGesture> _recognizedGestures;
+        private RecognizedGesture _recognizedGesture;
+        private double _lastCost;
 
+        /// <summary>
+        /// Minimal length of the buffer containing recorded <see cref="GestureFrame"/>s.
+        /// </summary>
+        protected int _minimalBufferLength = 20;
+
+        /// <summary>
+        /// Gets or sets maximal accepted distance between currently recorded <see cref="GestureFrame"/> and last frame of known gestrure.
+        /// </summary>
+        /// <returns>Maximal accepted distance between currently recorded <see cref="GestureFrame"/> and last frame of known gestrure.</returns>
         public double LastFrameMatchThreshold
         {
             get { return _lastFrameMatchThreshold; }
             set { _lastFrameMatchThreshold = value; }
         }
-
+        /// <summary>
+        /// Gets or sets maximal accepted cost of the recorded candidate <see cref="Gesture"/> and known <see cref="Gesture"/>.
+        /// </summary>
+        /// <returns>Maximal accepted cost if the recorded candidate <see cref="Gesture"/> and known <see cref="Gesture"/>.</returns>
         public double GestureMatchThreshold
         {
             get { return _gestureMatchThreshold; }
             set { _gestureMatchThreshold = value; }
         }
-
-        protected int _minimalBufferLength = 20;
+        /// <summary>
+        /// Gets or sets minimal length of the buffer containing recorded <see cref="GestureFrame"/>s.
+        /// </summary>
+        /// <returns>Minimal length of the buffer containing recorded <see cref="GestureFrame"/>s.</returns>
         public int MinimalBufferLength
         {
             get { return _minimalBufferLength; }
             set { if (value > 0) _minimalBufferLength = value; }
         }
+        /// <summary>
+        /// Gets all recognized <see cref="Gesture"/>s during last processing of Skeletons data.
+        /// </summary>
+        /// <returns>Recognized <see cref="Gesture"/>s.</returns>
+        public List<RecognizedGesture> RecognizedGestures
+        {
+            get { return _recognizedGestures; }
+        }
+        /// <summary>
+        /// Gets the last recognized <see cref="Gesture"/> during processing Skeletons data.
+        /// </summary>
+        /// <returns>Last recognized <see cref="Gesture"/>.</returns>
+        public RecognizedGesture RecognizedGesture
+        {
+            get { return _recognizedGesture; }
+        }
+        /// <summary>
+        /// Gets the cost of last evaluated candidate gesture.
+        /// </summary>
+        /// <returns>The cost of last evaluated candidate gesture.</returns>
+        public double LastCost
+        {
+            get { return _lastCost; }
+        }
 
-        private List<Gesture> _gestures;
-        private bool _isStarted = false;
+        /// <summary>
+        /// Initializes new instance of <see cref="Recognizer"/> class.
+        /// </summary>
+        public Recognizer()
+        {
+            _isStarted = false;
+            _gestures = new List<Gesture>();
+        }
 
+        /// <summary>
+        /// Starts recognizing of registered gestures.
+        /// </summary>
         public void Start()
         {
             _isStarted = true;
         }
 
+        /// <summary>
+        /// Stops recognizing.
+        /// </summary>
         public void Stop()
         {
             _isStarted = false;
         }
 
-        public Recognizer()
-        {
-            _gestures = new List<Gesture>();
-        }
-
+        /// <summary>
+        /// Adds new <see cref="Gesture"/> to be recognized from the skeletons data.
+        /// </summary>
+        /// <param name="gesture">Gesture to be recognized.</param>
         public void AddGesture(Gesture gesture)
         {
             if (gesture.Sequence.Count < _minimalBufferLength)
@@ -58,18 +115,23 @@ namespace Mach.Kinect.Gestures
             _gestures.Add(gesture);
         }
 
-        private RecognizedGesture _recognizedGesture;
-        public RecognizedGesture RecognizedGesture
+        /// <summary>
+        /// Removes <see cref="Gesture"/> from recognizing.
+        /// </summary>
+        /// <param name="gesture">Gesture to remove.</param>
+        public void RemoveGesture(Gesture gesture)
         {
-            get { return _recognizedGesture; }
-            set { _recognizedGesture = value; }
+            _gestures.Remove(gesture);
         }
 
-        private double _lastCost;
-        public double LastCost { get { return _lastCost; } }
+        /// <summary>
+        /// Extracts <see cref="Skeleton"/> points to gesture frame buffer and recognizes candidate gestures.
+        /// </summary>
+        /// <param name="skeleton"></param>
         public override void ProcessSkeleton(Skeleton skeleton)
         {
             _recognizedGesture = null;
+            _recognizedGestures = new List<RecognizedGesture>();
 
             if (!_isStarted)
                 return;
@@ -91,7 +153,10 @@ namespace Mach.Kinect.Gestures
                         _lastCost = cost;
 
                         if (cost < _gestureMatchThreshold)
+                        {
                             _recognizedGesture = new RecognizedGesture() { Gesture = candidate, Cost = cost, Distance = distance, Matching = recordedGesture };
+                            _recognizedGestures.Add(_recognizedGesture);
+                        }
                         else
                         {
                             System.Diagnostics.Debug.Print(string.Format("False positive | {0} | {1} | {2}", candidate.Name, candidateInfo.Item1, cost));
@@ -119,11 +184,6 @@ namespace Mach.Kinect.Gestures
                     System.Diagnostics.Debug.Print(string.Format("Frame distance | {1} | {0}", frameDistance, gesture.Name));
                 }
             }
-        }
-
-        public void RemoveGesture(Gesture gesture)
-        {
-            _gestures.Remove(gesture);
         }
     }
 }
