@@ -103,7 +103,7 @@ namespace Mach.Xna.Kinect.Components
         /// Gets or sets if OS cursor should be hidden when hand is tracked.
         /// </summary>
         /// <returns>True when OS cursor will be hidden when hand is tracked.</returns>
-        public bool HideMouseCursorWhenHandTracked
+        public bool HideSystemCursorWhenHandTracked
         {
             get { return _hideMouseCursorWhenHandTracked; }
             set { _hideMouseCursorWhenHandTracked = value; }
@@ -112,7 +112,7 @@ namespace Mach.Xna.Kinect.Components
         /// Gets or sets if location of OS mouse cursor should be updated by this component.
         /// </summary>
         /// <returns>If true location of OS mouse cursor is updated by this component.</returns>
-        public bool SetMouseCursorLocation
+        public bool UpdateSystemCursorPosition
         {
             get { return _setMouseCursorLocation; }
             set { _setMouseCursorLocation = value; }
@@ -159,7 +159,7 @@ namespace Mach.Xna.Kinect.Components
         /// Gets or sets texture that is rendered on the cursor position.
         /// </summary>
         /// <returns>Texture that is rendered on the cursor position.</returns>
-        public Texture2D HandTexture
+        public Texture2D Texture
         {
             get { return _handTexture; }
             set { _handTexture = value; }
@@ -323,7 +323,7 @@ namespace Mach.Xna.Kinect.Components
         {
             _spriteBatch.Begin();
 
-            if (_cursorPosition != Vector2.Zero)
+            if (_cursorPosition != Vector2.Zero && _handTexture != null)
             {
                 _spriteBatch.Draw(_handTexture, _cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
             }
