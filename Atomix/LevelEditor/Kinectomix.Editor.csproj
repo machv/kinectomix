@@ -131,19 +131,12 @@
     <Compile Include="ViewModel\BoardTileViewModel.cs" />
     <Compile Include="ViewModel\EditorViewModel.cs" />
     <Compile Include="ViewModel\LevelViewModel.cs" />
-    <Compile Include="ViewModel\NewLevelViewModel.cs" />
     <Compile Include="ViewModel\BoardViewModel.cs" />
     <Compile Include="View\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EditorControl.xaml.cs">
       <DependentUpon>EditorControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\NewLevelControl.xaml.cs">
-      <DependentUpon>NewLevelControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\NewLevelWindow.xaml.cs">
-      <DependentUpon>NewLevelWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -154,14 +147,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\EditorControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\NewLevelControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\NewLevelWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
