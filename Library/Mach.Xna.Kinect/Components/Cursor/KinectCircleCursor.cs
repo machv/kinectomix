@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mach.Xna.Kinect.Components
 {
+    /// <summary>
+    /// Cursor for Kinect sensor with circle progress animation.
+    /// </summary>
     public class KinectCircleCursor : KinectCursor
     {
         private Texture2D _cicle;
@@ -16,6 +19,10 @@ namespace Mach.Xna.Kinect.Components
         private Vector2 _circlePosition;
         private ContentManager _content;
 
+        /// <summary>
+        /// Gets or sets progress of the circle animation, accepted values are in [0, 1] range.
+        /// </summary>
+        /// <returns>Progress of the circle animation.</returns>
         public double Progress
         {
             get { return _progress; }
@@ -32,18 +39,32 @@ namespace Mach.Xna.Kinect.Components
             }
         }
 
+        /// <summary>
+        /// Creates new instance of <see cref="KinectCircleCursor"/>.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="kinectManager">Manager handling connected sensor.</param>
         public KinectCircleCursor(Game game, VisualKinectManager chooser) : base(game, chooser)
         {
             _animatedCircle = new AnimatedTexture(Vector2.Zero, 0, 0.5f);
             _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
         }
 
+        /// <summary>
+        /// Creates new instance of <see cref="KinectCircleCursor"/>.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="kinectManager">Manager handling connected sensor.</param>
+        /// <param name="content">ContentManager containing required assets.</param>
         public KinectCircleCursor(Game game, ContentManager content, VisualKinectManager chooser) : base(game, chooser)
         {
             _animatedCircle = new AnimatedTexture(Vector2.Zero, 0, 0.5f);
             _content = content;
         }
 
+        /// <summary>
+        /// Loads the textures and fonts.
+        /// </summary>
         protected override void LoadContent()
         {
             base.LoadContent();
@@ -53,6 +74,10 @@ namespace Mach.Xna.Kinect.Components
             _animatedCircle.Load(_cicle, _framesCount, _framesCount);
         }
 
+        /// <summary>
+        /// Updates position of the cursor.
+        /// </summary>
+        /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -67,6 +92,10 @@ namespace Mach.Xna.Kinect.Components
             }
         }
 
+        /// <summary>
+        /// Draws current position of the cursor.
+        /// </summary>
+        /// <param name="gameTime">The elapsed game time.</param>
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
