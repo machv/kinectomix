@@ -33,11 +33,22 @@ namespace Mach.Xna.Kinect.Components
         private Texture2D _handTexture;
         private VisualKinectManager _KinectChooser;
         private Skeletons _skeletons;
+        private TrackedCursorHand _trackedCursorHandMode;
 
         /// <summary>
         /// <see cref="SpriteBatch"/> for rendering output.
         /// </summary>
         protected SpriteBatch _spriteBatch;
+
+        /// <summary>
+        /// Gets or sets which hand will be tracked as cursor.
+        /// </summary>
+        /// <returns>Which hand will be tracked as cursor.</returns>
+        public TrackedCursorHand TrackedCursorHandMode
+        {
+            get { return _trackedCursorHandMode; }
+            set { _trackedCursorHandMode = value; }
+        }
 
         /// <summary>
         /// Gets or sets render scale for displayed information.
@@ -229,12 +240,19 @@ namespace Mach.Xna.Kinect.Components
             {
                 if (_skeletons != null && _skeletons.TrackedSkeleton != null)
                 {
-                    _leftHanded =
-                        (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
-                        _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
-                        ||
-                        (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
-                        _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
+                    if (_trackedCursorHandMode == TrackedCursorHand.Automatic)
+                    {
+                        _leftHanded =
+                            (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                            _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
+                            ||
+                            (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                            _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
+                    }
+                    else
+                    {
+                        _leftHanded = _trackedCursorHandMode == TrackedCursorHand.Left;
+                    }
 
                     bool isHandTracked;
                     Vector2 cursor = _cursorMapper.GetCursorPosition(_skeletons.TrackedSkeleton, _leftHanded, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height, out isHandTracked);

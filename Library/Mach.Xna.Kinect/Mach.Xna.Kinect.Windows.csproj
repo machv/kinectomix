@@ -75,6 +75,7 @@
     <Compile Include="Components\Cursor\Cursor Tracking\AbsoluteCursorMapper.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\ICursorMapper.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\RelativeCursorMapper.cs" />
+    <Compile Include="Components\Cursor\TrackedCursorHand.cs" />
     <Compile Include="Components\Gestures.cs" />
     <Compile Include="Components\KinectButton.cs" />
     <Compile Include="Components\Cursor\KinectCircleCursor.cs" />
