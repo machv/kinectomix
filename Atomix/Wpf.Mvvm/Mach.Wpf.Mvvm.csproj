@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DelegateCommand.cs" />
-    <Compile Include="DelegateCommandBase.cs" />
     <Compile Include="DelegateCommandGeneric.cs" />
     <Compile Include="IFileDialogService.cs" />
     <Compile Include="NotifyPropertyBase.cs" />

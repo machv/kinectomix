@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Mach.Kinect.ConnectedSensor">
+    <Position X="0.75" Y="0.75" Width="2.5" />
+    <Members>
+      <Field Name="_processSkeletonsAutomatically" Hidden="true" />
+      <Field Name="_sensor" Hidden="true" />
+      <Field Name="_skeletons" Hidden="true" />
+      <Method Name="ProcessSkeletonFrame" Hidden="true" />
+      <Method Name="SkeletonFrameReady" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AkACCAAAESAAAAAgAgAAAAAAAAAAAAAAAAAAABABAAA=</HashCode>
+      <FileName>Kinect Manager\ConnectedSensor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mach.Kinect.Skeletons">
+    <Position X="3.5" Y="0.75" Width="2.75" />
+    <Members>
+      <Field Name="_items" Hidden="true" />
+      <Field Name="_sensor" Hidden="true" />
+      <Field Name="_timestamp" Hidden="true" />
+      <Field Name="_trackedSkeletonId" Hidden="true" />
+      <Field Name="_trackingType" Hidden="true" />
+      <Method Name="FixToFirstKnownSkeleton" Hidden="true" />
+      <Method Name="FixToFirstTrackedSkeleton" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Mach.Kinect.Skeletons.SkeletonTrackingType">
+        <TypeIdentifier>
+          <NewMemberFileName>Kinect Manager\Skeletons.SkeletonTrackingType.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EgAAgAAAJAEQCAAAEAAAAAAAADAABAgAAABAAAAAAgE=</HashCode>
+      <FileName>Kinect Manager\Skeletons.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mach.Kinect.KinectManager">
+    <Position X="6.75" Y="0.75" Width="2.75" />
+    <Members>
+      <Field Name="_connectedSensorsLimit" Hidden="true" />
+      <Field Name="_lastStatus" Hidden="true" />
+      <Field Name="_processSkeletonsAutomatically" Hidden="true" />
+      <Field Name="_sensors" Hidden="true" />
+      <Field Name="_skeletonsTrackingType" Hidden="true" />
+      <Field Name="_startColorStream" Hidden="true" />
+      <Field Name="_startDepthStream" Hidden="true" />
+      <Field Name="_startSkeletonStream" Hidden="true" />
+      <Field Name="_useSeatedMode" Hidden="true" />
+      <Method Name="DiscoverSensor" Hidden="true" />
+      <Method Name="DoInitialization" Hidden="true" />
+      <Method Name="KinectSensors_StatusChanged" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Delegate Name="Mach.Kinect.KinectManager.KinectStatusChangedEventHandler">
+        <TypeIdentifier>
+          <NewMemberFileName>Kinect Manager\KinectManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AEQQAAMAESIQwAAACAAAACAAABACABAABABMAIQAABA=</HashCode>
+      <FileName>Kinect Manager\KinectManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
