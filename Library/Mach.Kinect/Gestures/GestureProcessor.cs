@@ -54,23 +54,25 @@ namespace Mach.Kinect.Gestures
                 return;
             }
 
-            // transpozice a normalizace souřadnic, jednotkou je délka krku (ShoulderCenter - Head) 
+            // transpozice and normalizace of coordinates, 1 unit is length of shoulders (ShoulderRight - ShoulderLeft) 
+            JointType first = JointType.Head;
+            JointType second = JointType.ShoulderCenter;
 
-            if (skeleton.Joints[JointType.Head].TrackingState != JointTrackingState.Tracked ||
-                skeleton.Joints[JointType.ShoulderCenter].TrackingState != JointTrackingState.Tracked)
+            if (skeleton.Joints[first].TrackingState != JointTrackingState.Tracked ||
+                skeleton.Joints[second].TrackingState != JointTrackingState.Tracked)
                 return;
 
             SkeletonPoint center = new SkeletonPoint()
             {
-                X = (skeleton.Joints[JointType.ShoulderCenter].Position.X + skeleton.Joints[JointType.Head].Position.X) / 2,
-                Y = (skeleton.Joints[JointType.ShoulderCenter].Position.Y + skeleton.Joints[JointType.Head].Position.Y) / 2,
-                Z = (skeleton.Joints[JointType.ShoulderCenter].Position.Z + skeleton.Joints[JointType.Head].Position.Z) / 2,
+                X = (skeleton.Joints[second].Position.X + skeleton.Joints[first].Position.X) / 2,
+                Y = (skeleton.Joints[second].Position.Y + skeleton.Joints[first].Position.Y) / 2,
+                Z = (skeleton.Joints[second].Position.Z + skeleton.Joints[first].Position.Z) / 2,
             };
 
             float neckLength = (float)Math.Sqrt(
-                    Math.Pow((skeleton.Joints[JointType.ShoulderCenter].Position.X - skeleton.Joints[JointType.Head].Position.X), 2) +
-                    Math.Pow((skeleton.Joints[JointType.ShoulderCenter].Position.Y - skeleton.Joints[JointType.Head].Position.Y), 2) +
-                    Math.Pow((skeleton.Joints[JointType.ShoulderCenter].Position.Z - skeleton.Joints[JointType.Head].Position.Z), 2)
+                    Math.Pow((skeleton.Joints[second].Position.X - skeleton.Joints[first].Position.X), 2) +
+                    Math.Pow((skeleton.Joints[second].Position.Y - skeleton.Joints[first].Position.Y), 2) +
+                    Math.Pow((skeleton.Joints[second].Position.Z - skeleton.Joints[first].Position.Z), 2)
                 );
 
             FrameData frame = new FrameData(TrackedJointsCount);
