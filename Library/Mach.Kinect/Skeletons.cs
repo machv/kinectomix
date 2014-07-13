@@ -1,4 +1,5 @@
 ﻿using Microsoft.Kinect;
+using System;
 using System.Linq;
 
 namespace Mach.Kinect
@@ -7,6 +8,7 @@ namespace Mach.Kinect
     {
         private long _timestamp;
         private Skeleton[] _items;
+        private KinectSensor _sensor;
 
         public Skeleton[] Items
         {
@@ -36,6 +38,22 @@ namespace Mach.Kinect
 
                 switch (_trackingType)
                 {
+                    case SkeletonTrackingType.NearestForcedFullyTracked:
+                        skeleton = GetNearestKnownSkeleton();
+                        if (skeleton != null && skeleton.TrackingState == SkeletonTrackingState.PositionOnly)
+                        {
+                            if (_sensor == null)
+                                throw new InvalidOperationException("NearestForcedFullyTracked strategy works only if KinectSensor is passed via constructor.");
+
+                            if (!_sensor.SkeletonStream.AppChoosesSkeletons)
+                            {
+                                _sensor.SkeletonStream.AppChoosesSkeletons = true;
+                            }
+
+                            _sensor.SkeletonStream.ChooseSkeletons(skeleton.TrackingId);
+                        }
+
+                        return skeleton;
                     case SkeletonTrackingType.First:
                         return GetAnyKnownkeleton();
                     case SkeletonTrackingType.FirstFullyTracked:
@@ -77,6 +95,12 @@ namespace Mach.Kinect
 
         public Skeletons(SkeletonTrackingType trackingType)
         {
+            _trackingType = trackingType;
+        }
+
+        public Skeletons(KinectSensor sensor, SkeletonTrackingType trackingType)
+        {
+            _sensor = sensor;
             _trackingType = trackingType;
         }
 

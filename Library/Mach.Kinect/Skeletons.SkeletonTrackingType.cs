@@ -32,6 +32,10 @@
             /// The skeleton with corresponding ID and if that ID is not tracked it tries to find first fully tracked alternative.
             /// </summary>
             FixByIdOrFirstFullyTracked,
+            /// <summary>
+            /// The skeleton that is the nearest to the sensor and if his position is only passively tracked it forces active tracking mode of this person.
+            /// </summary>
+            NearestForcedFullyTracked,
         }
     }
 }
