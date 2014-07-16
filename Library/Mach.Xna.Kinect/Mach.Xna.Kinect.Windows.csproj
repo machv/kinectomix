@@ -90,7 +90,7 @@
     <Compile Include="Components\Cursor\Hand State\ConvexityClosedHandTracker.cs" />
     <Compile Include="Components\Cursor\Hand State\IHandStateTracker.cs" />
     <Compile Include="Components\Cursor\Hand State\InteractionsClosedHandTracker.cs" />
-    <Compile Include="Components\Cursor\Hand State\PressedHandTracker.cs" />
+    <Compile Include="Components\Cursor\Hand State\HoverHandTracker.cs" />
     <Compile Include="Input\KinectInputProvider.cs" />
     <Compile Include="Input\KinectInputState.cs" />
     <Compile Include="KinectInteractionClient.cs" />
@@ -118,6 +118,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="Resources\Bone.xnb" />
     <None Include="Resources\ConnectedKinect.xnb" />
     <None Include="Resources\Edge.xnb" />

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Mach.Wpf.Mvvm.DelegateCommand">
+    <Position X="0.5" Y="1.25" Width="2.75" />
+    <Members>
+      <Field Name="_action" Hidden="true" />
+      <Field Name="_canExecute" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Delegate Name="Mach.Wpf.Mvvm.DelegateCommand.ICommandOnCanExecute" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DelegateCommand.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQEACAAQAAEAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>DelegateCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mach.Wpf.Mvvm.DelegateCommand&lt;T&gt;">
+    <Position X="3.5" Y="1.25" Width="2.75" />
+    <Members>
+      <Field Name="_action" Hidden="true" />
+      <Field Name="_canExecute" Hidden="true" />
+      <Field Name="removeGesture" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQEACAAQAAEAAAAAAEAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>DelegateCommandGeneric.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mach.Wpf.Mvvm.NotifyPropertyBase">
+    <Position X="3.5" Y="3.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NotifyPropertyBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Mach.Wpf.Mvvm.IFileDialogService">
+    <Position X="6.5" Y="1.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAQEAAAAAAAAAAAARAAAA=</HashCode>
+      <FileName>IFileDialogService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
