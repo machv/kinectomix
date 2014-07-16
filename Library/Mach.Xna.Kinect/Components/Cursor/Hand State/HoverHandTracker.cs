@@ -24,6 +24,15 @@ namespace Mach.Xna.Kinect.HandState
         {
             get { return _isHovered; }
         }
+        /// <summary>
+        /// Gets or sets minimal duration of hand hover.
+        /// </summary>
+        /// <returns>Minimal duration of hand hover.</returns>
+        public TimeSpan MinimalHoverDuration
+        {
+            get { return _minimalHoverDuration; }
+            set { _minimalHoverDuration = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of <see cref="HoverHandTracker"/> class.
@@ -31,6 +40,15 @@ namespace Mach.Xna.Kinect.HandState
         public HoverHandTracker()
         {
             _minimalHoverDuration = TimeSpan.FromSeconds(1);
+            _animatedHand = new AnimatedTexture(Vector2.Zero, 0, 0.25f);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="HoverHandTracker"/> class.
+        /// </summary>
+        public HoverHandTracker(TimeSpan minimalHoverDuration)
+        {
+            _minimalHoverDuration = minimalHoverDuration;
             _animatedHand = new AnimatedTexture(Vector2.Zero, 0, 0.25f);
         }
 
