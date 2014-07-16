@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mach.Xna.Kinect.Components
@@ -21,17 +22,16 @@ namespace Mach.Xna.Kinect.Components
         private Vector2 _renderOffset;
         private float _scale;
         private SpriteFont _font;
-        private Vector2[] _cursorPositionsBuffer;
-        private int _cursorPositionsBufferIndex;
+        private Queue<Vector2> _cursorPositionsBuffer;
         private IHandStateTracker _handStateTracker;
         private bool _hideMouseCursorWhenHandTracked;
         private bool _setMouseCursorLocation;
         private ICursorMapper _cursorMapper;
-        private Vector2 _cursorPosition;
-        private SkeletonPoint _handRealPosition;
+        private Vector2 _position;
+        private SkeletonPoint _handPosition;
         private bool _isHandTracked;
         private Texture2D _handTexture;
-        private VisualKinectManager _KinectChooser;
+        private KinectManager _kinectManager;
         private Skeletons _skeletons;
         private TrackedCursorHand _trackedCursorHandMode;
 
@@ -77,18 +77,24 @@ namespace Mach.Xna.Kinect.Components
             get { return _cursorPositionsBufferLength; }
             set
             {
-                if (_cursorPositionsBufferLength != value)
+                int newLength = value;
+                if (newLength < 1)
                 {
-                    int lengthToCopy = Math.Min(_cursorPositionsBufferLength, value);
-                    Vector2[] newCursorPositionsBuffer = new Vector2[value];
+                    newLength = 1;
+                }
 
-                    Array.Copy(_cursorPositionsBuffer, newCursorPositionsBuffer, lengthToCopy);
+                if (_cursorPositionsBufferLength != newLength)
+                {
+                    int diff = _cursorPositionsBufferLength - newLength;
+                    if (diff > 0)
+                    {
+                        for (int i = 0; i < diff; i++) // Remove positions above limit
+                        {
+                            _cursorPositionsBuffer.Dequeue();
+                        }
+                    }
 
-                    if (_cursorPositionsBufferIndex >= value)
-                        _cursorPositionsBufferIndex = value - 1;
-
-                    _cursorPositionsBuffer = newCursorPositionsBuffer;
-                    _cursorPositionsBufferLength = value;
+                    _cursorPositionsBufferLength = newLength;
                 }
             }
         }
@@ -146,17 +152,17 @@ namespace Mach.Xna.Kinect.Components
         /// Gets position of the cursor on the screen.
         /// </summary>
         /// <returns>Position of the cursor on the screen.</returns>
-        public Vector2 CursorPosition
+        public Vector2 Position
         {
-            get { return _cursorPosition; }
+            get { return _position; }
         }
         /// <summary>
         /// Gets position of tracked hand in real world coordinate space.
         /// </summary>
         /// <returns>Position of tracked hand in real world coordinate space.</returns>
-        public SkeletonPoint HandRealPosition
+        public SkeletonPoint HandPosition
         {
-            get { return _handRealPosition; }
+            get { return _handPosition; }
         }
         /// <summary>
         /// Gets if hand is currently tracked for the cursor.
@@ -184,15 +190,15 @@ namespace Mach.Xna.Kinect.Components
         public KinectCursor(Game game, VisualKinectManager kinectManager)
             : base(game)
         {
-            _KinectChooser = kinectManager;
+            _kinectManager = kinectManager;
             _skeletons = kinectManager.Skeletons;
             _renderOffset = Vector2.Zero;
             _scale = 1;
 
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            _cursorPositionsBuffer = new Vector2[_cursorPositionsBufferLength];
-            _cursorPositionsBufferIndex = -1;
+            _cursorPositionsBuffer = new Queue<Vector2>(_cursorPositionsBufferLength);
+            //_cursorPositionsBufferIndex = -1;
             _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
             _cursorMapper = new RelativeCursorMapper(kinectManager.Manager);
         }
@@ -206,15 +212,15 @@ namespace Mach.Xna.Kinect.Components
         public KinectCursor(Game game, ContentManager content, VisualKinectManager kinectManager)
             : base(game)
         {
-            _KinectChooser = kinectManager;
+            _kinectManager = kinectManager;
             _skeletons = kinectManager.Skeletons;
             _renderOffset = Vector2.Zero;
             _scale = 1;
 
             _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
-            _cursorPositionsBuffer = new Vector2[_cursorPositionsBufferLength];
-            _cursorPositionsBufferIndex = -1;
+            _cursorPositionsBuffer = new Queue<Vector2>(_cursorPositionsBufferLength);
+            //_cursorPositionsBufferIndex = -1;
             _content = content;
             _cursorMapper = new RelativeCursorMapper(kinectManager.Manager);
         }
@@ -236,7 +242,7 @@ namespace Mach.Xna.Kinect.Components
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_KinectChooser.Sensor != null)
+            if (_kinectManager.Sensor != null)
             {
                 if (_skeletons != null && _skeletons.TrackedSkeleton != null)
                 {
@@ -257,7 +263,7 @@ namespace Mach.Xna.Kinect.Components
                     bool isHandTracked;
                     Vector2 cursor = _cursorMapper.GetCursorPosition(_skeletons.TrackedSkeleton, _leftHanded, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height, out isHandTracked);
 
-                    _handRealPosition = _skeletons.TrackedSkeleton.Joints[_leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
+                    _handPosition = _skeletons.TrackedSkeleton.Joints[_leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
 
                     AddCursorPosition(cursor);
 
@@ -286,7 +292,7 @@ namespace Mach.Xna.Kinect.Components
 
                 if (_handStateTracker != null)
                 {
-                    using (DepthImageFrame depthFrame = _KinectChooser.Sensor.DepthStream.OpenNextFrame(0))
+                    using (DepthImageFrame depthFrame = _kinectManager.Sensor.DepthStream.OpenNextFrame(0))
                     {
                         if (depthFrame != null)
                         {
@@ -294,7 +300,7 @@ namespace Mach.Xna.Kinect.Components
                         }
                     }
 
-                    using (SkeletonFrame skeletonFrame = _KinectChooser.Sensor.SkeletonStream.OpenNextFrame(0))
+                    using (SkeletonFrame skeletonFrame = _kinectManager.Sensor.SkeletonStream.OpenNextFrame(0))
                     {
                         if (skeletonFrame != null)
                         {
@@ -306,7 +312,7 @@ namespace Mach.Xna.Kinect.Components
 
             if (_skeletons.TrackedSkeleton != null && _handStateTracker != null)
             {
-                _handStateTracker.Update(_leftHanded, _cursorPosition);
+                _handStateTracker.Update(_leftHanded, _position);
             }
 
             if (_skeletons.TrackedSkeleton != null)
@@ -316,18 +322,18 @@ namespace Mach.Xna.Kinect.Components
                 // Avoid flickering
                 if (cursorPos != Vector2.Zero)
                 {
-                    _cursorPosition = cursorPos;
+                    _position = cursorPos;
 
                     if (_setMouseCursorLocation)
                     {
-                        Mouse.SetPosition((int)_cursorPosition.X, (int)_cursorPosition.Y);
+                        Mouse.SetPosition((int)_position.X, (int)_position.Y);
                     }
                 }
             }
             else
             {
                 // No tracked skeleton is present so we hide cursor.
-                _cursorPosition = Vector2.Zero;
+                _position = Vector2.Zero;
             }
 
             base.Update(gameTime);
@@ -341,9 +347,9 @@ namespace Mach.Xna.Kinect.Components
         {
             _spriteBatch.Begin();
 
-            if (_cursorPosition != Vector2.Zero && _handTexture != null)
+            if (_position != Vector2.Zero && _handTexture != null)
             {
-                _spriteBatch.Draw(_handTexture, _cursorPosition, null, Color.White, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
+                _spriteBatch.Draw(_handTexture, _position, null, Color.White, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
             }
 
             if (_handStateTracker != null)
@@ -365,24 +371,26 @@ namespace Mach.Xna.Kinect.Components
             if (cursorPosition == Vector2.Zero)
                 return;
 
-            _cursorPositionsBufferIndex = (_cursorPositionsBufferIndex + 1) % _cursorPositionsBuffer.Length;
-            _cursorPositionsBuffer[_cursorPositionsBufferIndex] = cursorPosition;
+            _cursorPositionsBuffer.Enqueue(cursorPosition);
+
+            if (_cursorPositionsBuffer.Count > _cursorPositionsBufferLength)
+                _cursorPositionsBuffer.Dequeue();
         }
 
         private Vector2 GetHarmonizedCursorPosition()
         {
-            if (_cursorPositionsBufferIndex < 0) return Vector2.Zero;
+            Vector2 newPosition = Vector2.Zero;
 
-            var valuesX = _cursorPositionsBuffer.Select(p => p.X);
+            foreach (Vector2 position in _cursorPositionsBuffer)
+            {
+                newPosition.X += position.X;
+                newPosition.Y += position.Y;
+            }
 
-            if (valuesX.Count() < 1) return Vector2.Zero;
+            newPosition.X /= _cursorPositionsBuffer.Count;
+            newPosition.Y /= _cursorPositionsBuffer.Count;
 
-            var valuesY = _cursorPositionsBuffer.Select(p => p.Y);
-
-            float x = valuesX.Sum() / valuesX.Count();
-            float y = valuesY.Sum() / valuesY.Count();
-
-            return new Vector2(x, y);
+            return newPosition;
         }
     }
 }
