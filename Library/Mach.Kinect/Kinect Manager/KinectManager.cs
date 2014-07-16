@@ -290,13 +290,17 @@ namespace Mach.Kinect
                     {
                         // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
                         TransformSmoothParameters parameters = new TransformSmoothParameters();
+                        //parameters.Smoothing = 0.7f;
+                        //parameters.Correction = 0.3f;
+                        //parameters.Prediction = 0.4f;
+                        //parameters.JitterRadius = 1.0f;
+                        //parameters.MaxDeviationRadius = 0.5f;
+
                         parameters.Smoothing = 0.5f;
-                        parameters.Correction = 0.5f;
-                        parameters.Prediction = 0.4f;
-                        parameters.JitterRadius = 1.0f;
-                        parameters.MaxDeviationRadius = 0.5f;
-                        parameters.Smoothing = 0.7f;
-                        parameters.Correction = 0.3f;
+                        parameters.Correction = 0.1f;
+                        parameters.Prediction = 0.5f;
+                        parameters.JitterRadius = 0.1f;
+                        parameters.MaxDeviationRadius = 0.1f;
 
                         sensor.SkeletonStream.Enable(parameters);
                     }
