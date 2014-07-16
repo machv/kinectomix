@@ -117,7 +117,7 @@ namespace Mach.Xna.Components
         /// <summary>
         /// Gets or sets color of button's background when button is not hovered.
         /// </summary>
-        /// <returns>Backgound color of button.</returns>
+        /// <returns>Background color of button.</returns>
         public Color Background
         {
             get { return _background; }
