@@ -1,4 +1,5 @@
-﻿using Mach.Xna;
+﻿using Mach.Kinect;
+using Mach.Xna;
 using Mach.Xna.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -44,7 +45,7 @@ namespace Mach.Xna.Kinect.Components
         /// </summary>
         /// <param name="game">Game containing this component.</param>
         /// <param name="kinectManager">Manager handling connected sensor.</param>
-        public KinectCircleCursor(Game game, VisualKinectManager chooser) : base(game, chooser)
+        public KinectCircleCursor(Game game, KinectManager kinectManager) : base(game, kinectManager)
         {
             _animatedCircle = new AnimatedTexture(Vector2.Zero, 0, 0.5f);
             _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
@@ -56,7 +57,7 @@ namespace Mach.Xna.Kinect.Components
         /// <param name="game">Game containing this component.</param>
         /// <param name="kinectManager">Manager handling connected sensor.</param>
         /// <param name="content">ContentManager containing required assets.</param>
-        public KinectCircleCursor(Game game, ContentManager content, VisualKinectManager chooser) : base(game, chooser)
+        public KinectCircleCursor(Game game, ContentManager content, KinectManager kinectManager) : base(game, kinectManager)
         {
             _animatedCircle = new AnimatedTexture(Vector2.Zero, 0, 0.5f);
             _content = content;
@@ -83,9 +84,9 @@ namespace Mach.Xna.Kinect.Components
             base.Update(gameTime);
 
             _frame = 0; // Except zero
-            if (CursorPosition != Vector2.Zero && _progress > 0)
+            if (Position != Vector2.Zero && _progress > 0)
             {
-                _circlePosition = new Vector2(CursorPosition.X - 20, CursorPosition.Y - 20);
+                _circlePosition = new Vector2(Position.X - 20, Position.Y - 20);
                 _frame = (int)(_progress * _framesCount);
                 if (_frame > _framesCount)
                     _frame = _framesCount - 1;
@@ -100,7 +101,7 @@ namespace Mach.Xna.Kinect.Components
         {
             base.Draw(gameTime);
 
-            if (CursorPosition != Vector2.Zero && _frame > 0)
+            if (Position != Vector2.Zero && _frame > 0)
             {
                 _spriteBatch.Begin();
                 _animatedCircle.DrawFrame(_spriteBatch, _frame, _circlePosition);

@@ -94,7 +94,7 @@ namespace Mach.Xna.Kinect.Components
         {
             base.Update(gameTime);
 
-            Vector2 handPosition = _circleCursor != null ? _circleCursor.CursorPosition : _cursor.CursorPosition;
+            Vector2 handPosition = _circleCursor != null ? _circleCursor.Position : _cursor.Position;
 
             bool isOver = _boundingRectangle.Contains((int)handPosition.X, (int)handPosition.Y);
 

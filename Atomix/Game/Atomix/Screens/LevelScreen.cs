@@ -359,7 +359,7 @@ namespace Mach.Kinectomix.Screens
 
                 // Detect hover
                 Point mousePosition = cursor.IsHandTracked ?
-                    new Point((int)cursor.CursorPosition.X, (int)cursor.CursorPosition.Y) :
+                    new Point((int)cursor.Position.X, (int)cursor.Position.Y) :
                     new Point(mouseState.X, mouseState.Y);
 
                 // Clear selection
@@ -455,7 +455,7 @@ namespace Mach.Kinectomix.Screens
                                 _cursor.Progress = 0;
 
                             // prepare for gesture
-                            _swipeGestures.Start(cursor.HandRealPosition, 0.05);
+                            _swipeGestures.Start(cursor.HandPosition, 0.05);
                             _isGestureCandidate = true;
                         }
                     }
@@ -471,7 +471,7 @@ namespace Mach.Kinectomix.Screens
                     }
                     else
                     {
-                        activityPosition = new Point((int)cursor.CursorPosition.X, (int)cursor.CursorPosition.Y);
+                        activityPosition = new Point((int)cursor.Position.X, (int)cursor.Position.Y);
                     }
 
                     // Find nearest point
@@ -525,7 +525,7 @@ namespace Mach.Kinectomix.Screens
                 if (_isGestureCandidate)
                 {
                     SwipeGesture recognizedGesture;
-                    _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandRealPosition, out recognizedGesture);
+                    _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandPosition, out recognizedGesture);
                     if (recognizedGesture != null)
                     {
                         MoveDirection direction = SwipeToMoveDirection(recognizedGesture.Direction);
