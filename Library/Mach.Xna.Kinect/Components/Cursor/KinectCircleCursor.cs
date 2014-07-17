@@ -48,7 +48,7 @@ namespace Mach.Xna.Kinect.Components
         public KinectCircleCursor(Game game, KinectManager kinectManager) : base(game, kinectManager)
         {
             _animatedCircle = new AnimatedTexture(Vector2.Zero, 0, 0.5f);
-            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+            _content = new ResourceContentManager(game.Services, Sprites.ResourceManager);
         }
 
         /// <summary>

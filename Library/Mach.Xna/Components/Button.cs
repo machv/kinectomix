@@ -220,7 +220,7 @@ namespace Mach.Xna.Components
             Foreground = Color.White;
             BorderColor = Color.Black;
             BorderThickness = 2;
-            _width = 160;
+            _width = 190;
             _height = 70;
             _content = string.Empty;
             _isActive = true;

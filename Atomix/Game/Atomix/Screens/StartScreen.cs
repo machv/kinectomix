@@ -1,5 +1,7 @@
 ﻿using Mach.Kinectomix.Logic;
+using Mach.Kinectomix.Resources;
 using Mach.Xna.Components;
+using Mach.Xna.Input.Extensions;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
@@ -34,13 +36,13 @@ namespace Mach.Kinectomix.Screens
             _quitMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, _cursor);
             _quitMessageBox.Changed += _quitMessageBox_Changed;
 
-            _startButton = new KinectButton(ScreenManager.Game, _cursor, "play game");
+            _startButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.PlayGame);
             _startButton.Selected += Start_Selected;
 
-            _levelsButton = new KinectButton(ScreenManager.Game, _cursor, "levels");
+            _levelsButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.Levels);
             _levelsButton.Selected += Levels_Selected;
 
-            _quitButton = new KinectButton(ScreenManager.Game, _cursor, "quit game");
+            _quitButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.QuitGame);
             _quitButton.Selected += Quit_Selected;
 
             Components.Add(_startButton);
@@ -75,11 +77,11 @@ namespace Mach.Kinectomix.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            string name = "Kinectomix";
+            string name = StartScreenResources.GameName;
             Vector2 size = _splashFont.MeasureString(name);
 
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 220), Color.Black);
+            _spriteBatch.DrawStringWithShadow(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 220), Color.Black);
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -141,31 +143,7 @@ namespace Mach.Kinectomix.Screens
             _quitButton.IsActive = false;
             _startButton.IsActive = false;
 
-            _quitMessageBox.Show("Do you really want to quit this game?", MessageBoxButtons.YesNo);
-        }
-
-        void Dummy()
-        {
-            // Vytvoření vlastních tlačítek
-            Button continueButton = new Button(ScreenManager.Game)
-            {
-                Tag = MessageBoxResult.Yes,
-                Content = "Pokračovat k další úrovni",
-            };
-            Button exitButton = new Button(ScreenManager.Game)
-            {
-                Tag = MessageBoxResult.No,
-                Content = "Ukončit hru",
-            };
-
-            // Vytvoření dialogového okna
-            MessageBox messageBox = new MessageBox(ScreenManager.Game, ScreenManager.InputProvider);
-            // Zaregistrování události po stisknutí libovolného tlačítka
-            messageBox.Changed += _quitMessageBox_Changed;
-            // Zobrazení dialogu
-messageBox.Show("Co si přejete udělat?",
-    new Button[] { continueButton, exitButton });
-
+            _quitMessageBox.Show(StartScreenResources.QuitConfirmation, MessageBoxButtons.YesNo);
         }
 
         private void _quitMessageBox_Changed(object sender, MessageBoxEventArgs e)

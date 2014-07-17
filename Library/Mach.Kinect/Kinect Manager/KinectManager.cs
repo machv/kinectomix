@@ -20,6 +20,12 @@ namespace Mach.Kinect
         private int _connectedSensorsLimit;
         private bool _processSkeletonsAutomatically;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether skeletons should be processed automatically.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if skeletons should be processed automatically; otherwise, <c>false</c>.
+        /// </value>
         public bool ProcessSkeletonsAutomatically
         {
             get
@@ -114,7 +120,7 @@ namespace Mach.Kinect
         }
 
         /// <summary>
-        /// Gets or sets if should be used seated or nomal mode.
+        /// Gets or sets if should be used seated or normal mode.
         /// </summary>
         /// <returns>True if seated mode is used.</returns>
         public bool UseSeatedMode
@@ -145,6 +151,14 @@ namespace Mach.Kinect
 
         public event KinectStatusChangedEventHandler KinectStatusChanged;
 
+        static KinectManager()
+        {
+            Localization.KinectManagerResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KinectManager"/> class.
+        /// </summary>
         public KinectManager()
                 : this(true, true)
         {
@@ -219,39 +233,39 @@ namespace Mach.Kinect
 
         public string GetStatusDescription(KinectStatus kinectStatus)
         {
-            string status = "Unknown";
+            string status = Localization.KinectManagerResources.Unknown;
 
             switch (kinectStatus)
             {
                 case KinectStatus.Undefined:
-                    status = "Status of the attached Kinect cannot be determined.";
+                    status = Localization.KinectManagerResources.Undefined;
                     break;
                 case KinectStatus.Disconnected:
-                    status = "The Kinect has been disconnected.";
+                    status = Localization.KinectManagerResources.Disconnected;
                     break;
                 case KinectStatus.Connected:
-                    status = "The Kinect is fully connected and ready.";
+                    status = Localization.KinectManagerResources.Connected;
                     break;
                 case KinectStatus.Initializing:
-                    status = "The Kinect is initializing.";
+                    status = Localization.KinectManagerResources.Initializing;
                     break;
                 case KinectStatus.Error:
-                    status = "Communication with the Kinect procudes errors.";
+                    status = Localization.KinectManagerResources.Error;
                     break;
                 case KinectStatus.NotPowered:
-                    status = "The Kinect is not fully powered.";
+                    status = Localization.KinectManagerResources.NotPowered;
                     break;
                 case KinectStatus.NotReady:
-                    status = "Some part of the Kinect is not yet ready.";
+                    status = Localization.KinectManagerResources.NotReady;
                     break;
                 case KinectStatus.DeviceNotGenuine:
-                    status = "The attached device is not genuine Kinect sensor.";
+                    status = Localization.KinectManagerResources.DeviceNotGenuine;
                     break;
                 case KinectStatus.DeviceNotSupported:
-                    status = "The attached Kinect is not supported.";
+                    status = Localization.KinectManagerResources.DeviceNotSupported;
                     break;
                 case KinectStatus.InsufficientBandwidth:
-                    status = "The USB connector does not have sufficient bandwidth.";
+                    status = Localization.KinectManagerResources.InsufficientBandwidth;
                     break;
             }
 

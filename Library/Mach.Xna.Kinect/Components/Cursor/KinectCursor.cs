@@ -199,7 +199,7 @@ namespace Mach.Xna.Kinect.Components
 
             _cursorPositionsBuffer = new Queue<Vector2>(_cursorPositionsBufferLength);
             //_cursorPositionsBufferIndex = -1;
-            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+            _content = new ResourceContentManager(game.Services, Sprites.ResourceManager);
             _cursorMapper = new RelativeCursorMapper(kinectManager);
         }
 

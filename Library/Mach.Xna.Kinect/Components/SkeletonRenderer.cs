@@ -84,7 +84,7 @@ namespace Mach.Xna.Kinect.Components
             _pointMapping = SkeletonToColorMap;
             _offset = offset;
             _scale = scale;
-            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+            _content = new ResourceContentManager(game.Services, Sprites.ResourceManager);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Mach.Xna.Kinect.Components
             _pointMapping = pointMapping;
             _offset = offset;
             _scale = scale;
-            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+            _content = new ResourceContentManager(game.Services, Sprites.ResourceManager);
         }
 
         /// <summary>

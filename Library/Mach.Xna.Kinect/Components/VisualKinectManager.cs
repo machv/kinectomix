@@ -83,6 +83,11 @@ namespace Mach.Xna.Kinect.Components
             set { _font = value; }
         }
 
+        static VisualKinectManager()
+        {
+            Localization.VisualKinectManagerResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
+        }
+
         /// <summary>
         /// Creates new instance of <see cref="VisualKinectManager"/>.
         /// </summary>
@@ -104,7 +109,7 @@ namespace Mach.Xna.Kinect.Components
            : this(game)
         {
             _manager = kinectManager;
-            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+            _content = new ResourceContentManager(game.Services, Sprites.ResourceManager);
         }
 
         /// <summary>
@@ -117,7 +122,7 @@ namespace Mach.Xna.Kinect.Components
             : this(game)
         {
             _manager = new KinectManager(startColorStream, startDepthStream);
-            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+            _content = new ResourceContentManager(game.Services, Sprites.ResourceManager);
         }
 
         /// <summary>
@@ -178,7 +183,7 @@ namespace Mach.Xna.Kinect.Components
                 _iconPosition.Y = 20;
 
                 // Text
-                _description = _manager.LastStatus == KinectStatus.Undefined ? "please connect sensor" : _manager.GetStatusDescription(_manager.LastStatus);
+                _description = _manager.LastStatus == KinectStatus.Undefined ? Localization.VisualKinectManagerResources.PleaseConnectSensor : _manager.GetStatusDescription(_manager.LastStatus);
                 Vector2 textSize = _font.MeasureString(_description);
                 _textPosition = new Vector2();
                 _textPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - textSize.X / 2;

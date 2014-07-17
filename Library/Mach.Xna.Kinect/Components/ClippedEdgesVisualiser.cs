@@ -52,7 +52,7 @@ namespace Mach.Xna.Kinect.Components
             : base(game)
         {
             _kinectManager = kinectManager;
-            _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
+            _content = new ResourceContentManager(game.Services, Sprites.ResourceManager);
         }
 
         /// <summary>

@@ -55,7 +55,7 @@ namespace Mach.Kinectomix.Screens
         {
             Vector2 size;
 
-            string name = "Kinectomix";
+            string name = "Atomix for Kinect";
             size = _splashFont.MeasureString(name);
 
             _spriteBatch.Begin();

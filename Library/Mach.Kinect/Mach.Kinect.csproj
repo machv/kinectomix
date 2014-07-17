@@ -61,6 +61,11 @@
     <Compile Include="Gestures\TrackingDimension.cs" />
     <Compile Include="Kinect Manager\ConnectedSensor.cs" />
     <Compile Include="Kinect Manager\KinectManager.cs" />
+    <Compile Include="Localization\KinectManagerResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>KinectManagerResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Kinect Manager\Skeletons.cs" />
     <Compile Include="Kinect Manager\Skeletons.SkeletonTrackingType.cs" />
@@ -69,6 +74,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Kinect Manager.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\KinectManagerResources.cs-CZ.resx" />
+    <EmbeddedResource Include="Localization\KinectManagerResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>KinectManagerResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

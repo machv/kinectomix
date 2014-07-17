@@ -100,6 +100,8 @@ namespace Mach.Kinectomix
 
             _state = new GameState();
 
+            Resources.StartScreenResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
+
             Exiting += Game_Exiting;
         }
 
@@ -137,7 +139,7 @@ namespace Mach.Kinectomix
             UpdateScale(_scale);
 
             Components.Add(background);
-            Components.Add(frameRate);
+            //Components.Add(frameRate);
             Components.Add(_gameScreenManager);
             Components.Add(_kinectChooser);
             //Components.Add(_gestures);
