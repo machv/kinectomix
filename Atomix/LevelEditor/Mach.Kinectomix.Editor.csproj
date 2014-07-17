@@ -7,8 +7,8 @@
     <ProjectGuid>{5313A90B-65AB-4D03-AB9E-73C257C765FC}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Kinectomix.LevelEditor</RootNamespace>
-    <AssemblyName>Kinectomix.LevelEditor</AssemblyName>
+    <RootNamespace>Mach.Kinectomix.LevelEditor</RootNamespace>
+    <AssemblyName>Mach.Kinectomix.LevelEditor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -46,6 +46,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Mach.Kinectomix.LevelEditor.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,6 +56,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Mach.Kinectomix.LevelEditor.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>EditorIcon.ico</ApplicationIcon>
@@ -180,9 +182,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logic\Kinectomix.Logic.csproj">
+    <ProjectReference Include="..\Logic\Mach.Kinectomix.Logic.csproj">
       <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
-      <Name>Kinectomix.Logic</Name>
+      <Name>Mach.Kinectomix.Logic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Wpf.Mvvm\Mach.Wpf.Mvvm.csproj">
       <Project>{e6aefe09-e617-40ed-9594-91e7e7594d32}</Project>

@@ -140,20 +140,20 @@
       <Project>{efc015b9-f516-4258-a4fd-759f4933104a}</Project>
       <Name>Mach.Kinect</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Library\Mach.Xna.Kinect\Mach.Xna.Kinect.Windows.csproj">
+    <ProjectReference Include="..\..\..\Library\Mach.Xna.Kinect\Mach.Xna.Kinect.csproj">
       <Project>{9f5b44d8-6e3b-40b6-b89d-ee3ac01e6660}</Project>
-      <Name>Mach.Xna.Kinect.Windows</Name>
+      <Name>Mach.Xna.Kinect</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Library\Mach.Xna\Mach.Xna.Windows.csproj">
+    <ProjectReference Include="..\..\..\Library\Mach.Xna\Mach.Xna.csproj">
       <Project>{2b9b0242-de91-4989-9f3e-574feb47fc4c}</Project>
-      <Name>Mach.Xna.Windows</Name>
+      <Name>Mach.Xna</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Logic\Kinectomix.Logic.csproj">
+    <ProjectReference Include="..\..\Logic\Mach.Kinectomix.Logic.csproj">
       <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
-      <Name>Kinectomix.Logic</Name>
+      <Name>Mach.Kinectomix.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AtomixContent\Kinectomix.Content.contentproj">
-      <Name>Kinectomix.Content</Name>
+    <ProjectReference Include="..\AtomixContent\Mach.Kinectomix.Content.contentproj">
+      <Name>Mach.Kinectomix.Content</Name>
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{EB32481B-E79C-4B5F-A2F8-51F3EAC56E7F}</Project>
     </ProjectReference>

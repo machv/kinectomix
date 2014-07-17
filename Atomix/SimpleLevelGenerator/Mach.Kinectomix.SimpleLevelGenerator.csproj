@@ -63,9 +63,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logic\Kinectomix.Logic.csproj">
+    <ProjectReference Include="..\Logic\Mach.Kinectomix.Logic.csproj">
       <Project>{e3bd22bb-e5f5-4900-8b05-a32c87510ea4}</Project>
-      <Name>Kinectomix.Logic</Name>
+      <Name>Mach.Kinectomix.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
