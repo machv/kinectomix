@@ -36,7 +36,7 @@ namespace Kinectomix.LevelEditor.Model
                 (
                     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     "SavedGames",
-                    "Kinectomix",
+                    Properties.Settings.Default.GameName,
                     "Game",
                     "AllPlayers"
                 );

@@ -35,6 +35,12 @@ namespace Mach.Xna.ScreenManagement
             get { return _input; }
             set { _input = value; }
         }
+        /// <summary>
+        /// Gets the previous screen.
+        /// </summary>
+        /// <value>
+        /// The previous screen.
+        /// </value>
         public GameScreen PreviousScreen
         {
             get { return _previousScreen; }

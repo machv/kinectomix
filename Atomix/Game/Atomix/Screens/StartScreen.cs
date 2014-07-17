@@ -106,14 +106,14 @@ namespace Mach.Kinectomix.Screens
 
         public override void Activated()
         {
-            (ScreenManager.Game as KinectomixGame).KinectChooser.ShowConnectKinectPrompt = true;
+            (ScreenManager.Game as KinectomixGame).VisualKinectManager.ShowConnectKinectPrompt = true;
 
             base.Activated();
         }
 
         public override void Deactivated()
         {
-            (ScreenManager.Game as KinectomixGame).KinectChooser.ShowConnectKinectPrompt = false;
+            (ScreenManager.Game as KinectomixGame).VisualKinectManager.ShowConnectKinectPrompt = false;
 
             base.Deactivated();
         }
@@ -129,7 +129,6 @@ namespace Mach.Kinectomix.Screens
         private void Start_Selected(object sender, EventArgs e)
         {
             Level level = KinectomixGame.State.GetCurrentLevel();
-            //Level currentLevel = LevelFactory.Load(string.Format("Content/Levels/{0}.atx", levelInfo.AssetName));
             LevelScreen gameScreen = new LevelScreen(level, _spriteBatch);
 
             ScreenManager.Add(gameScreen);
@@ -143,6 +142,30 @@ namespace Mach.Kinectomix.Screens
             _startButton.IsActive = false;
 
             _quitMessageBox.Show("Do you really want to quit this game?", MessageBoxButtons.YesNo);
+        }
+
+        void Dummy()
+        {
+            // Vytvoření vlastních tlačítek
+            Button continueButton = new Button(ScreenManager.Game)
+            {
+                Tag = MessageBoxResult.Yes,
+                Content = "Pokračovat k další úrovni",
+            };
+            Button exitButton = new Button(ScreenManager.Game)
+            {
+                Tag = MessageBoxResult.No,
+                Content = "Ukončit hru",
+            };
+
+            // Vytvoření dialogového okna
+            MessageBox messageBox = new MessageBox(ScreenManager.Game, ScreenManager.InputProvider);
+            // Zaregistrování události po stisknutí libovolného tlačítka
+            messageBox.Changed += _quitMessageBox_Changed;
+            // Zobrazení dialogu
+messageBox.Show("Co si přejete udělat?",
+    new Button[] { continueButton, exitButton });
+
         }
 
         private void _quitMessageBox_Changed(object sender, MessageBoxEventArgs e)

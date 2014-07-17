@@ -30,17 +30,68 @@ namespace Mach.Kinectomix.Logic
         /// <returns>True if tile is empty and can be played on it.</returns>
         public bool IsEmpty { get; set; }
         /// <summary>
-        /// Constructs new instance of BoardTile class where tile is fixed by default.
+        /// Gets or sets the top left bond.
         /// </summary>
+        /// <value>
+        /// The top left bond.
+        /// </value>
         public BondType TopLeftBond { get; set; }
+        /// <summary>
+        /// Gets or sets the top bond.
+        /// </summary>
+        /// <value>
+        /// The top bond.
+        /// </value>
         public BondType TopBond { get; set; }
+        /// <summary>
+        /// Gets or sets the top right bond.
+        /// </summary>
+        /// <value>
+        /// The top right bond.
+        /// </value>
         public BondType TopRightBond { get; set; }
+        /// <summary>
+        /// Gets or sets the right bond.
+        /// </summary>
+        /// <value>
+        /// The right bond.
+        /// </value>
         public BondType RightBond { get; set; }
+        /// <summary>
+        /// Gets or sets the bottom right bond.
+        /// </summary>
+        /// <value>
+        /// The bottom right bond.
+        /// </value>
         public BondType BottomRightBond { get; set; }
+        /// <summary>
+        /// Gets or sets the bottom bond.
+        /// </summary>
+        /// <value>
+        /// The bottom bond.
+        /// </value>
         public BondType BottomBond { get; set; }
+        /// <summary>
+        /// Gets or sets the bottom left bond.
+        /// </summary>
+        /// <value>
+        /// The bottom left bond.
+        /// </value>
         public BondType BottomLeftBond { get; set; }
+        /// <summary>
+        /// Gets or sets the left bond.
+        /// </summary>
+        /// <value>
+        /// The left bond.
+        /// </value>
         public BondType LeftBond { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this tile has any bond.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this tile has bonds; otherwise, <c>false</c>.
+        /// </value>
         public bool HasBonds
         {
             get
@@ -56,11 +107,18 @@ namespace Mach.Kinectomix.Logic
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BoardTile"/> class.
+        /// </summary>
         public BoardTile()
         {
             IsFixed = true;
         }
 
+        /// <summary>
+        /// Gets the asset code.
+        /// </summary>
+        /// <returns></returns>
         public string GetAssetCode()
         {
             return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", Asset,

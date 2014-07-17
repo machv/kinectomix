@@ -28,12 +28,7 @@ namespace Mach.Xna.Components
         private object _tag;
         private bool _isActive;
         private bool _isVisible;
-
-        public bool IsVisible
-        {
-            get { return _isVisible; }
-            set { _isVisible = value; }
-        }
+        private bool _isFocused;
 
         /// <summary>
         /// Currently used <see cref="IInputProvider"/> for the input from user.
@@ -48,6 +43,17 @@ namespace Mach.Xna.Components
         /// </summary>
         protected SpriteBatch _spriteBatch;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether button is visible.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this button is visible; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set { _isVisible = value; }
+        }
         /// <summary>
         /// Gets or sets rendering position of this button.
         /// </summary>
@@ -133,9 +139,9 @@ namespace Mach.Xna.Components
             set { _activeBackground = value; }
         }
         /// <summary>
-        /// Gets or sets foreground color of text in the button.
+        /// Gets or sets color of the text in the button.
         /// </summary>
-        /// <returns>Foreground color used in textbox.</returns>
+        /// <returns>Color of the text.</returns>
         public Color Foreground
         {
             get { return _foreground; }
@@ -187,7 +193,16 @@ namespace Mach.Xna.Components
                 }
             }
         }
-
+        /// <summary>
+        /// Gets a value indicating whether the button is focused.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the button is focused; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsFocused
+        {
+            get { return _isFocused; }
+        }
         /// <summary>
         /// Occurs when a <see cref="Button"/> is selected (eg. clicked).
         /// </summary>
@@ -263,11 +278,11 @@ namespace Mach.Xna.Components
             if (_isActive)
             {
                 IInputState inputState = _inputProvider.GetState();
-                bool isOver = _boundingRectangle.Contains(inputState.X, inputState.Y);
+                _isFocused = _boundingRectangle.Contains(inputState.X, inputState.Y);
 
-                _currentBackground = isOver ? ActiveBackground : Background;
+                _currentBackground = _isFocused ? ActiveBackground : Background;
 
-                if (isOver)
+                if (_isFocused)
                 {
                     _previousInputState = _currentInputState;
                     _currentInputState = inputState;

@@ -7,6 +7,12 @@ namespace Mach.Kinectomix.Logic
 {
     public static class Serializer
     {
+        /// <summary>
+        /// Deserializes the specified node.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="node">The node.</param>
+        /// <returns></returns>
         public static T Deserialize<T>(XmlElement node) where T : new()
         {
             T customType = new T();
@@ -28,6 +34,12 @@ namespace Mach.Kinectomix.Logic
             return customType;
         }
 
+        /// <summary>
+        /// Serializes the specified element.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t">Element to serialize.</param>
+        /// <returns></returns>
         public static XmlElement Serialize<T>(T t) where T : new()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(T));

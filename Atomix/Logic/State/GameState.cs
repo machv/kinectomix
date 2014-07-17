@@ -8,6 +8,7 @@ namespace Mach.Kinectomix.Logic
         public Highscore Highscore { get; set; }
 
         public string DefinitionHash { get; set; }
+
         public Level[] Levels { get; set; }
 
         public int CurrentLevel { get; set; }

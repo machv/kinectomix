@@ -19,27 +19,18 @@ namespace Mach.Kinectomix
     {
         public const string HighscoreFile = "atomix.highscore";
 
-        GraphicsDeviceManager graphics;
-        SpriteBatch _spriteBatch;
-        ScreenManager _gameScreenManager;
-        VisualKinectManager _kinectChooser;
-        VideoStreamComponent _videoStream;
-        SkeletonRenderer _skeletonRenderer;
-        Gestures _gestures;
-        IInputProvider _input;
-        static GameState _state;
-        Vector2 _kinectDebugOffset;
-        float _scale = 1;
-        public static GameState State { get { return _state; } }
-        KinectCircleCursor _cursor;
-
-        public VisualKinectManager KinectChooser
-        {
-            get { return _kinectChooser; }
-        }
-
-        public KinectCircleCursor Cursor { get { return _cursor; } }
-
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private ScreenManager _gameScreenManager;
+        private VisualKinectManager _kinectChooser;
+        private VideoStreamComponent _videoStream;
+        private SkeletonRenderer _skeletonRenderer;
+        private Gestures _gestures;
+        private IInputProvider _input;
+        private static GameState _state;
+        private Vector2 _kinectDebugOffset;
+        private float _scale = 1;
+        private KinectCircleCursor _cursor;
         private int _fullScreenWidth = 1280;
         private int _fullScreenHeight = 720;
         private int _windowWidth = 1280;
@@ -47,6 +38,36 @@ namespace Mach.Kinectomix
         private bool _isFullScreen = false;
         private KeyboardState _previousKeyboardState;
 
+        /// <summary>
+        /// Gets the state.
+        /// </summary>
+        /// <value>
+        /// The state.
+        /// </value>
+        public static GameState State
+        {
+            get { return _state; }
+        }
+        /// <summary>
+        /// Gets the kinect chooser.
+        /// </summary>
+        /// <value>
+        /// The kinect chooser.
+        /// </value>
+        public VisualKinectManager VisualKinectManager
+        {
+            get { return _kinectChooser; }
+        }
+        /// <summary>
+        /// Gets the cursor.
+        /// </summary>
+        /// <value>
+        /// The cursor.
+        /// </value>
+        public KinectCircleCursor Cursor
+        {
+            get { return _cursor; }
+        }
         /// <summary>
         /// Gets or sets if game is used full screen of windowed mode.
         /// </summary>
@@ -64,38 +85,12 @@ namespace Mach.Kinectomix
             }
         }
 
-        private void UpdateScreenDimensions()
-        {
-            if (_isFullScreen)
-            {
-                foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
-                {
-                    if ((mode.Width == _fullScreenWidth) && (mode.Height == _fullScreenHeight))
-                    {
-                        graphics.PreferredBackBufferWidth = _fullScreenWidth;
-                        graphics.PreferredBackBufferHeight = _fullScreenHeight;
-                        graphics.IsFullScreen = true;
-                        graphics.ApplyChanges();
-
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                if (_windowWidth <= GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width)
-                {
-                    graphics.PreferredBackBufferWidth = _windowWidth;
-                    graphics.PreferredBackBufferHeight = _windowHeight;
-                    graphics.IsFullScreen = false;
-                    graphics.ApplyChanges();
-                }
-            }
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KinectomixGame"/> class.
+        /// </summary>
         public KinectomixGame()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
 
             _fullScreenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _fullScreenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
@@ -108,7 +103,7 @@ namespace Mach.Kinectomix
             Exiting += Game_Exiting;
         }
 
-         /// <summary>
+        /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
         /// related content.  Calling base.Initialize will enumerate through any components
@@ -121,11 +116,11 @@ namespace Mach.Kinectomix
             _kinectChooser = new VisualKinectManager(this, true, true);
             _gestures = new Gestures(this, _kinectChooser.Skeletons, "Content/Gestures/");
             _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectDebugOffset, _scale);
-            _cursor = new KinectCircleCursor(this, _kinectChooser) { HideSystemCursorWhenHandTracked = true };
+            _cursor = new KinectCircleCursor(this, _kinectChooser.Manager) { HideSystemCursorWhenHandTracked = true };
             _videoStream = new VideoStreamComponent(this, _kinectChooser) { StreamType = VideoStream.Depth };
             var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);
-            var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _kinectChooser.Skeletons);
+            var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _kinectChooser.Manager);
             //_cursor.HandTracker = new ConvexityClosedHandTracker(_kinectChooser);
             //_cursor.VideoStreamData = _videoStream;
 
@@ -250,21 +245,33 @@ namespace Mach.Kinectomix
             base.Draw(gameTime);
         }
 
-        private Texture2D CreateColorTexture(Color color, int width = 1, int height = 1)
+        private void UpdateScreenDimensions()
         {
-            Texture2D texture = new Texture2D(GraphicsDevice, width, height, false, SurfaceFormat.Color);
-
-            // Create a color array for the pixels
-            Color[] colors = new Color[width * height];
-            for (int i = 0; i < colors.Length; i++)
+            if (_isFullScreen)
             {
-                colors[i] = new Color(color.ToVector3());
+                foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+                {
+                    if ((mode.Width == _fullScreenWidth) && (mode.Height == _fullScreenHeight))
+                    {
+                        _graphics.PreferredBackBufferWidth = _fullScreenWidth;
+                        _graphics.PreferredBackBufferHeight = _fullScreenHeight;
+                        _graphics.IsFullScreen = true;
+                        _graphics.ApplyChanges();
+
+                        break;
+                    }
+                }
             }
-
-            // Set the color data for the texture
-            texture.SetData(colors);
-
-            return texture;
+            else
+            {
+                if (_windowWidth <= GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width)
+                {
+                    _graphics.PreferredBackBufferWidth = _windowWidth;
+                    _graphics.PreferredBackBufferHeight = _windowHeight;
+                    _graphics.IsFullScreen = false;
+                    _graphics.ApplyChanges();
+                }
+            }
         }
 
         private void Game_Exiting(object sender, EventArgs e)

@@ -37,7 +37,18 @@ namespace Mach.Kinectomix.Screens
         private SpriteFont _splashFont;
         private SpriteFont _levelFont;
         private Point activeAtomIndex = new Point(-1, -1);
-
+        private ContentManager _content;
+        private Button _levelsButton;
+        private Button _repeatButton;
+        private Button _nextButton;
+        private SwipeRecognizer _swipeGestures;
+        private Level _levelDefinition;
+        private LevelViewModel _level;
+        private SpriteBatch _spriteBatch;
+        private string _log = "";
+        private KinectCircleCursor _cursor;
+        private KinectButton _pauseButton;
+        private LevelHighscore _highscore;
         private int TileWidth = 64;
         private int TileHeight = 64;
 
@@ -52,32 +63,24 @@ namespace Mach.Kinectomix.Screens
 
         // Scoring
         private int _moves;
-        private DateTime gameStarted;
+        private DateTime _gameStarted;
         private TimeSpan _gameDuration;
+        private DateTime _lastDate;
 
         private bool _isLevelFinished = false;
-
-        private ContentManager _content;
-
-        private Button _levelsButton;
-        private Button _repeatButton;
-        private Button _nextButton;
-        private SwipeRecognizer _swipeGestures;
-        private Level levelDefinition;
-        private LevelViewModel level;
-        private SpriteBatch spriteBatch;
-        private string _log = "";
-        private KinectCircleCursor _cursor;
-        private KinectButton _pauseButton;
-        private LevelHighscore _highscore;
 
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
             _swipeGestures = new SwipeRecognizer();
-            levelDefinition = currentLevel;
-            this.spriteBatch = spriteBatch;
+            _levelDefinition = currentLevel;
+            _spriteBatch = spriteBatch;
+        }
 
-            gameStarted = DateTime.Now;
+        public override void Activated()
+        {
+            _gameStarted = DateTime.Now;
+
+            base.Activated();
         }
 
         public override void Initialize()
@@ -95,7 +98,7 @@ namespace Mach.Kinectomix.Screens
             _pauseMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, cursor);
             _pauseMessageBox.Changed += pause_Changed;
 
-            level = LevelViewModel.FromModel(levelDefinition, ScreenManager.GraphicsDevice);
+            _level = LevelViewModel.FromModel(_levelDefinition, ScreenManager.GraphicsDevice);
             _highscore = KinectomixGame.State.GetCurrentLevelHighscore();
 
             _activeTileOpacity = 0.0f;
@@ -119,7 +122,7 @@ namespace Mach.Kinectomix.Screens
             Components.Add(_repeatButton);
             Components.Add(_nextButton);
 
-            lastDate = DateTime.Now;
+            _lastDate = DateTime.Now;
 
             base.Initialize();
         }
@@ -134,29 +137,29 @@ namespace Mach.Kinectomix.Screens
             _pauseMessageBox.Hide();
 
             _isPaused = false;
-            lastDate = DateTime.Now;
+            _lastDate = DateTime.Now;
         }
 
         protected override void LoadContent()
         {
-            int boardHeight = level.Board.RowsCount * TileHeight;
+            int boardHeight = _level.Board.RowsCount * TileHeight;
 
-            int startX = ScreenManager.GraphicsDevice.Viewport.Bounds.Width - (level.Board.ColumnsCount * TileWidth) - 1 * TileWidth;
+            int startX = ScreenManager.GraphicsDevice.Viewport.Bounds.Width - (_level.Board.ColumnsCount * TileWidth) - 1 * TileWidth;
             int startY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - boardHeight / 2;
 
             boardPosition = new Vector2(startX, startY);
 
-            CalculateBoardTilePositions(boardPosition, level.Board);
+            CalculateBoardTilePositions(boardPosition, _level.Board);
 
             //int offset = (int)boardPosition.X + level.Board.ColumnsCount * TileWidth + TileWidth;
             int offset = 30;
-            int moleculeWidth = level.Molecule.ColumnsCount * TileWidth;
-            int moleculeHeight = level.Molecule.RowsCount * TileHeight;
+            int moleculeWidth = _level.Molecule.ColumnsCount * TileWidth;
+            int moleculeHeight = _level.Molecule.RowsCount * TileHeight;
             //int posX = (ScreenManager.GraphicsDevice.Viewport.Bounds.Width - offset) / 2 - moleculeWidth / 2;
             int posX = (offset); // / 2 - moleculeWidth / 2;
             int posY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - moleculeHeight / 2;
 
-            CalculateBoardTilePositions(new Vector2(offset + posX, posY), level.Molecule);
+            CalculateBoardTilePositions(new Vector2(offset + posX, posY), _level.Molecule);
 
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
@@ -198,11 +201,11 @@ namespace Mach.Kinectomix.Screens
             if (newLevel == null)
             {
                 // We are on last level -> go to main screen
-                gameScreen = new StartScreen(spriteBatch);
+                gameScreen = new StartScreen(_spriteBatch);
             }
             else
             {
-                gameScreen = new LevelScreen(newLevel, spriteBatch);
+                gameScreen = new LevelScreen(newLevel, _spriteBatch);
             }
 
             ScreenManager.Add(gameScreen);
@@ -215,7 +218,7 @@ namespace Mach.Kinectomix.Screens
 
             // Load current level again
             Level newLevel = KinectomixGame.State.GetCurrentLevel();
-            gameScreen = new LevelScreen(newLevel, spriteBatch);
+            gameScreen = new LevelScreen(newLevel, _spriteBatch);
 
             ScreenManager.Add(gameScreen);
             ScreenManager.Activate(gameScreen);
@@ -223,7 +226,7 @@ namespace Mach.Kinectomix.Screens
 
         void _levelsButton_Selected(object sender, EventArgs e)
         {
-            GameScreen gameScreen = new LevelsScreen(spriteBatch);
+            GameScreen gameScreen = new LevelsScreen(_spriteBatch);
 
             ScreenManager.Add(gameScreen);
             ScreenManager.Activate(gameScreen);
@@ -257,7 +260,7 @@ namespace Mach.Kinectomix.Screens
             _pauseMessageBox.Show("game paused", buttons);
         }
 
-        private DateTime lastDate;
+ 
 
         public override void Update(GameTime gameTime)
         {
@@ -318,13 +321,13 @@ namespace Mach.Kinectomix.Screens
                     return;
                 }
 
-                _gameDuration += DateTime.Now - lastDate;
+                _gameDuration += DateTime.Now - _lastDate;
 
                 if (isMovementAnimation)
                 {
                     float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    Vector2 destinationPosition = level.Board[destination.X, destination.Y].RenderPosition;
+                    Vector2 destinationPosition = _level.Board[destination.X, destination.Y].RenderPosition;
 
                     if (atomPosition.X == destinationPosition.X)
                     {
@@ -342,8 +345,8 @@ namespace Mach.Kinectomix.Screens
                     if (tile.Contains((int)atomPosition.X, (int)atomPosition.Y))
                     {
                         isMovementAnimation = false;
-                        level.Board[destination.X, destination.Y].Asset = atomToMove;
-                        level.Board[destination.X, destination.Y].IsEmpty = false;
+                        _level.Board[destination.X, destination.Y].Asset = atomToMove;
+                        _level.Board[destination.X, destination.Y].IsEmpty = false;
 
                         // Animation finished -> check victory
                         bool isFinished = CheckFinish();
@@ -363,7 +366,7 @@ namespace Mach.Kinectomix.Screens
                     new Point(mouseState.X, mouseState.Y);
 
                 // Clear selection
-                foreach (BoardTileViewModel tile in level.Board.Where(t => t != null && t.IsHovered == true))
+                foreach (BoardTileViewModel tile in _level.Board.Where(t => t != null && t.IsHovered == true))
                 {
                     tile.IsHovered = false;
                 }
@@ -373,27 +376,27 @@ namespace Mach.Kinectomix.Screens
                 int k = -1;
                 int l = -1;
 
-                for (int i = 0; i < level.Board.RowsCount; i++)
+                for (int i = 0; i < _level.Board.RowsCount; i++)
                 {
-                    for (int j = 0; j < level.Board.ColumnsCount; j++)
+                    for (int j = 0; j < _level.Board.ColumnsCount; j++)
                     {
-                        if (level.Board[i, j] != null)
+                        if (_level.Board[i, j] != null)
                         {
-                            if (level.Board[i, j].RenderRectangle.Contains(mousePosition))
+                            if (_level.Board[i, j].RenderRectangle.Contains(mousePosition))
                             {
                                 if (cursor.IsHandTracked)
                                 {
                                     // If we are tracking cursor via Kinect, we use some affinity
-                                    if (level.Board[i, j].IsFixed == false)
+                                    if (_level.Board[i, j].IsFixed == false)
                                     {
-                                        newHoveredTileBefore = level.Board[i, j];
+                                        newHoveredTileBefore = _level.Board[i, j];
                                         k = i;
                                         l = j;
                                     }
                                     else
                                     {
                                         int m, n;
-                                        BoardTileViewModel tile = GetNeigbourMoleculeTile(level.Board, i, j, out m, out n);
+                                        BoardTileViewModel tile = GetNeigbourMoleculeTile(_level.Board, i, j, out m, out n);
 
                                         if (tile != null)
                                         {
@@ -406,7 +409,7 @@ namespace Mach.Kinectomix.Screens
                                 else
                                 {
                                     // In normal way (mouse) we use direct positions
-                                    newHoveredTileBefore = level.Board[i, j];
+                                    newHoveredTileBefore = _level.Board[i, j];
                                     k = i;
                                     l = j;
                                 }
@@ -449,7 +452,7 @@ namespace Mach.Kinectomix.Screens
                             currentlyHoveredTile.IsSelected = true;
 
                             activeAtomIndex = new Point(k, l);
-                            PrepareAvailableTileMovements(level.Board, k, l);
+                            PrepareAvailableTileMovements(_level.Board, k, l);
 
                             if (_cursor != null)
                                 _cursor.Progress = 0;
@@ -480,30 +483,30 @@ namespace Mach.Kinectomix.Screens
                     // Reset active atom to none
                     activeAtomIndex = new Point(-1, -1);
 
-                    for (int i = 0; i < level.Board.RowsCount; i++)
+                    for (int i = 0; i < _level.Board.RowsCount; i++)
                     {
-                        for (int j = 0; j < level.Board.ColumnsCount; j++)
+                        for (int j = 0; j < _level.Board.ColumnsCount; j++)
                         {
-                            if (level.Board[i, j] != null)
+                            if (_level.Board[i, j] != null)
                             {
                                 Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, TileWidth, TileHeight);
                                 if (clickOccurred && tile.Contains(activityPosition))
                                 {
-                                    if (level.Board[i, j].IsFixed == false)
+                                    if (_level.Board[i, j].IsFixed == false)
                                     {
                                         ClearBoard();
 
-                                        level.Board[i, j].IsSelected = true;
+                                        _level.Board[i, j].IsSelected = true;
                                         activeAtomIndex = new Point(i, j);
 
-                                        PrepareAvailableTileMovements(level.Board, i, j);
+                                        PrepareAvailableTileMovements(_level.Board, i, j);
                                     }
-                                    else if (level.Board[i, j].Asset == "Right" ||
-                                             level.Board[i, j].Asset == "Left" ||
-                                             level.Board[i, j].Asset == "Up" ||
-                                             level.Board[i, j].Asset == "Down")
+                                    else if (_level.Board[i, j].Asset == "Right" ||
+                                             _level.Board[i, j].Asset == "Left" ||
+                                             _level.Board[i, j].Asset == "Up" ||
+                                             _level.Board[i, j].Asset == "Down")
                                     {
-                                        MoveDirection direction = GetDirectionFromAsset(level.Board[i, j].Asset);
+                                        MoveDirection direction = GetDirectionFromAsset(_level.Board[i, j].Asset);
                                         Point coordinates = new Point(i, j);
                                         Point atomCoordinates = GetAtomPosition(coordinates, direction);
 
@@ -549,10 +552,10 @@ namespace Mach.Kinectomix.Screens
                     if (_activeTileOpacity < 0.5)
                         _activeTileOpacityDirection = 1;
 
-                    level.Board[activeAtomIndex.X, activeAtomIndex.Y].Opacity = _activeTileOpacity;
+                    _level.Board[activeAtomIndex.X, activeAtomIndex.Y].Opacity = _activeTileOpacity;
                 }
 
-                lastDate = DateTime.Now;
+                _lastDate = DateTime.Now;
             }
         }
 
@@ -560,7 +563,7 @@ namespace Mach.Kinectomix.Screens
         {
             Point newCoordinates = GetNewAtomPosition(atomCoordinates, direction);
 
-            BoardTileViewModel atom = level.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
+            BoardTileViewModel atom = _level.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
 
             // start animation
             isMovementAnimation = true;
@@ -570,12 +573,12 @@ namespace Mach.Kinectomix.Screens
             moveDirection = direction;
 
             // instead of just switching do the animation
-            level.Board[atomCoordinates.X, atomCoordinates.Y] = level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
-            level.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
-            level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true; // but now will be rendered as empty
-            level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// but now will be rendered as empty
+            _level.Board[atomCoordinates.X, atomCoordinates.Y] = _level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
+            _level.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
+            _level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true; // but now will be rendered as empty
+            _level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// but now will be rendered as empty
 
-            CalculateBoardTilePositions(boardPosition, level.Board);
+            CalculateBoardTilePositions(boardPosition, _level.Board);
 
             _moves += 1;
         }
@@ -602,22 +605,22 @@ namespace Mach.Kinectomix.Screens
             board[i, j].Movements = MoveDirection.None;
 
             //zjistit jakymi smery se muze pohnout
-            if (level.CanGoUp(i, j))
+            if (_level.CanGoUp(i, j))
             {
                 board[i, j].Movements |= MoveDirection.Up;
                 board[i - 1, j].Asset = "Up";
             }
-            if (level.CanGoDown(i, j))
+            if (_level.CanGoDown(i, j))
             {
                 board[i, j].Movements |= MoveDirection.Down;
                 board[i + 1, j].Asset = "Down";
             }
-            if (level.CanGoLeft(i, j))
+            if (_level.CanGoLeft(i, j))
             {
                 board[i, j].Movements |= MoveDirection.Left;
                 board[i, j - 1].Asset = "Left";
             }
-            if (level.CanGoRight(i, j))
+            if (_level.CanGoRight(i, j))
             {
                 board[i, j].Movements |= MoveDirection.Right;
                 board[i, j + 1].Asset = "Right";
@@ -630,7 +633,7 @@ namespace Mach.Kinectomix.Screens
             k = -1;
             l = -1;
 
-            for (int i = -1; i <= 1; i++) // erows
+            for (int i = -1; i <= 1; i++) // rows
             {
                 for (int j = -1; j <= 1; j++) // columns
                 {
@@ -683,56 +686,56 @@ namespace Mach.Kinectomix.Screens
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Begin();
+            _spriteBatch.Begin();
 
-            string levelName = string.IsNullOrEmpty(level.Name) == false ? level.Name : "game level";
+            string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : "game level";
 
-            spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(20, 20), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(20, 20), Color.Red);
 
-            spriteBatch.DrawString(_normalFont, _log, new Vector2(20, 600), Color.Red);
+            _spriteBatch.DrawString(_normalFont, _log, new Vector2(20, 600), Color.Red);
 
-            DrawBoard(spriteBatch, level.Board, true);
-            DrawBoard(spriteBatch, level.Molecule);
+            DrawBoard(_spriteBatch, _level.Board, true);
+            DrawBoard(_spriteBatch, _level.Molecule);
 
-            spriteBatch.DrawStringWithShadow(_normalFont, "Current", new Vector2(21 + 105, 85), Color.Gray);
+            _spriteBatch.DrawStringWithShadow(_normalFont, "Current", new Vector2(21 + 105, 85), Color.Gray);
 
             string text = "Score:";
             var scoreSize = _normalFont.MeasureString(text);
-            spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20, 120), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20, 120), Color.Red);
 
             text = "Time:";
             var timeSize = _normalFont.MeasureString(text);
             float dif = scoreSize.X - timeSize.X;
 
-            spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20 + dif, 160), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20 + dif, 160), Color.Red);
 
-            spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _moves), new Vector2(20 + 105, 120), Color.Red);
-            spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(20 + 105, 160), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _moves), new Vector2(20 + 105, 120), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(20 + 105, 160), Color.Red);
 
             if (_highscore != null)
             {
-                spriteBatch.DrawStringWithShadow(_normalFont, "Best", new Vector2(280, 85), Color.Gray);
-                spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _highscore.Moves), new Vector2(280, 120), Color.Red);
-                spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _highscore.Time.ToString(@"mm\:ss")), new Vector2(280, 160), Color.Red);
+                _spriteBatch.DrawStringWithShadow(_normalFont, "Best", new Vector2(280, 85), Color.Gray);
+                _spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _highscore.Moves), new Vector2(280, 120), Color.Red);
+                _spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _highscore.Time.ToString(@"mm\:ss")), new Vector2(280, 160), Color.Red);
             }
 
             if (isMovementAnimation)
             {
-                spriteBatch.Draw(GetTileTexture(atomToMove), new Rectangle((int)atomPosition.X, (int)atomPosition.Y, TileWidth, TileHeight), Color.White);
+                _spriteBatch.Draw(GetTileTexture(atomToMove), new Rectangle((int)atomPosition.X, (int)atomPosition.Y, TileWidth, TileHeight), Color.White);
             }
 
             if (_isLevelFinished)
             {
-                spriteBatch.Draw(idleTexture, new Rectangle(0, 0, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.GraphicsDevice.Viewport.Bounds.Height), Color.White);
-                spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 230), Color.Brown);
+                _spriteBatch.Draw(idleTexture, new Rectangle(0, 0, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.GraphicsDevice.Viewport.Bounds.Height), Color.White);
+                _spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 230), Color.Brown);
 
                 string name = "level completed";
                 Vector2 size = _splashFont.MeasureString(name);
 
-                spriteBatch.DrawString(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
+                _spriteBatch.DrawString(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
             }
 
-            spriteBatch.End();
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
@@ -761,23 +764,23 @@ namespace Mach.Kinectomix.Screens
 
         private bool CheckFinish()
         {
-            for (int i = 0; i < level.Board.RowsCount; i++)
+            for (int i = 0; i < _level.Board.RowsCount; i++)
             {
-                for (int j = 0; j < level.Board.ColumnsCount; j++)
+                for (int j = 0; j < _level.Board.ColumnsCount; j++)
                 {
                     // We expect match
                     bool isMatch = true;
 
-                    for (int x = 0; x < level.Molecule.RowsCount; x++)
+                    for (int x = 0; x < _level.Molecule.RowsCount; x++)
                     {
-                        for (int y = 0; y < level.Molecule.ColumnsCount; y++)
+                        for (int y = 0; y < _level.Molecule.ColumnsCount; y++)
                         {
                             // If we have empty tile in definition it is like a wildcard that matches everything
-                            if (level.Molecule[x, y] == null || level.Molecule[x, y].IsEmpty)
+                            if (_level.Molecule[x, y] == null || _level.Molecule[x, y].IsEmpty)
                                 continue;
 
                             // TODO overflow
-                            if (i + x >= level.Board.RowsCount || j + y >= level.Board.ColumnsCount || level.Board[i + x, j + y] == null || level.Board[i + x, j + y].Asset != level.Molecule[x, y].Asset)
+                            if (i + x >= _level.Board.RowsCount || j + y >= _level.Board.ColumnsCount || _level.Board[i + x, j + y] == null || _level.Board[i + x, j + y].Asset != _level.Molecule[x, y].Asset)
                             {
                                 isMatch = false;
                                 break;
@@ -829,9 +832,9 @@ namespace Mach.Kinectomix.Screens
             {
                 case MoveDirection.Right:
                     newCoordinates.Y++; // We started on the atom -> move one right
-                    while (newCoordinates.Y < level.Board.ColumnsCount)
+                    while (newCoordinates.Y < _level.Board.ColumnsCount)
                     {
-                        if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
+                        if (_level.Board[newCoordinates.X, newCoordinates.Y] == null || _level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
                             break;
 
                         newCoordinates.Y++;
@@ -843,7 +846,7 @@ namespace Mach.Kinectomix.Screens
                     newCoordinates.Y--; // We started on the atom -> move one left
                     while (newCoordinates.Y >= 0)
                     {
-                        if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
+                        if (_level.Board[newCoordinates.X, newCoordinates.Y] == null || _level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
                             break;
 
                         newCoordinates.Y--;
@@ -853,9 +856,9 @@ namespace Mach.Kinectomix.Screens
                     break;
                 case MoveDirection.Down:
                     newCoordinates.X++; // We started on the atom -> move one bottom
-                    while (newCoordinates.X < level.Board.RowsCount)
+                    while (newCoordinates.X < _level.Board.RowsCount)
                     {
-                        if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
+                        if (_level.Board[newCoordinates.X, newCoordinates.Y] == null || _level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
                             break;
 
                         newCoordinates.X++;
@@ -867,7 +870,7 @@ namespace Mach.Kinectomix.Screens
                     newCoordinates.X--; // We started on the atom -> move one up
                     while (newCoordinates.X >= 0)
                     {
-                        if (level.Board[newCoordinates.X, newCoordinates.Y] == null || level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
+                        if (_level.Board[newCoordinates.X, newCoordinates.Y] == null || _level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty == false)
                             break;
 
                         newCoordinates.X--;
@@ -883,26 +886,26 @@ namespace Mach.Kinectomix.Screens
         //TODO -> into the ViewModel
         private void ClearBoard()
         {
-            for (int x = 0; x < level.Board.RowsCount; x++)
+            for (int x = 0; x < _level.Board.RowsCount; x++)
             {
-                for (int y = 0; y < level.Board.ColumnsCount; y++)
+                for (int y = 0; y < _level.Board.ColumnsCount; y++)
                 {
-                    if (level.Board[x, y] == null)
+                    if (_level.Board[x, y] == null)
                         continue;
 
-                    switch (level.Board[x, y].Asset)
+                    switch (_level.Board[x, y].Asset)
                     {
                         case "Down":
                         case "Up":
                         case "Right":
                         case "Left":
-                            level.Board[x, y].Asset = "Empty";
+                            _level.Board[x, y].Asset = "Empty";
                             break;
                     }
 
-                    level.Board[x, y].IsSelected = false;
-                    level.Board[x, y].Movements = MoveDirection.None;
-                    level.Board[x, y].Opacity = 1;
+                    _level.Board[x, y].IsSelected = false;
+                    _level.Board[x, y].Movements = MoveDirection.None;
+                    _level.Board[x, y].Opacity = 1;
                 }
             }
         }
@@ -923,7 +926,7 @@ namespace Mach.Kinectomix.Screens
                     tileTexture = arrowTexture;
                     break;
                 default:
-                    tileTexture = level.Assets[asset];
+                    tileTexture = _level.Assets[asset];
                     break;
             }
 
@@ -971,11 +974,11 @@ namespace Mach.Kinectomix.Screens
                     }
 
                     if (drawEmpty && drawEmptyTiles)
-                        spriteBatch.Draw(emptyTexture, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), Color.White);
+                        _spriteBatch.Draw(emptyTexture, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), Color.White);
 
                     if (tile != null)
                     {
-                        spriteBatch.Draw(tile, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), null, Color.White * board[i, j].Opacity, RotationAngle, origin, SpriteEffects.None, 0f);
+                        _spriteBatch.Draw(tile, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), null, Color.White * board[i, j].Opacity, RotationAngle, origin, SpriteEffects.None, 0f);
 
                         if (board[i, j].IsHovered && (board[i, j].IsFixed == false || board[i, j].IsEmpty == true))
                         {

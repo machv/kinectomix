@@ -22,7 +22,7 @@
         /// </summary>
         OK,
         /// <summary>
-        /// Thie dialog box return value is unknown (usually sent from a custom button which does not have defined Tag value).
+        /// This dialog box return value is unknown (usually sent from a custom button which does not have defined Tag value).
         /// </summary>
         Unknown,
         /// <summary>

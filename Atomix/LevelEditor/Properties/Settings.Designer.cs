@@ -118,5 +118,17 @@ namespace Kinectomix.LevelEditor.Properties {
                 this["FixedTilesDirectory"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Kinectomix")]
+        public string GameName {
+            get {
+                return ((string)(this["GameName"]));
+            }
+            set {
+                this["GameName"] = value;
+            }
+        }
     }
 }

@@ -42,6 +42,7 @@ namespace Mach.Xna.Input
                 return null;
 
             List<IInputState> states = new List<IInputState>();
+
             // Find first with active selection.
             foreach (var provider in _providers)
             {
@@ -65,7 +66,7 @@ namespace Mach.Xna.Input
                     return state;
             }
 
-            // Fallback to first state.
+            // Fall back to first state.
             return _providers[0].GetState();
         }
     }

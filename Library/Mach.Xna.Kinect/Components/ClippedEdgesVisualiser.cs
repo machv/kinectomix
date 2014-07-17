@@ -19,7 +19,7 @@ namespace Mach.Xna.Kinect.Components
 
         private int _edgeWidth;
         private Texture2D _edgeTexture;
-        private Skeletons _skeletons;
+        private KinectManager _kinectManager;
         private SpriteBatch _spriteBatch;
         private Rectangle _verticalRectangle;
         private Rectangle _horizontalRectangle;
@@ -48,10 +48,10 @@ namespace Mach.Xna.Kinect.Components
         /// </summary>
         /// <param name="game"></param>
         /// <param name="skeletons"></param>
-        public ClippedEdgesVisualiser(Game game, Skeletons skeletons)
+        public ClippedEdgesVisualiser(Game game, KinectManager kinectManager)
             : base(game)
         {
-            _skeletons = skeletons;
+            _kinectManager = kinectManager;
             _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
         }
 
@@ -61,10 +61,10 @@ namespace Mach.Xna.Kinect.Components
         /// <param name="game"></param>
         /// <param name="skeletons"></param>
         /// <param name="content">ContentManager containing required assets.</param>
-        public ClippedEdgesVisualiser(Game game, Skeletons skeletons, ContentManager content)
+        public ClippedEdgesVisualiser(Game game, KinectManager kinectManager, ContentManager content)
             : base(game)
         {
-            _skeletons = skeletons;
+            _kinectManager = kinectManager;
             _content = content;
         }
 
@@ -109,24 +109,26 @@ namespace Mach.Xna.Kinect.Components
         {
             _spriteBatch.Begin();
 
-            if (_skeletons.TrackedSkeleton != null)
+            if (_kinectManager != null && _kinectManager.Skeletons != null && _kinectManager.Skeletons.TrackedSkeleton != null)
             {
-                if (_skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Top))
+                Skeletons skeletons = _kinectManager.Skeletons;
+
+                if (skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Top))
                 {
                     DrawEdge(_horizontalRectangle, _topEdgePosition, _topEdgeOrigin, TopRotation);
                 }
 
-                if (_skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Bottom))
+                if (skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Bottom))
                 {
                     DrawEdge(_horizontalRectangle, _bottomEdgePosition, _bottomEdgeOrigin, BottomRotation);
                 }
 
-                if (_skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Left))
+                if (skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Left))
                 {
                     DrawEdge(_verticalRectangle, _leftEdgePosition, _leftEdgeOrigin, LeftRotation);
                 }
 
-                if (_skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Right))
+                if (skeletons.TrackedSkeleton.ClippedEdges.HasFlag(FrameEdges.Right))
                 {
                     DrawEdge(_verticalRectangle, _rightEdgePosition, _rightEdgeOrigin, RightRotation);
                 }

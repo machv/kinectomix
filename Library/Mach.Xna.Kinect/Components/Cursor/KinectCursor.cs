@@ -32,7 +32,7 @@ namespace Mach.Xna.Kinect.Components
         private bool _isHandTracked;
         private Texture2D _handTexture;
         private KinectManager _kinectManager;
-        private Skeletons _skeletons;
+        //private Skeletons _skeletons;
         private TrackedCursorHand _trackedCursorHandMode;
 
         /// <summary>
@@ -187,11 +187,11 @@ namespace Mach.Xna.Kinect.Components
         /// </summary>
         /// <param name="game">Game containing this component.</param>
         /// <param name="kinectManager">Manager handling connected sensor.</param>
-        public KinectCursor(Game game, VisualKinectManager kinectManager)
+        public KinectCursor(Game game, KinectManager kinectManager)
             : base(game)
         {
             _kinectManager = kinectManager;
-            _skeletons = kinectManager.Skeletons;
+            //_skeletons = kinectManager.Skeletons;
             _renderOffset = Vector2.Zero;
             _scale = 1;
 
@@ -200,7 +200,7 @@ namespace Mach.Xna.Kinect.Components
             _cursorPositionsBuffer = new Queue<Vector2>(_cursorPositionsBufferLength);
             //_cursorPositionsBufferIndex = -1;
             _content = new ResourceContentManager(game.Services, Resources.ResourceManager);
-            _cursorMapper = new RelativeCursorMapper(kinectManager.Manager);
+            _cursorMapper = new RelativeCursorMapper(kinectManager);
         }
 
         /// <summary>
@@ -209,11 +209,11 @@ namespace Mach.Xna.Kinect.Components
         /// <param name="game">Game containing this component.</param>
         /// <param name="kinectManager">Manager handling connected sensor.</param>
         /// <param name="content">ContentManager containing required assets.</param>
-        public KinectCursor(Game game, ContentManager content, VisualKinectManager kinectManager)
+        public KinectCursor(Game game, ContentManager content, KinectManager kinectManager)
             : base(game)
         {
             _kinectManager = kinectManager;
-            _skeletons = kinectManager.Skeletons;
+            //_skeletons = kinectManager.Skeletons;
             _renderOffset = Vector2.Zero;
             _scale = 1;
 
@@ -222,7 +222,7 @@ namespace Mach.Xna.Kinect.Components
             _cursorPositionsBuffer = new Queue<Vector2>(_cursorPositionsBufferLength);
             //_cursorPositionsBufferIndex = -1;
             _content = content;
-            _cursorMapper = new RelativeCursorMapper(kinectManager.Manager);
+            _cursorMapper = new RelativeCursorMapper(kinectManager);
         }
 
         /// <summary>
@@ -242,55 +242,9 @@ namespace Mach.Xna.Kinect.Components
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_kinectManager.Sensor != null)
+            if (_kinectManager != null)
             {
-                if (_skeletons != null && _skeletons.TrackedSkeleton != null)
-                {
-                    if (_trackedCursorHandMode == TrackedCursorHand.Automatic)
-                    {
-                        _leftHanded =
-                            (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
-                            _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
-                            ||
-                            (_skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
-                            _skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < _skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
-                    }
-                    else
-                    {
-                        _leftHanded = _trackedCursorHandMode == TrackedCursorHand.Left;
-                    }
-
-                    bool isHandTracked;
-                    Vector2 cursor = _cursorMapper.GetCursorPosition(_skeletons.TrackedSkeleton, _leftHanded, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height, out isHandTracked);
-
-                    _handPosition = _skeletons.TrackedSkeleton.Joints[_leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
-
-                    AddCursorPosition(cursor);
-
-                    if (cursor != Vector2.Zero)
-                    {
-                        _isHandTracked = true;
-
-                        if (_hideMouseCursorWhenHandTracked)
-                            Game.IsMouseVisible = false;
-                    }
-                    else if (!isHandTracked)
-                    {
-                        _isHandTracked = false;
-
-                        if (_hideMouseCursorWhenHandTracked)
-                            Game.IsMouseVisible = true;
-                    }
-                }
-                else
-                {
-                    _isHandTracked = false;
-
-                    if (_hideMouseCursorWhenHandTracked)
-                        Game.IsMouseVisible = true;
-                }
-
-                if (_handStateTracker != null)
+                if (_kinectManager.Sensor != null && _handStateTracker != null)
                 {
                     using (DepthImageFrame depthFrame = _kinectManager.Sensor.DepthStream.OpenNextFrame(0))
                     {
@@ -308,32 +262,76 @@ namespace Mach.Xna.Kinect.Components
                         }
                     }
                 }
-            }
 
-            if (_skeletons.TrackedSkeleton != null && _handStateTracker != null)
-            {
-                _handStateTracker.Update(_leftHanded, _position);
-            }
+                Skeletons skeletons = _kinectManager.Skeletons;
 
-            if (_skeletons.TrackedSkeleton != null)
-            {
-                Vector2 cursorPos = GetHarmonizedCursorPosition();
-
-                // Avoid flickering
-                if (cursorPos != Vector2.Zero)
+                if (skeletons != null && skeletons.TrackedSkeleton != null)
                 {
-                    _position = cursorPos;
-
-                    if (_setMouseCursorLocation)
+                    if (_trackedCursorHandMode == TrackedCursorHand.Automatic)
                     {
-                        Mouse.SetPosition((int)_position.X, (int)_position.Y);
+                        _leftHanded =
+                            (skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                            skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState != JointTrackingState.Tracked)
+                            ||
+                            (skeletons.TrackedSkeleton.Joints[JointType.HandLeft].TrackingState == JointTrackingState.Tracked &&
+                            skeletons.TrackedSkeleton.Joints[JointType.HandLeft].Position.Z < skeletons.TrackedSkeleton.Joints[JointType.HandRight].Position.Z);
+                    }
+                    else
+                    {
+                        _leftHanded = _trackedCursorHandMode == TrackedCursorHand.Left;
+                    }
+
+                    bool isHandTracked;
+                    Vector2 cursor = _cursorMapper.GetCursorPosition(skeletons.TrackedSkeleton, _leftHanded, GraphicsDevice.Viewport.Bounds.Width, GraphicsDevice.Viewport.Bounds.Height, out isHandTracked);
+
+                    _handPosition = skeletons.TrackedSkeleton.Joints[_leftHanded ? JointType.HandLeft : JointType.HandRight].Position;
+
+                    AddCursorPosition(cursor);
+
+                    if (cursor != Vector2.Zero)
+                    {
+                        _isHandTracked = true;
+
+                        if (_hideMouseCursorWhenHandTracked)
+                            Game.IsMouseVisible = false;
+                    }
+                    else if (!isHandTracked)
+                    {
+                        _isHandTracked = false;
+
+                        if (_hideMouseCursorWhenHandTracked)
+                            Game.IsMouseVisible = true;
+                    }
+
+                    if (_handStateTracker != null)
+                    {
+                        _handStateTracker.Update(_leftHanded, _position);
+                    }
+
+
+                    Vector2 cursorPos = GetHarmonizedCursorPosition();
+
+                    // Avoid flickering
+                    if (cursorPos != Vector2.Zero)
+                    {
+                        _position = cursorPos;
+
+                        if (_setMouseCursorLocation)
+                        {
+                            Mouse.SetPosition((int)_position.X, (int)_position.Y);
+                        }
                     }
                 }
-            }
-            else
-            {
-                // No tracked skeleton is present so we hide cursor.
-                _position = Vector2.Zero;
+                else
+                {
+                    // No tracked skeleton is present so we hide cursor.
+                    _position = Vector2.Zero;
+
+                    _isHandTracked = false;
+
+                    if (_hideMouseCursorWhenHandTracked)
+                        Game.IsMouseVisible = true;
+                }
             }
 
             base.Update(gameTime);

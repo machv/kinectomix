@@ -10,6 +10,16 @@ namespace Mach.Xna.Input
         private MouseState _state;
 
         /// <summary>
+        /// Gets the original <see cref="MouseState"/> structure.
+        /// </summary>
+        /// <value>
+        /// The original <see cref="MouseState"/> structure.
+        /// </value>
+        public MouseState StateDetails
+        {
+            get { return _state; }
+        }
+        /// <summary>
         /// Gets the horizontal position of the mouse cursor.
         /// </summary>
         /// <returns>Horizontal position of the mouse cursor in relation to the upper-left corner of the game window.</returns>

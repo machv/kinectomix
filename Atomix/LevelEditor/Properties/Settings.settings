@@ -26,5 +26,8 @@
     <Setting Name="FixedTilesDirectory" Type="System.String" Scope="User">
       <Value Profile="(Default)">Tile/Fixed</Value>
     </Setting>
+    <Setting Name="GameName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Kinectomix</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
