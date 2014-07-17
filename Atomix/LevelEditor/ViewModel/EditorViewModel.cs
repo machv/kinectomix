@@ -350,21 +350,7 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
                 FileMode mode = File.Exists(_levelFileDialog.FileName) ? FileMode.Truncate : FileMode.OpenOrCreate;
                 using (Stream stream = File.Open(_levelFileDialog.FileName, mode))
                 {
-                    switch (_levelFileDialog.FilterIndex)
-                    {
-                        case 1: // Custom xml serialized
-                            LevelFactory.SaveLevelXmlSerialized(level, stream);
-                            break;
-                        case 2: // Compiled
-                            LevelFactory.SaveLevelCompiled(level, stream, _levelFileDialog.FileName);
-                            break;
-                        case 3: // Custom binary
-                            LevelFactory.SaveLevelBinary(level, stream);
-                            break;
-                        case 4: // XML
-                            LevelFactory.SaveLevelDefinition(level, stream);
-                            break;
-                    }
+                    LevelFactory.SaveLevelXmlSerialized(level, stream);
                 }
             }
         }
