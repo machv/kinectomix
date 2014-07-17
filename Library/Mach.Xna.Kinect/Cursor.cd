@@ -2,22 +2,6 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="Mach.Xna.Kinect.HandState.ConvexityClosedHandTracker" Collapsed="true">
     <Position X="3" Y="3" Width="2.25" />
-    <Members>
-      <Field Name="_handBoundingBox" Hidden="true" />
-      <Field Name="_isHandClosed" Hidden="true" />
-      <Field Name="_kinectChooser" Hidden="true" />
-      <Field Name="_lines" Hidden="true" />
-      <Field Name="_pointTexture" Hidden="true" />
-      <Field Name="_textToRender" Hidden="true" />
-      <Field Name="_videoStreamData" Hidden="true" />
-      <Method Name="CalculateHandDimensions" Hidden="true" />
-      <Method Name="DrawBoudingBox" Hidden="true" />
-      <Method Name="GetDistanceBetweenJoints" Hidden="true" />
-      <Method Name="GetChangesList" Hidden="true" />
-      <Method Name="GetLineParts" Hidden="true" />
-      <Field Name="lastDepthFrameData" Hidden="true" />
-      <Field Name="lastDepthFrameDataLength" Hidden="true" />
-    </Members>
     <TypeIdentifier>
       <HashCode>AAQAAAEBAAJAAgAAAAABAABEAAACIAkAAAMAAAAgQEA=</HashCode>
       <FileName>Components\Cursor\Hand State\ConvexityClosedHandTracker.cs</FileName>
@@ -26,13 +10,6 @@
   </Class>
   <Class Name="Mach.Xna.Kinect.HandState.HoverHandTracker" Collapsed="true">
     <Position X="6.25" Y="3" Width="2.75" />
-    <Members>
-      <Field Name="_animatedHand" Hidden="true" />
-      <Field Name="_hoverStart" Hidden="true" />
-      <Field Name="_isHovered" Hidden="true" />
-      <Field Name="_minimalHoverDuration" Hidden="true" />
-      <Field Name="_previousCursorPosition" Hidden="true" />
-    </Members>
     <TypeIdentifier>
       <HashCode>AAQIAQEAAAIAAgAAAAAQAAAAAAACACAAAAAAAEAAAAA=</HashCode>
       <FileName>Components\Cursor\Hand State\HoverHandTracker.cs</FileName>
@@ -41,9 +18,6 @@
   </Class>
   <Class Name="Mach.Xna.Kinect.Components.AbsoluteCursorMapper" Collapsed="true">
     <Position X="6.75" Y="5.5" Width="2.25" />
-    <Members>
-      <Field Name="_kinectManager" Hidden="true" />
-    </Members>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAIAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Components\Cursor\Cursor Tracking\AbsoluteCursorMapper.cs</FileName>
@@ -52,11 +26,6 @@
   </Class>
   <Class Name="Mach.Xna.Kinect.Components.RelativeCursorMapper" Collapsed="true">
     <Position X="3" Y="5.5" Width="2" />
-    <Members>
-      <Field Name="_kinectManager" Hidden="true" />
-      <Field Name="_moveThreshold" Hidden="true" />
-      <Field Name="_previousPosition" Hidden="true" />
-    </Members>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAACAIAABAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Components\Cursor\Cursor Tracking\RelativeCursorMapper.cs</FileName>
@@ -99,7 +68,6 @@
       <Field Name="_renderOffset" Hidden="true" />
       <Field Name="_scale" Hidden="true" />
       <Field Name="_setMouseCursorLocation" Hidden="true" />
-      <Field Name="_skeletons" Hidden="true" />
       <Field Name="_spriteBatch" Hidden="true" />
       <Field Name="_trackedCursorHandMode" Hidden="true" />
       <Method Name="AddCursorPosition" Hidden="true" />
@@ -107,7 +75,7 @@
       <Method Name="LoadContent" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AQRAAAIAAgAAAgAhAhcAAAkACCCAwEgAAIaowAAQICQ=</HashCode>
+      <HashCode>AQRAAAIAAgAAAgAhABcAAAkACCCAwEgAAIaowAAQICQ=</HashCode>
       <FileName>Components\Cursor\KinectCursor.cs</FileName>
     </TypeIdentifier>
   </Class>

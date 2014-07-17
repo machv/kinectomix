@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Mach.Xna.ScreenManagement.GameScreen">
+    <Position X="3.25" Y="2.25" Width="3" />
+    <Members>
+      <Field Name="_components" Hidden="true" />
+      <Field Name="_screenManager" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAACBAI4BAAAAAAAAABAQAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Screen Management\GameScreen.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Mach.Xna.ScreenManagement.ScreenManager">
+    <Position X="6.5" Y="2.25" Width="3.75" />
+    <Members>
+      <Field Name="_activeScreen" Hidden="true" />
+      <Field Name="_content" Hidden="true" />
+      <Field Name="_input" Hidden="true" />
+      <Field Name="_previousScreen" Hidden="true" />
+      <Field Name="_screens" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>BAYAEAAAAgIAAgBBAAAABAAAAAAAAAAAQAAACAAAUAA=</HashCode>
+      <FileName>Screen Management\ScreenManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

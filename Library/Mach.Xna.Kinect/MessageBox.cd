@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Mach.Xna.Kinect.Components.KinectMessageBox" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.75" />
+    <Members>
+      <Field Name="_cursor" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Components\KinectMessageBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mach.Xna.Components.MessageBox" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Mach.Xna.Components.MessageBoxBase">
+    <Position X="1" Y="0.5" Width="3.5" />
+    <Members>
+      <Field Name="_buttonCancel" Hidden="true" />
+      <Field Name="_buttonNo" Hidden="true" />
+      <Field Name="_buttonOk" Hidden="true" />
+      <Field Name="_buttonYes" Hidden="true" />
+      <Method Name="LoadContent" Hidden="true" />
+      <Method Name="MessageBoxBase" Hidden="true" />
+    </Members>
+    <TypeIdentifier />
+  </Class>
+  <Class Name="Mach.Xna.Components.MessageBoxEventArgs">
+    <Position X="6.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier />
+  </Class>
+  <Enum Name="Mach.Xna.Components.MessageBoxButtons">
+    <Position X="4.75" Y="2.5" Width="1.75" />
+    <TypeIdentifier />
+  </Enum>
+  <Enum Name="Mach.Xna.Components.MessageBoxResult">
+    <Position X="6.75" Y="2.5" Width="2.5" />
+    <TypeIdentifier />
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
