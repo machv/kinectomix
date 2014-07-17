@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace Kinectomix.LevelEditor
+namespace Mach.Kinectomix.LevelEditor
 {
     public class BondsVisualiser : FrameworkElement
     {

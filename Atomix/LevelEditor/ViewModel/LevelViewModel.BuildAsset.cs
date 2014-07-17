@@ -1,4 +1,4 @@
-﻿namespace Kinectomix.LevelEditor.ViewModel
+﻿namespace Mach.Kinectomix.LevelEditor.ViewModel
 {
     public partial class LevelViewModel
     {

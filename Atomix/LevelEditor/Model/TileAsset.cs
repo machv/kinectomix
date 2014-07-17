@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Media;
 
-namespace Kinectomix.LevelEditor.Model
+namespace Mach.Kinectomix.LevelEditor.Model
 {
     public class TileAsset
     {

@@ -1,8 +1,7 @@
-﻿using System;
-using Mach.Wpf.Mvvm;
+﻿using Mach.Wpf.Mvvm;
 using Microsoft.Win32;
 
-namespace Kinectomix.LevelEditor.Model
+namespace Mach.Kinectomix.LevelEditor.Model
 {
     public class LevelFileDialog : IFileDialogService
     {

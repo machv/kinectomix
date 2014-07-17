@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Kinectomix.LevelEditor.Model
+namespace Mach.Kinectomix.LevelEditor.Model
 {
     public class ObservableTilesCollection<T> : TilesCollection<T>, INotifyCollectionChanged, INotifyPropertyChanged where T : new()
     {

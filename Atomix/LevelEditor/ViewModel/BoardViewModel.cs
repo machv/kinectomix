@@ -1,9 +1,9 @@
-﻿using Kinectomix.LevelEditor.Model;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Mach.Wpf.Mvvm;
 using Mach.Kinectomix.Logic;
+using Mach.Kinectomix.LevelEditor.Model;
 
-namespace Kinectomix.LevelEditor.ViewModel
+namespace Mach.Kinectomix.LevelEditor.ViewModel
 {
     public class BoardViewModel : NotifyPropertyBase
     {

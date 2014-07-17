@@ -1,8 +1,8 @@
-﻿using Kinectomix.LevelEditor.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Mach.Wpf.Mvvm;
+using Mach.Kinectomix.LevelEditor.Model;
 
-namespace Kinectomix.LevelEditor.ViewModel
+namespace Mach.Kinectomix.LevelEditor.ViewModel
 {
     public class AvailableTilesViewModel : NotifyPropertyBase
     {

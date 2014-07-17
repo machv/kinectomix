@@ -1,12 +1,7 @@
-﻿using Kinectomix.LevelEditor.ViewModel;
+﻿using Mach.Kinectomix.LevelEditor.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
-namespace Kinectomix.LevelEditor
+namespace Mach.Kinectomix.LevelEditor
 {
     public class TileSelectedEventArgs : EventArgs
     {

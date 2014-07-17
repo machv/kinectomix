@@ -1,5 +1,4 @@
-﻿using Kinectomix.LevelEditor.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
@@ -7,8 +6,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Mach.Wpf.Mvvm;
 using Mach.Kinectomix.Logic;
+using Mach.Kinectomix.LevelEditor.Model;
 
-namespace Kinectomix.LevelEditor.ViewModel
+namespace Mach.Kinectomix.LevelEditor.ViewModel
 {
     /// <summary>
     /// View Model for the definition of one game level.

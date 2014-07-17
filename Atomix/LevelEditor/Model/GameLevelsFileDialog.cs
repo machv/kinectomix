@@ -3,7 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.IO;
 
-namespace Kinectomix.LevelEditor.Model
+namespace Mach.Kinectomix.LevelEditor.Model
 {
     public class GameLevelsFileDialog : IFileDialogService
     {

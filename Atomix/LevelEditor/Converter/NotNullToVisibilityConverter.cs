@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Kinectomix.LevelEditor
+namespace Mach.Kinectomix.LevelEditor
 {
     public class NotNullToVisibilityConverter : IValueConverter
     {

@@ -1,13 +1,13 @@
-﻿using Kinectomix.LevelEditor.Model;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Input;
 using Mach.Wpf.Mvvm;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Xml.Serialization;
 using Mach.Kinectomix.Logic;
+using Mach.Kinectomix.LevelEditor.Model;
 
-namespace Kinectomix.LevelEditor.ViewModel
+namespace Mach.Kinectomix.LevelEditor.ViewModel
 {
     public class EditorViewModel : NotifyPropertyBase
     {

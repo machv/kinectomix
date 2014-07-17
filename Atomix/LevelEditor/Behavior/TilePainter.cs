@@ -1,10 +1,10 @@
-﻿using Kinectomix.LevelEditor.ViewModel;
+﻿using Mach.Kinectomix.LevelEditor.ViewModel;
 using Mach.Kinectomix.Logic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Kinectomix.LevelEditor.Behavior
+namespace Mach.Kinectomix.LevelEditor.Behavior
 {
     public class TilePainter
     {

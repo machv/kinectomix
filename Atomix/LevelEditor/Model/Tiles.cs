@@ -1,13 +1,13 @@
-﻿using Kinectomix.LevelEditor.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using Mach.Kinectomix.Logic;
+using Mach.Kinectomix.LevelEditor.ViewModel;
 
-namespace Kinectomix.LevelEditor.Model
+namespace Mach.Kinectomix.LevelEditor.Model
 {
     public class Tiles
     {

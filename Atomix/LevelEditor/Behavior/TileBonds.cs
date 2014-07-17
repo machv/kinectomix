@@ -1,8 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Documents;
 
-namespace Kinectomix.LevelEditor.Behavior
+namespace Mach.Kinectomix.LevelEditor.Behavior
 {
     public class TileBonds
     {

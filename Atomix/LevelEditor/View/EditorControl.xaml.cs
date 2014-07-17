@@ -1,11 +1,11 @@
-﻿using Kinectomix.LevelEditor.ViewModel;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Mach.Kinectomix.Logic;
+using Mach.Kinectomix.LevelEditor.ViewModel;
 
-namespace Kinectomix.LevelEditor.View
+namespace Mach.Kinectomix.LevelEditor.View
 {
     /// <summary>
     /// Interaction logic for LevelControl.xaml

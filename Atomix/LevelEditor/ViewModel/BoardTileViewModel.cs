@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Kinectomix.LevelEditor.ViewModel
+namespace Mach.Kinectomix.LevelEditor.ViewModel
 {
     public class BoardTileViewModel : NotifyPropertyBase
     {
