@@ -37,6 +37,33 @@ namespace Mach.Kinectomix.Screens
 
             Components.Add(_backButton);
 
+            for (int i = 0; i < KinectomixGame.State.Levels.Length; i++)
+            {
+                Level level = KinectomixGame.State.Levels[i];
+                LevelHighscore highscore = KinectomixGame.State.Highscore.GetLevelHighscore(i);
+
+                bool isEnabled = true;
+                if (i > 0 && highscore == null) // Skips first level as first will be available always
+                {
+                    LevelHighscore previousHighscore = KinectomixGame.State.Highscore.GetLevelHighscore(i - 1);
+                    if (previousHighscore == null) // If previous level is not finished, we do not allow to play this one
+                    {
+                        isEnabled = false;
+                    }
+                }
+
+                KinectButton button = new KinectButton(ScreenManager.Game, _cursor);
+                button.Selected += button_Selected;
+                button.Tag = level;
+                button.Content = level.Name;
+                button.InputProvider = ScreenManager.InputProvider;
+                button.Width = 320;
+                button.IsEnabled = isEnabled;
+
+                _buttons.Add(button);
+                Components.Add(button);
+            }
+
             foreach (Level level in KinectomixGame.State.Levels)
             {
                 KinectButton button = new KinectButton(ScreenManager.Game, _cursor);
@@ -77,6 +104,17 @@ namespace Mach.Kinectomix.Screens
         private int xStep = 10;
         public override void Update(GameTime gameTime)
         {
+            KeyboardState state = Keyboard.GetState();
+
+            // Cheat for allowing all levels
+            if (state.IsKeyDown(Keys.LeftControl) && state.IsKeyDown(Keys.A) && state.IsKeyDown(Keys.L))
+            {
+                foreach (Button button in _buttons)
+                {
+                    button.IsEnabled = true;
+                }
+            }
+
             _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width + _backButton.BorderThickness - _backButton.Width, -_backButton.BorderThickness);
 
             int xPos = 20;
