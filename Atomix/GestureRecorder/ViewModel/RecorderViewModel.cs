@@ -492,8 +492,6 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 frameCounter = 0;
             }
 
-            
-
             if (_recorder == null && _recognizer == null)
                 return;
 

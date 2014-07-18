@@ -22,7 +22,7 @@ namespace Mach.Kinectomix.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class StartScreenResources {
+    public class StartScreenResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Mach.Kinectomix.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Mach.Kinectomix.Resources.StartScreenResources", typeof(StartScreenResources).Assembly);
@@ -51,7 +51,7 @@ namespace Mach.Kinectomix.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Mach.Kinectomix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Atomix for Kinect.
         /// </summary>
-        internal static string GameName {
+        public static string GameName {
             get {
                 return ResourceManager.GetString("GameName", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Mach.Kinectomix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to levels.
         /// </summary>
-        internal static string Levels {
+        public static string Levels {
             get {
                 return ResourceManager.GetString("Levels", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Mach.Kinectomix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to play game.
         /// </summary>
-        internal static string PlayGame {
+        public static string PlayGame {
             get {
                 return ResourceManager.GetString("PlayGame", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Mach.Kinectomix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Do you really want to quit this game?.
         /// </summary>
-        internal static string QuitConfirmation {
+        public static string QuitConfirmation {
             get {
                 return ResourceManager.GetString("QuitConfirmation", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Mach.Kinectomix.Resources {
         /// <summary>
         ///   Looks up a localized string similar to quit game.
         /// </summary>
-        internal static string QuitGame {
+        public static string QuitGame {
             get {
                 return ResourceManager.GetString("QuitGame", resourceCulture);
             }

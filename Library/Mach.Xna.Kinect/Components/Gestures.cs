@@ -20,8 +20,8 @@ namespace Mach.Xna.Kinect.Components
         private static IEqualityComparer<RecognizedGesture> _gesturesComparer = new RecognizedGestureComparer();
         private static Gestures _instance;
 
-        private const int MinimalFramesToProcess = 4;
-        private Skeletons _skeletons;
+        private int _minimalFramesToProcess = 4;
+        private KinectManager _kinectManager;
         private Recognizer _recognizer;
         private string _gesturesLocation;
         private RecognizedGesture _recognizedGesture;
@@ -32,19 +32,65 @@ namespace Mach.Xna.Kinect.Components
         private ConcurrentQueue<RecognizedGesture> _recognizedGestures;
 
         /// <summary>
-        /// Creates new instance of gestures component.
+        /// Gets or sets the minimal frames to process recognizing of gesture.
+        /// </summary>
+        /// <value>
+        /// The minimal frames to process.
+        /// </value>
+        public int MinimalFramesToProcess
+        {
+            get { return _minimalFramesToProcess; }
+            set
+            {
+                if (value > 0)
+                {
+                    _minimalFramesToProcess = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gestures"/> class.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
-        /// <param name="skeletons">Skeletons tracked from the Kinect sensor.</param>
+        /// <param name="kinectManager">Kinect Manager used for tracking skeletons.</param>
         /// <param name="gesturesLocation">Path to prerecorded gestures.</param>
-        public Gestures(Game game, Skeletons skeletons, string gesturesLocation)
+        public Gestures(Game game, KinectManager kinectManager, string gesturesLocation)
             : base(game)
         {
             _instance = this;
 
-            _skeletons = skeletons;
+            _kinectManager = kinectManager;
             _recognizer = new Recognizer();
             _gesturesLocation = gesturesLocation;
+            _pendingSkeletons = new ConcurrentQueue<Skeleton>();
+            _recognizedGestures = new ConcurrentQueue<RecognizedGesture>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Gestures" /> class.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="kinectManager">Kinect Manager used for tracking skeletons.</param>
+        /// <param name="gestures">The gestures with initialized instances.</param>
+        /// <exception cref="System.InvalidOperationException">Prepared gestures have to have Instance ready.</exception>
+        public Gestures(Game game, KinectManager kinectManager, KnownGesture[] gestures)
+            : base(game)
+        {
+            // Check that all gestures are initialized
+            foreach (KnownGesture gesture in gestures)
+            {
+                if (gesture.Instance == null)
+                {
+                    throw new System.InvalidOperationException("Prepared gestures have to have Instance ready.");
+                }
+            }
+
+            _instance = this;
+
+            _kinectManager = kinectManager;
+            _recognizer = new Recognizer();
+            _knownGestures = new KnownGestures(gestures);
             _pendingSkeletons = new ConcurrentQueue<Skeleton>();
             _recognizedGestures = new ConcurrentQueue<RecognizedGesture>();
         }
@@ -64,17 +110,24 @@ namespace Mach.Xna.Kinect.Components
         public override void Initialize()
         {
             XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
-            KnownGesture[] knownGestures = Game.Content.Load<KnownGesture[]>("Gestures");
 
-            _knownGestures = new KnownGestures(knownGestures);
+            if (_knownGestures == null)
+            {
+                KnownGesture[] knownGestures = Game.Content.Load<KnownGesture[]>("Gestures");
+                _knownGestures = new KnownGestures(knownGestures);
+            }
+
             foreach (KnownGesture knownGesture in _knownGestures)
             {
-                using (Stream stream = TitleContainer.OpenStream(_gesturesLocation + knownGesture.Filename))
+                if (knownGesture.Instance == null)
                 {
-                    Gesture gesture = seralizer.Deserialize(stream) as Gesture;
+                    using (Stream stream = TitleContainer.OpenStream(_gesturesLocation + knownGesture.Filename))
+                    {
+                        Gesture gesture = seralizer.Deserialize(stream) as Gesture;
 
-                    knownGesture.Instance = gesture;
-                    _recognizer.AddGesture(gesture);
+                        knownGesture.Instance = gesture;
+                        _recognizer.AddGesture(gesture);
+                    }
                 }
             }
 
@@ -117,12 +170,12 @@ namespace Mach.Xna.Kinect.Components
         {
             if (_isEven)
             {
-                if (_skeletons.TrackedSkeleton != null)
-                    _pendingSkeletons.Enqueue(_skeletons.TrackedSkeleton);
+                if (_kinectManager.Skeletons.TrackedSkeleton != null)
+                    _pendingSkeletons.Enqueue(_kinectManager.Skeletons.TrackedSkeleton);
             }
             _isEven = !_isEven;
 
-            if (_isUpdating == false && _pendingSkeletons.Count > MinimalFramesToProcess)
+            if (_isUpdating == false && _pendingSkeletons.Count > _minimalFramesToProcess)
             {
                 Task.Factory.StartNew(() => ProcessRecognizing());
             }

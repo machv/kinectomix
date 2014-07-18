@@ -24,9 +24,10 @@ namespace Mach.Xna.Components
         private Color _background;
         private Color _activeBackground;
         private Color _foreground;
+        private Color _disabledBackground;
         private SpriteFont _font;
         private object _tag;
-        private bool _isActive;
+        private bool _isEnabled;
         private bool _isVisible;
         private bool _isFocused;
 
@@ -139,6 +140,17 @@ namespace Mach.Xna.Components
             set { _activeBackground = value; }
         }
         /// <summary>
+        /// Gets or sets the <see cref="Color"/> of the background when button is not in enabled state.
+        /// </summary>
+        /// <value>
+        /// The <see cref="Color"/> of the background when button is not in enabled state.
+        /// </value>
+        public Color DisabledBackground
+        {
+            get { return _disabledBackground; }
+            set { _disabledBackground = value; }
+        }
+        /// <summary>
         /// Gets or sets color of the text in the button.
         /// </summary>
         /// <returns>Color of the text.</returns>
@@ -178,12 +190,12 @@ namespace Mach.Xna.Components
         /// Gets or sets if this button is active and accepts input.
         /// </summary>
         /// <returns>True if is active and accepts input.</returns>
-        public bool IsActive
+        public bool IsEnabled
         {
-            get { return _isActive; }
+            get { return _isEnabled; }
             set
             {
-                _isActive = value;
+                _isEnabled = value;
 
                 if (value == false)
                 {
@@ -215,15 +227,16 @@ namespace Mach.Xna.Components
         public Button(Game game)
             : base(game)
         {
-            Background = Color.Gray;
-            ActiveBackground = Color.Silver;
-            Foreground = Color.White;
-            BorderColor = Color.Black;
-            BorderThickness = 2;
+            _background = Color.Gray;
+            _activeBackground = Color.Silver;
+            _disabledBackground = Color.LightGray;
+            _foreground = Color.White;
+            _borderColor = Color.Black;
+            _borderThickness = 2;
             _width = 190;
             _height = 70;
             _content = string.Empty;
-            _isActive = true;
+            _isEnabled = true;
             _isVisible = true;
         }
 
@@ -275,7 +288,7 @@ namespace Mach.Xna.Components
             if (_inputProvider == null)
                 throw new Exception("No input provider is set.");
 
-            if (_isActive)
+            if (_isEnabled)
             {
                 IInputState inputState = _inputProvider.GetState();
                 _isFocused = _boundingRectangle.Contains(inputState.X, inputState.Y);
@@ -295,8 +308,8 @@ namespace Mach.Xna.Components
             }
             else
             {
-                // When button is not active we always use default background
-                _currentBackground = Background;
+                // When button is not active we use disabled background
+                _currentBackground = _disabledBackground;
             }
 
             base.Update(gameTime);

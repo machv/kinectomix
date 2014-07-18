@@ -9,6 +9,7 @@ using Mach.Xna.Components;
 using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.Screens;
 using Mach.Kinectomix.Components;
+using Mach.Xna.Kinect.HandState;
 
 namespace Mach.Kinectomix
 {
@@ -22,7 +23,7 @@ namespace Mach.Kinectomix
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private ScreenManager _gameScreenManager;
-        private VisualKinectManager _kinectChooser;
+        private VisualKinectManager _visualKinectManager;
         private VideoStreamComponent _videoStream;
         private SkeletonRenderer _skeletonRenderer;
         private Gestures _gestures;
@@ -56,7 +57,7 @@ namespace Mach.Kinectomix
         /// </value>
         public VisualKinectManager VisualKinectManager
         {
-            get { return _kinectChooser; }
+            get { return _visualKinectManager; }
         }
         /// <summary>
         /// Gets the cursor.
@@ -115,16 +116,15 @@ namespace Mach.Kinectomix
         {
             IsMouseVisible = true;
 
-            _kinectChooser = new VisualKinectManager(this, true, true);
-            _gestures = new Gestures(this, _kinectChooser.Skeletons, "Content/Gestures/");
-            _skeletonRenderer = new SkeletonRenderer(this, _kinectChooser, _kinectDebugOffset, _scale);
-            _cursor = new KinectCircleCursor(this, _kinectChooser.Manager) { HideSystemCursorWhenHandTracked = true };
-            _videoStream = new VideoStreamComponent(this, _kinectChooser) { StreamType = VideoStream.Depth };
+            _visualKinectManager = new VisualKinectManager(this, true, true);
+            _gestures = new Gestures(this, _visualKinectManager.Manager, "Content/Gestures/");
+            _skeletonRenderer = new SkeletonRenderer(this, _visualKinectManager, _kinectDebugOffset, _scale);
+            _cursor = new KinectCircleCursor(this, _visualKinectManager.Manager) { HideSystemCursorWhenHandTracked = true };
+            _videoStream = new VideoStreamComponent(this, _visualKinectManager) { StreamType = VideoStream.Depth };
             var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);
-            var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _kinectChooser.Manager);
-            //_cursor.HandTracker = new ConvexityClosedHandTracker(_kinectChooser);
-            //_cursor.VideoStreamData = _videoStream;
+            var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _visualKinectManager.Manager);
+            _cursor.HandStateTracker = new ConvexityClosedHandTracker(_visualKinectManager) { VideoStreamData = _videoStream };
 
             // Input
             var mouseInput = new MouseInputProvider();
@@ -141,7 +141,7 @@ namespace Mach.Kinectomix
             Components.Add(background);
             //Components.Add(frameRate);
             Components.Add(_gameScreenManager);
-            Components.Add(_kinectChooser);
+            Components.Add(_visualKinectManager);
             //Components.Add(_gestures);
             Components.Add(_videoStream);
             Components.Add(_skeletonRenderer);

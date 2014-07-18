@@ -109,7 +109,6 @@
     <Compile Include="Converter\NegateConverter.cs" />
     <Compile Include="Converter\NotNullToVisibilityConverter.cs" />
     <Compile Include="Converter\NullToTrueConverter.cs" />
-    <Compile Include="Model\DependencyPropertyCollection.cs" />
     <Compile Include="Model\ObservableTilesCollection.cs" />
     <Compile Include="Model\TileAsset.cs" />
     <Compile Include="Library\DialogCloser.cs" />

@@ -139,9 +139,9 @@ namespace Mach.Kinectomix.Screens
 
         private void Quit_Selected(object sender, EventArgs e)
         {
-            _levelsButton.IsActive = false;
-            _quitButton.IsActive = false;
-            _startButton.IsActive = false;
+            _levelsButton.IsEnabled = false;
+            _quitButton.IsEnabled = false;
+            _startButton.IsEnabled = false;
 
             _quitMessageBox.Show(StartScreenResources.QuitConfirmation, MessageBoxButtons.YesNo);
         }
@@ -150,9 +150,9 @@ namespace Mach.Kinectomix.Screens
         {
             _quitMessageBox.Hide();
 
-            _levelsButton.IsActive = true;
-            _quitButton.IsActive = true;
-            _startButton.IsActive = true;
+            _levelsButton.IsEnabled = true;
+            _quitButton.IsEnabled = true;
+            _startButton.IsEnabled = true;
 
             if (e.Result == MessageBoxResult.Yes)
             {
