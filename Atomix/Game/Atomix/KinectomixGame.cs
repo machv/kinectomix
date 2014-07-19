@@ -30,7 +30,7 @@ namespace Mach.Kinectomix
         private IInputProvider _input;
         private static GameState _state;
         private Vector2 _kinectDebugOffset;
-        private float _scale = 1;
+        private float _scale = 0.5f;
         private KinectCircleCursor _cursor;
         private int _fullScreenWidth = 1280;
         private int _fullScreenHeight = 720;
@@ -119,12 +119,23 @@ namespace Mach.Kinectomix
             _visualKinectManager = new VisualKinectManager(this, true, true);
             _gestures = new Gestures(this, _visualKinectManager.Manager, "Content/Gestures/");
             _skeletonRenderer = new SkeletonRenderer(this, _visualKinectManager, _kinectDebugOffset, _scale);
-            _cursor = new KinectCircleCursor(this, _visualKinectManager.Manager) { HideSystemCursorWhenHandTracked = true };
-            _videoStream = new VideoStreamComponent(this, _visualKinectManager) { StreamType = VideoStream.Depth };
+
+            _cursor = new KinectCircleCursor(this, _visualKinectManager.Manager)
+            {
+                HideSystemCursorWhenHandTracked = true
+            };
+
+            _videoStream = new VideoStreamComponent(this, _visualKinectManager)
+            {
+                StreamType = VideoStream.Color,
+                RenderingScale = _scale,
+                RenderingOffset = _kinectDebugOffset,
+            };
+
             var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);
             var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _visualKinectManager.Manager);
-            _cursor.HandStateTracker = new ConvexityClosedHandTracker(_visualKinectManager) { VideoStreamData = _videoStream };
+            //_cursor.HandStateTracker = new ConvexityClosedHandTracker(_visualKinectManager); // { VideoStreamData = _videoStream };
 
             // Input
             var mouseInput = new MouseInputProvider();
@@ -154,7 +165,8 @@ namespace Mach.Kinectomix
         protected void UpdateScale(float scale)
         {
             _scale = scale;
-            _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 * _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
+            //_kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 * _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
+            _kinectDebugOffset = new Vector2(20, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
 
             _skeletonRenderer.Scale = _scale;
             _skeletonRenderer.RenderOffset = _kinectDebugOffset;
