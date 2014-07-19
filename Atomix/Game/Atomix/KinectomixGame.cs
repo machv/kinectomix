@@ -132,6 +132,7 @@ namespace Mach.Kinectomix
                 RenderingOffset = _kinectDebugOffset,
             };
 
+            var videoWhenNoSkeleton = new VideoWhenNoSkeleton(this, _visualKinectManager.Manager, _videoStream, _skeletonRenderer);
             var background = new Background(this, "Background");
             var frameRate = new FrameRateInfo(this);
             var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _visualKinectManager.Manager);
@@ -154,19 +155,20 @@ namespace Mach.Kinectomix
             Components.Add(_gameScreenManager);
             Components.Add(_visualKinectManager);
             //Components.Add(_gestures);
-            Components.Add(_videoStream);
-            Components.Add(_skeletonRenderer);
+            //Components.Add(_videoStream);
+            //Components.Add(_skeletonRenderer);
+            Components.Add(videoWhenNoSkeleton);
             Components.Add(_cursor);
             Components.Add(clippedEdgeVisualiser);
 
             base.Initialize();
         }
 
-        protected void UpdateScale(float scale)
+        private void UpdateScale(float scale)
         {
             _scale = scale;
             //_kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 * _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
-            _kinectDebugOffset = new Vector2(20, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
+            _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2 - (640 * _scale) / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
 
             _skeletonRenderer.Scale = _scale;
             _skeletonRenderer.RenderOffset = _kinectDebugOffset;
@@ -176,6 +178,14 @@ namespace Mach.Kinectomix
 
             _videoStream.RenderingScale = _scale;
             _videoStream.RenderingOffset = _kinectDebugOffset;
+        }
+
+        private void ShowVideoWithSkeleton()
+        {
+        }
+
+        private void HideVideoWithSkeleton()
+        {
         }
 
         /// <summary>

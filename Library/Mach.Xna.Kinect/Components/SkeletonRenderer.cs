@@ -8,7 +8,7 @@ using System;
 namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
-    /// Visualises tracked skeletons by the Kinect Sensor.
+    /// Visualizes tracked skeletons by the Kinect Sensor.
     /// </summary>
     public class SkeletonRenderer : DrawableGameComponent
     {
@@ -39,7 +39,6 @@ namespace Mach.Xna.Kinect.Components
             get { return _scale; }
             set { _scale = value; }
         }
-
         /// <summary>
         /// Gets or sets offset where will be skeletons rendered on the screen.
         /// </summary>
@@ -219,7 +218,7 @@ namespace Mach.Xna.Kinect.Components
             Vector2 start = _pointMapping(joints[startJoint].Position);
             Vector2 end = _pointMapping(joints[endJoint].Position);
             Vector2 diff = end - start;
-            Vector2 scale = new Vector2(1.0f, diff.Length() / this._boneTexture.Height);
+            Vector2 scale = new Vector2(1.0f, diff.Length() / _boneTexture.Height);
 
             float angle = (float)Math.Atan2(diff.Y, diff.X) - MathHelper.PiOver2;
 
@@ -239,7 +238,7 @@ namespace Mach.Xna.Kinect.Components
             {
                 // This is used to map a skeleton point to the color image location
                 var colorPt = _chooser.Sensor.CoordinateMapper.MapSkeletonPointToColorPoint(point, _chooser.Sensor.ColorStream.Format);
-                return new Vector2(colorPt.X / _scale, colorPt.Y / _scale);
+                return new Vector2(colorPt.X * _scale, colorPt.Y * _scale);
             }
 
             return Vector2.Zero;

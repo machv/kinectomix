@@ -165,7 +165,7 @@ namespace Mach.Xna.Kinect.Components
         /// <summary>
         /// Processes new skeleton into the recognizer.
         /// </summary>
-        /// <param name="gameTime">Snapshot of game timing.</param>
+        /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
             if (_isEven)

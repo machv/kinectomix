@@ -12,9 +12,10 @@ namespace Mach.Xna.Kinect.Components
         private KinectCursor _cursor;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KinectMessageBox"/> component.
+        /// Initializes a new instance of the <see cref="KinectMessageBox" /> component.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
+        /// <param name="inputProvider">The input provider.</param>
         /// <param name="cursor">Kinect cursor used in game.</param>
         public KinectMessageBox(Game game, IInputProvider inputProvider, KinectCursor cursor)
             : base(game, inputProvider)
@@ -22,6 +23,9 @@ namespace Mach.Xna.Kinect.Components
             _cursor = cursor;
         }
 
+        /// <summary>
+        /// Prepares default buttons.
+        /// </summary>
         public override void Initialize()
         {
             _buttonOk = new KinectButton(Game, _cursor, "OK") { Tag = MessageBoxResult.OK, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };

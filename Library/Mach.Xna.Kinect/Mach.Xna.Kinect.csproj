@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Components\SkeletonRenderer.cs" />
     <Compile Include="Components\VideoStreamComponent.cs" />
+    <Compile Include="Components\VideoWhenNoSkeleton.cs" />
     <Compile Include="Components\VisualKinectManager.cs" />
     <Compile Include="Gestures\GesturesState.cs" />
     <Compile Include="Gestures\GestureType.cs" />

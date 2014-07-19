@@ -33,6 +33,7 @@ namespace Mach.Xna.Kinect.Components
         private Game _game;
         private GraphicsDevice _graphicsDevice;
         private Rectangle _position;
+        private float _transparency;
 
         /// <summary>
         /// Gets current video frame from the Kinect sensor.
@@ -69,7 +70,17 @@ namespace Mach.Xna.Kinect.Components
             get { return _renderingOffset; }
             set { _renderingOffset = value; }
         }
-
+        /// <summary>
+        /// Gets or sets the transparency of displayed video.
+        /// </summary>
+        /// <value>
+        /// The transparency of displayed video.
+        /// </value>
+        public float Transparency
+        {
+            get { return _transparency; }
+            set { _transparency = value; }
+        }
         /// <summary>
         /// Creates new instance of <see cref="VisualKinectManager"/>.
         /// </summary>
@@ -81,6 +92,7 @@ namespace Mach.Xna.Kinect.Components
             _game = game;
             _chooser = chooser;
             _graphicsDevice = game.GraphicsDevice;
+            _transparency = 1;
         }
 
         /// <summary>
@@ -203,7 +215,7 @@ namespace Mach.Xna.Kinect.Components
             if (_videoFrame != null)
             {
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(_videoFrame, _position, Color.White);
+                _spriteBatch.Draw(_videoFrame, _position, Color.White * _transparency);
                 _spriteBatch.End();
             }
 
