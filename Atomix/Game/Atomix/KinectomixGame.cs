@@ -133,7 +133,7 @@ namespace Mach.Kinectomix
             };
 
             var videoWhenNoSkeleton = new VideoWhenNoSkeleton(this, _visualKinectManager.Manager, _videoStream, _skeletonRenderer);
-            var background = new Background(this, "Background");
+            var background = new Background(this, "Youtube1Wall");
             var frameRate = new FrameRateInfo(this);
             var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _visualKinectManager.Manager);
             //_cursor.HandStateTracker = new ConvexityClosedHandTracker(_visualKinectManager); // { VideoStreamData = _videoStream };

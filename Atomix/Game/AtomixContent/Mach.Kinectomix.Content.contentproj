@@ -133,6 +133,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bcg1.jpg">
+      <Name>Bcg1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Gestures\LeftHandUp.gst">
       <Name>LeftHandUp</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -141,6 +146,11 @@
       <Name>RightHandUp</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="Youtube1Wall.png">
+      <Name>Youtube1Wall</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Gestures\55_RightHandUp.gst">
@@ -198,6 +208,24 @@
       <Name>Definition</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fonts\Time.spritefont">
+      <Name>Time</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fonts\Title.spritefont">
+      <Name>Title</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <SubType>Designer</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Buttons\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 

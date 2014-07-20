@@ -55,41 +55,47 @@ namespace Mach.Xna.Kinect.Components
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_kinectManager.Skeletons.TrackedSkeleton == null)
+            if (_kinectManager.Sensor != null && _kinectManager.Skeletons != null)
             {
-                _showVideo = true;
-                _transparency = 1;
-            }
-            else
-            {
-                // We have tracked skeleton -> check if timeout exceeded
-                if (_wasPreviouslySkeletonPresent == false)
+                if (_kinectManager.Skeletons.TrackedSkeleton == null)
                 {
-                    _matchDate = DateTime.Now;
-                }
-
-                TimeSpan difference = DateTime.Now - _matchDate;
-                if (difference < AfterMatchTimeout)
-                {
-                    // Lower transparency
-                    _transparency = 1 - (float)(difference.TotalMilliseconds) / (float)(AfterMatchTimeout.TotalMilliseconds);
+                    _showVideo = true;
+                    _transparency = 1;
                 }
                 else
                 {
-                    // After timeout exceeds hide video completely
-                    _showVideo = false;
+                    // We have tracked skeleton -> check if timeout exceeded
+                    if (_wasPreviouslySkeletonPresent == false)
+                    {
+                        _matchDate = DateTime.Now;
+                    }
+
+                    TimeSpan difference = DateTime.Now - _matchDate;
+                    if (difference < AfterMatchTimeout)
+                    {
+                        // Lower transparency
+                        _transparency = 1 - (float)(difference.TotalMilliseconds) / (float)(AfterMatchTimeout.TotalMilliseconds);
+                    }
+                    else
+                    {
+                        // After timeout exceeds hide video completely
+                        _showVideo = false;
+                    }
                 }
-            }
 
-            if (_showVideo)
+                if (_showVideo)
+                {
+                    _video.Transparency = _transparency;
+                    _video.Update(gameTime);
+                    _skeleton.Update(gameTime);
+                }
+
+                _wasPreviouslySkeletonPresent = _kinectManager.Skeletons.TrackedSkeleton != null;
+            }
+            else
             {
-                _video.Transparency = _transparency;
-                _video.Update(gameTime);
-                _skeleton.Update(gameTime);
+                _showVideo = false;
             }
-
-            _wasPreviouslySkeletonPresent = _kinectManager.Skeletons.TrackedSkeleton != null;
-
             base.Update(gameTime);
         }
 

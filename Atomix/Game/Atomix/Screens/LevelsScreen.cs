@@ -64,20 +64,6 @@ namespace Mach.Kinectomix.Screens
                 Components.Add(button);
             }
 
-            foreach (Level level in KinectomixGame.State.Levels)
-            {
-                KinectButton button = new KinectButton(ScreenManager.Game, _cursor);
-                button.Selected += button_Selected;
-                button.Tag = level;
-                button.Content = level.Name;
-                button.InputProvider = ScreenManager.InputProvider;
-                button.Width = 320;
-
-                _buttons.Add(button);
-
-                Components.Add(button);
-            }
-
             swipe = new SwipeRecognizer();
 
             base.Initialize();

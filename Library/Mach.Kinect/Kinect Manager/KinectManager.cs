@@ -151,6 +151,9 @@ namespace Mach.Kinect
 
         public event KinectStatusChangedEventHandler KinectStatusChanged;
 
+        /// <summary>
+        /// Initializes the <see cref="KinectManager"/> class.
+        /// </summary>
         static KinectManager()
         {
             Localization.KinectManagerResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
@@ -165,6 +168,11 @@ namespace Mach.Kinect
 
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KinectManager"/> class.
+        /// </summary>
+        /// <param name="startColorStream">if set to <c>true</c> color stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="startDepthStream">if set to <c>true</c> depth stream on connected Kinect sensors will be enabled.</param>
         public KinectManager(bool startColorStream, bool startDepthStream)
                 : this(startColorStream, startDepthStream, int.MaxValue)
         {

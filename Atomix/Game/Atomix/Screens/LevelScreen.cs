@@ -36,6 +36,7 @@ namespace Mach.Kinectomix.Screens
         private SpriteFont _normalFont;
         private SpriteFont _splashFont;
         private SpriteFont _levelFont;
+        private SpriteFont _timeFont;
         private Point activeAtomIndex = new Point(-1, -1);
         private ContentManager _content;
         private Button _levelsButton;
@@ -140,6 +141,9 @@ namespace Mach.Kinectomix.Screens
             _lastDate = DateTime.Now;
         }
 
+        /// <summary>
+        /// Loads the content.
+        /// </summary>
         protected override void LoadContent()
         {
             int boardHeight = _level.Board.RowsCount * TileHeight;
@@ -172,6 +176,7 @@ namespace Mach.Kinectomix.Screens
             _normalFont = _content.Load<SpriteFont>("Fonts/Normal");
             _splashFont = _content.Load<SpriteFont>("Fonts/Splash");
             _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
+            _timeFont = _content.Load<SpriteFont>("Fonts/Time");
             idleTexture = _content.Load<Texture2D>("Idle");
 
             _pauseButton.Font = _normalFont;
@@ -709,8 +714,8 @@ namespace Mach.Kinectomix.Screens
 
             _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20 + dif, 160), Color.Red);
 
-            _spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _moves), new Vector2(20 + 105, 120), Color.Red);
-            _spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(20 + 105, 160), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _moves), new Vector2(20 + 105, 120), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(20 + 105, 160), Color.Red);
 
             if (_highscore != null)
             {
