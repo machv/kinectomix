@@ -67,12 +67,14 @@
   <ItemGroup>
     <Compile Include="AnimatedTexture.cs" />
     <Compile Include="Components\Button.cs" />
+    <Compile Include="Components\ButtonBase.cs" />
     <Compile Include="Components\FrameRateInfo.cs" />
     <Compile Include="Components\MessageBox.cs" />
     <Compile Include="Components\MessageBoxBase.cs" />
     <Compile Include="Components\MessageBoxButtons.cs" />
     <Compile Include="Components\MessageBoxEventArgs.cs" />
     <Compile Include="Components\MessageBoxResult.cs" />
+    <Compile Include="Components\SpriteButton.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\IInputState.cs" />
