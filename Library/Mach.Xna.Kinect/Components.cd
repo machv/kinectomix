@@ -3,16 +3,13 @@
   <Class Name="Mach.Xna.Kinect.Components.KinectButton">
     <Position X="5" Y="2" Width="2.5" />
     <Members>
-      <Field Name="_circleCursor" Hidden="true" />
-      <Field Name="_cursor" Hidden="true" />
-      <Field Name="_hoverStart" Hidden="true" />
-      <Field Name="_isHovering" Hidden="true" />
       <Field Name="_minimalHoverDuration" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAQAIQEAAAAAAAAAAAAAAAAAQAIAACAAAAAAAAAAAAA=</HashCode>
-      <FileName>Components\KinectButton.cs</FileName>
+      <HashCode>AAQAAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Components\Buttons\KinectButton.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Mach.Xna.Components.Button">
     <Position X="0.75" Y="0.5" Width="3" />

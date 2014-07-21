@@ -49,6 +49,12 @@ namespace Mach.Xna.Components
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SpriteButton"/> class.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        public SpriteButton(Game game) : base(game) { }
+
+        /// <summary>
         /// Updates correct texture for the button.
         /// </summary>
         /// <param name="gameTime">Snapshot of game timing.</param>

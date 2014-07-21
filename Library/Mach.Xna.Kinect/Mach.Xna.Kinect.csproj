@@ -73,16 +73,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\Bresenham.cs" />
+    <Compile Include="Components\Buttons\IKinectAwareButton.cs" />
+    <Compile Include="Components\Buttons\KinectFocusChecker.cs" />
     <Compile Include="Components\ClippedEdgesVisualiser.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\AbsoluteCursorMapper.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\ICursorMapper.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\RelativeCursorMapper.cs" />
     <Compile Include="Components\Cursor\TrackedCursorHand.cs" />
     <Compile Include="Components\Gestures.cs" />
-    <Compile Include="Components\KinectButton.cs" />
+    <Compile Include="Components\Buttons\KinectButton.cs" />
     <Compile Include="Components\Cursor\KinectCircleCursor.cs" />
     <Compile Include="Components\Cursor\KinectCursor.cs" />
     <Compile Include="Components\KinectMessageBox.cs" />
+    <Compile Include="Components\Buttons\KinectSpriteButton.cs" />
     <Compile Include="Components\Localization\VisualKinectManagerResources.cs-CZ.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -1,13 +1,9 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Mach.Xna.Components;
+﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace Mach.Xna.Kinect.Components
 {
-    /// <summary>
-    /// Extended implementation of <see cref="Button"/> class that interacts with Kinect using <see cref="KinectCursor"/> or <see cref="KinectCircleCursor"/>.
-    /// </summary>
-    public class KinectButton : Button
+    public class KinectFocusChecker
     {
         private KinectCursor _cursor;
         private KinectCircleCursor _circleCursor;
@@ -25,19 +21,17 @@ namespace Mach.Xna.Kinect.Components
             set { _minimalHoverDuration = value; }
         }
 
-        private KinectButton(Game game)
-            : base(game)
+        private KinectFocusChecker()
         {
             _minimalHoverDuration = TimeSpan.FromSeconds(1);
         }
 
         /// <summary>
-        /// Initializes new instance of <see cref="KinectButton"/> with <see cref="KinectCircleCursor"/>. Default hover time is 1 second.
+        /// Initializes new instance of <see cref="KinectFocusChecker"/> with <see cref="KinectCircleCursor"/>. Default hover time is 1 second.
         /// </summary>
-        /// <param name="game">Game containing this component.</param>
         /// <param name="cursor">Cursor from which track position.</param>
-        public KinectButton(Game game, KinectCircleCursor cursor)
-            : this(game)
+        public KinectFocusChecker(KinectCircleCursor cursor)
+            : this()
         {
             if (cursor == null)
                 throw new ArgumentNullException("cursor");
@@ -46,24 +40,11 @@ namespace Mach.Xna.Kinect.Components
         }
 
         /// <summary>
-        /// Initializes new instance of <see cref="KinectButton"/> with cursor and text caption.
+        /// Initializes new instance of <see cref="KinectFocusChecker"/> with <see cref="KinectCursor"/>. Default hover time is 1 second.
         /// </summary>
-        /// <param name="game">Game containing this component.</param>
         /// <param name="cursor">Cursor from which track position.</param>
-        /// <param name="content">Caption text for the button.</param>
-        public KinectButton(Game game, KinectCircleCursor cursor, string content)
-            : this(game, cursor)
-        {
-            Content = content;
-        }
-
-        /// <summary>
-        /// Initializes new instance of <see cref="KinectButton"/> with <see cref="KinectCursor"/>. Default hover time is 1 second.
-        /// </summary>
-        /// <param name="game">Game containing this component.</param>
-        /// <param name="cursor">Cursor from which track position.</param>
-        public KinectButton(Game game, KinectCursor cursor)
-            : this(game)
+        public KinectFocusChecker(KinectCursor cursor)
+            : this()
         {
             if (cursor == null)
                 throw new ArgumentNullException("cursor");
@@ -74,29 +55,12 @@ namespace Mach.Xna.Kinect.Components
                 _cursor = cursor;
         }
 
-        /// <summary>
-        /// Initializes new instance of <see cref="KinectButton"/> with cursor and text caption.
-        /// </summary>
-        /// <param name="game">Game containing this component.</param>
-        /// <param name="cursor">Cursor from which track position.</param>
-        /// <param name="content">Caption text for the button.</param>
-        public KinectButton(Game game, KinectCursor cursor, string content)
-            : this(game, cursor)
+        public bool ProcessCursorFocus(Rectangle boundingRectangle, out bool isSelected)
         {
-            Content = content;
-        }
-
-        /// <summary>
-        /// Process checks in <see cref="Button"/> Update and adds additional checks for hover via <see cref="KinectCursor"/>.
-        /// </summary>
-        /// <param name="gameTime">Snapshot of game timing.</param>
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
+            isSelected = false;
 
             Vector2 handPosition = _circleCursor != null ? _circleCursor.Position : _cursor.Position;
-
-            bool isOver = _boundingRectangle.Contains((int)handPosition.X, (int)handPosition.Y);
+            bool isOver = boundingRectangle.Contains((int)handPosition.X, (int)handPosition.Y);
 
             if (isOver == true && _isHovering == false)
             {
@@ -104,7 +68,9 @@ namespace Mach.Xna.Kinect.Components
                 _isHovering = true;
 
                 if (_circleCursor != null)
+                {
                     _circleCursor.Progress = 0;
+                }
             }
 
             if (isOver == false && _isHovering == true)
@@ -113,7 +79,9 @@ namespace Mach.Xna.Kinect.Components
                 _isHovering = false;
 
                 if (_circleCursor != null)
+                {
                     _circleCursor.Progress = 0;
+                }
             }
 
             if (_isHovering == true)
@@ -121,18 +89,24 @@ namespace Mach.Xna.Kinect.Components
                 TimeSpan elapsed = DateTime.Now - _hoverStart;
 
                 if (_circleCursor != null)
+                {
                     _circleCursor.Progress = elapsed.TotalMilliseconds / _minimalHoverDuration.TotalMilliseconds;
+                }
 
                 if (elapsed > _minimalHoverDuration)
                 {
                     _isHovering = false;
 
                     if (_circleCursor != null)
+                    {
                         _circleCursor.Progress = 0;
+                    }
 
-                    OnSelected();
+                    isSelected = true;
                 }
             }
+
+            return isOver;
         }
     }
 }
