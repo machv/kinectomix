@@ -48,7 +48,7 @@ namespace Mach.Kinectomix.Screens
         private SpriteBatch _spriteBatch;
         private string _log = "";
         private KinectCircleCursor _cursor;
-        private KinectButton _pauseButton;
+        private SpriteButton _pauseButton;
         private LevelHighscore _highscore;
         private int TileWidth = 64;
         private int TileHeight = 64;
@@ -91,7 +91,7 @@ namespace Mach.Kinectomix.Screens
             if (cursor is KinectCircleCursor)
                 _cursor = cursor as KinectCircleCursor;
 
-            _pauseButton = new KinectButton(ScreenManager.Game, _cursor, "pause");
+            _pauseButton = new KinectSpriteButton(ScreenManager.Game, _cursor);
             _pauseButton.Selected += Pause_Selected;
 
             Components.Add(_pauseButton);
@@ -179,7 +179,10 @@ namespace Mach.Kinectomix.Screens
             _timeFont = _content.Load<SpriteFont>("Fonts/Time");
             idleTexture = _content.Load<Texture2D>("Idle");
 
-            _pauseButton.Font = _normalFont;
+            _pauseButton.Texture = _content.Load<Texture2D>("Buttons/PauseNormal");
+            _pauseButton.Focused = _content.Load<Texture2D>("Buttons/PauseFocused");
+            _pauseButton.Width = 70;
+            _pauseButton.Height = 70;
             _pauseButton.InputProvider = ScreenManager.InputProvider;
 
             _levelsButton.Font = _normalFont;
@@ -265,13 +268,13 @@ namespace Mach.Kinectomix.Screens
             _pauseMessageBox.Show("game paused", buttons);
         }
 
- 
+
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            _pauseButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width + _pauseButton.BorderThickness - _pauseButton.Width, -_pauseButton.BorderThickness);
+            _pauseButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _pauseButton.Width - 10, 10);
 
             if (!_isPaused)
             {

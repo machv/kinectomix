@@ -59,7 +59,7 @@ namespace Mach.Xna.Kinect.Components
 
             _isFocused = _focusChecker.ProcessCursorFocus(_boundingRectangle, out isSelected);
 
-            if (isSelected)
+            if (_focusChecker.IsKinectTracking && isSelected)
             {
                 OnSelected();
             }

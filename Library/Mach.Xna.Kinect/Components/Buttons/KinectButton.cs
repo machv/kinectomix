@@ -68,16 +68,19 @@ namespace Mach.Xna.Kinect.Components
         /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
             bool isSelected;
 
-            _isFocused = _focusChecker.ProcessCursorFocus(_boundingRectangle, out isSelected);
-
-            if (isSelected)
+            if (Game.IsActive)
             {
-                OnSelected();
+                _isFocused = _focusChecker.ProcessCursorFocus(_boundingRectangle, out isSelected);
+
+                if (_focusChecker.IsKinectTracking && isSelected)
+                {
+                    OnSelected();
+                }
             }
+
+            base.Update(gameTime);
         }
     }
 }

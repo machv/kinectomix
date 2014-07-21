@@ -51,7 +51,7 @@ namespace Mach.Xna.Components
         /// <value>
         /// <c>true</c> if this button is visible; otherwise, <c>false</c>.
         /// </value>
-        public bool IsVisible
+        public virtual bool IsVisible
         {
             get { return _isVisible; }
             set { _isVisible = value; }
@@ -60,7 +60,7 @@ namespace Mach.Xna.Components
         /// Gets or sets rendering position of this button.
         /// </summary>
         /// <returns>Top position to render.</returns>
-        public Vector2 Position
+        public virtual Vector2 Position
         {
             get { return _position; }
             set
@@ -74,7 +74,7 @@ namespace Mach.Xna.Components
         /// Gets or sets width of this button.
         /// </summary>
         /// <returns>Current width of the button.</returns>
-        public int Width
+        public virtual int Width
         {
             get { return _width; }
             set
@@ -91,7 +91,7 @@ namespace Mach.Xna.Components
         /// Gets or sets height of this button.
         /// </summary>
         /// <returns>Current height of the button.</returns>
-        public int Height
+        public virtual int Height
         {
             get { return _height; }
             set
@@ -108,7 +108,7 @@ namespace Mach.Xna.Components
         /// Gets or sets an arbitrary object value that can be used to store custom information about this button.
         /// </summary>
         /// <returns></returns>
-        public object Tag
+        public virtual object Tag
         {
             get { return _tag; }
             set { _tag = value; }
@@ -117,7 +117,7 @@ namespace Mach.Xna.Components
         /// Gets or sets input provider for accepting interactions from user.
         /// </summary>
         /// <returns>Current registered input provider for this button.</returns>
-        public IInputProvider InputProvider
+        public virtual IInputProvider InputProvider
         {
             get { return _inputProvider; }
             set { _inputProvider = value; }
@@ -126,7 +126,7 @@ namespace Mach.Xna.Components
         /// Gets or sets if this button is active and accepts input.
         /// </summary>
         /// <returns>True if is active and accepts input.</returns>
-        public bool IsEnabled
+        public virtual bool IsEnabled
         {
             get { return _isEnabled; }
             set
@@ -147,7 +147,7 @@ namespace Mach.Xna.Components
         /// <value>
         /// <c>true</c> if the button is focused; otherwise, <c>false</c>.
         /// </value>
-        public bool IsFocused
+        public virtual bool IsFocused
         {
             get { return _isFocused; }
         }

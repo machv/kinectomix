@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace Mach.Xna.Kinect.Components
@@ -10,6 +11,8 @@ namespace Mach.Xna.Kinect.Components
         private bool _isHovering;
         private DateTime _hoverStart;
         private TimeSpan _minimalHoverDuration;
+        private bool _isKinectTracking;
+        private bool _trackMouseIfKinectIsNotTracking;
 
         /// <summary>
         /// Gets or sets minimal required duration of cursor's hover over button to accept it as "click". Default hover duration is 1 second.
@@ -20,10 +23,32 @@ namespace Mach.Xna.Kinect.Components
             get { return _minimalHoverDuration; }
             set { _minimalHoverDuration = value; }
         }
+        /// <summary>
+        /// Gets a value indicating whether is kinect tracking hand.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is kinect tracking hand; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsKinectTracking
+        {
+            get { return _isKinectTracking; }
+        }
+        /// <summary>
+        /// Gets or sets a whether mouse will be tracked when Kinect is not tracking cursor.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if mouse will be tracked when Kinect is not tracking cursor; otherwise, <c>false</c>.
+        /// </value>
+        public bool TrackMouseIfKinectIsNotTracking
+        {
+            get { return _trackMouseIfKinectIsNotTracking; }
+            set { _trackMouseIfKinectIsNotTracking = value; }
+        }
 
         private KinectFocusChecker()
         {
             _minimalHoverDuration = TimeSpan.FromSeconds(1);
+            _trackMouseIfKinectIsNotTracking = true;
         }
 
         /// <summary>
@@ -59,7 +84,25 @@ namespace Mach.Xna.Kinect.Components
         {
             isSelected = false;
 
+            KinectCursor cursor = _circleCursor != null ? _circleCursor : _cursor;
+
             Vector2 handPosition = _circleCursor != null ? _circleCursor.Position : _cursor.Position;
+
+            if (cursor != null && !cursor.IsHandTracked)
+            {
+                if (_trackMouseIfKinectIsNotTracking)
+                {
+                    MouseState state = Mouse.GetState();
+                    handPosition = new Vector2(state.X, state.Y);
+                }
+
+                _isKinectTracking = false;
+            }
+            else
+            {
+                _isKinectTracking = true;
+            }
+
             bool isOver = boundingRectangle.Contains((int)handPosition.X, (int)handPosition.Y);
 
             if (isOver == true && _isHovering == false)

@@ -138,6 +138,16 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Buttons\PauseFocused.png">
+      <Name>PauseFocused</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Buttons\PauseNormal.png">
+      <Name>PauseNormal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Gestures\LeftHandUp.gst">
       <Name>LeftHandUp</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -224,9 +234,7 @@
       <SubType>Designer</SubType>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Buttons\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

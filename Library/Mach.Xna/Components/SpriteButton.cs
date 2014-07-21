@@ -73,8 +73,12 @@ namespace Mach.Xna.Components
                 _currentTexture = _disabledTexture != null ? _disabledTexture : _normalTexture;
             }
 
-            _textureScale = _currentTexture.Height / _currentTexture.Width;
-            int width = (int)(_textureScale * Height);
+            float textureRatio = _currentTexture.Width / _currentTexture.Height;
+            float buttonRatio = Width / Height;
+            float scale = textureRatio < buttonRatio ? _currentTexture.Width / Width : _currentTexture.Height / Height;
+            int width = (int)(scale * Height);
+
+            _textureScale = (float)Height / _currentTexture.Height;
             _boundingRectangle = new Rectangle((int)Position.X, (int)Position.Y, width, Height);
 
             base.Update(gameTime);
