@@ -37,7 +37,7 @@ namespace Mach.Kinectomix.LevelEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("49")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public int TileWith {
             get {
                 return ((int)(this["TileWith"]));
@@ -49,7 +49,7 @@ namespace Mach.Kinectomix.LevelEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("49")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public int TileHeight {
             get {
                 return ((int)(this["TileHeight"]));
@@ -73,7 +73,7 @@ namespace Mach.Kinectomix.LevelEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
         public int DefaultBoardColumns {
             get {
                 return ((int)(this["DefaultBoardColumns"]));

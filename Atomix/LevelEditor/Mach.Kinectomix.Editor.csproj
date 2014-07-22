@@ -184,6 +184,12 @@
     <Content Include="FileIcon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Tile\Atom\Fluoride.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tile\Atom\Nitrogen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tile\Fixed\Wall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

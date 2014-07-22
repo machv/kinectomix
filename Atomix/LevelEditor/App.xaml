@@ -37,7 +37,7 @@
                                            VerticalAlignment="Center"
                                            Width="49"
                                            Height="49"
-                                           Stretch="Fill">
+                                           Stretch="Uniform">
                                 <Image.Style>
                                     <Style TargetType="Image">
                                         <Style.Triggers>
@@ -117,7 +117,7 @@
                                            VerticalAlignment="Center"
                                            Width="49"
                                            Height="49"
-                                           Stretch="None"/>
+                                           Stretch="Fill"/>
                                     <l:BondsVisualiser TopLeftBond="{Binding TopLeftBond}"
                                                        TopBond="{Binding TopBond}"
                                                        TopRightBond="{Binding TopRightBond}" 
@@ -133,7 +133,7 @@
                                            VerticalAlignment="Center"
                                            Width="49"
                                            Height="49"
-                                           Stretch="None">
+                                           Stretch="Fill">
                                         <Behavior:TileBonds.IsBondingEnabled>
                                             <MultiBinding Converter="{StaticResource AllTrueConveter}">
                                                 <Binding Path="IsFixed" Converter="{StaticResource NegateConverter}" />
@@ -209,7 +209,7 @@
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
 
-                                        <Image Grid.Row="0" Source="{Binding AssetSource}" />
+                                        <Image Grid.Row="0" Width="49" Height="49" Stretch="Fill" Source="{Binding AssetSource}" />
                                         <TextBlock Grid.Row="1" Text="{Binding Name}" TextAlignment="Center"/>
                                     </Grid>
                                 </ToggleButton>
