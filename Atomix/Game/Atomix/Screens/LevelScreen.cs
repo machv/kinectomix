@@ -13,6 +13,7 @@ using Mach.Xna.Kinect.Gestures;
 using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.ViewModel;
 using Mach.Kinect.Gestures;
+using Mach.Kinectomix.Components;
 
 namespace Mach.Kinectomix.Screens
 {
@@ -29,6 +30,7 @@ namespace Mach.Kinectomix.Screens
         private Texture2D arrowTexture;
         private Texture2D activeTexture;
         private Texture2D idleTexture;
+        private Texture2D _scoreBoxTexture;
         private MouseState mouseState;
         private MouseState lastMouseState;
         private SoundEffect applause;
@@ -52,6 +54,9 @@ namespace Mach.Kinectomix.Screens
         private LevelHighscore _highscore;
         private int TileWidth = 64;
         private int TileHeight = 64;
+        private int _leftBoxEndX = 400;
+        private int _leftMargin = 55;
+        private int _topOffsetMain = 120;
 
         // Animation stuff
         protected bool isMovementAnimation = false;
@@ -86,6 +91,9 @@ namespace Mach.Kinectomix.Screens
 
         public override void Initialize()
         {
+            var background = new Background(ScreenManager.Game, "LevelBackground");
+            Components.Add(background);
+
             KinectCursor cursor = (ScreenManager.Game as KinectomixGame).Cursor;
 
             if (cursor is KinectCircleCursor)
@@ -148,7 +156,9 @@ namespace Mach.Kinectomix.Screens
         {
             int boardHeight = _level.Board.RowsCount * TileHeight;
 
-            int startX = ScreenManager.GraphicsDevice.Viewport.Bounds.Width - (_level.Board.ColumnsCount * TileWidth) - 1 * TileWidth;
+            //int startX = ScreenManager.GraphicsDevice.Viewport.Bounds.Width - (_level.Board.ColumnsCount * TileWidth) - 1 * TileWidth;
+
+            int startX = _leftBoxEndX + (ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _leftBoxEndX) / 2 - (_level.Board.ColumnsCount * TileWidth) / 2;
             int startY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - boardHeight / 2;
 
             boardPosition = new Vector2(startX, startY);
@@ -161,9 +171,34 @@ namespace Mach.Kinectomix.Screens
             int moleculeHeight = _level.Molecule.RowsCount * TileHeight;
             //int posX = (ScreenManager.GraphicsDevice.Viewport.Bounds.Width - offset) / 2 - moleculeWidth / 2;
             int posX = (offset); // / 2 - moleculeWidth / 2;
-            int posY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - moleculeHeight / 2;
+            int posY = ScreenManager.GraphicsDevice.Viewport.Bounds.Height - moleculeHeight - offset;
 
-            CalculateBoardTilePositions(new Vector2(offset + posX, posY), _level.Molecule);
+            int maxWidth = 355; // _leftBoxEndX - _leftMargin;
+            int maxHeight = 325;
+            float scale = 1;
+            int offsetY = _topOffsetMain;
+
+            if (moleculeWidth > maxWidth)
+            {
+                scale = (float)maxWidth / moleculeWidth;
+            }
+
+            if (moleculeHeight > maxHeight)
+            {
+                float heightScale = (float)maxHeight / moleculeHeight;
+                if (heightScale < scale)
+                {
+                    scale = heightScale;
+                }
+            }
+
+            moleculeWidth = (int)(moleculeWidth * scale);
+            moleculeHeight = (int)(moleculeHeight * scale);
+
+            posX = 45 + maxWidth / 2 - moleculeWidth / 2;
+            posY = _topOffsetMain + maxHeight / 2 - moleculeHeight / 2;
+
+            CalculateBoardTilePositions(new Vector2(posX, posY), _level.Molecule, scale);
 
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
@@ -178,6 +213,7 @@ namespace Mach.Kinectomix.Screens
             _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
             _timeFont = _content.Load<SpriteFont>("Fonts/Time");
             idleTexture = _content.Load<Texture2D>("Idle");
+            _scoreBoxTexture = _content.Load<Texture2D>("ScoreBox");
 
             _pauseButton.Texture = _content.Load<Texture2D>("Buttons/PauseNormal");
             _pauseButton.Focused = _content.Load<Texture2D>("Buttons/PauseFocused");
@@ -694,37 +730,56 @@ namespace Mach.Kinectomix.Screens
 
         public override void Draw(GameTime gameTime)
         {
+            base.Draw(gameTime);
+
             _spriteBatch.Begin();
+
+            //_spriteBatch.Draw(_scoreBoxTexture, new Vector2(30, 100), Color.White);
+
 
             string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : "game level";
 
-            _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(20, 20), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(55, 33), Color.Red);
 
             _spriteBatch.DrawString(_normalFont, _log, new Vector2(20, 600), Color.Red);
 
             DrawBoard(_spriteBatch, _level.Board, true);
             DrawBoard(_spriteBatch, _level.Molecule);
 
-            _spriteBatch.DrawStringWithShadow(_normalFont, "Current", new Vector2(21 + 105, 85), Color.Gray);
+            //_spriteBatch.DrawStringWithShadow(_normalFont, "Current", new Vector2(21 + 105, 85), Color.Gray);
 
-            string text = "Score:";
+            string text = "tahů";
             var scoreSize = _normalFont.MeasureString(text);
-            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20, 120), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 490), Color.Red);
 
-            text = "Time:";
+            text = "čas";
             var timeSize = _normalFont.MeasureString(text);
             float dif = scoreSize.X - timeSize.X;
 
-            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(20 + dif, 160), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 595), Color.Red);
 
-            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _moves), new Vector2(20 + 105, 120), Color.Red);
-            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(20 + 105, 160), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _moves), new Vector2(55, 525), Color.Red);
+            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(55, 630), Color.Red);
 
+            Vector2 textSize;
+            int x;
+            string textToRender;
             if (_highscore != null)
             {
-                _spriteBatch.DrawStringWithShadow(_normalFont, "Best", new Vector2(280, 85), Color.Gray);
-                _spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _highscore.Moves), new Vector2(280, 120), Color.Red);
-                _spriteBatch.DrawStringWithShadow(_normalFont, string.Format("{0}", _highscore.Time.ToString(@"mm\:ss")), new Vector2(280, 160), Color.Red);
+                textToRender = "rekord";
+                textSize = _normalFont.MeasureString(textToRender);
+                x = _leftBoxEndX - (int)textSize.X;
+                _spriteBatch.DrawStringWithShadow(_normalFont, textToRender, new Vector2(x, 490), Color.Gray);
+
+                textToRender = string.Format("{0}", _highscore.Moves);
+                textSize = _timeFont.MeasureString(textToRender);
+                x = _leftBoxEndX - (int)textSize.X;
+                _spriteBatch.DrawStringWithShadow(_timeFont, textToRender, new Vector2(x, 525), Color.Gray);
+
+                textToRender = string.Format("{0}", _highscore.Time.ToString(@"mm\:ss"));
+                textSize = _timeFont.MeasureString(textToRender);
+                x = _leftBoxEndX - (int)textSize.X;
+                _spriteBatch.DrawStringWithShadow(_timeFont, textToRender, new Vector2(x, 630), Color.Gray);
             }
 
             if (isMovementAnimation)
@@ -744,30 +799,6 @@ namespace Mach.Kinectomix.Screens
             }
 
             _spriteBatch.End();
-
-            base.Draw(gameTime);
-        }
-
-        private void CalculateBoardTilePositions(Vector2 startPosition, TilesCollection<BoardTileViewModel> board)
-        {
-            Vector2 currentPosition = new Vector2(startPosition.X, startPosition.Y);
-
-            for (int i = 0; i < board.RowsCount; i++)
-            {
-                for (int j = 0; j < board.ColumnsCount; j++)
-                {
-                    if (board[i, j] != null)
-                    {
-                        board[i, j].RenderPosition = currentPosition;
-                        board[i, j].RenderRectangle = new Rectangle((int)currentPosition.X, (int)currentPosition.Y, TileWidth, TileHeight);
-                    }
-
-                    currentPosition.X += TileWidth;
-                }
-
-                currentPosition.X = startPosition.X;
-                currentPosition.Y += TileHeight;
-            }
         }
 
         private bool CheckFinish()
@@ -941,6 +972,29 @@ namespace Mach.Kinectomix.Screens
             return tileTexture;
         }
 
+        private void CalculateBoardTilePositions(Vector2 startPosition, TilesCollection<BoardTileViewModel> board, float scale = 1)
+        {
+            Vector2 currentPosition = new Vector2(startPosition.X, startPosition.Y);
+
+            for (int i = 0; i < board.RowsCount; i++)
+            {
+                for (int j = 0; j < board.ColumnsCount; j++)
+                {
+                    if (board[i, j] != null)
+                    {
+                        board[i, j].RenderPosition = currentPosition;
+                        board[i, j].RenderScale = scale;
+                        board[i, j].RenderRectangle = new Rectangle((int)currentPosition.X, (int)currentPosition.Y, (int)(TileWidth * scale), (int)(TileHeight * scale));
+                    }
+
+                    currentPosition.X += (int)(TileWidth * scale);
+                }
+
+                currentPosition.X = startPosition.X;
+                currentPosition.Y += (int)(TileHeight * scale);
+            }
+        }
+
         private void DrawBoard(SpriteBatch spriteBach, TilesCollection<BoardTileViewModel> board, bool drawEmptyTiles = false)
         {
             bool drawEmpty = false;
@@ -982,15 +1036,15 @@ namespace Mach.Kinectomix.Screens
                     }
 
                     if (drawEmpty && drawEmptyTiles)
-                        _spriteBatch.Draw(emptyTexture, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), Color.White);
+                        _spriteBatch.Draw(emptyTexture, board[i, j].RenderRectangle, Color.White);
 
                     if (tile != null)
                     {
-                        _spriteBatch.Draw(tile, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), null, Color.White * board[i, j].Opacity, RotationAngle, origin, SpriteEffects.None, 0f);
+                        _spriteBatch.Draw(tile, board[i, j].RenderRectangle, null, Color.White * board[i, j].Opacity, RotationAngle, origin, SpriteEffects.None, 0f);
 
                         if (board[i, j].IsHovered && (board[i, j].IsFixed == false || board[i, j].IsEmpty == true))
                         {
-                            spriteBach.Draw(activeTexture, new Rectangle((int)board[i, j].RenderPosition.X, (int)board[i, j].RenderPosition.Y, TileWidth, TileHeight), Color.White);
+                            spriteBach.Draw(activeTexture, board[i, j].RenderRectangle, Color.White);
                         }
                     }
                 }

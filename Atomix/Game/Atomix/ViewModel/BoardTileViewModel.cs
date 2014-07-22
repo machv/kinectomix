@@ -74,10 +74,32 @@ namespace Mach.Kinectomix.ViewModel
         public Vector2 RenderPosition { get; set; }
 
         /// <summary>
+        /// Gets or sets the scale for rendering this tile.
+        /// </summary>
+        /// <value>
+        /// The scale for rendering this tile.
+        /// </value>
+        public float RenderScale { get; set; }
+
+        /// <summary>
         /// Rendering rectangle in which tile is on the board. Used for hit testing.
         /// </summary>
         /// <returns></returns>
         public Rectangle RenderRectangle { get; set; }
+        /// <summary>
+        /// Gets or sets the width of the tile.
+        /// </summary>
+        /// <value>
+        /// The width of the render.
+        /// </value>
+        //public int RenderWidth { get; set; }
+        /// <summary>
+        /// Gets or sets the height of the tile.
+        /// </summary>
+        /// <value>
+        /// The height of the render.
+        /// </value>
+        //public int RenderHeight { get; set; }
 
         public BoardTileViewModel(BoardTile tile) :this()
         {

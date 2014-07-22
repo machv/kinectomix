@@ -81,6 +81,7 @@ namespace Mach.Kinectomix
                 if (_isFullScreen != value)
                 {
                     _isFullScreen = value;
+
                     UpdateScreenDimensions();
                 }
             }
@@ -93,8 +94,8 @@ namespace Mach.Kinectomix
         {
             _graphics = new GraphicsDeviceManager(this);
 
-            _fullScreenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _fullScreenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+//            _fullScreenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+//            _fullScreenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             UpdateScreenDimensions();
 
             Content.RootDirectory = "Content";
