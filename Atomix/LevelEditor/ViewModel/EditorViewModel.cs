@@ -286,8 +286,6 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
             if (levelViewModel == null)
                 return;
 
-            //TODO check if field changed? if yes, allow save before new.
-
             _tileSelector.Tiles = levelViewModel.Tiles;
             _tiles = levelViewModel.Tiles;
             Level = levelViewModel;

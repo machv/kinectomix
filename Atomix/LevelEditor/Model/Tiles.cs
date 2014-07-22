@@ -107,6 +107,7 @@ namespace Mach.Kinectomix.LevelEditor.Model
             {
                 BoardTile tile = new BoardTile() { IsFixed = asset.IsFixed, IsEmpty = false, Asset = asset.Code, Name = asset.Name };
                 BoardTileViewModel tileVm = new BoardTileViewModel(tile, asset);
+                tileVm.IsFromLevel = true;
 
                 Add(tileVm, TileType.Board);
 

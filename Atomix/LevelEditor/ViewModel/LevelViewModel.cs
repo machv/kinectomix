@@ -207,7 +207,7 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
             {
                 if (item.Value.Template != null)
                 {
-                    Size dimensions = new Size(49, 49);
+                    Size dimensions = new Size(Properties.Settings.Default.TileWith, Properties.Settings.Default.TileWith);
                     int width = 4;
 
                     DrawingVisual drawingVisual = new DrawingVisual();

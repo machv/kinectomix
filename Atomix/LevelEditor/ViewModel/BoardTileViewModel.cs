@@ -14,6 +14,7 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
         private BoardTile _tile;
         private string _assetFile;
         private bool _isChanged;
+        private bool _isFromLevel;
 
         internal string AssetFile
         {
@@ -204,6 +205,18 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
         {
             get { return _isChanged; }
             set { _isChanged = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this tile is loaded is from level definition.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this this tile is loaded is from level definition; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsFromLevel
+        {
+            get { return _isFromLevel; }
+            set { _isFromLevel = value; }
         }
 
         public BoardTileViewModel()

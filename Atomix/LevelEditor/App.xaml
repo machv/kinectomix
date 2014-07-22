@@ -61,7 +61,7 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Auto">
@@ -173,49 +173,73 @@
                 <!--
                 <StackPanel Orientation="Horizontal">
                 -->
-                    <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding SelectedTile}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.Template>
-                            <ControlTemplate TargetType="ListBox">
-                                <Border>
-                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                                        <ItemsPresenter/>
-                                    </ScrollViewer>
-                                </Border>
-                            </ControlTemplate>
-                        </ListBox.Template>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="Padding" Value="0,0,0,0"/>
-                                <Setter Property="Margin" Value="1"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <ToggleButton IsChecked="{Binding 
+                <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding SelectedTile}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.Template>
+                        <ControlTemplate TargetType="ListBox">
+                            <Border>
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </Border>
+                        </ControlTemplate>
+                    </ListBox.Template>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="Padding" Value="0,0,0,0"/>
+                            <Setter Property="Margin" Value="1"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <ToggleButton IsChecked="{Binding 
                                               RelativeSource={RelativeSource FindAncestor, 
                                               AncestorType={x:Type ListBoxItem}},
                                               Path=IsSelected}"
                                               Background="Transparent"
                                               Margin="0"
                                               BorderThickness="0">
+                                <Border BorderBrush="Black">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsFromLevel}" Value="True">
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
                                     <Grid Margin="3">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
 
+
+
+
+                                        <!--<Grid.Style>
+                                        <Style TargetType="Grid">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsFromLevel}" Value="True">
+                                                    <Setter Property="Background" Value="Silver"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>-->
+
                                         <Image Grid.Row="0" Width="49" Height="49" Stretch="Fill" Source="{Binding AssetSource}" />
                                         <TextBlock Grid.Row="1" Text="{Binding Name}" TextAlignment="Center"/>
                                     </Grid>
-                                </ToggleButton>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                </Border>
+                            </ToggleButton>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
                 <!--
                     <Button Command="{Binding AddTileCommand}">
                         <Grid>
