@@ -52,8 +52,8 @@ namespace Mach.Kinectomix.Screens
         private KinectCircleCursor _cursor;
         private SpriteButton _pauseButton;
         private LevelHighscore _highscore;
-        private int TileWidth = 64;
-        private int TileHeight = 64;
+        private int TileWidth = 60;
+        private int TileHeight = 60;
         private int _leftBoxEndX = 400;
         private int _leftMargin = 55;
         private int _topOffsetMain = 120;

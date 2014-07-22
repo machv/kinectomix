@@ -184,16 +184,24 @@
     <Content Include="FileIcon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Tile\Atom\C.png" />
-    <Resource Include="Tile\Atom\Empty.png" />
-    <Resource Include="Tile\Atom\F.png" />
-    <Resource Include="Tile\Atom\H.png" />
-    <Resource Include="Tile\Atom\N.png" />
-    <Resource Include="Tile\Atom\O.png" />
-    <Resource Include="Tile\Atom\Wall.png" />
+    <Content Include="Tile\Fixed\Wall.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Board\Empty.png" />
+    <Content Include="Tile\Atom\Hydrogen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tile\Atom\Oxygen.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icon\Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Tile\Atom\Carbon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -219,9 +227,6 @@
       <Progid>Kinectomix.Editor</Progid>
       <DefaultIcon>FileIcon.ico</DefaultIcon>
     </FileAssociation>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tile\Fixed\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
