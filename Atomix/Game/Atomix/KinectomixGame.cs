@@ -19,7 +19,7 @@ namespace Mach.Kinectomix
     public class KinectomixGame : Game
     {
         public const string HighscoreFile = "atomix.highscore";
-        public static Color BrickColor = new Color(176, 64, 16);
+        public static Color BrickColor = Color.Gold; // new Color(176, 64, 16);
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;

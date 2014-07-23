@@ -22,6 +22,7 @@ namespace Mach.Xna.Kinect.Components
         private float _scale;
         private readonly SkeletonPointMap _pointMapping;
         private ContentManager _content;
+        private float _transparency;
 
         /// <summary>
         /// A delegate method explaining how to map a SkeletonPoint from one space to another.
@@ -57,6 +58,17 @@ namespace Mach.Xna.Kinect.Components
         {
             get { return _pointMapping; }
         }
+        /// <summary>
+        /// Gets or sets the transparency of displayed video.
+        /// </summary>
+        /// <value>
+        /// The transparency of displayed video.
+        /// </value>
+        public float Transparency
+        {
+            get { return _transparency; }
+            set { _transparency = value; }
+        }
 
         /// <summary>
         /// Creates a new instance of <see cref="SkeletonRenderer"/>.
@@ -83,6 +95,8 @@ namespace Mach.Xna.Kinect.Components
             _pointMapping = SkeletonToColorMap;
             _offset = offset;
             _scale = scale;
+            _transparency = 1;
+
             _content = new ResourceContentManager(game.Services, Sprites.ResourceManager);
         }
 
@@ -203,7 +217,7 @@ namespace Mach.Xna.Kinect.Components
                         _jointTexture,
                         _pointMapping(j.Position) + _offset,
                         null,
-                        jointColor,
+                        jointColor * _transparency,
                         0.0f,
                         _jointOrigin,
                         1.0f,
@@ -229,7 +243,7 @@ namespace Mach.Xna.Kinect.Components
                 color = Color.Gray;
             }
 
-            _spriteBatch.Draw(_boneTexture, start + _offset, null, color, angle, _boneOrigin, scale, SpriteEffects.None, 1.0f);
+            _spriteBatch.Draw(_boneTexture, start + _offset, null, color * _transparency, angle, _boneOrigin, scale, SpriteEffects.None, 1.0f);
         }
 
         private Vector2 SkeletonToColorMap(SkeletonPoint point)

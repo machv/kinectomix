@@ -88,6 +88,7 @@ namespace Mach.Xna.Kinect.Components
                     _video.Transparency = _transparency;
                     _video.Update(gameTime);
                     _skeleton.Update(gameTime);
+                    _skeleton.Transparency = _transparency;
                 }
 
                 _wasPreviouslySkeletonPresent = _kinectManager.Skeletons.TrackedSkeleton != null;
