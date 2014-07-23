@@ -23,6 +23,7 @@ namespace Mach.Xna.Kinect.Components
         private Texture2D _backgroundTexture;
         private bool _showConnectKinectPrompt;
         private bool _showConnectedKinectIcon;
+        private bool _showPromptKinectIcon;
         private bool _drawConnectKinectAlert;
         private Vector2 _textPosition;
         private string _description;
@@ -32,6 +33,7 @@ namespace Mach.Xna.Kinect.Components
         private ContentManager _content;
         private Color _foreground;
         private Vector2 _renderPosition;
+        private Vector2 _promptTextPositionOffset;
 
         /// <summary>
         /// Gets or sets a whether connect kinect prompt will be rendered.
@@ -43,6 +45,28 @@ namespace Mach.Xna.Kinect.Components
         {
             get { return _showConnectKinectPrompt; }
             set { _showConnectKinectPrompt = value; }
+        }
+        /// <summary>
+        /// Gets or sets a value indicating whether icon in prompt will be rendered.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if icon in prompt will be rendered; otherwise, <c>false</c>.
+        /// </value>
+        public bool ShowPromptKinectIcon
+        {
+            get { return _showPromptKinectIcon; }
+            set { _showPromptKinectIcon = value; }
+        }
+        /// <summary>
+        /// Gets or sets the position offset where prompt text will start in texture.
+        /// </summary>
+        /// <value>
+        /// The position offset where prompt text will start in texture.
+        /// </value>
+        public Vector2 PromptTextPositionOffset
+        {
+            get { return _promptTextPositionOffset; }
+            set { _promptTextPositionOffset = value; }
         }
         /// <summary>
         /// Gets or sets the background texture.
@@ -181,6 +205,7 @@ namespace Mach.Xna.Kinect.Components
             _connectedIconScale = 0.2f;
             _foreground = Color.Black;
             _renderPosition = Vector2.Zero;
+            _showPromptKinectIcon = true;
 
             _showConnectKinectPrompt = true;
             _showConnectedKinectIcon = true;
@@ -266,17 +291,28 @@ namespace Mach.Xna.Kinect.Components
                     width = _backgroundTexture.Width;
                 }
 
-                // Icon
-                _iconPosition = new Vector2();
-                _iconPosition.X = _renderPosition.X + width / 2 - (_iconTexture.Width * _iconScale) / 2;
-                _iconPosition.Y = _renderPosition.Y + 20;
-
+                if (_showPromptKinectIcon)
+                {
+                    // Icon
+                    _iconPosition = new Vector2();
+                    _iconPosition.X = _renderPosition.X + width / 2 - (_iconTexture.Width * _iconScale) / 2;
+                    _iconPosition.Y = _renderPosition.Y + 20;
+                }
+                else
+                {
+                    _iconPosition = Vector2.Zero;
+                }
                 // Text
                 _description = _manager.LastStatus == KinectStatus.Undefined ? Localization.VisualKinectManagerResources.PleaseConnectSensor : _manager.GetStatusDescription(_manager.LastStatus);
                 Vector2 textSize = _font.MeasureString(_description);
                 _textPosition = new Vector2();
-                _textPosition.X = _renderPosition.X + width / 2 - textSize.X / 2;
-                _textPosition.Y = _renderPosition.Y + _iconPosition.Y + _iconTexture.Height * _iconScale + 10;
+                _textPosition.X = _renderPosition.X + _promptTextPositionOffset.X + (width - _promptTextPositionOffset.X) / 2 - textSize.X / 2;
+                _textPosition.Y = _renderPosition.Y + _promptTextPositionOffset.Y + _iconPosition.Y;
+
+                if (_showPromptKinectIcon)
+                {
+                    _textPosition.Y += _iconTexture.Height * _iconScale + 10;
+                }
 
                 _drawConnectKinectAlert = true;
             }
@@ -314,11 +350,13 @@ namespace Mach.Xna.Kinect.Components
 
                     _spriteBatch.DrawString(_font, _description, _textPosition, _foreground);
 
-                    if (_drawIcon == true)
+                    if (_showPromptKinectIcon)
                     {
-                        _spriteBatch.Draw(_iconTexture, _iconPosition, null, Color.White, 0, Vector2.Zero, _iconScale, SpriteEffects.None, 0);
+                        if (_drawIcon == true)
+                        {
+                            _spriteBatch.Draw(_iconTexture, _iconPosition, null, Color.White, 0, Vector2.Zero, _iconScale, SpriteEffects.None, 0);
+                        }
                     }
-
                     _spriteBatch.End();
                 }
             }

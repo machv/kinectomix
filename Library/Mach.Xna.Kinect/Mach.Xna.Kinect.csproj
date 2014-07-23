@@ -110,6 +110,16 @@
     <Compile Include="Input\KinectInputProvider.cs" />
     <Compile Include="Input\KinectInputState.cs" />
     <Compile Include="KinectInteractionClient.cs" />
+    <Compile Include="Components\Localization\KinectMessageBoxResources.cs-CZ.Designer.cs">
+      <DependentUpon>KinectMessageBoxResources.cs-CZ.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Components\Localization\KinectMessageBoxResources.Designer.cs">
+      <DependentUpon>KinectMessageBoxResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprites.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -135,6 +145,14 @@
     <EmbeddedResource Include="Components\Localization\VisualKinectManagerResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>VisualKinectManagerResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Localization\KinectMessageBoxResources.cs-CZ.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>KinectMessageBoxResources.cs-CZ.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\Localization\KinectMessageBoxResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>KinectMessageBoxResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Sprites.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

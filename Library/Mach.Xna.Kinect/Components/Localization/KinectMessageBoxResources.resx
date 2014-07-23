@@ -117,37 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Connected" xml:space="preserve">
-    <value>the Kinect is fully connected and ready</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="DeviceNotGenuine" xml:space="preserve">
-    <value>the attached device is not Kinect sensor</value>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
-  <data name="DeviceNotSupported" xml:space="preserve">
-    <value>the attached Kinect is not supported</value>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
   </data>
-  <data name="Disconnected" xml:space="preserve">
-    <value>the Kinect has been disconnected</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>cannot communicate with Kinect</value>
-  </data>
-  <data name="Initializing" xml:space="preserve">
-    <value>the Kinect is initializing</value>
-  </data>
-  <data name="InsufficientBandwidth" xml:space="preserve">
-    <value>the USB connector does not have enough bandwidth</value>
-  </data>
-  <data name="NotPowered" xml:space="preserve">
-    <value>the Kinect is not fully powered</value>
-  </data>
-  <data name="NotReady" xml:space="preserve">
-    <value>the Kinect is not yet ready</value>
-  </data>
-  <data name="Undefined" xml:space="preserve">
-    <value>status of the attached Kinect cannot be determined</value>
-  </data>
-  <data name="Unknown" xml:space="preserve">
-    <value>unknown stats</value>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

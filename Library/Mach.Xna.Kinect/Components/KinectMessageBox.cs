@@ -11,6 +11,11 @@ namespace Mach.Xna.Kinect.Components
     {
         private KinectCursor _cursor;
 
+        static KinectMessageBox()
+        {
+            Localization.KinectMessageBoxResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="KinectMessageBox" /> component.
         /// </summary>
@@ -28,10 +33,10 @@ namespace Mach.Xna.Kinect.Components
         /// </summary>
         public override void Initialize()
         {
-            _buttonOk = new KinectButton(Game, _cursor, "OK") { Tag = MessageBoxResult.OK, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };
-            _buttonCancel = new KinectButton(Game, _cursor, "Cancel") { Tag = MessageBoxResult.Cancel, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };
-            _buttonYes = new KinectButton(Game, _cursor, "Yes") { Tag = MessageBoxResult.Yes, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };
-            _buttonNo = new KinectButton(Game, _cursor, "No") { Tag = MessageBoxResult.No, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };
+            _buttonOk = new KinectButton(Game, _cursor, Localization.KinectMessageBoxResources.OK) { Tag = MessageBoxResult.OK, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };
+            _buttonCancel = new KinectButton(Game, _cursor, Localization.KinectMessageBoxResources.Cancel) { Tag = MessageBoxResult.Cancel, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };
+            _buttonYes = new KinectButton(Game, _cursor, Localization.KinectMessageBoxResources.Yes) { Tag = MessageBoxResult.Yes, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };
+            _buttonNo = new KinectButton(Game, _cursor, Localization.KinectMessageBoxResources.No) { Tag = MessageBoxResult.No, Width = ButtonsWidth, Height = ButtonsHeight, InputProvider = InputProvider, Background = Color.DarkGray, BorderColor = Color.White };
 
             base.Initialize();
         }

@@ -215,10 +215,13 @@ namespace Mach.Kinectomix
             score.DefinitionHash = _state.DefinitionHash;
             _state.Highscore = score;
 
-            _visualKinectManager.Font = Content.Load<SpriteFont>("Fonts/Normal");
+            _visualKinectManager.Font = Content.Load<SpriteFont>("Fonts/Small");
             _visualKinectManager.Foreground = KinectomixGame.BrickColor;
             _visualKinectManager.Background = Content.Load<Texture2D>("KinectPromptBackground");
-            _visualKinectManager.RenderPosition = new Vector2(320, 0);
+            _visualKinectManager.RenderPosition = new Vector2(290, 0);
+            _visualKinectManager.ShowPromptKinectIcon = false;
+            _visualKinectManager.PromptTextPositionOffset = new Vector2(150, 18);
+            _visualKinectManager.ShowConnectKinectPrompt = false;
 
             _gameScreenManager.Add(screen);
             _gameScreenManager.Activate(screen);

@@ -61,7 +61,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Kinect is fully connected and ready..
+        ///   Looks up a localized string similar to the Kinect is fully connected and ready.
         /// </summary>
         internal static string Connected {
             get {
@@ -70,7 +70,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The attached device is not genuine Kinect sensor..
+        ///   Looks up a localized string similar to the attached device is not Kinect sensor.
         /// </summary>
         internal static string DeviceNotGenuine {
             get {
@@ -79,7 +79,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The attached Kinect is not supported..
+        ///   Looks up a localized string similar to the attached Kinect is not supported.
         /// </summary>
         internal static string DeviceNotSupported {
             get {
@@ -88,7 +88,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Kinect has been disconnected..
+        ///   Looks up a localized string similar to the Kinect has been disconnected.
         /// </summary>
         internal static string Disconnected {
             get {
@@ -97,7 +97,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Communication with the Kinect procudes errors..
+        ///   Looks up a localized string similar to cannot communicate with Kinect.
         /// </summary>
         internal static string Error {
             get {
@@ -106,7 +106,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Kinect is initializing..
+        ///   Looks up a localized string similar to the Kinect is initializing.
         /// </summary>
         internal static string Initializing {
             get {
@@ -115,7 +115,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The USB connector does not have sufficient bandwidth..
+        ///   Looks up a localized string similar to the USB connector does not have enough bandwidth.
         /// </summary>
         internal static string InsufficientBandwidth {
             get {
@@ -124,7 +124,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Kinect is not fully powered..
+        ///   Looks up a localized string similar to the Kinect is not fully powered.
         /// </summary>
         internal static string NotPowered {
             get {
@@ -133,7 +133,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some part of the Kinect is not yet ready..
+        ///   Looks up a localized string similar to the Kinect is not yet ready.
         /// </summary>
         internal static string NotReady {
             get {
@@ -142,7 +142,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status of the attached Kinect cannot be determined..
+        ///   Looks up a localized string similar to status of the attached Kinect cannot be determined.
         /// </summary>
         internal static string Undefined {
             get {
@@ -151,7 +151,7 @@ namespace Mach.Kinect.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unknown.
+        ///   Looks up a localized string similar to unknown stats.
         /// </summary>
         internal static string Unknown {
             get {
