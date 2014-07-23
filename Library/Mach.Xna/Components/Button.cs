@@ -145,10 +145,10 @@ namespace Mach.Xna.Components
         /// </summary>
         protected override void LoadContent()
         {
+            base.LoadContent();
+
             _empty = new Texture2D(_spriteBatch.GraphicsDevice, 1, 1);
             _empty.SetData(new Color[] { Color.White });
-
-            base.LoadContent();
         }
 
         /// <summary>
@@ -192,14 +192,41 @@ namespace Mach.Xna.Components
                 _spriteBatch.Draw(_empty, _boundingRectangle, BorderColor);
                 _spriteBatch.Draw(_empty, innerDimensions, _currentBackground);
 
+                _spriteBatch.End();
+
+                RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+
+                //Set up the spritebatch to draw using scissoring (for text cropping)
+                _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
+                                  null, null, _rasterizerState);
+
                 Vector2 textSize = Font.MeasureString(_content);
                 Vector2 textPosition = new Vector2(_boundingRectangle.Center.X, _boundingRectangle.Center.Y) - textSize / 2f;
                 textPosition.X = (int)textPosition.X;
-                textPosition.Y = (int)textPosition.Y;
+                textPosition.Y = (int)textPosition.Y + (textSize.Y - Font.LineSpacing);
+
+                //textPosition.Y = _boundingRectangle.Bottom - Font.LineSpacing;
+                //textPosition.Y = _boundingRectangle.Bottom - textSize.Y;
+
+                if (textPosition.X < _boundingRectangle.X) // overflow reset to zero
+                    textPosition.X = _boundingRectangle.X + _borderThickness;
+
+                Rectangle currentRect = _spriteBatch.GraphicsDevice.ScissorRectangle;
+                Rectangle clippingRectangle = _boundingRectangle;
+                clippingRectangle.Width -= 2 * _borderThickness;
+
+                if (currentRect.Contains(clippingRectangle))
+                {
+                    _spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
+                }
+
                 _spriteBatch.DrawString(Font, _content, textPosition, Foreground);
+
+                _spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
 
                 _spriteBatch.End();
             }
+
             base.Draw(gameTime);
         }
     }

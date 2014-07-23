@@ -175,9 +175,14 @@ namespace Mach.Xna.Components
         /// </summary>
         public override void Initialize()
         {
-            _spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-
             base.Initialize();
+        }
+
+        protected override void LoadContent()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            base.LoadContent();
         }
 
         /// <summary>
