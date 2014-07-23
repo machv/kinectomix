@@ -117,19 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GameName" xml:space="preserve">
-    <value>Kinectomix</value>
-  </data>
-  <data name="Levels" xml:space="preserve">
-    <value>úrovně</value>
-  </data>
-  <data name="PlayGame" xml:space="preserve">
-    <value>hrát</value>
-  </data>
-  <data name="QuitConfirmation" xml:space="preserve">
-    <value>Opravdu si přejete ukončit hru?</value>
-  </data>
-  <data name="QuitGame" xml:space="preserve">
-    <value>ukončit</value>
+  <data name="Title" xml:space="preserve">
+    <value>Game Levels</value>
   </data>
 </root>

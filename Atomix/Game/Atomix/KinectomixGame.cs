@@ -19,6 +19,7 @@ namespace Mach.Kinectomix
     public class KinectomixGame : Game
     {
         public const string HighscoreFile = "atomix.highscore";
+        public static Color BrickColor = new Color(176, 64, 16);
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -104,6 +105,7 @@ namespace Mach.Kinectomix
 
             Resources.StartScreenResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
             Resources.LevelScreenResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
+            Resources.LevelsScreenResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
 
             Exiting += Game_Exiting;
         }
@@ -135,7 +137,7 @@ namespace Mach.Kinectomix
             };
 
             var videoWhenNoSkeleton = new VideoWhenNoSkeleton(this, _visualKinectManager.Manager, _videoStream, _skeletonRenderer);
-            var background = new Background(this, "Youtube1Wall");
+            var background = new Background(this, "Backgrounds/Start");
             var frameRate = new FrameRateInfo(this);
             var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _visualKinectManager.Manager);
             //_cursor.HandStateTracker = new ConvexityClosedHandTracker(_visualKinectManager); // { VideoStreamData = _videoStream };

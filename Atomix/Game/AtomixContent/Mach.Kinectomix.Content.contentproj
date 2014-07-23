@@ -134,11 +134,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bcg1.jpg">
-      <Name>Bcg1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Buttons\PauseFocused.png">
       <Name>PauseFocused</Name>
       <Importer>TextureImporter</Importer>
@@ -146,6 +141,21 @@
     </Compile>
     <Compile Include="Buttons\PauseNormal.png">
       <Name>PauseNormal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Buttons\BackFocused.png">
+      <Name>BackFocused</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Buttons\BackNormal.png">
+      <Name>BackNormal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Backgrounds\Start.png">
+      <Name>Start</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -157,16 +167,6 @@
       <Name>RightHandUp</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Youtube1Wall.png">
-      <Name>Youtube1Wall</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="ScoreBox.png">
-      <Name>ScoreBox</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Backgrounds\Level.png">
       <Name>Level</Name>
       <Importer>TextureImporter</Importer>

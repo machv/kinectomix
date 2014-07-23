@@ -118,6 +118,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LevelScreenResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\LevelsScreenResources.cs-CZ.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LevelsScreenResources.cs-CZ.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\LevelsScreenResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LevelsScreenResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\StartScreenResources.cs-CZ.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -201,6 +211,14 @@
     <EmbeddedResource Include="Resources\LevelScreenResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LevelScreenResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LevelsScreenResources.cs-CZ.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LevelsScreenResources.cs-CZ.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LevelsScreenResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LevelsScreenResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\StartScreenResources.cs-CZ.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -81,7 +81,7 @@ namespace Mach.Kinectomix.Screens
             Vector2 size = _splashFont.MeasureString(name);
 
             _spriteBatch.Begin();
-            _spriteBatch.DrawStringWithShadow(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 220), Color.DarkRed);
+            _spriteBatch.DrawStringWithShadow(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 220), KinectomixGame.BrickColor);
             _spriteBatch.End();
 
             base.Draw(gameTime);

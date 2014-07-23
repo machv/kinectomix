@@ -754,14 +754,12 @@ namespace Mach.Kinectomix.Screens
         {
             _spriteBatch.Begin();
 
-            Color brick = new Color(176, 64, 16);
-
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
 
 
             string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : "game level";
 
-            _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(55, 33), brick);
+            _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(55, 33), KinectomixGame.BrickColor);
 
             DrawBoard(_spriteBatch, _level.Board, true);
             DrawBoard(_spriteBatch, _level.Molecule);
@@ -770,16 +768,16 @@ namespace Mach.Kinectomix.Screens
 
             string text = "tahů";
             var scoreSize = _normalFont.MeasureString(text);
-            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 490), brick);
+            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 490), KinectomixGame.BrickColor);
 
             text = "čas";
             var timeSize = _normalFont.MeasureString(text);
             float dif = scoreSize.X - timeSize.X;
 
-            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 595), brick);
+            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 595), KinectomixGame.BrickColor);
 
-            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _moves), new Vector2(55, 525), brick);
-            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(55, 630), brick);
+            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _moves), new Vector2(55, 525), KinectomixGame.BrickColor);
+            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(55, 630), KinectomixGame.BrickColor);
 
             Vector2 textSize;
             int x;

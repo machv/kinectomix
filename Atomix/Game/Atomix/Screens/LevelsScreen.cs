@@ -1,6 +1,7 @@
 ﻿using Mach.Kinect.Gestures;
 using Mach.Kinectomix.Logic;
 using Mach.Xna.Components;
+using Mach.Xna.Input.Extensions;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
@@ -19,10 +20,11 @@ namespace Mach.Kinectomix.Screens
         private List<KinectButton> _buttons = new List<KinectButton>();
         private SpriteFont _normalFont;
         private SpriteFont _splashFont;
+        private SpriteFont _titleFont;
         private SwipeRecognizer swipe;
         private KinectCursor _cursor;
-        private KinectButton _backButton;
         private Texture2D _backgroundTexture;
+        private SpriteButton _backButton;
 
         public LevelsScreen(SpriteBatch spriteBatch)
         {
@@ -33,9 +35,8 @@ namespace Mach.Kinectomix.Screens
         {
             _cursor = (ScreenManager.Game as KinectomixGame).Cursor;
 
-            _backButton = new KinectButton(ScreenManager.Game, _cursor, "go back");
+            _backButton = new KinectSpriteButton(ScreenManager.Game, _cursor);
             _backButton.Selected += Back_Selected;
-
             Components.Add(_backButton);
 
             for (int i = 0; i < KinectomixGame.State.Levels.Length; i++)
@@ -58,7 +59,7 @@ namespace Mach.Kinectomix.Screens
                 button.Tag = level;
                 button.Content = level.Name;
                 button.InputProvider = ScreenManager.InputProvider;
-                button.Width = 320;
+                button.Width = 360;
                 button.IsEnabled = isEnabled;
 
                 _buttons.Add(button);
@@ -73,10 +74,13 @@ namespace Mach.Kinectomix.Screens
         protected override void LoadContent()
         {
             _backgroundTexture = ScreenManager.Content.Load<Texture2D>("Backgrounds/Levels");
-            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
+            _titleFont = ScreenManager.Content.Load<SpriteFont>("Fonts/LevelName");
             _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
-            _backButton.Font = _normalFont;
+            _backButton.Texture = ScreenManager.Content.Load<Texture2D>("Buttons/BackNormal");
+            _backButton.Focused = ScreenManager.Content.Load<Texture2D>("Buttons/BackFocused");
+            _backButton.Width = 60;
+            _backButton.Height = 60;
             _backButton.InputProvider = ScreenManager.InputProvider;
 
             foreach (Button button in _buttons)
@@ -103,7 +107,7 @@ namespace Mach.Kinectomix.Screens
                 }
             }
 
-            _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width + _backButton.BorderThickness - _backButton.Width, -_backButton.BorderThickness);
+            _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _backButton.Width - 30, 30);
 
             int xPos = 20;
             int xDiff = 30;
@@ -208,12 +212,6 @@ namespace Mach.Kinectomix.Screens
 
             if (xTranslationBuffer != 0)
             {
-                //if (xTranslation >= 0)
-                //{
-                //    xTranslation = 0;
-                //    xTranslationBuffer = 0;
-                //}
-
                 if (xTranslationBuffer > 0)
                 {
                     xTranslationBuffer -= xStep;
@@ -233,12 +231,16 @@ namespace Mach.Kinectomix.Screens
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Draws the screen.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
         public override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
-            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
 
-            _spriteBatch.DrawString(_splashFont, "Game Levels", new Vector2(20, 30), Color.Red);
+            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
+            _spriteBatch.DrawStringWithShadow(_titleFont, Resources.LevelsScreenResources.Title, new Vector2(55, 33), KinectomixGame.BrickColor);
 
             _spriteBatch.End();
 
