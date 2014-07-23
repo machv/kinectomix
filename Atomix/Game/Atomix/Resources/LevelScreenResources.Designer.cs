@@ -59,5 +59,104 @@ namespace Mach.Kinectomix.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to continue.
+        /// </summary>
+        public static string ContinueGame {
+            get {
+                return ResourceManager.GetString("ContinueGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Level.
+        /// </summary>
+        public static string DefaultLevelName {
+            get {
+                return ResourceManager.GetString("DefaultLevelName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Paused.
+        /// </summary>
+        public static string GamePaused {
+            get {
+                return ResourceManager.GetString("GamePaused", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to best score.
+        /// </summary>
+        public static string HighScore {
+            get {
+                return ResourceManager.GetString("HighScore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level completed.
+        /// </summary>
+        public static string LevelCompleted {
+            get {
+                return ResourceManager.GetString("LevelCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to levels.
+        /// </summary>
+        public static string Levels {
+            get {
+                return ResourceManager.GetString("Levels", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to main menu.
+        /// </summary>
+        public static string MainMenu {
+            get {
+                return ResourceManager.GetString("MainMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to moves.
+        /// </summary>
+        public static string Moves {
+            get {
+                return ResourceManager.GetString("Moves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to next level.
+        /// </summary>
+        public static string NextLevel {
+            get {
+                return ResourceManager.GetString("NextLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to play again.
+        /// </summary>
+        public static string PlayAgain {
+            get {
+                return ResourceManager.GetString("PlayAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to time.
+        /// </summary>
+        public static string Time {
+            get {
+                return ResourceManager.GetString("Time", resourceCulture);
+            }
+        }
     }
 }

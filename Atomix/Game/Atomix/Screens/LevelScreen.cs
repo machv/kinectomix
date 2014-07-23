@@ -114,15 +114,15 @@ namespace Mach.Kinectomix.Screens
 
             Components.Add(_pauseMessageBox);
 
-            _levelsButton = new Button(ScreenManager.Game, "levels");
+            _levelsButton = new Button(ScreenManager.Game, Resources.LevelScreenResources.Levels);
             _levelsButton.InputProvider = ScreenManager.InputProvider;
             _levelsButton.IsVisible = false;
 
-            _repeatButton = new Button(ScreenManager.Game, "play again");
+            _repeatButton = new Button(ScreenManager.Game, Resources.LevelScreenResources.PlayAgain);
             _repeatButton.InputProvider = ScreenManager.InputProvider;
             _repeatButton.IsVisible = false;
 
-            _nextButton = new Button(ScreenManager.Game, "continue");
+            _nextButton = new Button(ScreenManager.Game, Resources.LevelScreenResources.NextLevel);
             _nextButton.InputProvider = ScreenManager.InputProvider;
             _nextButton.IsVisible = false;
 
@@ -317,14 +317,14 @@ namespace Mach.Kinectomix.Screens
             _isPaused = true;
 
             KinectButton[] buttons = new KinectButton[] {
-                new KinectButton(ScreenManager.Game, _cursor, "main menu") { Tag = MessageBoxResult.Custom1, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
-                new KinectButton(ScreenManager.Game, _cursor, "continue") { Tag = MessageBoxResult.OK, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.MainMenu) { Tag = MessageBoxResult.Custom1, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.ContinueGame) { Tag = MessageBoxResult.OK, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
             };
 
             foreach (Button button in buttons)
                 button.Initialize();
 
-            _pauseMessageBox.Show("game paused", buttons);
+            _pauseMessageBox.Show(Resources.LevelScreenResources.GamePaused, buttons);
         }
 
 
@@ -757,7 +757,7 @@ namespace Mach.Kinectomix.Screens
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
 
 
-            string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : "Game Level";
+            string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : Resources.LevelScreenResources.DefaultLevelName;
 
             _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(55, 40), KinectomixGame.BrickColor);
 
@@ -766,11 +766,11 @@ namespace Mach.Kinectomix.Screens
 
             //_spriteBatch.DrawStringWithShadow(_normalFont, "Current", new Vector2(21 + 105, 85), Color.Gray);
 
-            string text = "tahů";
+            string text = Resources.LevelScreenResources.Moves;
             var scoreSize = _normalFont.MeasureString(text);
             _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 490), KinectomixGame.BrickColor);
 
-            text = "čas";
+            text = Resources.LevelScreenResources.Time;
             var timeSize = _normalFont.MeasureString(text);
             float dif = scoreSize.X - timeSize.X;
 
@@ -784,7 +784,7 @@ namespace Mach.Kinectomix.Screens
             string textToRender;
             if (_highscore != null)
             {
-                textToRender = "rekord";
+                textToRender = Resources.LevelScreenResources.HighScore;
                 textSize = _normalFont.MeasureString(textToRender);
                 x = _leftBoxEndX - (int)textSize.X;
                 _spriteBatch.DrawStringWithShadow(_normalFont, textToRender, new Vector2(x, 490), Color.Gray);
@@ -810,7 +810,7 @@ namespace Mach.Kinectomix.Screens
                 _spriteBatch.Draw(idleTexture, new Rectangle(0, 0, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.GraphicsDevice.Viewport.Bounds.Height), Color.White);
                 _spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 230), Color.Brown);
 
-                string name = "level completed";
+                string name = Resources.LevelScreenResources.LevelCompleted;
                 Vector2 size = _splashFont.MeasureString(name);
 
                 _spriteBatch.DrawString(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
