@@ -211,7 +211,20 @@ namespace Mach.Xna.Components
                     Width - 2 * BorderThickness,
                     Height - 2 * BorderThickness);
 
-                _spriteBatch.Draw(_empty, _boundingRectangle, BorderColor);
+                // draw top border
+                if (_borderThickness > 0)
+                {
+                    Rectangle topBorder = new Rectangle(_boundingRectangle.Left, _boundingRectangle.Top, _boundingRectangle.Width, _borderThickness);
+                    Rectangle bottomBorder = new Rectangle(_boundingRectangle.Left, _boundingRectangle.Bottom - _borderThickness, _boundingRectangle.Width, _borderThickness);
+                    Rectangle leftBorder = new Rectangle(_boundingRectangle.Left, _boundingRectangle.Top, _borderThickness, _boundingRectangle.Height);
+                    Rectangle rightBorder = new Rectangle(_boundingRectangle.Right - _borderThickness, _boundingRectangle.Top, _borderThickness, _boundingRectangle.Height);
+
+                    _spriteBatch.Draw(_empty, topBorder, BorderColor);
+                    _spriteBatch.Draw(_empty, bottomBorder, BorderColor);
+                    _spriteBatch.Draw(_empty, leftBorder, BorderColor);
+                    _spriteBatch.Draw(_empty, rightBorder, BorderColor);
+                }
+                
                 _spriteBatch.Draw(_empty, innerDimensions, _currentBackground);
 
                 _spriteBatch.End();
