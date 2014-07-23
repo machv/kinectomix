@@ -55,13 +55,16 @@ namespace Mach.Xna.Kinect.Components
         {
             base.Update(gameTime);
 
-            bool isSelected;
-
-            _isFocused = _focusChecker.ProcessCursorFocus(_boundingRectangle, out isSelected);
-
-            if (_focusChecker.IsKinectTracking && isSelected)
+            if (Game.IsActive)
             {
-                OnSelected();
+                bool isSelected;
+
+                _isFocused = _focusChecker.ProcessCursorFocus(_boundingRectangle, out isSelected);
+
+                if (_focusChecker.IsKinectTracking && isSelected)
+                {
+                    OnSelected();
+                }
             }
         }
     }

@@ -199,7 +199,7 @@ namespace Mach.Xna.Components
         /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_isEnabled && !_isFrozen)
+            if (_isEnabled && !_isFrozen && Game.IsActive)
             {
                 if (_inputProvider == null)
                     throw new InvalidOperationException("No input provider is set.");
