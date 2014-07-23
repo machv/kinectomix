@@ -532,7 +532,7 @@ namespace Mach.Kinectomix.Screens
                     {
                         currentlyHoveredTile.IsHovered = true;
 
-                        if (currentlyHoveredTile.IsFixed == false)
+                        if (cursor.IsHandTracked && currentlyHoveredTile.IsFixed == false)
                         {
                             TimeSpan elapsedTime = DateTime.Now - lastHoveredTileTime;
 
@@ -1094,11 +1094,11 @@ namespace Mach.Kinectomix.Screens
                         board[i, j].RenderRectangle = new Rectangle((int)currentPosition.X, (int)currentPosition.Y, (int)(TileWidth * scale), (int)(TileHeight * scale));
                     }
 
-                    currentPosition.X += (int)(TileWidth * scale);
+                    currentPosition.X += TileWidth * scale;
                 }
 
                 currentPosition.X = startPosition.X;
-                currentPosition.Y += (int)(TileHeight * scale);
+                currentPosition.Y += TileHeight * scale;
             }
         }
 
@@ -1143,15 +1143,20 @@ namespace Mach.Kinectomix.Screens
                     }
 
                     if (drawEmpty && drawEmptyTiles)
-                        _spriteBatch.Draw(emptyTexture, board[i, j].RenderRectangle, Color.White);
+                    {
+                        //_spriteBatch.Draw(emptyTexture, board[i, j].RenderRectangle, Color.White);
+                        _spriteBatch.Draw(emptyTexture, board[i, j].RenderPosition, null, Color.White, 0, Vector2.Zero, board[i, j].RenderScale, SpriteEffects.None, 0);
+                    }
 
                     if (tile != null)
                     {
-                        _spriteBatch.Draw(tile, board[i, j].RenderRectangle, null, Color.White * board[i, j].Opacity, RotationAngle, origin, SpriteEffects.None, 0f);
+                        //_spriteBatch.Draw(tile, board[i, j].RenderRectangle, null, Color.White * board[i, j].Opacity, RotationAngle, origin, SpriteEffects.None, 0f);
+                        _spriteBatch.Draw(tile, board[i, j].RenderPosition, null, Color.White * board[i, j].Opacity, RotationAngle, origin, board[i, j].RenderScale, SpriteEffects.None, 0);
 
                         if (board[i, j].IsHovered && (board[i, j].IsFixed == false || board[i, j].IsEmpty == true))
                         {
-                            spriteBach.Draw(activeTexture, board[i, j].RenderRectangle, Color.White);
+                            //_spriteBatch.Draw(activeTexture, board[i, j].RenderRectangle, Color.White);
+                            _spriteBatch.Draw(activeTexture, board[i, j].RenderPosition, null, Color.White, 0, Vector2.Zero, board[i, j].RenderScale, SpriteEffects.None, 0);
                         }
                     }
                 }
