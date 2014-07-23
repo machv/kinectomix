@@ -17,9 +17,11 @@ namespace Mach.Xna.Components
         private int _borderThickness;
         private Color _borderColor;
         private Color _background;
-        private Color _activeBackground;
         private Color _foreground;
+        private Color _activeBackground;
+        private Color _activeForeground;
         private Color _disabledBackground;
+        private Color _disabledForeground;
         private SpriteFont _font;
 
 
@@ -69,6 +71,15 @@ namespace Mach.Xna.Components
             set { _activeBackground = value; }
         }
         /// <summary>
+        /// Gets or sets color of the button's foreground color when button is hovered.
+        /// </summary>
+        /// <returns>Foreground color when hovered.</returns>
+        public Color ActiveForeground
+        {
+            get { return _activeForeground; }
+            set { _activeForeground = value; }
+        }
+        /// <summary>
         /// Gets or sets the <see cref="Color"/> of the background when button is not in enabled state.
         /// </summary>
         /// <value>
@@ -78,6 +89,17 @@ namespace Mach.Xna.Components
         {
             get { return _disabledBackground; }
             set { _disabledBackground = value; }
+        }
+        /// <summary>
+        /// Gets or sets the <see cref="Color"/> of the foreground when button is not in enabled state.
+        /// </summary>
+        /// <value>
+        /// The <see cref="Color"/> of the foreground when button is not in enabled state.
+        /// </value>
+        public Color DisabledForeground
+        {
+            get { return _disabledForeground; }
+            set { _disabledForeground = value; }
         }
         /// <summary>
         /// Gets or sets color of the text in the button.
