@@ -65,6 +65,8 @@ namespace Mach.Kinectomix.Screens
                 button.Background = Color.Transparent;
                 button.Foreground = Color.White;
                 button.ActiveBackground = Color.Black;
+                button.DisabledBackground = Color.Transparent;
+                button.DisabledForeground = Color.Gray;
                 button.IsEnabled = isEnabled;
 
                 _buttons.Add(button);
@@ -94,6 +96,23 @@ namespace Mach.Kinectomix.Screens
             base.LoadContent();
         }
 
+        private void FreezeButtons()
+        {
+            if (_buttons == null)
+                return;
+
+            foreach (ButtonBase b in _buttons)
+                b.Freeze();
+        }
+        private void UnfreezeButtons()
+        {
+            if (_buttons == null)
+                return;
+
+            foreach (ButtonBase b in _buttons)
+                b.Unfreeze();
+        }
+
         private MouseState _previousMouseState;
         private KeyboardState _previousKeyboardState;
         private int xTranslation;
@@ -114,23 +133,25 @@ namespace Mach.Kinectomix.Screens
 
             _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _backButton.Width - 30, 30);
 
+            int topOffet = 150;
             int xPos = 50;
-            int xDiff = 0;
+            int xDiff = 60;
             int yPos = 60;
+            int rightMargin = 30;
 
-            Vector2 position = new Vector2(xPos, 150);
+            Vector2 position = new Vector2(xPos, topOffet);
 
             foreach (Button b in _buttons)
             {
                 b.Position = position;
 
-                position.X += xDiff;
+                //position.X += xDiff;
                 position.Y += b.Height + yPos;
 
-                if (position.Y + b.Height + yPos > ScreenManager.GraphicsDevice.Viewport.Bounds.Height)
+                if (position.Y + b.Height > ScreenManager.GraphicsDevice.Viewport.Bounds.Height)
                 {
                     xPos += xDiff + b.Width;
-                    position.Y = 170;
+                    position.Y = topOffet;
                     position.X = xPos;
                 }
             }
@@ -151,6 +172,7 @@ namespace Mach.Kinectomix.Screens
             }
 
             int scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 1;
+            scrollStep = 2 * (360 + 60);
 
             KeyboardState keyboardState = Keyboard.GetState();
 
@@ -178,7 +200,7 @@ namespace Mach.Kinectomix.Screens
 
             // Scrolling for gestures is larger
             scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
-
+            scrollStep = 360;
 
             if (_cursor.IsHandTracked && xTranslationBuffer == 0)
             {
@@ -212,11 +234,14 @@ namespace Mach.Kinectomix.Screens
                     xTranslationBuffer = xTranslation * -1; // ...we crop buffer it to correct alignment.
 
             if (xTranslationBuffer < 0) // If we scroll to left...
-                if (xTranslationBuffer * -1 > rightOverflow + xDiff) // ...and buffer contains more than maximal right overflow...
-                    xTranslationBuffer = rightOverflow * -1 - xDiff; // we crop buffer to right overflow + margin.
+                if (xTranslationBuffer * -1 > rightOverflow + rightMargin) // ...and buffer contains more than maximal right overflow...
+                    xTranslationBuffer = rightOverflow * -1 - rightMargin; // we crop buffer to right overflow + margin.
 
-            if (xTranslationBuffer != 0)
+
+            if (xTranslationBuffer != 0) // Start animation
             {
+                FreezeButtons();
+
                 if (xTranslationBuffer > 0)
                 {
                     xTranslationBuffer -= xStep;
@@ -230,6 +255,12 @@ namespace Mach.Kinectomix.Screens
                     xTranslation -= xStep;
                     if (xTranslationBuffer > 0)
                         xTranslationBuffer = 0;
+                }
+
+                if (xTranslationBuffer == 0)
+                {
+                    // Animation has finished
+                    UnfreezeButtons();
                 }
             }
 

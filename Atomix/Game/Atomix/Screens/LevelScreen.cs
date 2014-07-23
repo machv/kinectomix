@@ -32,7 +32,6 @@ namespace Mach.Kinectomix.Screens
         private Texture2D arrowTexture;
         private Texture2D activeTexture;
         private Texture2D idleTexture;
-        private Texture2D _scoreBoxTexture;
         private MouseState mouseState;
         private MouseState lastMouseState;
         private SoundEffect applause;
@@ -236,7 +235,6 @@ namespace Mach.Kinectomix.Screens
             _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
             _timeFont = _content.Load<SpriteFont>("Fonts/Time");
             idleTexture = _content.Load<Texture2D>("Idle");
-            _scoreBoxTexture = _content.Load<Texture2D>("ScoreBox");
 
             _pauseButton.Texture = _content.Load<Texture2D>("Buttons/PauseNormal");
             _pauseButton.Focused = _content.Load<Texture2D>("Buttons/PauseFocused");
