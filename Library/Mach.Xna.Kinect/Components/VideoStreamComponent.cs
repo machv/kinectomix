@@ -32,8 +32,9 @@ namespace Mach.Xna.Kinect.Components
         private VisualKinectManager _chooser;
         private Game _game;
         private GraphicsDevice _graphicsDevice;
-        private Rectangle _position;
+        private Rectangle _computedDestination;
         private float _transparency;
+        private Rectangle _destinationRectangle;
 
         /// <summary>
         /// Gets current video frame from the Kinect sensor.
@@ -81,6 +82,18 @@ namespace Mach.Xna.Kinect.Components
             get { return _transparency; }
             set { _transparency = value; }
         }
+        /// <summary>
+        /// Gets or sets the destination render rectangle for video.
+        /// </summary>
+        /// <value>
+        /// The destination render rectangle for video.
+        /// </value>
+        public Rectangle DestinationRectangle
+        {
+            get { return _destinationRectangle; }
+            set { _destinationRectangle = value; }
+        }
+
         /// <summary>
         /// Creates new instance of <see cref="VisualKinectManager"/>.
         /// </summary>
@@ -139,7 +152,7 @@ namespace Mach.Xna.Kinect.Components
                                     _videoFrame = new Texture2D(_graphicsDevice, colorVideoFrame.Width, colorVideoFrame.Height);
                                     _videoFrame.SetData(bgraPixelData);
 
-                                    _position = new Rectangle((int)_renderingOffset.X, (int)_renderingOffset.Y, (int)(colorVideoFrame.Width * _renderingScale), (int)(colorVideoFrame.Height * _renderingScale));
+                                    _computedDestination = new Rectangle((int)_renderingOffset.X, (int)_renderingOffset.Y, (int)(colorVideoFrame.Width * _renderingScale), (int)(colorVideoFrame.Height * _renderingScale));
                                 }
                             }
                         }
@@ -195,7 +208,7 @@ namespace Mach.Xna.Kinect.Components
                                     _videoFrame = new Texture2D(_graphicsDevice, depthFrame.Width, depthFrame.Height);
                                     _videoFrame.SetData(colorPixels);
 
-                                    _position = new Rectangle((int)_renderingOffset.X, (int)_renderingOffset.Y, (int)(depthFrame.Width * _renderingScale), (int)(depthFrame.Height * _renderingScale));
+                                    _computedDestination = new Rectangle((int)_renderingOffset.X, (int)_renderingOffset.Y, (int)(depthFrame.Width * _renderingScale), (int)(depthFrame.Height * _renderingScale));
                                 }
                             }
                         }
@@ -215,7 +228,8 @@ namespace Mach.Xna.Kinect.Components
             if (_videoFrame != null)
             {
                 _spriteBatch.Begin();
-                _spriteBatch.Draw(_videoFrame, _position, Color.White * _transparency);
+                Rectangle destination = _destinationRectangle != Rectangle.Empty ? _destinationRectangle : _computedDestination;
+                _spriteBatch.Draw(_videoFrame, destination, Color.White * _transparency);
                 _spriteBatch.End();
             }
 

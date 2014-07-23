@@ -171,8 +171,13 @@ namespace Mach.Kinectomix
         private void UpdateScale(float scale)
         {
             _scale = scale;
+
+            _scale = 210f / 480f;
+
             //_kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 * _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
             _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2 - (640 * _scale) / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
+
+            _kinectDebugOffset = new Vector2(80, 480);
 
             _skeletonRenderer.Scale = _scale;
             _skeletonRenderer.RenderOffset = _kinectDebugOffset;
@@ -182,6 +187,7 @@ namespace Mach.Kinectomix
 
             _videoStream.RenderingScale = _scale;
             _videoStream.RenderingOffset = _kinectDebugOffset;
+            _videoStream.DestinationRectangle = new Rectangle(80, 480, 270, 210);
         }
 
         /// <summary>
@@ -221,7 +227,7 @@ namespace Mach.Kinectomix
             _visualKinectManager.RenderPosition = new Vector2(290, 0);
             _visualKinectManager.ShowPromptKinectIcon = false;
             _visualKinectManager.PromptTextPositionOffset = new Vector2(150, 18);
-            _visualKinectManager.ShowConnectKinectPrompt = false;
+            _visualKinectManager.ShowConnectedKinectIcon = false;
 
             _gameScreenManager.Add(screen);
             _gameScreenManager.Activate(screen);
@@ -243,6 +249,8 @@ namespace Mach.Kinectomix
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            UpdateScale(_scale);
+
             KeyboardState state = Keyboard.GetState();
 
             if (state.IsKeyDown(Keys.Q) == true && _previousKeyboardState.IsKeyDown(Keys.Q) == false)
