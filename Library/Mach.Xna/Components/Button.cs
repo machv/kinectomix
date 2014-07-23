@@ -143,7 +143,26 @@ namespace Mach.Xna.Components
             get { return _textAlignment; }
             set { _textAlignment = value; }
         }
-
+        /// <summary>
+        /// Gets the rendered width of this button.
+        /// </summary>
+        /// <value>
+        /// The buttons's width, in pixels.
+        /// </value>
+        public int ActualWidth
+        {
+            get { return _boundingRectangle.Width; }
+        }
+        /// <summary>
+        /// Gets the rendered height of this button.
+        /// </summary>
+        /// <value>
+        /// The buttons's height, in pixels.
+        /// </value>
+        public int ActualHeight
+        {
+            get { return _boundingRectangle.Height; }
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="Button"/> class.
         /// </summary>
@@ -287,6 +306,7 @@ namespace Mach.Xna.Components
                         textPosition.X = _boundingRectangle.X + _borderThickness + _padding;
                         break;
                     case TextAlignment.Center:
+                        // Center is default.
                         break;
                     case TextAlignment.Right:
                         textPosition.X = _boundingRectangle.Right - _borderThickness - _padding - textSize.X;

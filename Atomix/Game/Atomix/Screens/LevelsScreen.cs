@@ -1,5 +1,6 @@
 ﻿using Mach.Kinect.Gestures;
 using Mach.Kinectomix.Logic;
+using Mach.Xna;
 using Mach.Xna.Components;
 using Mach.Xna.Input.Extensions;
 using Mach.Xna.Kinect.Components;
@@ -59,8 +60,8 @@ namespace Mach.Kinectomix.Screens
                 button.Tag = level;
                 button.Content = level.Name;
                 button.InputProvider = ScreenManager.InputProvider;
-                button.Width = 360;
-                button.Height = 60;
+                button.Width = 360 - button.Padding * 2;
+                button.Height = 60 - button.Padding * 2;
                 button.BorderThickness = 0;
                 button.Background = Color.Transparent;
                 button.Foreground = Color.White;
@@ -68,6 +69,7 @@ namespace Mach.Kinectomix.Screens
                 button.DisabledBackground = Color.Transparent;
                 button.DisabledForeground = Color.Gray;
                 button.IsEnabled = isEnabled;
+                button.TextAlignment = TextAlignment.Left;
 
                 _buttons.Add(button);
                 Components.Add(button);
@@ -146,11 +148,11 @@ namespace Mach.Kinectomix.Screens
                 b.Position = position;
 
                 //position.X += xDiff;
-                position.Y += b.Height + yPos;
+                position.Y += b.ActualHeight + yPos;
 
                 if (position.Y + b.Height > ScreenManager.GraphicsDevice.Viewport.Bounds.Height)
                 {
-                    xPos += xDiff + b.Width;
+                    xPos += xDiff + b.ActualWidth;
                     position.Y = topOffet;
                     position.X = xPos;
                 }
