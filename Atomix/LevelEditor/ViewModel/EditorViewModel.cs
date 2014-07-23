@@ -170,8 +170,8 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
 
         public void LoadLevelsDefinition(string path)
         {
-            try
-            {
+            //try
+            //{
                 XmlSerializer seralizer = new XmlSerializer(typeof(GameDefinition));
 
                 using (Stream stream = File.Open(path, FileMode.Open))
@@ -189,11 +189,11 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
                     if (Levels.Count > 0)
                         Level = Levels[0]; // Select first level
                 }
-            }
-            catch
-            {
-                MessageBox.Show("Unable to load definition from selected file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            //}
+            //catch(Excelti
+            //{
+            //    MessageBox.Show("Unable to load definition from selected file", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //}
         }
 
         private void DoLoadLevelsDefinition()

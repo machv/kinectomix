@@ -60,26 +60,29 @@ namespace Mach.Xna.Components
         /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_isEnabled)
+            if (!_isFrozen)
             {
-                _currentTexture = _normalTexture;
-                if (_isFocused && _focusedTexture != null)
+                if (_isEnabled)
                 {
-                    _currentTexture = _focusedTexture;
+                    _currentTexture = _normalTexture;
+                    if (_isFocused && _focusedTexture != null)
+                    {
+                        _currentTexture = _focusedTexture;
+                    }
                 }
-            }
-            else
-            {
-                _currentTexture = _disabledTexture != null ? _disabledTexture : _normalTexture;
-            }
+                else
+                {
+                    _currentTexture = _disabledTexture != null ? _disabledTexture : _normalTexture;
+                }
 
-            float textureRatio = _currentTexture.Width / _currentTexture.Height;
-            float buttonRatio = Width / Height;
-            float scale = textureRatio < buttonRatio ? _currentTexture.Width / Width : _currentTexture.Height / Height;
-            int width = (int)(scale * Height);
+                float textureRatio = _currentTexture.Width / _currentTexture.Height;
+                float buttonRatio = Width / Height;
+                float scale = textureRatio < buttonRatio ? _currentTexture.Width / Width : _currentTexture.Height / Height;
+                int width = (int)(scale * Height);
 
-            _textureScale = (float)Height / _currentTexture.Height;
-            _boundingRectangle = new Rectangle((int)Position.X, (int)Position.Y, width, Height);
+                _textureScale = (float)Height / _currentTexture.Height;
+                _boundingRectangle = new Rectangle((int)Position.X, (int)Position.Y, width, Height);
+            }
 
             base.Update(gameTime);
         }

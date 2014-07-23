@@ -158,6 +158,7 @@ namespace Mach.Kinectomix.Screens
         private void pause_Changed(object sender, MessageBoxEventArgs e)
         {
             _pauseMessageBox.Hide();
+            _pauseButton.Unfreeze();
 
             _isPaused = false;
             _lastDate = DateTime.Now;
@@ -180,11 +181,6 @@ namespace Mach.Kinectomix.Screens
             leftViewport.X = 50;
             leftViewport.Y = 30;
 
-            _levelNameViewPort = ScreenManager.GraphicsDevice.Viewport;
-            _levelNameViewPort.Width = _levelNameWidth;
-            _levelNameViewPort.Height = 60;
-            _levelNameViewPort.Y = 30;
-            _levelNameViewPort.X = 50;
 
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
@@ -349,12 +345,14 @@ namespace Mach.Kinectomix.Screens
             _isPaused = true;
 
             KinectButton[] buttons = new KinectButton[] {
-                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.MainMenu) { Tag = MessageBoxResult.Custom1, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
-                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.ContinueGame) { Tag = MessageBoxResult.OK, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.MainMenu) { Font = _normalFont, Tag = MessageBoxResult.Custom1, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.ContinueGame) { Font = _normalFont, Tag = MessageBoxResult.OK, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
             };
 
             foreach (Button button in buttons)
                 button.Initialize();
+
+            _pauseButton.Freeze();
 
             _pauseMessageBox.Show(Resources.LevelScreenResources.GamePaused, buttons);
         }

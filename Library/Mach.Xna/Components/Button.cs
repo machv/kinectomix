@@ -26,6 +26,8 @@ namespace Mach.Xna.Components
         private Color _disabledForeground;
         private SpriteFont _font;
         private TextAlignment _textAlignment;
+        private Viewport _levelNameViewPort;
+        private Viewport _defaultViewport;
 
         /// <summary>
         /// Gets or sets caption displayed on this button.
@@ -218,6 +220,13 @@ namespace Mach.Xna.Components
 
             _empty = new Texture2D(_spriteBatch.GraphicsDevice, 1, 1);
             _empty.SetData(new Color[] { Color.White });
+
+            _defaultViewport = GraphicsDevice.Viewport;
+            _levelNameViewPort = _defaultViewport;
+            _levelNameViewPort.Width = _boundingRectangle.Width;
+            _levelNameViewPort.Height = _boundingRectangle.Height;
+            _levelNameViewPort.X = (int)Position.X;
+            _levelNameViewPort.Y = (int)Position.Y;
         }
 
         /// <summary>
@@ -226,6 +235,11 @@ namespace Mach.Xna.Components
         protected override void UpdateBoundingBox()
         {
             _boundingRectangle = new Rectangle((int)Position.X, (int)Position.Y, Width + _padding * 2 + _borderThickness * 2, Height + _padding * 2 + _borderThickness * 2);
+
+            _levelNameViewPort.X = (int)Position.X;
+            _levelNameViewPort.Y = (int)Position.Y;
+            _levelNameViewPort.Width = _boundingRectangle.Width;
+            _levelNameViewPort.Height = _boundingRectangle.Height;
         }
 
         /// <summary>
@@ -251,6 +265,12 @@ namespace Mach.Xna.Components
 
             base.Update(gameTime);
         }
+
+        float _scrollDifferenceX = 0;
+        bool toRight = true;
+        bool dokola = true;
+        TimeSpan delay = TimeSpan.FromSeconds(1);
+        DateTime whenContinue;
 
         /// <summary>
         /// Draws this button on the screen.
@@ -289,49 +309,156 @@ namespace Mach.Xna.Components
 
                 _spriteBatch.End();
 
-                RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
 
-                // Allows cropping inside
-                _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
-                                  null, null, _rasterizerState);
+                Viewport viewPort = _levelNameViewPort;
+                Rectangle bounds = _spriteBatch.GraphicsDevice.PresentationParameters.Bounds;
+                int xTrans = 0;
 
-                Vector2 textSize = Font.MeasureString(_content);
-                Vector2 textPosition = new Vector2(_boundingRectangle.Center.X, _boundingRectangle.Center.Y) - textSize / 2f;
-                textPosition.X = (int)textPosition.X;
-                textPosition.Y = (int)textPosition.Y + (textSize.Y - Font.LineSpacing) + _padding;
-
-                switch (_textAlignment)
+                if (!bounds.Contains(_levelNameViewPort.Bounds))
                 {
-                    case TextAlignment.Left:
-                        textPosition.X = _boundingRectangle.X + _borderThickness + _padding;
-                        break;
-                    case TextAlignment.Center:
-                        // Center is default.
-                        break;
-                    case TextAlignment.Right:
-                        textPosition.X = _boundingRectangle.Right - _borderThickness - _padding - textSize.X;
-                        break;
+                    xTrans = viewPort.X;
+                    Rectangle inter = Rectangle.Intersect(bounds, _levelNameViewPort.Bounds);
+                    viewPort.Bounds = Rectangle.Empty; // inter;
+                }
+
+                if (viewPort.Bounds != Rectangle.Empty)
+                {
+                    // we can use scrolling, as we are on the screen
+                    _spriteBatch.Begin();
+
+                    _spriteBatch.GraphicsDevice.Viewport = viewPort;
+                    Vector2 levelNameSize = Font.MeasureString(_content);
+
+                    Rectangle bound = new Rectangle(0, 0, _levelNameViewPort.Width, _levelNameViewPort.Height);
+
+                    Vector2 textPositionS = new Vector2(bound.Center.X, bound.Center.Y) - levelNameSize / 2f;
+                    textPositionS.X = xTrans + (int)textPositionS.X;
+                    textPositionS.Y = (int)textPositionS.Y + (levelNameSize.Y - Font.LineSpacing) + _padding;
+
+                    switch (_textAlignment)
+                    {
+                        case TextAlignment.Left:
+                            textPositionS.X = _borderThickness + _padding;
+                            break;
+                        case TextAlignment.Center:
+                            // Center is default.
+                            break;
+                        case TextAlignment.Right:
+                            textPositionS.X = _boundingRectangle.Width - _borderThickness - _padding - levelNameSize.X;
+                            break;
+                    }
+
+
+                    //if (textPositionS.X < _boundingRectangle.X) // overflow reset to zero
+                    //    textPositionS.X = _boundingRectangle.X + _borderThickness;
+
+
+
+                    if (levelNameSize.X > _levelNameViewPort.Width)
+                    {
+                        if (dokola)
+                        {
+                            if (levelNameSize.X + _scrollDifferenceX > 0)
+                            {
+                                _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                            }
+                            else
+                            {
+                                _scrollDifferenceX = _levelNameViewPort.Width;
+                            }
+                        }
+                        else
+                        {
+                            // cik cak
+                            if (whenContinue < DateTime.Now)
+                            {
+                                if (toRight)
+                                {
+                                    // scroll
+                                    if (levelNameSize.X + _scrollDifferenceX > _levelNameViewPort.Width)
+                                    {
+                                        _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                                    }
+                                    else
+                                    {
+                                        toRight = false;
+                                        _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                                    }
+                                }
+
+                                if (!toRight)
+                                {
+                                    if (_scrollDifferenceX < 0)
+                                    {
+                                        _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                                    }
+                                    else
+                                    {
+                                        toRight = true;
+                                        whenContinue = DateTime.Now + delay;
+                                    }
+                                }
+                            }
+                        }
+
+                        textPositionS.X = _scrollDifferenceX;
+                    }
+                    else
+                    {
+                        // vejdeme se
+                    }
+
+                    _spriteBatch.DrawString(Font, _content, textPositionS, _currentForeground);
+                    _spriteBatch.End();
+                    _spriteBatch.GraphicsDevice.Viewport = _defaultViewport;
                 }
 
 
-                if (textPosition.X < _boundingRectangle.X) // overflow reset to zero
-                    textPosition.X = _boundingRectangle.X + _borderThickness;
+                //_spriteBatch.Begin();
 
-                Rectangle currentRect = _spriteBatch.GraphicsDevice.ScissorRectangle;
-                Rectangle clippingRectangle = _boundingRectangle;
-                clippingRectangle.Width -= 2 * _borderThickness;
+                ////RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
 
-                // Cropping will be made only within current screen.
-                if (currentRect.Contains(clippingRectangle))
-                {
-                    _spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
-                }
+                ////// Allows cropping inside
+                ////_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
+                ////                  null, null, _rasterizerState);
 
-                _spriteBatch.DrawString(Font, _content, textPosition, _currentForeground);
+                //Vector2 textSize = Font.MeasureString(_content);
+                //Vector2 textPosition = new Vector2(_boundingRectangle.Center.X, _boundingRectangle.Center.Y) - textSize / 2f;
+                //textPosition.X = (int)textPosition.X;
+                //textPosition.Y = (int)textPosition.Y + (textSize.Y - Font.LineSpacing) + _padding;
 
-                _spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
+                //switch (_textAlignment)
+                //{
+                //    case TextAlignment.Left:
+                //        textPosition.X = _boundingRectangle.X + _borderThickness + _padding;
+                //        break;
+                //    case TextAlignment.Center:
+                //        // Center is default.
+                //        break;
+                //    case TextAlignment.Right:
+                //        textPosition.X = _boundingRectangle.Right - _borderThickness - _padding - textSize.X;
+                //        break;
+                //}
 
-                _spriteBatch.End();
+
+                //if (textPosition.X < _boundingRectangle.X) // overflow reset to zero
+                //    textPosition.X = _boundingRectangle.X + _borderThickness;
+
+                //Rectangle currentRect = _spriteBatch.GraphicsDevice.ScissorRectangle;
+                //Rectangle clippingRectangle = _boundingRectangle;
+                //clippingRectangle.Width -= 2 * _borderThickness;
+
+                //// Cropping will be made only within current screen.
+                //if (currentRect.Contains(clippingRectangle))
+                //{
+                //    _spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
+                //}
+
+                //_spriteBatch.DrawString(Font, _content, textPosition, _currentForeground);
+
+                //_spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
+
+                //_spriteBatch.End();
             }
 
             base.Draw(gameTime);
