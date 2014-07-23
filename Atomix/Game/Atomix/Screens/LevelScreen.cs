@@ -757,9 +757,9 @@ namespace Mach.Kinectomix.Screens
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
 
 
-            string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : "game level";
+            string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : "Game Level";
 
-            _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(55, 33), KinectomixGame.BrickColor);
+            _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(55, 40), KinectomixGame.BrickColor);
 
             DrawBoard(_spriteBatch, _level.Board, true);
             DrawBoard(_spriteBatch, _level.Molecule);

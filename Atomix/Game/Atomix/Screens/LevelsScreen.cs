@@ -60,6 +60,11 @@ namespace Mach.Kinectomix.Screens
                 button.Content = level.Name;
                 button.InputProvider = ScreenManager.InputProvider;
                 button.Width = 360;
+                button.Height = 60;
+                button.BorderThickness = 0;
+                button.Background = Color.Transparent;
+                button.Foreground = Color.White;
+                button.ActiveBackground = Color.Black;
                 button.IsEnabled = isEnabled;
 
                 _buttons.Add(button);
@@ -109,11 +114,11 @@ namespace Mach.Kinectomix.Screens
 
             _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _backButton.Width - 30, 30);
 
-            int xPos = 20;
-            int xDiff = 30;
-            int yPos = 20;
+            int xPos = 50;
+            int xDiff = 0;
+            int yPos = 60;
 
-            Vector2 position = new Vector2(xPos, 170);
+            Vector2 position = new Vector2(xPos, 150);
 
             foreach (Button b in _buttons)
             {
@@ -240,7 +245,7 @@ namespace Mach.Kinectomix.Screens
             _spriteBatch.Begin();
 
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
-            _spriteBatch.DrawStringWithShadow(_titleFont, Resources.LevelsScreenResources.Title, new Vector2(55, 33), KinectomixGame.BrickColor);
+            _spriteBatch.DrawStringWithShadow(_titleFont, Resources.LevelsScreenResources.Title, new Vector2(55, 40), KinectomixGame.BrickColor);
 
             _spriteBatch.End();
 
