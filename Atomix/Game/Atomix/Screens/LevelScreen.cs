@@ -366,7 +366,7 @@ namespace Mach.Kinectomix.Screens
                 {
                     clickOccurred = true;
                     isGestureDetected = true;
-                    _log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString() + " / " + gesturesState.RecognizedGestures.ToArray()[0].Gesture.Name;
+                    //_log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString() + " / " + gesturesState.RecognizedGestures.ToArray()[0].Gesture.Name;
                 }
 
                 KinectCursor cursor = (ScreenManager.Game as KinectomixGame).Cursor;
@@ -597,13 +597,12 @@ namespace Mach.Kinectomix.Screens
                         _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandPosition, out recognizedGesture);
                         if (recognizedGesture != null)
                         {
+                            // Recognized swipe gesture
                             MoveDirection direction = SwipeToMoveDirection(recognizedGesture.Direction);
 
                             ProcessTileMove(activeAtomIndex, direction);
 
                             ClearBoard();
-
-                            _log = "Detected swipe " + recognizedGesture.Direction.ToString();
                         }
                     }
 
@@ -763,8 +762,6 @@ namespace Mach.Kinectomix.Screens
             string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : "game level";
 
             _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(55, 33), brick);
-
-            _spriteBatch.DrawString(_normalFont, _log, new Vector2(20, 600), Color.Red);
 
             DrawBoard(_spriteBatch, _level.Board, true);
             DrawBoard(_spriteBatch, _level.Molecule);
