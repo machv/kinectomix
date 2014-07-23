@@ -72,7 +72,7 @@ namespace Mach.Xna.Components
             {
                 _position = value;
 
-                SetBoundingRectangle();
+                UpdateBoundingBox();
             }
         }
         /// <summary>
@@ -88,7 +88,7 @@ namespace Mach.Xna.Components
                 {
                     _width = value;
 
-                    SetBoundingRectangle();
+                    UpdateBoundingBox();
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace Mach.Xna.Components
                 {
                     _height = value;
 
-                    SetBoundingRectangle();
+                    UpdateBoundingBox();
                 }
             }
         }
@@ -255,7 +255,10 @@ namespace Mach.Xna.Components
                 Selected(this, new EventArgs());
         }
 
-        private void SetBoundingRectangle()
+        /// <summary>
+        /// Calculates bounding box for the button.
+        /// </summary>
+        protected virtual void UpdateBoundingBox()
         {
             _boundingRectangle = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
         }

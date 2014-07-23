@@ -75,6 +75,7 @@
     <Compile Include="Components\MessageBoxEventArgs.cs" />
     <Compile Include="Components\MessageBoxResult.cs" />
     <Compile Include="Components\SpriteButton.cs" />
+    <Compile Include="TextAlignment.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\IInputState.cs" />

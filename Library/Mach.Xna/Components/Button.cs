@@ -9,13 +9,14 @@ namespace Mach.Xna.Components
     /// <summary>
     /// Basic button implementation for use in XNA framework.
     /// </summary>
-    public class Button : ButtonBase
+    public partial class Button : ButtonBase
     {
         private Texture2D _empty;
         private Color _currentBackground;
         private Color _currentForeground;
         private string _content;
         private int _borderThickness;
+        private int _padding;
         private Color _borderColor;
         private Color _background;
         private Color _foreground;
@@ -24,7 +25,7 @@ namespace Mach.Xna.Components
         private Color _disabledBackground;
         private Color _disabledForeground;
         private SpriteFont _font;
-
+        private TextAlignment _textAlignment;
 
         /// <summary>
         /// Gets or sets caption displayed on this button.
@@ -43,6 +44,17 @@ namespace Mach.Xna.Components
         {
             get { return _borderThickness; }
             set { _borderThickness = value; }
+        }
+        /// <summary>
+        /// Gets or sets the padding inside the text box.
+        /// </summary>
+        /// <value>
+        /// The padding inside the text box.
+        /// </value>
+        public int Padding
+        {
+            get { return _padding; }
+            set { _padding = value; }
         }
         /// <summary>
         /// Gets or sets color of button's border.
@@ -120,6 +132,17 @@ namespace Mach.Xna.Components
             get { return _font; }
             set { _font = value; }
         }
+        /// <summary>
+        /// Gets or sets alignment of the text inside button.
+        /// </summary>
+        /// <value>
+        /// The alignment of the text inside button.
+        /// </value>
+        public TextAlignment TextAlignment
+        {
+            get { return _textAlignment; }
+            set { _textAlignment = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Button"/> class.
@@ -136,6 +159,8 @@ namespace Mach.Xna.Components
             _disabledForeground = Color.White;
             _borderColor = Color.Black;
             _borderThickness = 2;
+            _padding = 2;
+            _textAlignment = TextAlignment.Center;
             _content = string.Empty;
         }
 
@@ -177,6 +202,14 @@ namespace Mach.Xna.Components
         }
 
         /// <summary>
+        /// Calculates bounding box for the button.
+        /// </summary>
+        protected override void UpdateBoundingBox()
+        {
+            _boundingRectangle = new Rectangle((int)Position.X, (int)Position.Y, Width + _padding * 2 + _borderThickness * 2, Height + _padding * 2 + _borderThickness * 2);
+        }
+
+        /// <summary>
         /// Checks for hover over button or any interaction from user via <see cref="IInputProvider"/> interface.
         /// </summary>
         /// <param name="gameTime">Snapshot of game timing.</param>
@@ -214,10 +247,10 @@ namespace Mach.Xna.Components
                     throw new Exception("Font is not set.");
 
                 Rectangle innerDimensions = new Rectangle(
-                    (int)Position.X + BorderThickness,
-                    (int)Position.Y + BorderThickness,
-                    Width - 2 * BorderThickness,
-                    Height - 2 * BorderThickness);
+                    _boundingRectangle.X + _borderThickness,
+                    _boundingRectangle.Y + _borderThickness,
+                    Width + 2 * _padding,
+                    Height + 2 * _padding);
 
                 // draw top border
                 if (_borderThickness > 0)
@@ -232,24 +265,34 @@ namespace Mach.Xna.Components
                     _spriteBatch.Draw(_empty, leftBorder, BorderColor);
                     _spriteBatch.Draw(_empty, rightBorder, BorderColor);
                 }
-                
+
                 _spriteBatch.Draw(_empty, innerDimensions, _currentBackground);
 
                 _spriteBatch.End();
 
                 RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
 
-                //Set up the spritebatch to draw using scissoring (for text cropping)
+                // Allows cropping inside
                 _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
                                   null, null, _rasterizerState);
 
                 Vector2 textSize = Font.MeasureString(_content);
                 Vector2 textPosition = new Vector2(_boundingRectangle.Center.X, _boundingRectangle.Center.Y) - textSize / 2f;
                 textPosition.X = (int)textPosition.X;
-                textPosition.Y = (int)textPosition.Y + (textSize.Y - Font.LineSpacing);
+                textPosition.Y = (int)textPosition.Y + (textSize.Y - Font.LineSpacing) + _padding;
 
-                //textPosition.Y = _boundingRectangle.Bottom - Font.LineSpacing;
-                //textPosition.Y = _boundingRectangle.Bottom - textSize.Y;
+                switch (_textAlignment)
+                {
+                    case TextAlignment.Left:
+                        textPosition.X = _boundingRectangle.X + _borderThickness + _padding;
+                        break;
+                    case TextAlignment.Center:
+                        break;
+                    case TextAlignment.Right:
+                        textPosition.X = _boundingRectangle.Right - _borderThickness - _padding - textSize.X;
+                        break;
+                }
+
 
                 if (textPosition.X < _boundingRectangle.X) // overflow reset to zero
                     textPosition.X = _boundingRectangle.X + _borderThickness;
@@ -258,6 +301,7 @@ namespace Mach.Xna.Components
                 Rectangle clippingRectangle = _boundingRectangle;
                 clippingRectangle.Width -= 2 * _borderThickness;
 
+                // Cropping will be made only within current screen.
                 if (currentRect.Contains(clippingRectangle))
                 {
                     _spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
