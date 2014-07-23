@@ -23,6 +23,7 @@ namespace Mach.Kinectomix.Screens
 
         private KinectMessageBox _quitMessageBox;
         private KinectCircleCursor _cursor;
+        private Texture2D _backgroundTexture;
 
         public StartScreen(SpriteBatch spriteBatch)
         {
@@ -36,13 +37,49 @@ namespace Mach.Kinectomix.Screens
             _quitMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, _cursor);
             _quitMessageBox.Changed += _quitMessageBox_Changed;
 
-            _startButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.PlayGame);
+            _startButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.PlayGame)
+            {
+                BorderThickness = 0,
+                Padding = 2,
+                Height = 56,
+                Width = 356,
+                InputProvider = ScreenManager.InputProvider,
+                Background = Color.Transparent,
+                Foreground = Color.White,
+                ActiveBackground = Color.Black,
+                DisabledBackground = Color.Transparent,
+                DisabledForeground = Color.Gray,
+            };
             _startButton.Selected += Start_Selected;
 
-            _levelsButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.Levels);
+            _levelsButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.Levels)
+            {
+                BorderThickness = 0,
+                Padding = 2,
+                Height = 56,
+                Width = 356,
+                InputProvider = ScreenManager.InputProvider,
+                Background = Color.Transparent,
+                Foreground = Color.White,
+                ActiveBackground = Color.Black,
+                DisabledBackground = Color.Transparent,
+                DisabledForeground = Color.Gray,
+            };
             _levelsButton.Selected += Levels_Selected;
 
-            _quitButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.QuitGame);
+            _quitButton = new KinectButton(ScreenManager.Game, _cursor, StartScreenResources.QuitGame)
+            {
+                BorderThickness = 0,
+                Padding = 2,
+                Height = 56,
+                Width = 356,
+                InputProvider = ScreenManager.InputProvider,
+                Background = Color.Transparent,
+                Foreground = Color.White,
+                ActiveBackground = Color.Black,
+                DisabledBackground = Color.Transparent,
+                DisabledForeground = Color.Gray,
+            };
             _quitButton.Selected += Quit_Selected;
 
             Components.Add(_startButton);
@@ -54,11 +91,25 @@ namespace Mach.Kinectomix.Screens
             base.Initialize();
         }
 
+        protected override void LoadContent()
+        {
+            _backgroundTexture = ScreenManager.Content.Load<Texture2D>("Backgrounds/Start");
+            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Title");
+            _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
+
+            _quitMessageBox.Font = _normalFont;
+            _startButton.Font = _normalFont;
+            _levelsButton.Font = _normalFont;
+            _quitButton.Font = _normalFont;
+
+            base.LoadContent();
+        }
+
         public override void Update(GameTime gameTime)
         {
-            _startButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 80);
-            _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _startButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 20);
-            _quitButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _quitButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 50 + _quitButton.Height);
+            _startButton.Position = new Vector2(470, 300);
+            _levelsButton.Position = new Vector2(_startButton.Position.X, _startButton.Position.Y + _startButton.ActualHeight + 60);
+            _quitButton.Position = new Vector2(_levelsButton.Position.X, _levelsButton.Position.Y + _levelsButton.ActualHeight + 60);
 
             KeyboardState state = Keyboard.GetState();
 
@@ -81,30 +132,14 @@ namespace Mach.Kinectomix.Screens
             Vector2 size = _splashFont.MeasureString(name);
 
             _spriteBatch.Begin();
-            _spriteBatch.DrawStringWithShadow(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 220), KinectomixGame.BrickColor);
+            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
+            _spriteBatch.DrawStringWithShadow(_splashFont, name, new Vector2(7 + ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 245), KinectomixGame.BrickColor);
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
 
-        protected override void LoadContent()
-        {
-            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Title");
-            _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
-            _quitMessageBox.Font = _normalFont;
-
-            _startButton.Font = _normalFont;
-            _startButton.InputProvider = ScreenManager.InputProvider;
-
-            _levelsButton.Font = _normalFont;
-            _levelsButton.InputProvider = ScreenManager.InputProvider;
-
-            _quitButton.Font = _normalFont;
-            _quitButton.InputProvider = ScreenManager.InputProvider;
-
-            base.LoadContent();
-        }
 
         public override void Activated()
         {

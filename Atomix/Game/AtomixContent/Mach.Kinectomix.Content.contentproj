@@ -159,6 +159,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Backgrounds\Default.png">
+      <Name>Default</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Gestures\LeftHandUp.gst">
       <Name>LeftHandUp</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
