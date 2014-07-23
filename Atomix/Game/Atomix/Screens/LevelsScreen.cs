@@ -22,6 +22,7 @@ namespace Mach.Kinectomix.Screens
         private SwipeRecognizer swipe;
         private KinectCursor _cursor;
         private KinectButton _backButton;
+        private Texture2D _backgroundTexture;
 
         public LevelsScreen(SpriteBatch spriteBatch)
         {
@@ -71,6 +72,7 @@ namespace Mach.Kinectomix.Screens
 
         protected override void LoadContent()
         {
+            _backgroundTexture = ScreenManager.Content.Load<Texture2D>("Backgrounds/Levels");
             _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
             _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
@@ -234,6 +236,7 @@ namespace Mach.Kinectomix.Screens
         public override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
+            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
 
             _spriteBatch.DrawString(_splashFont, "Game Levels", new Vector2(20, 30), Color.Red);
 

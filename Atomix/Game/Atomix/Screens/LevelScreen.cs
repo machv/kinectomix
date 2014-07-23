@@ -22,6 +22,8 @@ namespace Mach.Kinectomix.Screens
     /// </summary>
     public class LevelScreen : GameScreen
     {
+        private const int TileWidth = 60;
+        private const int TileHeight = 60;
         private TimeSpan _minimalHoverDuration = TimeSpan.FromSeconds(2);
         private int _activeTileOpacityDirection;
         private float _activeTileOpacity;
@@ -48,12 +50,10 @@ namespace Mach.Kinectomix.Screens
         private Level _levelDefinition;
         private LevelViewModel _level;
         private SpriteBatch _spriteBatch;
-        private string _log = "";
         private KinectCircleCursor _cursor;
         private SpriteButton _pauseButton;
         private LevelHighscore _highscore;
-        private int TileWidth = 60;
-        private int TileHeight = 60;
+
         private int _leftBoxEndX = 400;
         private int _leftMargin = 55;
         private int _topOffsetMain = 120;
@@ -156,7 +156,7 @@ namespace Mach.Kinectomix.Screens
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            _backgroundTexture = _content.Load<Texture2D>("LevelBackground");
+            _backgroundTexture = _content.Load<Texture2D>("Backgrounds/Level");
 
             int maximalWidth;
             int maximalHeight;
@@ -240,8 +240,8 @@ namespace Mach.Kinectomix.Screens
 
             _pauseButton.Texture = _content.Load<Texture2D>("Buttons/PauseNormal");
             _pauseButton.Focused = _content.Load<Texture2D>("Buttons/PauseFocused");
-            _pauseButton.Width = 70;
-            _pauseButton.Height = 70;
+            _pauseButton.Width = 60;
+            _pauseButton.Height = 60;
             _pauseButton.InputProvider = ScreenManager.InputProvider;
 
             _levelsButton.Font = _normalFont;
@@ -333,7 +333,7 @@ namespace Mach.Kinectomix.Screens
         {
             base.Update(gameTime);
 
-            _pauseButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _pauseButton.Width - 10, 10);
+            _pauseButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _pauseButton.Width - 30, 30);
 
             if (!_isPaused)
             {

@@ -103,6 +103,7 @@ namespace Mach.Kinectomix
             _state = new GameState();
 
             Resources.StartScreenResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
+            Resources.LevelScreenResources.Culture = System.Globalization.CultureInfo.CurrentCulture;
 
             Exiting += Game_Exiting;
         }
