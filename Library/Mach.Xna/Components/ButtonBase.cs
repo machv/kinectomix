@@ -21,6 +21,11 @@ namespace Mach.Xna.Components
         private int _height;
 
         /// <summary>
+        /// <c>true</c> if this button is frozen and does not respond to any action.
+        /// </summary>
+        protected bool _isFrozen;
+
+        /// <summary>
         /// <c>true</c> if this button is rendered on the screen.
         /// </summary>
         protected bool _isVisible;
@@ -178,6 +183,9 @@ namespace Mach.Xna.Components
             base.Initialize();
         }
 
+        /// <summary>
+        /// Loads the content.
+        /// </summary>
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -191,11 +199,11 @@ namespace Mach.Xna.Components
         /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_inputProvider == null)
-                throw new InvalidOperationException("No input provider is set.");
-
-            if (_isEnabled)
+            if (_isEnabled && !_isFrozen)
             {
+                if (_inputProvider == null)
+                    throw new InvalidOperationException("No input provider is set.");
+
                 IInputState inputState = _inputProvider.GetState();
                 _isFocused = _boundingRectangle.Contains(inputState.X, inputState.Y);
 
@@ -211,7 +219,7 @@ namespace Mach.Xna.Components
                 }
             }
 
-                base.Update(gameTime);
+            base.Update(gameTime);
         }
 
         /// <summary>
@@ -220,6 +228,22 @@ namespace Mach.Xna.Components
         public void Select()
         {
             OnSelected();
+        }
+
+        /// <summary>
+        /// Freezes this button so it does not respond to user input and does not update itself.
+        /// </summary>
+        public virtual void Freeze()
+        {
+            _isFrozen = true;
+        }
+
+        /// <summary>
+        /// Unfreezes this button so it can update itself.
+        /// </summary>
+        public virtual void Unfreeze()
+        {
+            _isFrozen = false;
         }
 
         /// <summary>

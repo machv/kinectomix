@@ -13,6 +13,7 @@ namespace Mach.Xna.Components
     {
         private Texture2D _empty;
         private Color _currentBackground;
+        private Color _currentForeground;
         private string _content;
         private int _borderThickness;
         private Color _borderColor;
@@ -131,6 +132,8 @@ namespace Mach.Xna.Components
             _activeBackground = Color.Silver;
             _disabledBackground = Color.LightGray;
             _foreground = Color.White;
+            _activeForeground = Color.White;
+            _disabledForeground = Color.White;
             _borderColor = Color.Black;
             _borderThickness = 2;
             _content = string.Empty;
@@ -179,14 +182,19 @@ namespace Mach.Xna.Components
         /// <param name="gameTime">Snapshot of game timing.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_isEnabled)
+            if (!_isFrozen)
             {
-                _currentBackground = _isFocused ? ActiveBackground : Background;
-            }
-            else
-            {
-                // When button is not active we use disabled background
-                _currentBackground = _disabledBackground;
+                if (_isEnabled)
+                {
+                    _currentBackground = _isFocused ? _activeBackground : _background;
+                    _currentForeground = _isFocused ? _activeForeground : _foreground;
+                }
+                else
+                {
+                    // When button is not active we use disabled background
+                    _currentBackground = _disabledBackground;
+                    _currentForeground = _disabledForeground;
+                }
             }
 
             base.Update(gameTime);
@@ -255,7 +263,7 @@ namespace Mach.Xna.Components
                     _spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
                 }
 
-                _spriteBatch.DrawString(Font, _content, textPosition, Foreground);
+                _spriteBatch.DrawString(Font, _content, textPosition, _currentForeground);
 
                 _spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
 
