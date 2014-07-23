@@ -14,31 +14,101 @@ namespace Mach.Xna.Kinect.Components
         private SpriteBatch _spriteBatch;
         private SpriteFont _font;
         private Texture2D _iconTexture;
+        private Vector2 _iconPosition;
+        private float _iconScale;
+        private Vector2 _connectedIconPosition;
+        private float _connectedIconScale;
+        private Color _connectedIconColor;
         private Texture2D _connectedKinectTexture;
         private Texture2D _backgroundTexture;
         private bool _showConnectKinectPrompt;
         private bool _showConnectedKinectIcon;
         private bool _drawConnectKinectAlert;
-        private Vector2 _iconPosition;
         private Vector2 _textPosition;
         private Vector2 _backgroundPosition;
-        private float _iconScale;
         private string _description;
         private bool _drawIcon;
         private short _ticks;
         private KinectManager _manager;
         private ContentManager _content;
+        private Color _foreground;
 
+        /// <summary>
+        /// Gets or sets a whether connect kinect prompt will be rendered.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if connect prompt will be rendered; otherwise, <c>false</c>.
+        /// </value>
         public bool ShowConnectKinectPrompt
         {
             get { return _showConnectKinectPrompt; }
             set { _showConnectKinectPrompt = value; }
         }
-
+        /// <summary>
+        /// Gets or sets the background texture.
+        /// </summary>
+        /// <value>
+        /// The background texture.
+        /// </value>
+        public Texture2D Background
+        {
+            get { return _backgroundTexture; }
+            set { _backgroundTexture = value; }
+        }
+        /// <summary>
+        /// Gets or sets the foreground color of the text.
+        /// </summary>
+        /// <value>
+        /// The foreground color of the text.
+        /// </value>
+        public Color Foreground
+        {
+            get { return _foreground; }
+            set { _foreground = value; }
+        }
+        /// <summary>
+        /// Gets or sets whether will be shown icon if Kinect sensor is connected.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if icon representing connected Kinect will be rendered; otherwise, <c>false</c>.
+        /// </value>
         public bool ShowConnectedKinectIcon
         {
             get { return _showConnectedKinectIcon; }
             set { _showConnectedKinectIcon = value; }
+        }
+        /// <summary>
+        /// Gets or sets the position of connected Kinect Icon.
+        /// </summary>
+        /// <value>
+        /// The position of connected Kinect Icon.
+        /// </value>
+        public Vector2 ConnectedKinectIconPosition
+        {
+            get { return _connectedIconPosition; }
+            set { _connectedIconPosition = value; }
+        }
+        /// <summary>
+        /// Gets or sets the scale of connected Kinect Icon.
+        /// </summary>
+        /// <value>
+        /// The scale of connected Kinect Icon.
+        /// </value>
+        public float ConnectedKinectIconScale
+        {
+            get { return _connectedIconScale; }
+            set { _connectedIconScale = value; }
+        }
+        /// <summary>
+        /// Gets or sets the color of the connected Kinect icon.
+        /// </summary>
+        /// <value>
+        /// The color of the connected Kinect icon.
+        /// </value>
+        public Color ConnectedKinectIconColor
+        {
+            get { return _connectedIconColor; }
+            set { _connectedIconColor = value; }
         }
         /// <summary>
         /// Gets Kinect manager.
@@ -96,6 +166,10 @@ namespace Mach.Xna.Kinect.Components
             : base(game)
         {
             _iconScale = 0.4f;
+            _connectedIconColor = Color.Green;
+            _connectedIconScale = 0.2f;
+            _foreground = Color.Black;
+
             _showConnectKinectPrompt = true;
             _showConnectedKinectIcon = true;
         }
@@ -173,9 +247,12 @@ namespace Mach.Xna.Kinect.Components
             if (_showConnectKinectPrompt == true || (_manager.LastStatus != KinectStatus.Undefined && _manager.LastStatus != KinectStatus.Disconnected))
             {
                 // Background
-                _backgroundPosition = new Vector2();
-                _backgroundPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _backgroundTexture.Width / 2;
-                _backgroundPosition.Y = 0;
+                if (_backgroundTexture != null)
+                {
+                    _backgroundPosition = new Vector2();
+                    _backgroundPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _backgroundTexture.Width / 2;
+                    _backgroundPosition.Y = 0;
+                }
 
                 // Icon
                 _iconPosition = new Vector2();
@@ -218,10 +295,17 @@ namespace Mach.Xna.Kinect.Components
                 {
                     _spriteBatch.Begin();
 
-                    _spriteBatch.Draw(_backgroundTexture, _backgroundPosition, Color.White);
-                    _spriteBatch.DrawString(_font, _description, _textPosition, Color.Black);
+                    if (_backgroundTexture != null)
+                    {
+                        _spriteBatch.Draw(_backgroundTexture, _backgroundPosition, Color.White);
+                    }
+
+                    _spriteBatch.DrawString(_font, _description, _textPosition, _foreground);
+
                     if (_drawIcon == true)
+                    {
                         _spriteBatch.Draw(_iconTexture, _iconPosition, null, Color.White, 0, Vector2.Zero, _iconScale, SpriteEffects.None, 0);
+                    }
 
                     _spriteBatch.End();
                 }
@@ -232,7 +316,7 @@ namespace Mach.Xna.Kinect.Components
                 if (_showConnectedKinectIcon == true)
                 {
                     _spriteBatch.Begin();
-                    _spriteBatch.Draw(_connectedKinectTexture, _iconPosition, null, Color.Green, 0, Vector2.Zero, _iconScale * 0.5f, SpriteEffects.None, 0);
+                    _spriteBatch.Draw(_connectedKinectTexture, _connectedIconPosition, null, _connectedIconColor, 0, Vector2.Zero, _connectedIconScale, SpriteEffects.None, 0);
                     _spriteBatch.End();
                 }
             }
