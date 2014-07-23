@@ -76,6 +76,22 @@ namespace Mach.Kinectomix.Screens
 
         private bool _isLevelFinished = false;
 
+
+        Texture2D bch;
+
+        Viewport defaultViewport;
+        Viewport leftViewport;
+        SpriteFont font;
+
+        float _scrollDifferenceX = 0;
+        bool toRight = true;
+        bool dokola = true;
+        TimeSpan delay = TimeSpan.FromSeconds(1);
+        DateTime whenContinue;
+
+
+
+
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
             _swipeGestures = new SwipeRecognizer();
@@ -152,10 +168,28 @@ namespace Mach.Kinectomix.Screens
         /// </summary>
         protected override void LoadContent()
         {
+            defaultViewport = ScreenManager.GraphicsDevice.Viewport;
+
+            font = ScreenManager.Content.Load<SpriteFont>("Fonts/LevelName");
+            bch = ScreenManager.Content.Load<Texture2D>("background");
+
+            defaultViewport = ScreenManager.GraphicsDevice.Viewport;
+            leftViewport = defaultViewport;
+            leftViewport.Width = _levelNameWidth;
+            leftViewport.Height = 60;
+            leftViewport.X = 50;
+            leftViewport.Y = 30;
+
+            _levelNameViewPort = ScreenManager.GraphicsDevice.Viewport;
+            _levelNameViewPort.Width = _levelNameWidth;
+            _levelNameViewPort.Height = 60;
+            _levelNameViewPort.Y = 30;
+            _levelNameViewPort.X = 50;
+
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
-            _backgroundTexture = _content.Load<Texture2D>("Backgrounds/Level");
+            _backgroundTexture = _content.Load<Texture2D>("Backgrounds/LevelShort");
 
             int maximalWidth;
             int maximalHeight;
@@ -163,8 +197,8 @@ namespace Mach.Kinectomix.Screens
 
             // Board
             scale = 1;
-            maximalWidth = 810;
-            maximalHeight = 570;
+            maximalWidth = 750;
+            maximalHeight = 660;
             int boardWidth = _level.Board.ColumnsCount * TileHeight;
             int boardHeight = _level.Board.RowsCount * TileHeight;
 
@@ -190,7 +224,7 @@ namespace Mach.Kinectomix.Screens
             startX = 440 + 30 * (startX / 30);
 
             int startY = maximalHeight / 2 - boardHeight / 2;
-            startY = 120 + 30 * (startY / 30);
+            startY = 30 + 30 * (startY / 30);
 
             boardPosition = new Vector2(startX, startY);
 
@@ -747,22 +781,79 @@ namespace Mach.Kinectomix.Screens
         Vector3 startHandPositionReal;
         Vector3 lastHandPositionReal;
         double lastDiff;
+        private int _levelNameWidth = 360;
+        private Viewport _levelNameViewPort;
+        private Viewport _defaultViewport;
 
         public override void Draw(GameTime gameTime)
         {
             _spriteBatch.Begin();
-
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
+            _spriteBatch.End();
 
+            _spriteBatch.Begin();
+
+            _spriteBatch.GraphicsDevice.Viewport = leftViewport;
 
             string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : Resources.LevelScreenResources.DefaultLevelName;
+            Vector2 levelNameSize = font.MeasureString(levelName);
 
-            _spriteBatch.DrawStringWithShadow(_levelFont, levelName, new Vector2(55, 40), KinectomixGame.BrickColor);
+            if (levelNameSize.X > ScreenManager.GraphicsDevice.Viewport.Width)
+            {
+                if (dokola)
+                {
+                    if (levelNameSize.X + _scrollDifferenceX > 0)
+                    {
+                        _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                    }
+                    else
+                    {
+                        _scrollDifferenceX = ScreenManager.GraphicsDevice.Viewport.Width;
+                    }
+                }
+                else
+                {
+                    // cik cak
+                    if (whenContinue < DateTime.Now)
+                    {
+                        if (toRight)
+                        {
+                            // scroll
+                            if (levelNameSize.X + _scrollDifferenceX > ScreenManager.GraphicsDevice.Viewport.Width)
+                            {
+                                _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                            }
+                            else
+                            {
+                                toRight = false;
+                                _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                            }
+                        }
 
+                        if (!toRight)
+                        {
+                            if (_scrollDifferenceX < 0)
+                            {
+                                _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                            }
+                            else
+                            {
+                                toRight = true;
+                                whenContinue = DateTime.Now + delay;
+                            }
+                        }
+                    }
+                }
+            }
+
+            _spriteBatch.DrawStringWithShadow(font, levelName, new Vector2(_scrollDifferenceX, 5), KinectomixGame.BrickColor);
+            _spriteBatch.End();
+            _spriteBatch.GraphicsDevice.Viewport = defaultViewport;
+
+            _spriteBatch.Begin();
+            
             DrawBoard(_spriteBatch, _level.Board, true);
             DrawBoard(_spriteBatch, _level.Molecule);
-
-            //_spriteBatch.DrawStringWithShadow(_normalFont, "Current", new Vector2(21 + 105, 85), Color.Gray);
 
             string text = Resources.LevelScreenResources.Moves;
             var scoreSize = _normalFont.MeasureString(text);

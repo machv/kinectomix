@@ -184,14 +184,6 @@ namespace Mach.Kinectomix
             _videoStream.RenderingOffset = _kinectDebugOffset;
         }
 
-        private void ShowVideoWithSkeleton()
-        {
-        }
-
-        private void HideVideoWithSkeleton()
-        {
-        }
-
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -222,6 +214,11 @@ namespace Mach.Kinectomix
             }
             score.DefinitionHash = _state.DefinitionHash;
             _state.Highscore = score;
+
+            _visualKinectManager.Font = Content.Load<SpriteFont>("Fonts/Normal");
+            _visualKinectManager.Foreground = KinectomixGame.BrickColor;
+            _visualKinectManager.Background = Content.Load<Texture2D>("KinectPromptBackground");
+            _visualKinectManager.RenderPosition = new Vector2(320, 0);
 
             _gameScreenManager.Add(screen);
             _gameScreenManager.Activate(screen);

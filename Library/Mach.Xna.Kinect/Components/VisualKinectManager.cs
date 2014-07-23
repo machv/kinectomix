@@ -25,13 +25,13 @@ namespace Mach.Xna.Kinect.Components
         private bool _showConnectedKinectIcon;
         private bool _drawConnectKinectAlert;
         private Vector2 _textPosition;
-        private Vector2 _backgroundPosition;
         private string _description;
         private bool _drawIcon;
         private short _ticks;
         private KinectManager _manager;
         private ContentManager _content;
         private Color _foreground;
+        private Vector2 _renderPosition;
 
         /// <summary>
         /// Gets or sets a whether connect kinect prompt will be rendered.
@@ -65,6 +65,17 @@ namespace Mach.Xna.Kinect.Components
         {
             get { return _foreground; }
             set { _foreground = value; }
+        }
+        /// <summary>
+        /// Gets or sets the position where rendering of this component will start.
+        /// </summary>
+        /// <value>
+        /// The position where rendering of this component will start.
+        /// </value>
+        public Vector2 RenderPosition
+        {
+            get { return _renderPosition; }
+            set { _renderPosition = value; }
         }
         /// <summary>
         /// Gets or sets whether will be shown icon if Kinect sensor is connected.
@@ -169,6 +180,7 @@ namespace Mach.Xna.Kinect.Components
             _connectedIconColor = Color.Green;
             _connectedIconScale = 0.2f;
             _foreground = Color.Black;
+            _renderPosition = Vector2.Zero;
 
             _showConnectKinectPrompt = true;
             _showConnectedKinectIcon = true;
@@ -200,10 +212,12 @@ namespace Mach.Xna.Kinect.Components
         }
 
         /// <summary>
-        /// Creates new instance of <see cref="VisualKinectManager"/>.
+        /// Creates new instance of <see cref="VisualKinectManager" />.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
         /// <param name="content">ContentManager containing required assets.</param>
+        /// <param name="startColorStream">If set to <c>true</c> color stream will be started.</param>
+        /// <param name="startDepthStream">If set to <c>true</c> depth stream will be started.</param>
         public VisualKinectManager(Game game, ContentManager content, bool startColorStream, bool startDepthStream)
             : this(game)
         {
@@ -246,25 +260,23 @@ namespace Mach.Xna.Kinect.Components
 
             if (_showConnectKinectPrompt == true || (_manager.LastStatus != KinectStatus.Undefined && _manager.LastStatus != KinectStatus.Disconnected))
             {
-                // Background
+                int width = 200;
                 if (_backgroundTexture != null)
                 {
-                    _backgroundPosition = new Vector2();
-                    _backgroundPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _backgroundTexture.Width / 2;
-                    _backgroundPosition.Y = 0;
+                    width = _backgroundTexture.Width;
                 }
 
                 // Icon
                 _iconPosition = new Vector2();
-                _iconPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - _iconTexture.Width * _iconScale / 2;
-                _iconPosition.Y = 20;
+                _iconPosition.X = _renderPosition.X + width / 2 - (_iconTexture.Width * _iconScale) / 2;
+                _iconPosition.Y = _renderPosition.Y + 20;
 
                 // Text
                 _description = _manager.LastStatus == KinectStatus.Undefined ? Localization.VisualKinectManagerResources.PleaseConnectSensor : _manager.GetStatusDescription(_manager.LastStatus);
                 Vector2 textSize = _font.MeasureString(_description);
                 _textPosition = new Vector2();
-                _textPosition.X = Game.GraphicsDevice.Viewport.Width / 2 - textSize.X / 2;
-                _textPosition.Y = _iconPosition.Y + _iconTexture.Height * _iconScale + 10;
+                _textPosition.X = _renderPosition.X + width / 2 - textSize.X / 2;
+                _textPosition.Y = _renderPosition.Y + _iconPosition.Y + _iconTexture.Height * _iconScale + 10;
 
                 _drawConnectKinectAlert = true;
             }
@@ -297,7 +309,7 @@ namespace Mach.Xna.Kinect.Components
 
                     if (_backgroundTexture != null)
                     {
-                        _spriteBatch.Draw(_backgroundTexture, _backgroundPosition, Color.White);
+                        _spriteBatch.Draw(_backgroundTexture, _renderPosition, Color.White);
                     }
 
                     _spriteBatch.DrawString(_font, _description, _textPosition, _foreground);

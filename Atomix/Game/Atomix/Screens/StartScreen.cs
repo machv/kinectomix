@@ -107,7 +107,7 @@ namespace Mach.Kinectomix.Screens
 
         public override void Update(GameTime gameTime)
         {
-            _startButton.Position = new Vector2(470, 300);
+            _startButton.Position = new Vector2(470, 330);
             _levelsButton.Position = new Vector2(_startButton.Position.X, _startButton.Position.Y + _startButton.ActualHeight + 60);
             _quitButton.Position = new Vector2(_levelsButton.Position.X, _levelsButton.Position.Y + _levelsButton.ActualHeight + 60);
 
@@ -133,7 +133,7 @@ namespace Mach.Kinectomix.Screens
 
             _spriteBatch.Begin();
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
-            _spriteBatch.DrawStringWithShadow(_splashFont, name, new Vector2(7 + ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 245), KinectomixGame.BrickColor);
+            _spriteBatch.DrawStringWithShadow(_splashFont, name, new Vector2(7 + ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 215), KinectomixGame.BrickColor);
             _spriteBatch.End();
 
             base.Draw(gameTime);

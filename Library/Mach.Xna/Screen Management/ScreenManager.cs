@@ -47,6 +47,15 @@ namespace Mach.Xna.ScreenManagement
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ScreenManager" /> class.
+        /// </summary>
+        /// <param name="game">Game containing this component.</param>
+        public ScreenManager(Game game)
+            : this(game, null)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ScreenManager"/> class.
         /// </summary>
         /// <param name="game">Game containing this component.</param>

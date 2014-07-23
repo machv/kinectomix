@@ -164,6 +164,16 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Backgrounds\LevelLong.png">
+      <Name>LevelLong</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Backgrounds\LevelShort.png">
+      <Name>LevelShort</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Gestures\LeftHandUp.gst">
       <Name>LeftHandUp</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -172,13 +182,13 @@
       <Name>RightHandUp</Name>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Backgrounds\Level.png">
-      <Name>Level</Name>
+    <Compile Include="Backgrounds\Levels.png">
+      <Name>Levels</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Backgrounds\Levels.png">
-      <Name>Levels</Name>
+    <Compile Include="KinectPromptBackground.png">
+      <Name>KinectPromptBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
