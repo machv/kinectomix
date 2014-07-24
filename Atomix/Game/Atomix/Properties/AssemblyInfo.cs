@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Atomix for Kinect")]
+[assembly: AssemblyTitle("Kinectomix")]
 [assembly: AssemblyProduct("Kinectomix")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Atomix for Kinect")]
 [assembly: AssemblyCompany("Vladimír Mach")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]

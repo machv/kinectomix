@@ -70,6 +70,7 @@ namespace Mach.Kinectomix.Screens
                 button.DisabledForeground = Color.Gray;
                 button.IsEnabled = isEnabled;
                 button.TextAlignment = TextAlignment.Left;
+                button.TextScrolling = TextScrolling.Loop;
 
                 _buttons.Add(button);
                 Components.Add(button);
@@ -146,8 +147,6 @@ namespace Mach.Kinectomix.Screens
             foreach (Button b in _buttons)
             {
                 b.Position = position;
-
-                //position.X += xDiff;
                 position.Y += b.ActualHeight + yPos;
 
                 if (position.Y + b.Height > ScreenManager.GraphicsDevice.Viewport.Bounds.Height)

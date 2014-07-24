@@ -28,6 +28,7 @@ namespace Mach.Xna.Components
         private TextAlignment _textAlignment;
         private Viewport _levelNameViewPort;
         private Viewport _defaultViewport;
+        private TextScrolling _textScrolling;
 
         /// <summary>
         /// Gets or sets caption displayed on this button.
@@ -165,6 +166,18 @@ namespace Mach.Xna.Components
         {
             get { return _boundingRectangle.Height; }
         }
+        /// <summary>
+        /// Gets or sets the type of the scrolling of containing text.
+        /// </summary>
+        /// <value>
+        /// The type of the scrolling of containing text.
+        /// </value>
+        public TextScrolling TextScrolling
+        {
+            get { return _textScrolling; }
+            set { _textScrolling = value; }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Button"/> class.
         /// </summary>
@@ -348,117 +361,63 @@ namespace Mach.Xna.Components
                             break;
                     }
 
-
-                    //if (textPositionS.X < _boundingRectangle.X) // overflow reset to zero
-                    //    textPositionS.X = _boundingRectangle.X + _borderThickness;
-
-
-
                     if (levelNameSize.X > _levelNameViewPort.Width)
                     {
-                        if (dokola)
+                        switch (_textScrolling)
                         {
-                            if (levelNameSize.X + _scrollDifferenceX > 0)
-                            {
-                                _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
-                            }
-                            else
-                            {
-                                _scrollDifferenceX = _levelNameViewPort.Width;
-                            }
-                        }
-                        else
-                        {
-                            // cik cak
-                            if (whenContinue < DateTime.Now)
-                            {
-                                if (toRight)
+                            case TextScrolling.None:
+                                _scrollDifferenceX = 0;
+                                break;
+                            case TextScrolling.Loop:
+                                if (levelNameSize.X + _scrollDifferenceX > 0)
                                 {
-                                    // scroll
-                                    if (levelNameSize.X + _scrollDifferenceX > _levelNameViewPort.Width)
-                                    {
-                                        _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
-                                    }
-                                    else
-                                    {
-                                        toRight = false;
-                                        _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
-                                    }
+                                    _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
                                 }
+                                else
+                                {
+                                    _scrollDifferenceX = _levelNameViewPort.Width;
+                                }
+                                break;
+                            case TextScrolling.Slide:
+                                if (whenContinue < DateTime.Now)
+                                {
+                                    if (toRight)
+                                    {
+                                        // scroll
+                                        if (levelNameSize.X + _scrollDifferenceX > _levelNameViewPort.Width)
+                                        {
+                                            _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                                        }
+                                        else
+                                        {
+                                            toRight = false;
+                                            _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                                        }
+                                    }
 
-                                if (!toRight)
-                                {
-                                    if (_scrollDifferenceX < 0)
+                                    if (!toRight)
                                     {
-                                        _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
-                                    }
-                                    else
-                                    {
-                                        toRight = true;
-                                        whenContinue = DateTime.Now + delay;
+                                        if (_scrollDifferenceX < 0)
+                                        {
+                                            _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
+                                        }
+                                        else
+                                        {
+                                            toRight = true;
+                                            whenContinue = DateTime.Now + delay;
+                                        }
                                     }
                                 }
-                            }
+                                break;
                         }
 
                         textPositionS.X = _scrollDifferenceX;
-                    }
-                    else
-                    {
-                        // vejdeme se
                     }
 
                     _spriteBatch.DrawString(Font, _content, textPositionS, _currentForeground);
                     _spriteBatch.End();
                     _spriteBatch.GraphicsDevice.Viewport = _defaultViewport;
                 }
-
-
-                //_spriteBatch.Begin();
-
-                ////RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
-
-                ////// Allows cropping inside
-                ////_spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
-                ////                  null, null, _rasterizerState);
-
-                //Vector2 textSize = Font.MeasureString(_content);
-                //Vector2 textPosition = new Vector2(_boundingRectangle.Center.X, _boundingRectangle.Center.Y) - textSize / 2f;
-                //textPosition.X = (int)textPosition.X;
-                //textPosition.Y = (int)textPosition.Y + (textSize.Y - Font.LineSpacing) + _padding;
-
-                //switch (_textAlignment)
-                //{
-                //    case TextAlignment.Left:
-                //        textPosition.X = _boundingRectangle.X + _borderThickness + _padding;
-                //        break;
-                //    case TextAlignment.Center:
-                //        // Center is default.
-                //        break;
-                //    case TextAlignment.Right:
-                //        textPosition.X = _boundingRectangle.Right - _borderThickness - _padding - textSize.X;
-                //        break;
-                //}
-
-
-                //if (textPosition.X < _boundingRectangle.X) // overflow reset to zero
-                //    textPosition.X = _boundingRectangle.X + _borderThickness;
-
-                //Rectangle currentRect = _spriteBatch.GraphicsDevice.ScissorRectangle;
-                //Rectangle clippingRectangle = _boundingRectangle;
-                //clippingRectangle.Width -= 2 * _borderThickness;
-
-                //// Cropping will be made only within current screen.
-                //if (currentRect.Contains(clippingRectangle))
-                //{
-                //    _spriteBatch.GraphicsDevice.ScissorRectangle = clippingRectangle;
-                //}
-
-                //_spriteBatch.DrawString(Font, _content, textPosition, _currentForeground);
-
-                //_spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
-
-                //_spriteBatch.End();
             }
 
             base.Draw(gameTime);
