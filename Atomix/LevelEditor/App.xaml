@@ -22,9 +22,11 @@
                         <DataTemplate>
                             <Grid>
                                 <Image Source="Board/Empty.png"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Stretch="Uniform"/>
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Width="49"
+                                       Height="49"
+                                       Stretch="Uniform"/>
                                 <l:BondsVisualiser TopLeftBond="{Binding TopLeftBond}"
                                                        TopBond="{Binding TopBond}"
                                                        TopRightBond="{Binding TopRightBond}" 
@@ -34,10 +36,12 @@
                                                        BottomLeftBond="{Binding BottomLeftBond}"
                                                        LeftBond="{Binding LeftBond}" />
                                 <Image Source="{Binding AssetSource}" 
-                                           Behavior:TilePainter.IsPaintEnabled="False"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Stretch="Uniform">
+                                       Behavior:TilePainter.IsPaintEnabled="False"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Width="49"
+                                       Height="49"
+                                       Stretch="Uniform">
                                     <Image.Style>
                                         <Style TargetType="Image">
                                             <Style.Triggers>
