@@ -132,6 +132,9 @@
   <data name="Hydrogen" xml:space="preserve">
     <value>hydrogen</value>
   </data>
+  <data name="Nitrogen" xml:space="preserve">
+    <value>nitrogen</value>
+  </data>
   <data name="Oxygen" xml:space="preserve">
     <value>oxygen</value>
   </data>

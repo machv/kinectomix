@@ -15,18 +15,17 @@
         <Converter:NullToTrueConverter x:Key="NullToTrueConverter" />
 
         <DataTemplate x:Key="ViewOnlyBoard" DataType="{x:Type ViewModel:BoardViewModel}">
-            <ItemsControl ItemsSource="{Binding Tiles}" 
+            <Viewbox Stretch="Uniform">
+                <ItemsControl ItemsSource="{Binding Tiles}" 
                           Margin="3">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Image Source="Board/Empty.png"
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Image Source="Board/Empty.png"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Width="49"
-                                           Height="49"
-                                           Stretch="UniformToFill"/>
-                            <l:BondsVisualiser TopLeftBond="{Binding TopLeftBond}"
+                                           Stretch="Uniform"/>
+                                <l:BondsVisualiser TopLeftBond="{Binding TopLeftBond}"
                                                        TopBond="{Binding TopBond}"
                                                        TopRightBond="{Binding TopRightBond}" 
                                                        RightBond="{Binding RightBond}" 
@@ -34,35 +33,34 @@
                                                        BottomBond="{Binding BottomBond}"
                                                        BottomLeftBond="{Binding BottomLeftBond}"
                                                        LeftBond="{Binding LeftBond}" />
-                            <Image Source="{Binding AssetSource}" 
+                                <Image Source="{Binding AssetSource}" 
                                            Behavior:TilePainter.IsPaintEnabled="False"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Width="49"
-                                           Height="49"
-                                           Stretch="UniformToFill">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsPreview}" Value="True">
-                                                <Setter Property="Opacity" Value="0.5"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="{Binding Tiles.ColumnsCount}"
-                             Rows="{Binding Tiles.RowsCount}"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Center"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+                                           Stretch="Uniform">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsPreview}" Value="True">
+                                                    <Setter Property="Opacity" Value="0.5"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="{Binding Tiles.ColumnsCount}"
+                                         Rows="{Binding Tiles.RowsCount}"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Center" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Viewbox>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type ViewModel:BoardViewModel}">

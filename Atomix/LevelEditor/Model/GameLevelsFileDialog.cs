@@ -67,16 +67,6 @@ namespace Mach.Kinectomix.LevelEditor.Model
                     "Game",
                     "AllPlayers"
                 );
-
-            if (!Directory.Exists(_initialDirectory))
-            {
-                try
-                {
-                    Directory.CreateDirectory(_initialDirectory);
-                }
-                catch
-                { }
-            }
         }
 
         /// <summary>
@@ -88,7 +78,12 @@ namespace Mach.Kinectomix.LevelEditor.Model
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "Kinectomix levels (*.atx)|*.atx";
             dialog.Title = "Open Kinectomix levels";
-            dialog.InitialDirectory = _lastDirectory != null ? _lastDirectory : _initialDirectory;
+
+            string directory = _lastDirectory != null ? _lastDirectory : _initialDirectory;
+            if (Directory.Exists(directory))
+            {
+                dialog.InitialDirectory = directory;
+            }
 
             if (dialog.ShowDialog() == true)
             {
@@ -108,6 +103,8 @@ namespace Mach.Kinectomix.LevelEditor.Model
         /// <returns></returns>
         public bool SaveFileDialog()
         {
+            CreateInitialDirectory();
+
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "Kinectomix levels (*.atx)|*.atx";
             dialog.Title = "Save Kinectomix levels";
@@ -128,6 +125,19 @@ namespace Mach.Kinectomix.LevelEditor.Model
             }
 
             return false;
+        }
+
+        private void CreateInitialDirectory()
+        {
+            try
+            {
+                if (!Directory.Exists(_initialDirectory))
+                {
+                    Directory.CreateDirectory(_initialDirectory);
+                }
+            }
+            catch
+            { }
         }
 
         private void UpdateLastDirectory(string fileName)

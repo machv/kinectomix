@@ -106,6 +106,15 @@ namespace Mach.Kinectomix.LevelEditor.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to nitrogen.
+        /// </summary>
+        public static string Nitrogen {
+            get {
+                return ResourceManager.GetString("Nitrogen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to oxygen.
         /// </summary>
         public static string Oxygen {

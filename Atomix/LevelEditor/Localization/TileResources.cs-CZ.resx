@@ -132,6 +132,9 @@
   <data name="Hydrogen" xml:space="preserve">
     <value>vodík</value>
   </data>
+  <data name="Nitrogen" xml:space="preserve">
+    <value>dusík</value>
+  </data>
   <data name="Oxygen" xml:space="preserve">
     <value>kyslík</value>
   </data>
