@@ -5,42 +5,77 @@ using System.Xml.Serialization;
 
 namespace Mach.Kinectomix.Logic
 {
+    /// <summary>
+    /// Manages saving high score information.
+    /// </summary>
     public class Highscore
     {
-        public const string StorageContainerName = "State";
-
         private string _fileName;
         private string _definitionHash;
         private LevelHighscore[] _levels;
 
+        /// <summary>
+        /// The storage container name in <see cref="StorageDevice"/>.
+        /// </summary>
+        public const string StorageContainerName = "State";
+
+        /// <summary>
+        /// Gets or sets the name of the file that contains serialized high score data.
+        /// </summary>
+        /// <value>
+        /// The name of the file that contains serialized high score data..
+        /// </value>
         [XmlIgnore]
         public string FileName
         {
             get { return _fileName; }
             set { _fileName = value; }
         }
-
+        /// <summary>
+        /// Gets or sets the definition hash for corresponding <see cref="GameDefinition"/>.
+        /// </summary>
+        /// <value>
+        /// The definition hash for corresponding <see cref="GameDefinition"/>.
+        /// </value>
         public string DefinitionHash
         {
             get { return _definitionHash; }
             set { _definitionHash = value; }
         }
+        /// <summary>
+        /// Gets or sets the high score of levels.
+        /// </summary>
+        /// <value>
+        /// The high score of levels.
+        /// </value>
         public LevelHighscore[] Levels
         {
             get { return _levels; }
             set { _levels = value; }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Highscore"/> class.
+        /// </summary>
         public Highscore()
         {
             _levels = new LevelHighscore[1];
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Highscore"/> class.
+        /// </summary>
+        /// <param name="fileName">Name of the file that contains serialized high score data.</param>
         public Highscore(string fileName) : this()
         {
             _fileName = fileName;
         }
 
+        /// <summary>
+        /// Gets the high score of level at specified index. This index corresponds with the index of the <see cref="Level"/> in <see cref="GameDefinition"/>.
+        /// </summary>
+        /// <param name="levelIndex">Index of the level.</param>
+        /// <returns></returns>
         public LevelHighscore GetLevelHighscore(int levelIndex)
         {
             if (levelIndex >= _levels.Length || levelIndex < 0)
@@ -49,6 +84,12 @@ namespace Mach.Kinectomix.Logic
             return _levels[levelIndex];
         }
 
+        /// <summary>
+        /// Sets the level high score of level at specified index. This index corresponds with the index of the <see cref="Level"/> in <see cref="GameDefinition"/>..
+        /// </summary>
+        /// <param name="levelIndex">Index of the level.</param>
+        /// <param name="levelHighscore">The level high score.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">levelIndex</exception>
         public void SetLevelHighscore(int levelIndex, LevelHighscore levelHighscore)
         {
             if (levelIndex < 0)
@@ -64,6 +105,10 @@ namespace Mach.Kinectomix.Logic
             _levels[levelIndex] = levelHighscore;
         }
 
+        /// <summary>
+        /// Serializes this instance and saves it into the <see cref="FileName"/> file.
+        /// </summary>
+        /// <returns><c>true</c> if serialization succeeded.</returns>
         public bool Save()
         {
             StorageDevice device = GetStorageDevice();
@@ -97,6 +142,11 @@ namespace Mach.Kinectomix.Logic
             return true;
         }
 
+        /// <summary>
+        /// Deserializes the instance saved in the file.
+        /// </summary>
+        /// <param name="fileName">Name of the file that contains serialized instance of <see cref="Highscore"/> class.</param>
+        /// <returns></returns>
         public static Highscore Load(string fileName)
         {
             Highscore highscore = null;

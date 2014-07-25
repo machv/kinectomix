@@ -5,6 +5,9 @@ using System.Xml.Serialization;
 
 namespace Mach.Kinectomix.Logic
 {
+    /// <summary>
+    /// Custom XML serializer for serializing <see cref="TilesCollection{T}"/>.
+    /// </summary>
     public static class Serializer
     {
         /// <summary>

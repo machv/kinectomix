@@ -11,6 +11,7 @@ namespace Mach.Kinectomix.Logic
         private string _hash;
         private int _levelIndex;
         private Level[] _levels;
+
         /// <summary>
         /// Gets or sets game levels.
         /// </summary>
@@ -33,6 +34,7 @@ namespace Mach.Kinectomix.Logic
             get { return _hash; }
             set { _hash = value; }
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GameDefinition"/> class.
         /// </summary>
@@ -45,10 +47,7 @@ namespace Mach.Kinectomix.Logic
         /// <summary>
         /// Initializes a new instance of the <see cref="GameDefinition"/> class.
         /// </summary>
-        public GameDefinition()
-        {
-
-        }
+        public GameDefinition() { }
 
         /// <summary>
         /// Adds new level to the definition.

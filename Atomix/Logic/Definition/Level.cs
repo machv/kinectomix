@@ -50,6 +50,7 @@ namespace Mach.Kinectomix.Logic
             get { return _molecule; }
             set { _molecule = value; }
         }
+
         /// <summary>
         /// Initializes new instance of the <see cref="Level"/> class.
         /// </summary>

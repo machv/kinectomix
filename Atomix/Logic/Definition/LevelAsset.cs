@@ -48,7 +48,6 @@ namespace Mach.Kinectomix.Logic
             get { return _content; }
             set { _content = value; }
         }
-
         /// <summary>
         /// Gets or sets a value indicating whether this asset has any rendered bond.
         /// </summary>
@@ -60,7 +59,6 @@ namespace Mach.Kinectomix.Logic
             get { return _hasBonds; }
             set { _hasBonds = value; }
         }
-
         /// <summary>
         /// Gets or sets a value indicating whether this asset is fixed.
         /// </summary>
@@ -72,7 +70,6 @@ namespace Mach.Kinectomix.Logic
             get { return _isFixed; }
             set { _isFixed = value; }
         }
-
         /// <summary>
         /// Gets the content of the decoded asset.
         /// </summary>
