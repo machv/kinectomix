@@ -5,8 +5,11 @@
              xmlns:Behavior="clr-namespace:Mach.Kinectomix.LevelEditor.Behavior"
              xmlns:Converter="clr-namespace:Mach.Kinectomix.LevelEditor.Converter"
              xmlns:l="clr-namespace:Mach.Kinectomix.LevelEditor"
+             xmlns:localization="clr-namespace:Mach.Kinectomix.LevelEditor.Localization"
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
+        <localization:LocalizedStrings xmlns:local="clr-namespace:Mach.Kinectomix.LevelEditor.Localization" x:Key="LocalizedStrings" />
+        
         <Converter:NegateConverter x:Key="NegateConverter" />
         <Converter:AllTrueConveter x:Key="AllTrueConveter" />
         <Converter:NullToTrueConverter x:Key="NullToTrueConverter" />
@@ -22,7 +25,7 @@
                                            VerticalAlignment="Center"
                                            Width="49"
                                            Height="49"
-                                           Stretch="Uniform"/>
+                                           Stretch="UniformToFill"/>
                             <l:BondsVisualiser TopLeftBond="{Binding TopLeftBond}"
                                                        TopBond="{Binding TopBond}"
                                                        TopRightBond="{Binding TopRightBond}" 
@@ -37,7 +40,7 @@
                                            VerticalAlignment="Center"
                                            Width="49"
                                            Height="49"
-                                           Stretch="Uniform">
+                                           Stretch="UniformToFill">
                                 <Image.Style>
                                     <Style TargetType="Image">
                                         <Style.Triggers>
@@ -169,10 +172,8 @@
 
         <DataTemplate DataType="{x:Type ViewModel:AvailableTilesViewModel}">
             <StackPanel>
-                <TextBlock Text="Available tiles" FontWeight="Bold" />
-                <!--
-                <StackPanel Orientation="Horizontal">
-                -->
+                <TextBlock Text="{Binding Editor.AvailableTiles, Source={StaticResource LocalizedStrings}}" FontWeight="Bold" />
+
                 <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding SelectedTile}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -220,18 +221,6 @@
                                         </Grid.RowDefinitions>
 
 
-
-
-                                        <!--<Grid.Style>
-                                        <Style TargetType="Grid">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsFromLevel}" Value="True">
-                                                    <Setter Property="Background" Value="Silver"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Grid.Style>-->
-
                                         <Image Grid.Row="0" Width="49" Height="49" Stretch="Fill" Source="{Binding AssetSource}" />
                                         <TextBlock Grid.Row="1" Text="{Binding Name}" TextAlignment="Center"/>
                                     </Grid>
@@ -240,20 +229,6 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <!--
-                    <Button Command="{Binding AddTileCommand}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-
-                            <Image Grid.Row="0" Source="../Icons/Add.png" />
-                            <TextBlock Grid.Row="1" Text="Add new tile" TextAlignment="Center" />
-                        </Grid>
-                    </Button>
-                </StackPanel>
-                -->
             </StackPanel>
 
         </DataTemplate>

@@ -24,7 +24,7 @@ namespace Mach.Kinectomix.LevelEditor
     xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'
     xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
     TargetType='{x:Type Button}'>
-    <Ellipse Width='7' Height='7' Fill='Black' Opacity='0.8' />
+    <Rectangle Width='7' Height='7' Fill='Red' Opacity='0.65' />
 </ControlTemplate>";
             ControlTemplate buttonTemplate;
             using (StringReader stringReader = new StringReader(buttonTemplateXml))
@@ -44,6 +44,8 @@ namespace Mach.Kinectomix.LevelEditor
             btn.Click += Btn_Click;
             btn.Template = buttonTemplate;
             btn.Tag = "TopLeft";
+            btn.VerticalAlignment = VerticalAlignment.Top;
+            btn.HorizontalAlignment = HorizontalAlignment.Left;
             Grid.SetRow(btn, 0);
             Grid.SetColumn(btn, 0);
             grid.Children.Add(btn);
@@ -52,6 +54,8 @@ namespace Mach.Kinectomix.LevelEditor
             btn.Click += Btn_Click;
             btn.Template = buttonTemplate;
             btn.Tag = "Top";
+            btn.VerticalAlignment = VerticalAlignment.Top;
+            btn.HorizontalAlignment = HorizontalAlignment.Center;
             Grid.SetRow(btn, 0);
             Grid.SetColumn(btn, 1);
             grid.Children.Add(btn);
@@ -60,6 +64,8 @@ namespace Mach.Kinectomix.LevelEditor
             btn.Click += Btn_Click;
             btn.Template = buttonTemplate;
             btn.Tag = "TopRight";
+            btn.VerticalAlignment = VerticalAlignment.Top;
+            btn.HorizontalAlignment = HorizontalAlignment.Right;
             Grid.SetRow(btn, 0);
             Grid.SetColumn(btn, 2);
             grid.Children.Add(btn);
@@ -68,6 +74,8 @@ namespace Mach.Kinectomix.LevelEditor
             btn.Click += Btn_Click;
             btn.Template = buttonTemplate;
             btn.Tag = "Left";
+            btn.VerticalAlignment = VerticalAlignment.Center;
+            btn.HorizontalAlignment = HorizontalAlignment.Left;
             Grid.SetRow(btn, 1);
             Grid.SetColumn(btn, 0);
             grid.Children.Add(btn);
@@ -76,6 +84,8 @@ namespace Mach.Kinectomix.LevelEditor
             btn.Click += Btn_Click;
             btn.Template = buttonTemplate;
             btn.Tag = "Right";
+            btn.VerticalAlignment = VerticalAlignment.Center;
+            btn.HorizontalAlignment = HorizontalAlignment.Right;
             Grid.SetRow(btn, 1);
             Grid.SetColumn(btn, 2);
             grid.Children.Add(btn);
@@ -84,6 +94,8 @@ namespace Mach.Kinectomix.LevelEditor
             btn.Click += Btn_Click;
             btn.Template = buttonTemplate;
             btn.Tag = "BottomLeft";
+            btn.VerticalAlignment = VerticalAlignment.Bottom;
+            btn.HorizontalAlignment = HorizontalAlignment.Left;
             Grid.SetRow(btn, 2);
             Grid.SetColumn(btn, 0);
             grid.Children.Add(btn);
@@ -92,6 +104,8 @@ namespace Mach.Kinectomix.LevelEditor
             btn.Click += Btn_Click;
             btn.Template = buttonTemplate;
             btn.Tag = "Bottom";
+            btn.VerticalAlignment = VerticalAlignment.Bottom;
+            btn.HorizontalAlignment = HorizontalAlignment.Center;
             Grid.SetRow(btn, 2);
             Grid.SetColumn(btn, 1);
             grid.Children.Add(btn);
@@ -100,6 +114,8 @@ namespace Mach.Kinectomix.LevelEditor
             btn.Click += Btn_Click;
             btn.Template = buttonTemplate;
             btn.Tag = "BottomRight";
+            btn.VerticalAlignment = VerticalAlignment.Bottom;
+            btn.HorizontalAlignment = HorizontalAlignment.Right;
             Grid.SetRow(btn, 2);
             Grid.SetColumn(btn, 2);
             grid.Children.Add(btn);

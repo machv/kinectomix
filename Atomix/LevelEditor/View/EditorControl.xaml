@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:l="clr-namespace:Mach.Kinectomix.LevelEditor"
+             xmlns:locale="clr-namespace:Mach.Kinectomix.LevelEditor.Localization" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="700">
@@ -14,10 +15,10 @@
             <Grid Tag="{Binding DataContext,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}">
                 <Grid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Delete" 
+                        <MenuItem Header="{Binding Editor.Delete, Source={StaticResource LocalizedStrings}}" 
                                                   Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.RemoveLevelCommand}" 
                                                   CommandParameter="{Binding}" />
-                        <MenuItem Header="Export..."
+                        <MenuItem Header="{Binding Editor.Export, Source={StaticResource LocalizedStrings}}"
                                   Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.ExportLevelCommand}"
                                   CommandParameter="{Binding}" />
                     </ContextMenu>
@@ -42,14 +43,14 @@
                 </Grid.ColumnDefinitions>
 
                 <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
-                    <Button Content="_Add new level" Margin="5" Padding="3" Command="{Binding AddNewLevelCommand}" />
-                    <Button Content="_Import level..." Margin="5" Padding="3" Command="{Binding ImportLevelCommand}" />
+                    <Button Content="{Binding Editor.AddLevel, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding AddNewLevelCommand}" />
+                    <Button Content="{Binding Editor.ImportLevel, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding ImportLevelCommand}" />
                 </WrapPanel>
 
                 <WrapPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5">
-                    <Button Content="New definition" Margin="5" Padding="3" Command="{Binding NewLevelsDefinitionCommand}" />
-                    <Button Content="_Open levels definition..." Margin="5" Padding="3" Command="{Binding LoadLevelsDefinitionCommand}" />
-                    <Button Content="_Save levels definition as..." Margin="5" Padding="3" Command="{Binding SaveAsLevelsDefinitionCommand}" FontWeight="Bold" />
+                    <Button Content="{Binding Editor.NewDefinition, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding NewLevelsDefinitionCommand}" />
+                    <Button Content="{Binding Editor.OpenDefinition, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding LoadLevelsDefinitionCommand}" />
+                    <Button Content="{Binding Editor.SaveDefinitionAs, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding SaveAsLevelsDefinitionCommand}" FontWeight="Bold" />
                 </WrapPanel>
             </Grid>
         </Border>
@@ -67,7 +68,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24">Game levels</TextBlock>
+                    <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24" Text="{Binding Editor.GameLevels, Source={StaticResource LocalizedStrings}}" />
                     <ListBox ItemsSource="{Binding Levels}" 
                              ItemTemplate="{StaticResource levelListItemTemplate}"
                              SelectedItem="{Binding Level}" 
@@ -95,10 +96,10 @@
                     <TextBox Grid.Row="0" Margin="0,0,0,5" FontWeight="ExtraLight" FontSize="24" Text="{Binding Level.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
-                        <TabItem Header="Board" Tag="Board">
+                        <TabItem Header="{Binding Editor.Board, Source={StaticResource LocalizedStrings}}" Tag="Board">
                             <ContentPresenter Content="{Binding Level.Board}"/>
                         </TabItem>
-                        <TabItem Header="Molecule" Tag="Molecule">
+                        <TabItem Header="{Binding Editor.Molecule, Source={StaticResource LocalizedStrings}}" Tag="Molecule">
                             <ContentPresenter Content="{Binding Level.Molecule}"/>
                         </TabItem>
                     </TabControl>

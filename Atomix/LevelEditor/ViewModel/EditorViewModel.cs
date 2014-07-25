@@ -6,17 +6,19 @@ using System.Windows;
 using System.Xml.Serialization;
 using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.LevelEditor.Model;
+using Mach.Kinectomix.LevelEditor.Localization;
 
 namespace Mach.Kinectomix.LevelEditor.ViewModel
 {
     public class EditorViewModel : NotifyPropertyBase
     {
-        public const string DefaultLevelName = "Kinectomix Level";
+        //public const string DefaultLevelName = "Kinectomix Level";
         private int _newLevelIndex;
         private Tiles _tiles;
         private ObservableCollection<LevelViewModel> _levels;
         private bool _areLevelsChanged;
         private GameLevelsFileDialog _gameLevelsFileDialog;
+        private LocalizedStrings _localization = new LocalizedStrings();
 
         public ObservableCollection<LevelViewModel> Levels
         {
@@ -110,7 +112,7 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
         private void AddNewLevel()
         {
             LevelViewModel level = CreateNewLevel();
-            level.Name = string.Format("{0} {1}", DefaultLevelName, ++_newLevelIndex);
+            level.Name = string.Format("{0} {1}", EditorResources.DefaultLevelName, ++_newLevelIndex);
             level.IsChanged = false;
 
             Levels.Add(level);
