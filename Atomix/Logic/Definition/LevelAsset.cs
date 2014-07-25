@@ -43,7 +43,11 @@ namespace Mach.Kinectomix.Logic
         /// <value>
         /// The content.
         /// </value>
-        public string Content { get; set; }
+        public string Content
+        {
+            get { return _content; }
+            set { _content = value; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this asset has any rendered bond.
@@ -51,7 +55,11 @@ namespace Mach.Kinectomix.Logic
         /// <value>
         ///   <c>true</c> if this asset has bonds; otherwise, <c>false</c>.
         /// </value>
-        public bool HasBonds { get; set; }
+        public bool HasBonds
+        {
+            get { return _hasBonds; }
+            set { _hasBonds = value; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this asset is fixed.
@@ -59,7 +67,11 @@ namespace Mach.Kinectomix.Logic
         /// <value>
         ///   <c>true</c> if this instance is fixed; otherwise, <c>false</c>.
         /// </value>
-        public bool IsFixed { get; set; }
+        public bool IsFixed
+        {
+            get { return _isFixed; }
+            set { _isFixed = value; }
+        }
 
         /// <summary>
         /// Gets the content of the decoded asset.

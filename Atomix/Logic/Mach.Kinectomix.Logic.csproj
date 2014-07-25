@@ -33,6 +33,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>false</XnaCompressContent>
+    <DocumentationFile>bin\x86\Debug\Kinectomix.Logic.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -77,7 +78,6 @@
     <Compile Include="Definition\BoardTile.cs" />
     <Compile Include="Definition\BondType.cs" />
     <Compile Include="Definition\GameDefinition.cs" />
-    <Compile Include="DummyServiceProvider.cs" />
     <Compile Include="State\Highscore.cs" />
     <Compile Include="State\LevelHighscore.cs" />
     <Compile Include="Definition\TilesCollection.cs" />

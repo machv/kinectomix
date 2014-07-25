@@ -1,5 +1,8 @@
 ﻿namespace Mach.Kinect.Gestures
 {
+    /// <summary>
+    /// Detected swipe gesture.
+    /// </summary>
     public class SwipeGesture
     {
         private SwipeDirection _direction;

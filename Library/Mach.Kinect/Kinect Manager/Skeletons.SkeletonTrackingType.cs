@@ -2,6 +2,9 @@
 {
     public partial class Skeletons
     {
+        /// <summary>
+        /// Tracking strategy of skeletons.
+        /// </summary>
         public enum SkeletonTrackingType
         {
             /// <summary>

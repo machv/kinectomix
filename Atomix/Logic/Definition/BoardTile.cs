@@ -3,10 +3,10 @@ using System;
 
 namespace Mach.Kinectomix.Logic
 {
-    [Serializable]
     /// <summary>
     /// Represents one tile on the game's board.
     /// </summary>
+    [Serializable]
     public class BoardTile
     {
         /// <summary>

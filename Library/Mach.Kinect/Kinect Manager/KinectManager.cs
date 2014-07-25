@@ -147,8 +147,16 @@ namespace Mach.Kinect
             }
         }
 
+        /// <summary>
+        /// Represents the method that will handle <see cref="KinectStatusChanged"/> event.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public delegate void KinectStatusChangedEventHandler(object sender, EventArgs e);
 
+        /// <summary>
+        /// Occurs when status of any connected Kinect sensor changes.
+        /// </summary>
         public event KinectStatusChangedEventHandler KinectStatusChanged;
 
         /// <summary>
