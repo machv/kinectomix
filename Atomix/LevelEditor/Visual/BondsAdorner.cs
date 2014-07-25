@@ -177,7 +177,6 @@ namespace Mach.Kinectomix.LevelEditor
                     break;
                 default:
                     throw new IndexOutOfRangeException("Specified bond direction is not valid.");
-                    break;
             }
         }
 

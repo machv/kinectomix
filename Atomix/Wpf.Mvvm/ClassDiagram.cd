@@ -24,10 +24,9 @@
     <Members>
       <Field Name="_action" Hidden="true" />
       <Field Name="_canExecute" Hidden="true" />
-      <Field Name="removeGesture" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAQEACAAQAAEAAAAAAEAAAAAAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAQEACAAQAAEAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
       <FileName>DelegateCommandGeneric.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />

@@ -23,7 +23,7 @@
         /// <summary>
         /// Gets or sets the index of the filter currently selected in a file dialog.
         /// </summary>
-        /// <returns>The <see cref="Int32"/> that is the index of the selected filter. The default is 1.</returns>
+        /// <returns>The index of the selected filter. The default is 1.</returns>
         int FilterIndex { get; }
         /// <summary>
         /// Displays a save file dialog.

@@ -15,11 +15,23 @@ using System.Xml.Serialization;
 
 namespace Kinectomix.GestureRecorder.ViewModel
 {
+    /// <summary>
+    /// Presentation logic for recorder window.
+    /// </summary>
     public class RecorderViewModel : NotifyPropertyBase
     {
         private static IEqualityComparer<RecognizedGesture> _gesturesComparer = new RecognizedGestureComparer();
 
+        private int _frameCounter = 0;
+        private TimeSpan _elapsedTime = TimeSpan.Zero;
+        private int _fps;
         private KinectSensor _sensor;
+        private SkeletonViewModel _trackedJoints;
+
+        /// <summary>
+        /// Gets or sets the <see cref="KinectSensor"/> that is used for loading streams.
+        /// </summary>
+        /// <returns>The <see cref="KinectSensor"/> that is used for loading streams.</returns>
         public KinectSensor Sensor
         {
             get { return _sensor; }
@@ -29,8 +41,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        private SkeletonViewModel _trackedJoints;
+       
         public SkeletonViewModel TrackedJoints
         {
             get { return _trackedJoints; }
@@ -461,11 +472,12 @@ namespace Kinectomix.GestureRecorder.ViewModel
             return null;
         }
 
-        int frameRate = 0;
-        int frameCounter = 0;
-        TimeSpan elapsedTime = TimeSpan.Zero;
-
-        private int _fps;
+        /// <summary>
+        /// Gets or sets the current FPS speed.
+        /// </summary>
+        /// <value>
+        /// The current FPS speed.
+        /// </value>
         public int Fps
         {
             get { return _fps; }
@@ -482,14 +494,14 @@ namespace Kinectomix.GestureRecorder.ViewModel
             if (_lastDate == DateTime.MinValue)
                 _lastDate = DateTime.Now;
 
-            elapsedTime += DateTime.Now - _lastDate;
+            _elapsedTime += DateTime.Now - _lastDate;
             _lastDate = DateTime.Now;
 
-            if (elapsedTime > TimeSpan.FromSeconds(1))
+            if (_elapsedTime > TimeSpan.FromSeconds(1))
             {
-                elapsedTime -= TimeSpan.FromSeconds(1);
-                Fps = frameCounter;
-                frameCounter = 0;
+                _elapsedTime -= TimeSpan.FromSeconds(1);
+                Fps = _frameCounter;
+                _frameCounter = 0;
             }
 
             if (_recorder == null && _recognizer == null)
@@ -551,7 +563,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                     IsActiveSkeleton = false;
             }
 
-            frameCounter++;
+            _frameCounter++;
         }
     }
 }

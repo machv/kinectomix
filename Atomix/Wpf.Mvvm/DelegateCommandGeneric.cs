@@ -10,7 +10,6 @@ namespace Mach.Wpf.Mvvm
     {
         private readonly Action<T> _action;
         private readonly Func<T, bool> _canExecute;
-        private Action removeGesture;
 
         /// <summary>
         /// Initializes a new instance of <see cref="DelegateCommand{T}"/> class.
