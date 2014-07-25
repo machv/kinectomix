@@ -40,7 +40,7 @@ namespace Mach.Xna.Kinect.HandState
         /// <summary>
         /// Processes depth frame.
         /// </summary>
-        /// <param name="frame">Depth frame to process.</param>
+        /// <param name="depthFrame">Depth frame to process.</param>
         public void ProcessDepthData(DepthImageFrame depthFrame)
         {
             if (depthFrame != null)
@@ -55,7 +55,7 @@ namespace Mach.Xna.Kinect.HandState
         /// <summary>
         /// Processes skeleton frame.
         /// </summary>
-        /// <param name="depthFrame">Skeleton frame to process.</param>
+        /// <param name="skeletonFrame">Skeleton frame to process.</param>
         public void ProcessSkeletonData(SkeletonFrame skeletonFrame)
         {
             if (skeletonFrame != null)

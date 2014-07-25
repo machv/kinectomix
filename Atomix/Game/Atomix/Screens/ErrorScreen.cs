@@ -35,7 +35,7 @@ namespace Mach.Kinectomix.Screens
 
         protected override void LoadContent()
         {
-            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Splash");
+            _splashFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Title");
             _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
             _quitButton.Font = _normalFont;
@@ -55,7 +55,7 @@ namespace Mach.Kinectomix.Screens
         {
             Vector2 size;
 
-            string name = "Atomix for Kinect";
+            string name = "Kinectomix";
             size = _splashFont.MeasureString(name);
 
             _spriteBatch.Begin();

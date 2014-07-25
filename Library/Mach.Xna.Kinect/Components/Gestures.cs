@@ -24,7 +24,6 @@ namespace Mach.Xna.Kinect.Components
         private KinectManager _kinectManager;
         private Recognizer _recognizer;
         private string _gesturesLocation;
-        private RecognizedGesture _recognizedGesture;
         private KnownGestures _knownGestures;
         private bool _isUpdating;
         private bool _isEven;

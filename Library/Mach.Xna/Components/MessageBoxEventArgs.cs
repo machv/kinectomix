@@ -3,7 +3,7 @@
 namespace Mach.Xna.Components
 {
     /// <summary>
-    /// Provides data for the <see cref="KinectMessageBox.Changed"/> event.
+    /// Provides data for the <see cref="MessageBoxBase.Changed"/> event.
     /// </summary>
     public class MessageBoxEventArgs : EventArgs
     {

@@ -44,10 +44,10 @@ namespace Mach.Xna.Kinect.Components
         }
 
         /// <summary>
-        /// Creates new instance of clipped edge visualiser.
+        /// Creates new instance of clipped edge visualizer.
         /// </summary>
-        /// <param name="game"></param>
-        /// <param name="skeletons"></param>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="kinectManager">Kinect manager that manages connected sensor.</param>
         public ClippedEdgesVisualiser(Game game, KinectManager kinectManager)
             : base(game)
         {
@@ -56,10 +56,10 @@ namespace Mach.Xna.Kinect.Components
         }
 
         /// <summary>
-        /// Creates new instance of clipped edge visualiser.
+        /// Creates new instance of clipped edge visualizer.
         /// </summary>
-        /// <param name="game"></param>
-        /// <param name="skeletons"></param>
+        /// <param name="game">Game containing this component.</param>
+        /// <param name="kinectManager">Kinect manager that manages connected sensor.</param>
         /// <param name="content">ContentManager containing required assets.</param>
         public ClippedEdgesVisualiser(Game game, KinectManager kinectManager, ContentManager content)
             : base(game)
@@ -79,7 +79,7 @@ namespace Mach.Xna.Kinect.Components
         }
 
         /// <summary>
-        /// Loads and prepares required content for visualise clipped edges.
+        /// Loads and prepares required content for visualize clipped edges.
         /// </summary>
         protected override void LoadContent()
         {

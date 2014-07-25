@@ -4,6 +4,9 @@ using System;
 
 namespace Mach.Xna.Kinect.Components
 {
+    /// <summary>
+    /// Kinect-enabled button that uses textures.
+    /// </summary>
     public class KinectSpriteButton : SpriteButton
     {
         private KinectFocusChecker _focusChecker;

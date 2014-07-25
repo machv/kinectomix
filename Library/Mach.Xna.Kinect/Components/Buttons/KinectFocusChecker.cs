@@ -4,6 +4,9 @@ using System;
 
 namespace Mach.Xna.Kinect.Components
 {
+    /// <summary>
+    /// Provides logic for handling focus of the cursor within bounding rectangle.
+    /// </summary>
     public class KinectFocusChecker
     {
         private KinectCursor _cursor;
@@ -80,6 +83,12 @@ namespace Mach.Xna.Kinect.Components
                 _cursor = cursor;
         }
 
+        /// <summary>
+        /// Processes the cursor focus within selected bounding rectangle.
+        /// </summary>
+        /// <param name="boundingRectangle">The bounding rectangle in which focus will be checked.</param>
+        /// <param name="isSelected">if set to <c>true</c> required time for selection has been met.</param>
+        /// <returns></returns>
         public bool ProcessCursorFocus(Rectangle boundingRectangle, out bool isSelected)
         {
             isSelected = false;

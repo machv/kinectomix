@@ -1,33 +1,50 @@
 ﻿using Mach.Kinect.Gestures;
 using Microsoft.Xna.Framework.Content;
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace Mach.Xna.Kinect.Gestures
 {
+    /// <summary>
+    /// Represents known gesture for recognizing.
+    /// </summary>
     public class KnownGesture
     {
-        public string Filename { get; set; }
-        public GestureType Type { get; set; }
+        private string _fileName;
+        private GestureType _type;
+        private Gesture _instance;
 
-        [ContentSerializerIgnore]
-        public Gesture Instance { get; set; }
-
-    }
-
-    public class KnownGestures : Collection<KnownGesture>
-    {
-        public KnownGestures(KnownGesture[] gestures)
+        /// <summary>
+        /// Gets or sets the name of the file that contains definition of the gesture.
+        /// </summary>
+        /// <value>
+        /// The name of the file that contains definition of the gesture.
+        /// </value>
+        public string Filename
         {
-            Array.ForEach(gestures, g => Items.Add(g));
+            get { return _fileName; }
+            set { _fileName = value; }
         }
-        public KnownGesture this[GestureType type]
+        /// <summary>
+        /// Gets or sets the type of the gesture.
+        /// </summary>
+        /// <value>
+        /// The type of the gesture.
+        /// </value>
+        public GestureType Type
         {
-            get
-            {
-                return Items.Where(g => g.Type == type).FirstOrDefault();
-            }
+            get { return _type; }
+            set { _type = value; }
+        }
+        /// <summary>
+        /// Gets or sets the instance of the gesture loaded from definition file.
+        /// </summary>
+        /// <value>
+        /// The instance of the gesture loaded from definition file.
+        /// </value>
+        [ContentSerializerIgnore]
+        public Gesture Instance
+        {
+            get { return _instance; }
+            set { _instance = value; }
         }
     }
 }

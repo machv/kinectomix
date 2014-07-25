@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace Mach.Xna.Components
 {
+    /// <summary>
+    /// Base class with common logic for message box dialog.
+    /// </summary>
     public abstract class MessageBoxBase : DrawableGameComponent
     {
         private SpriteFont _font;
@@ -28,9 +31,21 @@ namespace Mach.Xna.Components
         private Button[] _renderedButtons;
         private IInputProvider _inputProvider;
 
+        /// <summary>
+        /// The button for OK result.
+        /// </summary>
         protected Button _buttonOk;
+        /// <summary>
+        /// The button for Cancel result.
+        /// </summary>
         protected Button _buttonCancel;
+        /// <summary>
+        /// The button for Yes result.
+        /// </summary>
         protected Button _buttonYes;
+        /// <summary>
+        /// The button for No result.
+        /// </summary>
         protected Button _buttonNo;
 
         /// <summary>
@@ -59,9 +74,9 @@ namespace Mach.Xna.Components
             get { return _isVisible; }
         }
         /// <summary>
-        /// Gets or sets if this message box should be in fullscreen background.
+        /// Gets or sets if this message box should be in full-screen background.
         /// </summary>
-        /// <returns>True if fullscreen backgrnound will be used.</returns>
+        /// <returns>True if full-screen background will be used.</returns>
         public bool IsFullscreen
         {
             get { return _isFullscreen; }
@@ -102,24 +117,48 @@ namespace Mach.Xna.Components
             get { return _buttonSpace; }
             set { _buttonSpace = value; }
         }
+        /// <summary>
+        /// Gets or sets the width of the buttons.
+        /// </summary>
+        /// <value>
+        /// The width of the buttons.
+        /// </value>
         public int ButtonsWidth
         {
             get { return _buttonWidth; }
             set { _buttonWidth = value; }
         }
+        /// <summary>
+        /// Gets or sets the height of the buttons.
+        /// </summary>
+        /// <value>
+        /// The height of the buttons.
+        /// </value>
         public int ButtonsHeight
         {
             get { return _buttonHeight; }
             set { _buttonHeight = value; }
         }
+        /// <summary>
+        /// Gets or sets the assigned input provider.
+        /// </summary>
+        /// <value>
+        /// The input provider.
+        /// </value>
         public IInputProvider InputProvider
         {
             get { return _inputProvider; }
+            set { _inputProvider = value; }
         }
 
-        /// Occurs when a result inside <see cref="KinectMessageBox"/> is selected.
+        /// Occurs when a result inside <see cref="MessageBoxBase"/> is selected.
         public event EventHandler<MessageBoxEventArgs> Changed;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageBoxBase"/> class.
+        /// </summary>
+        /// <param name="game">The game containing this component.</param>
+        /// <param name="inputProvider">The assigned input provider.</param>
         protected MessageBoxBase(Game game, IInputProvider inputProvider)
             : base(game)
         {

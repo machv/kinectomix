@@ -38,9 +38,10 @@ namespace Mach.Xna.Components
         }
 
         /// <summary>
-        /// Creates new instance of <see cref="FrameRateInfo"/> component.
+        /// Creates new instance of <see cref="FrameRateInfo" /> component.
         /// </summary>
         /// <param name="game">Game containing this component.</param>
+        /// <param name="contentManager">The content manager.</param>
         public FrameRateInfo(Game game, ContentManager contentManager)
             : base(game)
         {

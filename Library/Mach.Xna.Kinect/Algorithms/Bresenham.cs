@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Mach.Xna.Kinect.Algorithms
 {
+    /// <summary>
+    /// Contains implementation of Bresenham's line algorithm for integer rendering.
+    /// </summary>
     public static class Bresenham
     {
         private static void Swap<T>(ref T first, ref T second)
@@ -14,18 +17,24 @@ namespace Mach.Xna.Kinect.Algorithms
             second = temp;
         }
 
+        /// <summary>
+        /// Gets the integer points for line between start and end points.
+        /// </summary>
+        /// <param name="start">The start.</param>
+        /// <param name="end">The end.</param>
+        /// <returns></returns>
         public static IEnumerable<Point> GetLinePoints(Point start, Point end)
         {
             bool isSteep = Math.Abs(end.Y - start.Y) > Math.Abs(end.X - end.Y);
             if (isSteep)
             {
-                Swap<int>(ref start.X, ref start.Y);
-                Swap<int>(ref end.X, ref end.Y);
+                Swap(ref start.X, ref start.Y);
+                Swap(ref end.X, ref end.Y);
             }
 
             if (start.X > end.X)
             {
-                Swap<Point>(ref start, ref end);
+                Swap(ref start, ref end);
             }
 
             int deltaX = end.X - start.X;

@@ -3,6 +3,9 @@ using System;
 
 namespace Mach.Xna.ScreenManagement
 {
+    /// <summary>
+    /// Base class for game screens.
+    /// </summary>
     public abstract class GameScreen : IDisposable
     {
         private GameComponentCollection _components;
@@ -53,7 +56,6 @@ namespace Mach.Xna.ScreenManagement
         /// Update logic for the game screen.
         /// </summary>
         /// <param name="gameTime">Game time.</param>
-        /// <param name="isActive">True if this screen is now visible.</param>
         public virtual void Update(GameTime gameTime)
         {
             foreach (IGameComponent component in _components)
@@ -67,7 +69,6 @@ namespace Mach.Xna.ScreenManagement
         /// Draw the game screen.
         /// </summary>
         /// <param name="gameTime">Game time.</param>
-        /// <param name="isActive">True if this screen is now visible.</param>
         public virtual void Draw(GameTime gameTime)
         {
             foreach (IGameComponent component in _components)

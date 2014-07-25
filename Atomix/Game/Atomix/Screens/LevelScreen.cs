@@ -24,6 +24,7 @@ namespace Mach.Kinectomix.Screens
     {
         private const int TileWidth = 60;
         private const int TileHeight = 60;
+        private bool _isGestureCandidate = false;
         private TimeSpan _minimalHoverDuration = TimeSpan.FromSeconds(2);
         private int _activeTileOpacityDirection;
         private float _activeTileOpacity;
@@ -42,9 +43,6 @@ namespace Mach.Kinectomix.Screens
         private SpriteFont _timeFont;
         private Point activeAtomIndex = new Point(-1, -1);
         private ContentManager _content;
-        private KinectButton _levelsButton;
-        private KinectButton _repeatButton;
-        private KinectButton _nextButton;
         private SwipeRecognizer _swipeGestures;
         private Level _levelDefinition;
         private LevelViewModel _level;
@@ -55,7 +53,7 @@ namespace Mach.Kinectomix.Screens
         private Button _levelNameButton;
 
         private int _leftBoxEndX = 400;
-        private int _leftMargin = 55;
+
         private int _topOffsetMain = 120;
         private Texture2D _backgroundTexture;
 
@@ -863,21 +861,7 @@ namespace Mach.Kinectomix.Screens
             return MoveDirection.None;
         }
 
-        bool _isGestureCandidate = false;
-        bool isToLeftGesture = false;
-        bool isToRightGesture = false;
-        double gestureAccumulatedDistanceX = 0;
-        double gestureAxeTolerance = 10;
-        double gestureThreshold = 20;
-        MoveDirection gestureDirection;
-        Vector2 lastHandPosition;
-        Vector2 startHandPosition;
-        Vector3 startHandPositionReal;
-        Vector3 lastHandPositionReal;
-        double lastDiff;
-        private int _levelNameWidth = 360;
-        private Viewport _levelNameViewPort;
-        private Viewport _defaultViewport;
+
 
         private bool CheckFinish()
         {

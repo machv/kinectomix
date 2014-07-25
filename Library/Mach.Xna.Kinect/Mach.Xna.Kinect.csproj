@@ -107,6 +107,7 @@
     <Compile Include="Components\Cursor\Hand State\IHandStateTracker.cs" />
     <Compile Include="Components\Cursor\Hand State\InteractionsClosedHandTracker.cs" />
     <Compile Include="Components\Cursor\Hand State\HoverHandTracker.cs" />
+    <Compile Include="Gestures\KnownGestures.cs" />
     <Compile Include="Input\KinectInputProvider.cs" />
     <Compile Include="Input\KinectInputState.cs" />
     <Compile Include="KinectInteractionClient.cs" />

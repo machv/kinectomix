@@ -30,6 +30,12 @@ namespace Mach.Xna.Components
         private Viewport _defaultViewport;
         private TextScrolling _textScrolling;
 
+        // for scrolling
+        private float _scrollDifferenceX = 0;
+        private bool _toRight = true;
+        private TimeSpan _delay = TimeSpan.FromSeconds(1);
+        private DateTime _whenContinue;
+
         /// <summary>
         /// Gets or sets caption displayed on this button.
         /// </summary>
@@ -279,12 +285,6 @@ namespace Mach.Xna.Components
             base.Update(gameTime);
         }
 
-        float _scrollDifferenceX = 0;
-        bool toRight = true;
-        bool dokola = true;
-        TimeSpan delay = TimeSpan.FromSeconds(1);
-        DateTime whenContinue;
-
         /// <summary>
         /// Draws this button on the screen.
         /// </summary>
@@ -379,9 +379,9 @@ namespace Mach.Xna.Components
                                 }
                                 break;
                             case TextScrolling.Slide:
-                                if (whenContinue < DateTime.Now)
+                                if (_whenContinue < DateTime.Now)
                                 {
-                                    if (toRight)
+                                    if (_toRight)
                                     {
                                         // scroll
                                         if (levelNameSize.X + _scrollDifferenceX > _levelNameViewPort.Width)
@@ -390,12 +390,12 @@ namespace Mach.Xna.Components
                                         }
                                         else
                                         {
-                                            toRight = false;
+                                            _toRight = false;
                                             _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
                                         }
                                     }
 
-                                    if (!toRight)
+                                    if (!_toRight)
                                     {
                                         if (_scrollDifferenceX < 0)
                                         {
@@ -403,8 +403,8 @@ namespace Mach.Xna.Components
                                         }
                                         else
                                         {
-                                            toRight = true;
-                                            whenContinue = DateTime.Now + delay;
+                                            _toRight = true;
+                                            _whenContinue = DateTime.Now + _delay;
                                         }
                                     }
                                 }

@@ -20,7 +20,6 @@ namespace Mach.Kinectomix.Screens
         private SpriteBatch _spriteBatch;
         private List<KinectButton> _buttons = new List<KinectButton>();
         private SpriteFont _normalFont;
-        private SpriteFont _splashFont;
         private SpriteFont _titleFont;
         private SwipeRecognizer swipe;
         private KinectCursor _cursor;
