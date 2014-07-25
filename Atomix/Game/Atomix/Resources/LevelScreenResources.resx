@@ -147,6 +147,9 @@
   <data name="PlayAgain" xml:space="preserve">
     <value>play again</value>
   </data>
+  <data name="RestartLevel" xml:space="preserve">
+    <value>restart level</value>
+  </data>
   <data name="Time" xml:space="preserve">
     <value>time</value>
   </data>

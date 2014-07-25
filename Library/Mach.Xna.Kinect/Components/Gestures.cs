@@ -168,16 +168,19 @@ namespace Mach.Xna.Kinect.Components
         /// <param name="gameTime">The elapsed game time.</param>
         public override void Update(GameTime gameTime)
         {
-            if (_isEven)
+            if (_kinectManager.Skeletons != null)
             {
-                if (_kinectManager.Skeletons.TrackedSkeleton != null)
-                    _pendingSkeletons.Enqueue(_kinectManager.Skeletons.TrackedSkeleton);
-            }
-            _isEven = !_isEven;
+                if (_isEven)
+                {
+                    if (_kinectManager.Skeletons.TrackedSkeleton != null)
+                        _pendingSkeletons.Enqueue(_kinectManager.Skeletons.TrackedSkeleton);
+                }
+                _isEven = !_isEven;
 
-            if (_isUpdating == false && _pendingSkeletons.Count > _minimalFramesToProcess)
-            {
-                Task.Factory.StartNew(() => ProcessRecognizing());
+                if (_isUpdating == false && _pendingSkeletons.Count > _minimalFramesToProcess)
+                {
+                    Task.Factory.StartNew(() => ProcessRecognizing());
+                }
             }
 
             base.Update(gameTime);

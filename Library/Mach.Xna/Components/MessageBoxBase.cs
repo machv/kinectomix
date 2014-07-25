@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mach.Xna.Input;
+using System.Linq;
 
 namespace Mach.Xna.Components
 {
@@ -187,7 +188,8 @@ namespace Mach.Xna.Components
 
                 if (_renderedButtons != null)
                 {
-                    int x = GraphicsDevice.Viewport.Bounds.Width / 2 - (_renderedButtons.Length * (_buttonWidth + _buttonSpace)) / 2;
+                    int buttonsWidth = _renderedButtons.Select(b => b.Width).Sum() + _buttonSpace * _renderedButtons.Length;
+                    int x = GraphicsDevice.Viewport.Bounds.Width / 2 - buttonsWidth / 2;
                     int y = GraphicsDevice.Viewport.Bounds.Height / 2 - _height / 8 + _buttonHeight / 2;
 
                     foreach (Button button in _renderedButtons)
@@ -195,7 +197,7 @@ namespace Mach.Xna.Components
                         button.Position = new Vector2(x, y);
                         button.Update(gameTime);
 
-                        x += _buttonWidth + _buttonSpace;
+                        x += button.Width + _buttonSpace;
                     }
                 }
             }

@@ -179,22 +179,49 @@ namespace Mach.Kinect
 
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KinectManager"/> class.
+        /// </summary>
+        /// <param name="startColorStream">if set to <c>true</c> color stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="startDepthStream">if set to <c>true</c> depth stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="startSkeletonStream">if set to <c>true</c> skeleton stream on connected Kinect sensors will be enabled.</param>
         public KinectManager(bool startColorStream, bool startDepthStream, bool startSkeletonStream)
                 : this(startColorStream, startDepthStream, startSkeletonStream, int.MaxValue, Skeletons.SkeletonTrackingType.NearestFullyTracked)
         {
 
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KinectManager"/> class.
+        /// </summary>
+        /// <param name="startColorStream">if set to <c>true</c> color stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="startDepthStream">if set to <c>true</c> depth stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="connectedSensorsLimit">The connected sensors limit.</param>
         public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit)
                 : this(startColorStream, startDepthStream, connectedSensorsLimit, Skeletons.SkeletonTrackingType.NearestFullyTracked)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KinectManager"/> class.
+        /// </summary>
+        /// <param name="startColorStream">if set to <c>true</c> color stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="startDepthStream">if set to <c>true</c> depth stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="connectedSensorsLimit">The connected sensors limit.</param>
+        /// <param name="skeletonsTrackingType">Type of the skeletons tracking.</param>
         public KinectManager(bool startColorStream, bool startDepthStream, int connectedSensorsLimit, Skeletons.SkeletonTrackingType skeletonsTrackingType)
                 : this(startColorStream, startDepthStream, true, connectedSensorsLimit, skeletonsTrackingType)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KinectManager"/> class.
+        /// </summary>
+        /// <param name="startColorStream">if set to <c>true</c> color stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="startDepthStream">if set to <c>true</c> depth stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="startSkeletonStream">if set to <c>true</c> skeleton stream on connected Kinect sensors will be enabled.</param>
+        /// <param name="connectedSensorsLimit">The connected sensors limit.</param>
+        /// <param name="skeletonsTrackingType">Type of the skeletons tracking.</param>
         public KinectManager(bool startColorStream, bool startDepthStream, bool startSkeletonStream, int connectedSensorsLimit, Skeletons.SkeletonTrackingType skeletonsTrackingType)
         {
             _startColorStream = startColorStream;
@@ -210,6 +237,9 @@ namespace Mach.Kinect
             DiscoverSensor();
         }
 
+        /// <summary>
+        /// Processes the update on each connected Kinect sensor managed by this <see cref="KinectManager"/>.
+        /// </summary>
         public void ProcessUpdate()
         {
             foreach (ConnectedSensor sensor in _sensors)
@@ -218,27 +248,11 @@ namespace Mach.Kinect
             }
         }
 
-        private void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
-        {
-            if (e.Status != KinectStatus.Connected)
-            {
-                e.Sensor.Stop();
-            }
-
-            if (e.Status == KinectStatus.Disconnected)
-            {
-                ConnectedSensor sensor = _sensors.Where(s => s.Sensor.DeviceConnectionId == e.Sensor.DeviceConnectionId).FirstOrDefault();
-                if (sensor != null)
-                {
-                    _sensors.Remove(sensor);
-                }
-            }
-
-            _lastStatus = e.Status;
-
-            DiscoverSensor();
-        }
-
+        /// <summary>
+        /// Gets the descriptive text of the <see cref="KinectStatus"/> value.
+        /// </summary>
+        /// <param name="kinectStatus">The kinect status.</param>
+        /// <returns></returns>
         public string GetStatusDescription(KinectStatus kinectStatus)
         {
             string status = Localization.KinectManagerResources.Unknown;
@@ -278,6 +292,27 @@ namespace Mach.Kinect
             }
 
             return status;
+        }
+
+        private void KinectSensors_StatusChanged(object sender, StatusChangedEventArgs e)
+        {
+            if (e.Status != KinectStatus.Connected)
+            {
+                e.Sensor.Stop();
+            }
+
+            if (e.Status == KinectStatus.Disconnected)
+            {
+                ConnectedSensor sensor = _sensors.Where(s => s.Sensor.DeviceConnectionId == e.Sensor.DeviceConnectionId).FirstOrDefault();
+                if (sensor != null)
+                {
+                    _sensors.Remove(sensor);
+                }
+            }
+
+            _lastStatus = e.Status;
+
+            DiscoverSensor();
         }
 
         private void DiscoverSensor()

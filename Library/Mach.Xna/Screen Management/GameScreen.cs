@@ -87,8 +87,14 @@ namespace Mach.Xna.ScreenManagement
         /// </summary>
         protected virtual void UnloadContent() { }
 
+        /// <summary>
+        /// Occurs when this screen is activated and rendered.
+        /// </summary>
         public virtual void Activated() { }
 
+        /// <summary>
+        /// Occurs when this screen is deactivated and removed from rendering.
+        /// </summary>
         public virtual void Deactivated() { }
 
         /// <summary>

@@ -13,7 +13,7 @@ using Mach.Xna.Kinect.Gestures;
 using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.ViewModel;
 using Mach.Kinect.Gestures;
-using Mach.Kinectomix.Components;
+using Mach.Xna;
 
 namespace Mach.Kinectomix.Screens
 {
@@ -34,7 +34,7 @@ namespace Mach.Kinectomix.Screens
         private Texture2D idleTexture;
         private MouseState mouseState;
         private MouseState lastMouseState;
-        private SoundEffect applause;
+        private SoundEffect _applause;
         private Vector2 boardPosition;
         private SpriteFont _normalFont;
         private SpriteFont _splashFont;
@@ -42,9 +42,9 @@ namespace Mach.Kinectomix.Screens
         private SpriteFont _timeFont;
         private Point activeAtomIndex = new Point(-1, -1);
         private ContentManager _content;
-        private Button _levelsButton;
-        private Button _repeatButton;
-        private Button _nextButton;
+        private KinectButton _levelsButton;
+        private KinectButton _repeatButton;
+        private KinectButton _nextButton;
         private SwipeRecognizer _swipeGestures;
         private Level _levelDefinition;
         private LevelViewModel _level;
@@ -52,6 +52,7 @@ namespace Mach.Kinectomix.Screens
         private KinectCircleCursor _cursor;
         private SpriteButton _pauseButton;
         private LevelHighscore _highscore;
+        private Button _levelNameButton;
 
         private int _leftBoxEndX = 400;
         private int _leftMargin = 55;
@@ -76,22 +77,21 @@ namespace Mach.Kinectomix.Screens
 
         private bool _isLevelFinished = false;
 
+        // Message boxes
+        BoardTileViewModel currentlyHoveredTile = null;
+        DateTime lastHoveredTileTime = DateTime.MinValue;
+        private KeyboardState _previousKeyboardState;
+        private KinectMessageBox _pauseMessageBox;
+        private KinectMessageBox _finishedMessageBox;
+        private bool _isPaused = false;
+        private KinectButton[] _finishButtons;
+        private KinectButton[] _pauseButtons;
 
-        Texture2D bch;
-
-        Viewport defaultViewport;
-        Viewport leftViewport;
-        SpriteFont font;
-
-        float _scrollDifferenceX = 0;
-        bool toRight = true;
-        bool dokola = true;
-        TimeSpan delay = TimeSpan.FromSeconds(1);
-        DateTime whenContinue;
-
-
-
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LevelScreen"/> class.
+        /// </summary>
+        /// <param name="currentLevel">The level to play.</param>
+        /// <param name="spriteBatch">The sprite batch.</param>
         public LevelScreen(Level currentLevel, SpriteBatch spriteBatch)
         {
             _swipeGestures = new SwipeRecognizer();
@@ -99,6 +99,9 @@ namespace Mach.Kinectomix.Screens
             _spriteBatch = spriteBatch;
         }
 
+        /// <summary>
+        /// Occurs when this screen is activated.
+        /// </summary>
         public override void Activated()
         {
             _gameStarted = DateTime.Now;
@@ -106,62 +109,59 @@ namespace Mach.Kinectomix.Screens
             base.Activated();
         }
 
+        /// <summary>
+        /// Initializes this screen.
+        /// </summary>
         public override void Initialize()
         {
+            _activeTileOpacity = 0.0f;
+            _activeTileOpacityDirection = 1;
+            _level = LevelViewModel.FromModel(_levelDefinition, ScreenManager.GraphicsDevice);
+            _highscore = KinectomixGame.State.GetCurrentLevelHighscore();
+
             KinectCursor cursor = (ScreenManager.Game as KinectomixGame).Cursor;
 
             if (cursor is KinectCircleCursor)
                 _cursor = cursor as KinectCircleCursor;
 
+            string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : Resources.LevelScreenResources.DefaultLevelName;
+            _levelNameButton = new Button(ScreenManager.Game, levelName);
+
             _pauseButton = new KinectSpriteButton(ScreenManager.Game, _cursor);
             _pauseButton.Selected += Pause_Selected;
-
-            Components.Add(_pauseButton);
 
             _pauseMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, cursor);
             _pauseMessageBox.Changed += pause_Changed;
 
-            _level = LevelViewModel.FromModel(_levelDefinition, ScreenManager.GraphicsDevice);
-            _highscore = KinectomixGame.State.GetCurrentLevelHighscore();
+            _finishedMessageBox = new KinectMessageBox(ScreenManager.Game, ScreenManager.InputProvider, cursor);
+            _finishedMessageBox.Changed += _finishedMessageBox_Changed;
 
-            _activeTileOpacity = 0.0f;
-            _activeTileOpacityDirection = 1;
+            _finishButtons = new KinectButton[] {
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.Levels) { Tag = MessageBoxResult.Custom1 },
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.PlayAgain) { Tag = MessageBoxResult.Custom2 },
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.NextLevel) { Tag = MessageBoxResult.Custom3 },
+            };
 
+            foreach (Button button in _finishButtons)
+                button.Initialize();
+
+            _pauseButtons = new KinectButton[] {
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.MainMenu) { Tag = MessageBoxResult.Custom1 },
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.PlayAgain) { Tag = MessageBoxResult.Custom2 },
+                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.ContinueGame) { Tag = MessageBoxResult.Custom3 },
+            };
+
+            foreach (Button button in _pauseButtons)
+                button.Initialize();
+
+            Components.Add(_levelNameButton);
+            Components.Add(_pauseButton);
+            Components.Add(_finishedMessageBox);
             Components.Add(_pauseMessageBox);
-
-            _levelsButton = new Button(ScreenManager.Game, Resources.LevelScreenResources.Levels);
-            _levelsButton.InputProvider = ScreenManager.InputProvider;
-            _levelsButton.IsVisible = false;
-
-            _repeatButton = new Button(ScreenManager.Game, Resources.LevelScreenResources.PlayAgain);
-            _repeatButton.InputProvider = ScreenManager.InputProvider;
-            _repeatButton.IsVisible = false;
-
-            _nextButton = new Button(ScreenManager.Game, Resources.LevelScreenResources.NextLevel);
-            _nextButton.InputProvider = ScreenManager.InputProvider;
-            _nextButton.IsVisible = false;
-
-            Components.Add(_levelsButton);
-            Components.Add(_repeatButton);
-            Components.Add(_nextButton);
 
             _lastDate = DateTime.Now;
 
             base.Initialize();
-        }
-
-        private void Pause_Selected(object sender, EventArgs e)
-        {
-            PauseGame();
-        }
-
-        private void pause_Changed(object sender, MessageBoxEventArgs e)
-        {
-            _pauseMessageBox.Hide();
-            _pauseButton.Unfreeze();
-
-            _isPaused = false;
-            _lastDate = DateTime.Now;
         }
 
         /// <summary>
@@ -169,19 +169,6 @@ namespace Mach.Kinectomix.Screens
         /// </summary>
         protected override void LoadContent()
         {
-            defaultViewport = ScreenManager.GraphicsDevice.Viewport;
-
-            font = ScreenManager.Content.Load<SpriteFont>("Fonts/LevelName");
-            bch = ScreenManager.Content.Load<Texture2D>("background");
-
-            defaultViewport = ScreenManager.GraphicsDevice.Viewport;
-            leftViewport = defaultViewport;
-            leftViewport.Width = _levelNameWidth;
-            leftViewport.Height = 60;
-            leftViewport.X = 50;
-            leftViewport.Y = 30;
-
-
             if (_content == null)
                 _content = new ContentManager(ScreenManager.Game.Services, "Content");
 
@@ -228,7 +215,7 @@ namespace Mach.Kinectomix.Screens
 
             int moleculeWidth = _level.Molecule.ColumnsCount * TileWidth;
             int moleculeHeight = _level.Molecule.RowsCount * TileHeight;
-            int maxWidth = 355; 
+            int maxWidth = 355;
             int maxHeight = 325;
             scale = 1;
             int offsetY = _topOffsetMain;
@@ -259,12 +246,23 @@ namespace Mach.Kinectomix.Screens
             emptyTexture = _content.Load<Texture2D>("Board/Empty");
             arrowTexture = _content.Load<Texture2D>("Board/Arrow");
             activeTexture = _content.Load<Texture2D>("Board/Active");
-            applause = _content.Load<SoundEffect>("Sounds/Applause");
+            _applause = _content.Load<SoundEffect>("Sounds/Applause");
             _normalFont = _content.Load<SpriteFont>("Fonts/Normal");
             _splashFont = _content.Load<SpriteFont>("Fonts/Splash");
             _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
             _timeFont = _content.Load<SpriteFont>("Fonts/Time");
             idleTexture = _content.Load<Texture2D>("Idle");
+
+            _levelNameButton.Font = _levelFont;
+            _levelNameButton.IsEnabled = false;
+            _levelNameButton.DisabledForeground = KinectomixGame.BrickColor;
+            _levelNameButton.DisabledBackground = Color.Transparent;
+            _levelNameButton.TextScrolling = TextScrolling.Slide;
+            _levelNameButton.TextAlignment = TextAlignment.Left;
+            _levelNameButton.Position = new Vector2(50, 30);
+            _levelNameButton.Width = 360;
+            _levelNameButton.Height = 60;
+            _levelNameButton.BorderThickness = 0;
 
             _pauseButton.Texture = _content.Load<Texture2D>("Buttons/PauseNormal");
             _pauseButton.Focused = _content.Load<Texture2D>("Buttons/PauseFocused");
@@ -272,92 +270,24 @@ namespace Mach.Kinectomix.Screens
             _pauseButton.Height = 60;
             _pauseButton.InputProvider = ScreenManager.InputProvider;
 
-            _levelsButton.Font = _normalFont;
-            _levelsButton.Selected += _levelsButton_Selected;
-
-            _repeatButton.Font = _normalFont;
-            _repeatButton.Selected += _repeatButton_Selected;
-
-            _nextButton.Font = _normalFont;
-            _nextButton.Selected += _nextButton_Selected;
-
             _pauseMessageBox.Font = _normalFont;
+            _finishedMessageBox.Font = _normalFont;
+
+            InitializeButtons(_finishButtons);
+            InitializeButtons(_pauseButtons);
 
             base.LoadContent();
         }
 
-        void _nextButton_Selected(object sender, EventArgs e)
-        {
-            GameScreen gameScreen = null;
-
-            // Load next level
-            Level newLevel = KinectomixGame.State.SwitchToNextLevel();
-
-            if (newLevel == null)
-            {
-                // We are on last level -> go to main screen
-                gameScreen = new StartScreen(_spriteBatch);
-            }
-            else
-            {
-                gameScreen = new LevelScreen(newLevel, _spriteBatch);
-            }
-
-            ScreenManager.Add(gameScreen);
-            ScreenManager.Activate(gameScreen);
-        }
-
-        void _repeatButton_Selected(object sender, EventArgs e)
-        {
-            GameScreen gameScreen = null;
-
-            // Load current level again
-            Level newLevel = KinectomixGame.State.GetCurrentLevel();
-            gameScreen = new LevelScreen(newLevel, _spriteBatch);
-
-            ScreenManager.Add(gameScreen);
-            ScreenManager.Activate(gameScreen);
-        }
-
-        void _levelsButton_Selected(object sender, EventArgs e)
-        {
-            GameScreen gameScreen = new LevelsScreen(_spriteBatch);
-
-            ScreenManager.Add(gameScreen);
-            ScreenManager.Activate(gameScreen);
-        }
-
+        /// <summary>
+        /// Unloads the content.
+        /// </summary>
         protected override void UnloadContent()
         {
             _content.Unload();
 
             base.UnloadContent();
         }
-
-        BoardTileViewModel currentlyHoveredTile = null;
-        DateTime lastHoveredTileTime = DateTime.MinValue;
-        private KeyboardState _previousKeyboardState;
-        private KinectMessageBox _pauseMessageBox;
-        private bool _isPaused = false;
-
-        private void PauseGame()
-        {
-            _isPaused = true;
-
-            KinectButton[] buttons = new KinectButton[] {
-                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.MainMenu) { Font = _normalFont, Tag = MessageBoxResult.Custom1, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
-                new KinectButton(ScreenManager.Game, _cursor, Resources.LevelScreenResources.ContinueGame) { Font = _normalFont, Tag = MessageBoxResult.OK, Width = _pauseMessageBox.ButtonsWidth, Height = _pauseMessageBox.ButtonsHeight, Background = Color.DarkGray, BorderColor = Color.White },
-            };
-
-            foreach (Button button in buttons)
-                button.Initialize();
-
-            _pauseButton.Freeze();
-
-            _pauseMessageBox.Show(Resources.LevelScreenResources.GamePaused, buttons);
-        }
-
-
 
         public override void Update(GameTime gameTime)
         {
@@ -377,16 +307,12 @@ namespace Mach.Kinectomix.Screens
                 bool clickOccurred = false;
                 bool isGestureDetected = false;
 
-                // The active state from the last frame is now old
                 lastMouseState = mouseState;
-
-                // Get the mouse state relevant for this frame
                 mouseState = Mouse.GetState();
 
                 // Recognize a single click of the left mouse button
                 if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
                 {
-                    // React to the click
                     clickOccurred = true;
                 }
 
@@ -409,16 +335,11 @@ namespace Mach.Kinectomix.Screens
                     if (_highscore.UpdateIfBetter(_moves, _gameDuration))
                         KinectomixGame.State.SetCurrentLevelHighscore(_highscore);
 
-                    _repeatButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 - _repeatButton.Width - 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                    _repeatButton.IsVisible = true;
-                    _levelsButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                    _levelsButton.IsVisible = true;
-                    _nextButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - _levelsButton.Width / 2 + _nextButton.Width + 30, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 + 40);
-                    _nextButton.IsVisible = true;
                     return;
                 }
 
                 _gameDuration += DateTime.Now - _lastDate;
+                _lastDate = DateTime.Now;
 
                 if (isMovementAnimation)
                 {
@@ -449,8 +370,7 @@ namespace Mach.Kinectomix.Screens
                         bool isFinished = CheckFinish();
                         if (isFinished)
                         {
-                            applause.Play();
-                            _isLevelFinished = true;
+                            ProcessFinish();
                         }
                     }
                 }
@@ -650,8 +570,184 @@ namespace Mach.Kinectomix.Screens
                         _level.Board[activeAtomIndex.X, activeAtomIndex.Y].Opacity = _activeTileOpacity;
                     }
                 }
+            }
+        }
 
-                _lastDate = DateTime.Now;
+        public override void Draw(GameTime gameTime)
+        {
+            _spriteBatch.Begin();
+
+            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
+
+            DrawBoard(_spriteBatch, _level.Board, true);
+            DrawBoard(_spriteBatch, _level.Molecule);
+
+            string text = Resources.LevelScreenResources.Moves;
+            var scoreSize = _normalFont.MeasureString(text);
+            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 490), KinectomixGame.BrickColor);
+
+            text = Resources.LevelScreenResources.Time;
+            var timeSize = _normalFont.MeasureString(text);
+            float dif = scoreSize.X - timeSize.X;
+
+            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 595), KinectomixGame.BrickColor);
+
+            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _moves), new Vector2(55, 525), KinectomixGame.BrickColor);
+            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(55, 630), KinectomixGame.BrickColor);
+
+            Vector2 textSize;
+            int x;
+            string textToRender;
+            if (_highscore != null)
+            {
+                textToRender = Resources.LevelScreenResources.HighScore;
+                textSize = _normalFont.MeasureString(textToRender);
+                x = _leftBoxEndX - (int)textSize.X;
+                _spriteBatch.DrawStringWithShadow(_normalFont, textToRender, new Vector2(x, 490), Color.Gray);
+
+                textToRender = string.Format("{0}", _highscore.Moves);
+                textSize = _timeFont.MeasureString(textToRender);
+                x = _leftBoxEndX - (int)textSize.X;
+                _spriteBatch.DrawStringWithShadow(_timeFont, textToRender, new Vector2(x, 525), Color.Gray);
+
+                textToRender = string.Format("{0}", _highscore.Time.ToString(@"mm\:ss"));
+                textSize = _timeFont.MeasureString(textToRender);
+                x = _leftBoxEndX - (int)textSize.X;
+                _spriteBatch.DrawStringWithShadow(_timeFont, textToRender, new Vector2(x, 630), Color.Gray);
+            }
+
+            if (isMovementAnimation)
+            {
+                _spriteBatch.Draw(GetTileTexture(atomToMove), new Rectangle((int)atomPosition.X, (int)atomPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale)), Color.White);
+            }
+
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+
+
+        private void PauseGame()
+        {
+            _isPaused = true;
+            _pauseButton.Freeze();
+
+            _pauseMessageBox.Show(Resources.LevelScreenResources.GamePaused, _pauseButtons);
+        }
+
+        private void ProcessFinish()
+        {
+            _isPaused = true;
+            _isLevelFinished = true;
+
+            _applause.Play();
+            _finishedMessageBox.Show(Resources.LevelScreenResources.LevelCompleted, _finishButtons);
+        }
+
+        private void Pause_Selected(object sender, EventArgs e)
+        {
+            PauseGame();
+        }
+
+        private void pause_Changed(object sender, MessageBoxEventArgs e)
+        {
+            switch (e.Result)
+            {
+                case MessageBoxResult.Custom1: // MainMenu
+                    ShowStart();
+                    break;
+                case MessageBoxResult.Custom2: // PlayAgain
+                    RestartCurrentLevel();
+                    break;
+                case MessageBoxResult.Custom3: // ContinueGame
+                    _pauseMessageBox.Hide();
+                    _pauseButton.Unfreeze();
+
+                    _isPaused = false;
+                    _lastDate = DateTime.Now;
+                    break;
+            }
+        }
+
+        private void _finishedMessageBox_Changed(object sender, MessageBoxEventArgs e)
+        {
+            switch (e.Result)
+            {
+                case MessageBoxResult.Custom1: // Levels
+                    ShowLevels();
+
+                    // Keep message box visible, user can navigate back
+                    _pauseMessageBox.Show(Resources.LevelScreenResources.GamePaused, _pauseButtons);
+                    break;
+                case MessageBoxResult.Custom2: // PlayAgain
+                    RestartCurrentLevel();
+                    break;
+                case MessageBoxResult.Custom3: // NextLevel
+                    GoToNextLevel();
+                    break;
+            }
+        }
+
+        private void GoToNextLevel()
+        {
+            GameScreen gameScreen = null;
+
+            // Load next level
+            Level newLevel = KinectomixGame.State.SwitchToNextLevel();
+
+            if (newLevel == null)
+            {
+                // We are on last level -> go to main screen
+                gameScreen = new StartScreen(_spriteBatch);
+            }
+            else
+            {
+                gameScreen = new LevelScreen(newLevel, _spriteBatch);
+            }
+
+            ScreenManager.Add(gameScreen);
+            ScreenManager.Activate(gameScreen);
+        }
+
+        private void RestartCurrentLevel()
+        {
+            GameScreen gameScreen = null;
+
+            // Load current level again
+            Level newLevel = KinectomixGame.State.GetCurrentLevel();
+            gameScreen = new LevelScreen(newLevel, _spriteBatch);
+
+            ScreenManager.Add(gameScreen);
+            ScreenManager.Activate(gameScreen);
+        }
+
+        private void ShowLevels()
+        {
+            GameScreen gameScreen = new LevelsScreen(_spriteBatch);
+
+            ScreenManager.Add(gameScreen);
+            ScreenManager.Activate(gameScreen);
+        }
+
+        private void ShowStart()
+        {
+            GameScreen gameScreen = new StartScreen(_spriteBatch);
+
+            ScreenManager.Add(gameScreen);
+            ScreenManager.Activate(gameScreen);
+        }
+
+        private void InitializeButtons(Button[] buttons)
+        {
+            foreach (Button button in buttons)
+            {
+                button.Font = _normalFont;
+                button.Width = 310;
+                button.InputProvider = ScreenManager.InputProvider;
+                button.Background = Color.Silver;
+                button.Foreground = Color.White;
+                button.ActiveBackground = Color.Black;
+                button.ActiveForeground = Color.White;
             }
         }
 
@@ -782,131 +878,6 @@ namespace Mach.Kinectomix.Screens
         private int _levelNameWidth = 360;
         private Viewport _levelNameViewPort;
         private Viewport _defaultViewport;
-
-        public override void Draw(GameTime gameTime)
-        {
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.Game.GraphicsDevice.Viewport.Bounds.Height), Color.White);
-            _spriteBatch.End();
-
-            _spriteBatch.Begin();
-
-            _spriteBatch.GraphicsDevice.Viewport = leftViewport;
-
-            string levelName = string.IsNullOrEmpty(_level.Name) == false ? _level.Name : Resources.LevelScreenResources.DefaultLevelName;
-            Vector2 levelNameSize = font.MeasureString(levelName);
-
-            if (levelNameSize.X > ScreenManager.GraphicsDevice.Viewport.Width)
-            {
-                if (dokola)
-                {
-                    if (levelNameSize.X + _scrollDifferenceX > 0)
-                    {
-                        _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
-                    }
-                    else
-                    {
-                        _scrollDifferenceX = ScreenManager.GraphicsDevice.Viewport.Width;
-                    }
-                }
-                else
-                {
-                    // cik cak
-                    if (whenContinue < DateTime.Now)
-                    {
-                        if (toRight)
-                        {
-                            // scroll
-                            if (levelNameSize.X + _scrollDifferenceX > ScreenManager.GraphicsDevice.Viewport.Width)
-                            {
-                                _scrollDifferenceX -= (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
-                            }
-                            else
-                            {
-                                toRight = false;
-                                _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
-                            }
-                        }
-
-                        if (!toRight)
-                        {
-                            if (_scrollDifferenceX < 0)
-                            {
-                                _scrollDifferenceX += (float)(gameTime.ElapsedGameTime.TotalSeconds * 40);
-                            }
-                            else
-                            {
-                                toRight = true;
-                                whenContinue = DateTime.Now + delay;
-                            }
-                        }
-                    }
-                }
-            }
-
-            _spriteBatch.DrawStringWithShadow(font, levelName, new Vector2(_scrollDifferenceX, 5), KinectomixGame.BrickColor);
-            _spriteBatch.End();
-            _spriteBatch.GraphicsDevice.Viewport = defaultViewport;
-
-            _spriteBatch.Begin();
-            
-            DrawBoard(_spriteBatch, _level.Board, true);
-            DrawBoard(_spriteBatch, _level.Molecule);
-
-            string text = Resources.LevelScreenResources.Moves;
-            var scoreSize = _normalFont.MeasureString(text);
-            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 490), KinectomixGame.BrickColor);
-
-            text = Resources.LevelScreenResources.Time;
-            var timeSize = _normalFont.MeasureString(text);
-            float dif = scoreSize.X - timeSize.X;
-
-            _spriteBatch.DrawStringWithShadow(_normalFont, text, new Vector2(55, 595), KinectomixGame.BrickColor);
-
-            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _moves), new Vector2(55, 525), KinectomixGame.BrickColor);
-            _spriteBatch.DrawStringWithShadow(_timeFont, string.Format("{0}", _gameDuration.ToString(@"mm\:ss")), new Vector2(55, 630), KinectomixGame.BrickColor);
-
-            Vector2 textSize;
-            int x;
-            string textToRender;
-            if (_highscore != null)
-            {
-                textToRender = Resources.LevelScreenResources.HighScore;
-                textSize = _normalFont.MeasureString(textToRender);
-                x = _leftBoxEndX - (int)textSize.X;
-                _spriteBatch.DrawStringWithShadow(_normalFont, textToRender, new Vector2(x, 490), Color.Gray);
-
-                textToRender = string.Format("{0}", _highscore.Moves);
-                textSize = _timeFont.MeasureString(textToRender);
-                x = _leftBoxEndX - (int)textSize.X;
-                _spriteBatch.DrawStringWithShadow(_timeFont, textToRender, new Vector2(x, 525), Color.Gray);
-
-                textToRender = string.Format("{0}", _highscore.Time.ToString(@"mm\:ss"));
-                textSize = _timeFont.MeasureString(textToRender);
-                x = _leftBoxEndX - (int)textSize.X;
-                _spriteBatch.DrawStringWithShadow(_timeFont, textToRender, new Vector2(x, 630), Color.Gray);
-            }
-
-            if (isMovementAnimation)
-            {
-                _spriteBatch.Draw(GetTileTexture(atomToMove), new Rectangle((int)atomPosition.X, (int)atomPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale)), Color.White);
-            }
-
-            if (_isLevelFinished)
-            {
-                _spriteBatch.Draw(idleTexture, new Rectangle(0, 0, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, ScreenManager.GraphicsDevice.Viewport.Bounds.Height), Color.White);
-                _spriteBatch.Draw(wallTexture, new Rectangle(0, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100, ScreenManager.GraphicsDevice.Viewport.Bounds.Width, 230), Color.Brown);
-
-                string name = Resources.LevelScreenResources.LevelCompleted;
-                Vector2 size = _splashFont.MeasureString(name);
-
-                _spriteBatch.DrawString(_splashFont, name, new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 2 - size.X / 2, ScreenManager.GraphicsDevice.Viewport.Bounds.Height / 2 - 100), Color.White);
-            }
-
-            _spriteBatch.End();
-
-            base.Draw(gameTime);
-        }
 
         private bool CheckFinish()
         {

@@ -151,6 +151,15 @@ namespace Mach.Kinectomix.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to restart level.
+        /// </summary>
+        public static string RestartLevel {
+            get {
+                return ResourceManager.GetString("RestartLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to time.
         /// </summary>
         public static string Time {

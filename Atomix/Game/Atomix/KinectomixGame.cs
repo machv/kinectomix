@@ -14,12 +14,12 @@ using Mach.Xna.Kinect.HandState;
 namespace Mach.Kinectomix
 {
     /// <summary>
-    /// This is the main class for the Atomix game.
+    /// This is the main class for the Kinectomix game.
     /// </summary>
     public class KinectomixGame : Game
     {
-        public const string HighscoreFile = "atomix.highscore";
-        public static Color BrickColor = Color.Gold; // new Color(176, 64, 16);
+        public const string HighscoreFile = "kinectomix.highscore";
+        public static Color BrickColor = Color.Gold; 
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -111,10 +111,7 @@ namespace Mach.Kinectomix
         }
 
         /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
+        /// Initializes shared components for all screens.
         /// </summary>
         protected override void Initialize()
         {
@@ -138,7 +135,6 @@ namespace Mach.Kinectomix
 
             var videoWhenNoSkeleton = new VideoWhenNoSkeleton(this, _visualKinectManager.Manager, _videoStream, _skeletonRenderer);
             var background = new Background(this, "Backgrounds/Start");
-            var frameRate = new FrameRateInfo(this);
             var clippedEdgeVisualiser = new ClippedEdgesVisualiser(this, _visualKinectManager.Manager);
             //_cursor.HandStateTracker = new ConvexityClosedHandTracker(_visualKinectManager); // { VideoStreamData = _videoStream };
 
@@ -152,15 +148,12 @@ namespace Mach.Kinectomix
 
             _gameScreenManager = new ScreenManager(this, _input);
 
-            UpdateScale(_scale);
+            UpdateScale(210f / 480f);
 
             Components.Add(background);
-            //Components.Add(frameRate);
             Components.Add(_gameScreenManager);
             Components.Add(_visualKinectManager);
-            //Components.Add(_gestures);
-            //Components.Add(_videoStream);
-            //Components.Add(_skeletonRenderer);
+            Components.Add(_gestures);
             Components.Add(videoWhenNoSkeleton);
             Components.Add(_cursor);
             Components.Add(clippedEdgeVisualiser);
@@ -171,12 +164,6 @@ namespace Mach.Kinectomix
         private void UpdateScale(float scale)
         {
             _scale = scale;
-
-            _scale = 210f / 480f;
-
-            //_kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width - 20 - 640 * _scale, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
-            _kinectDebugOffset = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2 - (640 * _scale) / 2, GraphicsDevice.Viewport.Bounds.Height - 20 - 480 * _scale);
-
             _kinectDebugOffset = new Vector2(80, 480);
 
             _skeletonRenderer.Scale = _scale;
@@ -222,7 +209,7 @@ namespace Mach.Kinectomix
             _state.Highscore = score;
 
             _visualKinectManager.Font = Content.Load<SpriteFont>("Fonts/Small");
-            _visualKinectManager.Foreground = KinectomixGame.BrickColor;
+            _visualKinectManager.Foreground = new Color(255, 43, 0);
             _visualKinectManager.Background = Content.Load<Texture2D>("KinectPromptBackground");
             _visualKinectManager.RenderPosition = new Vector2(290, 0);
             _visualKinectManager.ShowPromptKinectIcon = false;
@@ -249,15 +236,19 @@ namespace Mach.Kinectomix
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            UpdateScale(_scale);
-
             KeyboardState state = Keyboard.GetState();
 
-            if (state.IsKeyDown(Keys.Q) == true && _previousKeyboardState.IsKeyDown(Keys.Q) == false)
+            if (state.IsKeyDown(Keys.W) == true && _previousKeyboardState.IsKeyDown(Keys.Q) == false)
                 UpdateScale(_scale - 0.1f);
 
-            if (state.IsKeyDown(Keys.A) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
+            if (state.IsKeyDown(Keys.S) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
                 UpdateScale(_scale + 0.1f);
+
+            if (state.IsKeyDown(Keys.Q) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
+                UpdateElevationAngle(5);
+
+            if (state.IsKeyDown(Keys.A) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
+                UpdateElevationAngle(-5);
 
             if (state.IsKeyDown(Keys.D))
             {
@@ -307,6 +298,24 @@ namespace Mach.Kinectomix
                     _graphics.IsFullScreen = false;
                     _graphics.ApplyChanges();
                 }
+            }
+        }
+
+        private void UpdateElevationAngle(int relativeAngle)
+        {
+            if (_visualKinectManager.Manager.Sensor != null)
+            {
+                int newAngle = _visualKinectManager.Sensor.ElevationAngle + relativeAngle;
+
+                try
+                {
+                    if (newAngle >= _visualKinectManager.Sensor.MinElevationAngle && newAngle <= _visualKinectManager.Manager.Sensor.MaxElevationAngle)
+                    {
+                        _visualKinectManager.Sensor.ElevationAngle = newAngle;
+                    }
+                }
+                catch
+                { }
             }
         }
 

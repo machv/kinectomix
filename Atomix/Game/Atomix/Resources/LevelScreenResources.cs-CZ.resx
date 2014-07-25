@@ -124,13 +124,13 @@
     <value>Úroveň</value>
   </data>
   <data name="GamePaused" xml:space="preserve">
-    <value>hra je přerušena</value>
+    <value>hra je pozastavena</value>
   </data>
   <data name="HighScore" xml:space="preserve">
     <value>rekord</value>
   </data>
   <data name="LevelCompleted" xml:space="preserve">
-    <value>Dohráno</value>
+    <value>hotovo</value>
   </data>
   <data name="Levels" xml:space="preserve">
     <value>úrovně</value>
@@ -145,7 +145,10 @@
     <value>další úroveň</value>
   </data>
   <data name="PlayAgain" xml:space="preserve">
-    <value>znovu</value>
+    <value>opakovat úroveň</value>
+  </data>
+  <data name="RestartLevel" xml:space="preserve">
+    <value>zkusit znovu</value>
   </data>
   <data name="Time" xml:space="preserve">
     <value>čas</value>
