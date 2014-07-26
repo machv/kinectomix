@@ -50,7 +50,7 @@ namespace Mach.Wpf.Mvvm
         /// Defines the method that determines whether the command can execute in its current state.
         /// </summary>
         /// <param name="parameter">Data used by the command.</param>
-        /// <returns>true if this command can be executed; otherwise, false.</returns>
+        /// <returns><c>true</c> if this command can be executed; otherwise, false.</returns>
         public bool CanExecute(object parameter)
         {
             if (parameter == null)

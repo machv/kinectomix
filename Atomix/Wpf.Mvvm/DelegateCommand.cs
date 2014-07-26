@@ -11,6 +11,11 @@ namespace Mach.Wpf.Mvvm
         private readonly Action _action;
         private readonly ICommandOnCanExecute _canExecute;
 
+        /// <summary>
+        /// Delegate when CanExecute is called on the command. This can be null.
+        /// </summary>
+        /// <param name="parameter">Data used by the command.</param>
+        /// <returns></returns>
         public delegate bool ICommandOnCanExecute(object parameter);
 
         /// <summary>
