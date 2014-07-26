@@ -252,7 +252,7 @@ namespace Mach.Kinectomix
             if (state.IsKeyDown(Keys.A) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
                 UpdateElevationAngle(-3);
 
-            if (state.IsKeyDown(Keys.A) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
+            if (state.IsKeyDown(Keys.D) == true && _previousKeyboardState.IsKeyDown(Keys.D) == false)
             {
                 if (Components.Contains(_videoStream))
                 {

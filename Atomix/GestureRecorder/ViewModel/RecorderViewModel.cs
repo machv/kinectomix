@@ -41,7 +41,7 @@ namespace Kinectomix.GestureRecorder.ViewModel
                 OnPropertyChanged();
             }
         }
-       
+
         public SkeletonViewModel TrackedJoints
         {
             get { return _trackedJoints; }
@@ -111,6 +111,19 @@ namespace Kinectomix.GestureRecorder.ViewModel
         {
             foreach (GestureViewModel gesture in _gestures)
                 gesture.IsRecognized = false;
+        }
+
+        public Gesture LoadGestureFromFile(string fileName)
+        {
+            XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
+            Gesture gesture = null;
+
+            using (Stream stream = File.Open(fileName, FileMode.Open))
+            {
+                gesture = seralizer.Deserialize(stream) as Gesture;
+            }
+
+            return gesture;
         }
 
         private void AddGesture()

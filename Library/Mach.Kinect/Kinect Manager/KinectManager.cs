@@ -325,16 +325,21 @@ namespace Mach.Kinect
 
         private void DiscoverSensor()
         {
-            foreach (KinectSensor candidate in KinectSensor.KinectSensors)
+            try
             {
-                if (candidate.Status == KinectStatus.Connected)
+                foreach (KinectSensor candidate in KinectSensor.KinectSensors)
                 {
-                    if (candidate != null)
+                    if (candidate.Status == KinectStatus.Connected)
                     {
-                        DoInitialization(candidate);
+                        if (candidate != null)
+                        {
+                            DoInitialization(candidate);
+                        }
                     }
                 }
             }
+            catch
+            { }
         }
 
         private void DoInitialization(KinectSensor sensor)

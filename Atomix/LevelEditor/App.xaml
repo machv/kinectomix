@@ -117,6 +117,9 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
+                                    <Grid.ToolTip>
+                                        <ToolTip Content="Baf" />
+                                    </Grid.ToolTip>
                                     <Image Source="Board/Empty.png"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"

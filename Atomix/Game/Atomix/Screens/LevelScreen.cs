@@ -25,7 +25,7 @@ namespace Mach.Kinectomix.Screens
         private const int TileWidth = 60;
         private const int TileHeight = 60;
         private bool _isGestureCandidate = false;
-        private TimeSpan _minimalHoverDuration = TimeSpan.FromSeconds(2);
+        private TimeSpan _minimalHoverDuration = TimeSpan.FromSeconds(1);
         private int _activeTileOpacityDirection;
         private float _activeTileOpacity;
         private Texture2D wallTexture;
@@ -38,7 +38,6 @@ namespace Mach.Kinectomix.Screens
         private SoundEffect _applause;
         private Vector2 boardPosition;
         private SpriteFont _normalFont;
-        private SpriteFont _splashFont;
         private SpriteFont _levelFont;
         private SpriteFont _timeFont;
         private Point activeAtomIndex = new Point(-1, -1);
@@ -326,12 +325,6 @@ namespace Mach.Kinectomix.Screens
 
                 if (_isLevelFinished)
                 {
-                    if (_highscore == null)
-                        _highscore = new LevelHighscore();
-
-                    if (_highscore.UpdateIfBetter(_moves, _gameDuration))
-                        KinectomixGame.State.SetCurrentLevelHighscore(_highscore);
-
                     return;
                 }
 
@@ -636,6 +629,12 @@ namespace Mach.Kinectomix.Screens
         {
             _isPaused = true;
             _isLevelFinished = true;
+
+            if (_highscore == null)
+                _highscore = new LevelHighscore();
+
+            if (_highscore.UpdateIfBetter(_moves, _gameDuration))
+                KinectomixGame.State.SetCurrentLevelHighscore(_highscore);
 
             _applause.Play();
             _finishedMessageBox.Show(Resources.LevelScreenResources.LevelCompleted, _finishButtons);
