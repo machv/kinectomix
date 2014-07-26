@@ -6,6 +6,7 @@
              xmlns:Converter="clr-namespace:Mach.Kinectomix.LevelEditor.Converter"
              xmlns:l="clr-namespace:Mach.Kinectomix.LevelEditor"
              xmlns:localization="clr-namespace:Mach.Kinectomix.LevelEditor.Localization"
+             xmlns:properties="clr-namespace:Mach.Kinectomix.LevelEditor.Properties"
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
         <localization:LocalizedStrings xmlns:local="clr-namespace:Mach.Kinectomix.LevelEditor.Localization" x:Key="LocalizedStrings" />
@@ -13,6 +14,7 @@
         <Converter:NegateConverter x:Key="NegateConverter" />
         <Converter:AllTrueConveter x:Key="AllTrueConveter" />
         <Converter:NullToTrueConverter x:Key="NullToTrueConverter" />
+        <Converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
         <DataTemplate x:Key="ViewOnlyBoard" DataType="{x:Type ViewModel:BoardViewModel}">
             <Viewbox Stretch="Uniform">
@@ -118,7 +120,8 @@
                             <DataTemplate>
                                 <Grid>
                                     <Grid.ToolTip>
-                                        <ToolTip Content="Baf" />
+                                        <ToolTip Visibility="{Binding Path=ShowAssetToolTips, Source={x:Static properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                 Content="{Binding Asset}" />
                                     </Grid.ToolTip>
                                     <Image Source="Board/Empty.png"
                                            HorizontalAlignment="Center"
@@ -220,6 +223,10 @@
                                         </Style>
                                     </Border.Style>
                                     <Grid Margin="3">
+                                        <Grid.ToolTip>
+                                            <ToolTip Visibility="{Binding Path=ShowAssetToolTips, Source={x:Static properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                 Content="{Binding Asset}" />
+                                        </Grid.ToolTip>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition />

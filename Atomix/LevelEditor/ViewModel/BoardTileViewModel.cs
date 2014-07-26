@@ -49,6 +49,11 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
             }
         }
 
+        public string AssetCode
+        {
+            get { return _tile.GetAssetCode(); }
+        }
+
         public string Name
         {
             get { return _tile.Name; }

@@ -130,5 +130,17 @@ namespace Mach.Kinectomix.LevelEditor.Properties {
                 this["GameName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowAssetToolTips {
+            get {
+                return ((bool)(this["ShowAssetToolTips"]));
+            }
+            set {
+                this["ShowAssetToolTips"] = value;
+            }
+        }
     }
 }
