@@ -246,14 +246,13 @@ namespace Mach.Kinectomix.Screens
             activeTexture = _content.Load<Texture2D>("Board/Active");
             _applause = _content.Load<SoundEffect>("Sounds/Applause");
             _normalFont = _content.Load<SpriteFont>("Fonts/Normal");
-            _splashFont = _content.Load<SpriteFont>("Fonts/Splash");
             _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
             _timeFont = _content.Load<SpriteFont>("Fonts/Time");
             idleTexture = _content.Load<Texture2D>("Idle");
 
             _levelNameButton.Font = _levelFont;
             _levelNameButton.IsEnabled = false;
-            _levelNameButton.DisabledForeground = KinectomixGame.BrickColor;
+            _levelNameButton.DisabledForeground = Color.White;
             _levelNameButton.DisabledBackground = Color.Transparent;
             _levelNameButton.TextScrolling = TextScrolling.Slide;
             _levelNameButton.TextAlignment = TextAlignment.Left;

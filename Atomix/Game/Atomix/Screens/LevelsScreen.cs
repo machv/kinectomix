@@ -25,6 +25,8 @@ namespace Mach.Kinectomix.Screens
         private KinectCursor _cursor;
         private Texture2D _backgroundTexture;
         private SpriteButton _backButton;
+        private SpriteButton _leftButton;
+        private SpriteButton _rightButton;
 
         public LevelsScreen(SpriteBatch spriteBatch)
         {
@@ -37,7 +39,18 @@ namespace Mach.Kinectomix.Screens
 
             _backButton = new KinectSpriteButton(ScreenManager.Game, _cursor);
             _backButton.Selected += Back_Selected;
+
+            _leftButton = new KinectSpriteButton(ScreenManager.Game, _cursor);
+            _leftButton.Selected += Navigation_Selected;
+            _leftButton.Tag = MoveDirection.Left;
+
+            _rightButton = new KinectSpriteButton(ScreenManager.Game, _cursor);
+            _rightButton.Selected += Navigation_Selected;
+            _rightButton.Tag = MoveDirection.Right;
+
             Components.Add(_backButton);
+            Components.Add(_leftButton);
+            Components.Add(_rightButton);
 
             for (int i = 0; i < KinectomixGame.State.Levels.Length; i++)
             {
@@ -55,7 +68,7 @@ namespace Mach.Kinectomix.Screens
                 }
 
                 KinectButton button = new KinectButton(ScreenManager.Game, _cursor);
-                button.Selected += button_Selected;
+                button.Selected += Level_Selected;
                 button.Tag = level;
                 button.Content = level.Name;
                 button.InputProvider = ScreenManager.InputProvider;
@@ -86,11 +99,23 @@ namespace Mach.Kinectomix.Screens
             _titleFont = ScreenManager.Content.Load<SpriteFont>("Fonts/LevelName");
             _normalFont = ScreenManager.Content.Load<SpriteFont>("Fonts/Normal");
 
-            _backButton.Texture = ScreenManager.Content.Load<Texture2D>("Buttons/BackNormal");
-            _backButton.Focused = ScreenManager.Content.Load<Texture2D>("Buttons/BackFocused");
+            _backButton.Texture = ScreenManager.Content.Load<Texture2D>("Buttons/HomeNormal");
+            _backButton.Focused = ScreenManager.Content.Load<Texture2D>("Buttons/HomeFocused");
             _backButton.Width = 60;
             _backButton.Height = 60;
             _backButton.InputProvider = ScreenManager.InputProvider;
+
+            _leftButton.Texture = ScreenManager.Content.Load<Texture2D>("Buttons/LeftNormal");
+            _leftButton.Focused = ScreenManager.Content.Load<Texture2D>("Buttons/LeftFocused");
+            _leftButton.Width = 60;
+            _leftButton.Height = 60;
+            _leftButton.InputProvider = ScreenManager.InputProvider;
+
+            _rightButton.Texture = ScreenManager.Content.Load<Texture2D>("Buttons/RightNormal");
+            _rightButton.Focused = ScreenManager.Content.Load<Texture2D>("Buttons/RightFocused");
+            _rightButton.Width = 60;
+            _rightButton.Height = 60;
+            _rightButton.InputProvider = ScreenManager.InputProvider;
 
             foreach (Button button in _buttons)
                 button.Font = _normalFont;
@@ -120,6 +145,8 @@ namespace Mach.Kinectomix.Screens
         private int xTranslation;
         private int xTranslationBuffer;
         private int xStep = 10;
+        private int _scrollStep = 420;
+        private bool _anyButtonOverflows;
         public override void Update(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
@@ -133,7 +160,9 @@ namespace Mach.Kinectomix.Screens
                 }
             }
 
-            _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _backButton.Width - 30, 30);
+            _rightButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _backButton.Width - 30, 30);
+            _leftButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _backButton.Width - 120, 30);
+            _backButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _backButton.Width - 210, 30);
 
             int topOffet = 150;
             int xPos = 50;
@@ -156,33 +185,21 @@ namespace Mach.Kinectomix.Screens
                 }
             }
 
-            bool anyButtonOverflows = false;
-            int rightOverflow = 0;
-            foreach (Button b in _buttons)
-            {
-                var pos = b.Position;
-                pos.X += xTranslation;
-                b.Position = pos;
+            
+            int rightOverflow;
+            _anyButtonOverflows = AnyButtonOverflows(out rightOverflow);
 
-                if (b.Position.X + b.Width > ScreenManager.GraphicsDevice.Viewport.Bounds.Width)
-                {
-                    anyButtonOverflows = true;
-                    rightOverflow = Math.Max(rightOverflow, (int)b.Position.X + b.Width - ScreenManager.GraphicsDevice.Viewport.Bounds.Width);
-                }
-            }
-
-            int scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 1;
-            scrollStep = 2 * (360 + 60);
+            //int scrollStep = 420;
 
             KeyboardState keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.Left) == true && _previousKeyboardState.IsKeyDown(Keys.Left) == false)
                 if (xTranslation < 0)
-                    xTranslationBuffer = scrollStep;
+                    xTranslationBuffer = _scrollStep;
 
             if (keyboardState.IsKeyDown(Keys.Right) == true && _previousKeyboardState.IsKeyDown(Keys.Right) == false)
-                if (anyButtonOverflows)
-                    xTranslationBuffer = -scrollStep;
+                if (_anyButtonOverflows)
+                    xTranslationBuffer = -_scrollStep;
 
             _previousKeyboardState = keyboardState;
 
@@ -190,17 +207,16 @@ namespace Mach.Kinectomix.Screens
 
             if (mouseState.ScrollWheelValue > _previousMouseState.ScrollWheelValue)
                 if (xTranslation < 0)
-                    xTranslationBuffer = scrollStep;
+                    xTranslationBuffer = _scrollStep;
 
             if (mouseState.ScrollWheelValue < _previousMouseState.ScrollWheelValue)
-                if (anyButtonOverflows)
-                    xTranslationBuffer = -scrollStep;
+                if (_anyButtonOverflows)
+                    xTranslationBuffer = -_scrollStep;
 
             _previousMouseState = mouseState;
 
             // Scrolling for gestures is larger
-            scrollStep = ScreenManager.GraphicsDevice.Viewport.Bounds.Width / 4 * 3;
-            scrollStep = 360;
+            int scrollStep = 2 * _scrollStep;
 
             if (_cursor.IsHandTracked && xTranslationBuffer == 0)
             {
@@ -213,7 +229,7 @@ namespace Mach.Kinectomix.Screens
                         switch (direction)
                         {
                             case SwipeDirection.Left:
-                                if (anyButtonOverflows)
+                                if (_anyButtonOverflows)
                                     xTranslationBuffer = -scrollStep;
                                 break;
                             case SwipeDirection.Right:
@@ -283,12 +299,56 @@ namespace Mach.Kinectomix.Screens
             base.Draw(gameTime);
         }
 
+        private bool AnyButtonOverflows(out int rightOverflow)
+        {
+            bool anyButtonOverflows = false;
+            rightOverflow = 0;
+            foreach (Button b in _buttons)
+            {
+                var pos = b.Position;
+                pos.X += xTranslation;
+                b.Position = pos;
+
+                if (b.Position.X + b.Width > ScreenManager.GraphicsDevice.Viewport.Bounds.Width)
+                {
+                    anyButtonOverflows = true;
+                    rightOverflow = Math.Max(rightOverflow, (int)b.Position.X + b.Width - ScreenManager.GraphicsDevice.Viewport.Bounds.Width);
+                }
+            }
+
+            return anyButtonOverflows;
+        }
+
         private void Back_Selected(object sender, EventArgs e)
         {
             ScreenManager.Activate(ScreenManager.PreviousScreen);
         }
 
-        private void button_Selected(object sender, EventArgs e)
+        private void Navigation_Selected(object sender, EventArgs e)
+        {
+            if (sender is ButtonBase)
+            {
+                ButtonBase button = sender as ButtonBase;
+                if (button.Tag is MoveDirection)
+                {
+                    MoveDirection direction = (MoveDirection)button.Tag;
+
+                    switch (direction)
+                    {
+                        case MoveDirection.Left:
+                            if (xTranslation < 0)
+                                xTranslationBuffer = _scrollStep;
+                            break;
+                        case MoveDirection.Right:
+                            if (_anyButtonOverflows)
+                                xTranslationBuffer = -_scrollStep;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void Level_Selected(object sender, EventArgs e)
         {
             Button button = sender as Button;
             Level level = button.Tag as Level;
