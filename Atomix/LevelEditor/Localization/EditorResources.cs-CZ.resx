@@ -147,8 +147,24 @@
   <data name="NewDefinition" xml:space="preserve">
     <value>Nová definice</value>
   </data>
+  <data name="NewDefinitionPendingChangesText" xml:space="preserve">
+    <value>Vytvořením nové definice úrovní se zruší změny provedené na aktuálně editované definici úrovní.
+
+Opravdu si přejete si pokračovat a vytvořit novou definici úrovní?</value>
+  </data>
+  <data name="NewDefinitionPendingChangesTitle" xml:space="preserve">
+    <value>Neuložené změny</value>
+  </data>
   <data name="OpenDefinition" xml:space="preserve">
     <value>_Otevřít definici...</value>
+  </data>
+  <data name="OpenDefinitionPendingChangesText" xml:space="preserve">
+    <value>Načtením jiné definice úrovní se zruší změny provedené na aktuálně editované definici úrovní.
+
+Opravdu si přejete si pokračovat a otevřít jinou definici úrovní?</value>
+  </data>
+  <data name="OpenDefinitionPendingChangesTitle" xml:space="preserve">
+    <value>Neuložené změny</value>
   </data>
   <data name="SaveDefinitionAs" xml:space="preserve">
     <value>_Uložit definici jako...</value>

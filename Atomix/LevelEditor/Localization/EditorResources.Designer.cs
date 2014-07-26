@@ -151,11 +151,51 @@ namespace Mach.Kinectomix.LevelEditor.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating new levels definition will cancel you modifications on current levels definition.
+        ///
+        ///Do you want to continue with creating new level definition?.
+        /// </summary>
+        public static string NewDefinitionPendingChangesText {
+            get {
+                return ResourceManager.GetString("NewDefinitionPendingChangesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pending changes.
+        /// </summary>
+        public static string NewDefinitionPendingChangesTitle {
+            get {
+                return ResourceManager.GetString("NewDefinitionPendingChangesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Open levels definition....
         /// </summary>
         public static string OpenDefinition {
             get {
                 return ResourceManager.GetString("OpenDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opening levels definition will cancel you modifications on current levels definition.
+        ///
+        ///Do you want to continue with opening levels definition?.
+        /// </summary>
+        public static string OpenDefinitionPendingChangesText {
+            get {
+                return ResourceManager.GetString("OpenDefinitionPendingChangesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pending changes.
+        /// </summary>
+        public static string OpenDefinitionPendingChangesTitle {
+            get {
+                return ResourceManager.GetString("OpenDefinitionPendingChangesTitle", resourceCulture);
             }
         }
         

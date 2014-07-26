@@ -147,8 +147,24 @@
   <data name="NewDefinition" xml:space="preserve">
     <value>New definition</value>
   </data>
+  <data name="NewDefinitionPendingChangesText" xml:space="preserve">
+    <value>Creating new levels definition will cancel you modifications on current levels definition.
+
+Do you want to continue with creating new level definition?</value>
+  </data>
+  <data name="NewDefinitionPendingChangesTitle" xml:space="preserve">
+    <value>Pending changes</value>
+  </data>
   <data name="OpenDefinition" xml:space="preserve">
     <value>_Open levels definition...</value>
+  </data>
+  <data name="OpenDefinitionPendingChangesText" xml:space="preserve">
+    <value>Opening levels definition will cancel you modifications on current levels definition.
+
+Do you want to continue with opening levels definition?</value>
+  </data>
+  <data name="OpenDefinitionPendingChangesTitle" xml:space="preserve">
+    <value>Pending changes</value>
   </data>
   <data name="SaveDefinitionAs" xml:space="preserve">
     <value>_Save levels definition as...</value>
