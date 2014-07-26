@@ -34,8 +34,8 @@ namespace Mach.Kinectomix.LevelEditor.Model
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Multiselect = _multiselect;
-            dialog.Filter = "Atomix level (*.xnb, *.xml, *.atb, *.atxl)|*.xnb;*.xml;*.atb;*.atxl|All files|*.*";
-            dialog.Title = "Open Kinectomix level definition";
+            dialog.Filter = Localization.DialogResources.LevelFileName + " (*.atxl)|*.atxl|" + Localization.DialogResources.AllFiles + "|*.*";
+            dialog.Title = Localization.DialogResources.LevelOpenFileDialogTitle;
 
             if (dialog.ShowDialog() == true)
             {
@@ -56,8 +56,8 @@ namespace Mach.Kinectomix.LevelEditor.Model
         public bool SaveFileDialog()
         {
             SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Atomix xml serialization (*.atxl)|*.atxl|Atomix binary level (*.xnb)|*.xnb|Atomix custom binary (*.atb)|*.atb|Atomix level (*.xml)|*.xml";
-            dialog.Title = "Save Kinectomix level definition";
+            dialog.Filter = Localization.DialogResources.LevelFileName + " (*.atxl)|*.atxl";
+            dialog.Title = Localization.DialogResources.LevelSaveFileDialogTitle;
 
             if (dialog.ShowDialog() == true)
             {

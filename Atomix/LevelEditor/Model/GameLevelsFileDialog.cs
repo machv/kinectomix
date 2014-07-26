@@ -44,7 +44,7 @@ namespace Mach.Kinectomix.LevelEditor.Model
         }
 
         /// <summary>
-        /// Mupltiple selection is not implemented.
+        /// Multiple selection is not implemented.
         /// </summary>
         /// <exception cref="System.NotImplementedException">
         /// </exception>
@@ -76,8 +76,8 @@ namespace Mach.Kinectomix.LevelEditor.Model
         public bool OpenFileDialog()
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Kinectomix levels (*.atx)|*.atx";
-            dialog.Title = "Open Kinectomix levels";
+            dialog.Filter = Localization.DialogResources.DefinitionFileName + " (*.atx)|*.atx|" + Localization.DialogResources.AllFiles + "|*.*";
+            dialog.Title = Localization.DialogResources.DefinitionOpenFileDialogTitle;
 
             string directory = _lastDirectory != null ? _lastDirectory : _initialDirectory;
             if (Directory.Exists(directory))
@@ -106,8 +106,8 @@ namespace Mach.Kinectomix.LevelEditor.Model
             CreateInitialDirectory();
 
             SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Kinectomix levels (*.atx)|*.atx";
-            dialog.Title = "Save Kinectomix levels";
+            dialog.Filter = Localization.DialogResources.DefinitionFileName + " (*.atx)|*.atx";
+            dialog.Title = Localization.DialogResources.DefinitionSaveFileDialogTitle;
             dialog.AddExtension = true;
             dialog.InitialDirectory = _lastDirectory != null ? _lastDirectory : _initialDirectory;
             dialog.FileName = "Definition.atx";

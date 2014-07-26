@@ -100,6 +100,11 @@
     <Compile Include="DragDropListBox\DraggedAdorner.cs" />
     <Compile Include="DragDropListBox\InsertionAdorner.cs" />
     <Compile Include="DragDropListBox\Utilities.cs" />
+    <Compile Include="Localization\DialogResources.Designer.cs">
+      <DependentUpon>DialogResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Localization\EditorResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -168,6 +173,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Localization\DialogResources.cs-CZ.resx" />
+    <EmbeddedResource Include="Localization\DialogResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DialogResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Localization\EditorResources.cs-CZ.resx" />
     <EmbeddedResource Include="Localization\EditorResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
