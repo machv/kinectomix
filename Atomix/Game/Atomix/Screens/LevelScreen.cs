@@ -880,7 +880,7 @@ namespace Mach.Kinectomix.Screens
                     {
                         for (int y = 0; y < _level.Molecule.ColumnsCount; y++)
                         {
-                            // If we have empty tile in definition it is like a wildcard that matches everything
+                            // If we have empty tile in definition it is like a wild-card that matches everything
                             if (_level.Molecule[x, y] == null || _level.Molecule[x, y].IsEmpty)
                                 continue;
 
