@@ -11,9 +11,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinectomix.Logic", "Lo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinectomix.Editor", "LevelEditor\Mach.Kinectomix.Editor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect.GestureRecorder", "GestureRecorder\Mach.Kinect.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect.GestureRecorder", "..\GestureRecorder\Mach.Kinect.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Wpf.Mvvm", "Wpf.Mvvm\Mach.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Wpf.Mvvm", "..\Library\Mach.Wpf.Mvvm\Mach.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna", "..\Library\Mach.Xna\Mach.Xna.csproj", "{2B9B0242-DE91-4989-9F3E-574FEB47FC4C}"
 EndProject
