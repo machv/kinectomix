@@ -230,30 +230,41 @@ namespace Mach.Kinectomix
         }
 
         /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
+        /// Checks for global keyboard shortcuts.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
 
-            if (state.IsKeyDown(Keys.W) == true && _previousKeyboardState.IsKeyDown(Keys.Q) == false)
+            // Toggle full screen mode
+            if (state.IsKeyDown(Keys.F11) == true && _previousKeyboardState.IsKeyDown(Keys.F11) == false)
+                    IsFullScreen = !IsFullScreen;
+
+            if (state.IsKeyDown(Keys.W) == true && _previousKeyboardState.IsKeyDown(Keys.W) == false)
                 UpdateScale(_scale - 0.1f);
 
-            if (state.IsKeyDown(Keys.S) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
+            if (state.IsKeyDown(Keys.S) == true && _previousKeyboardState.IsKeyDown(Keys.S) == false)
                 UpdateScale(_scale + 0.1f);
 
-            if (state.IsKeyDown(Keys.Q) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
-                UpdateElevationAngle(5);
+            if (state.IsKeyDown(Keys.Q) == true && _previousKeyboardState.IsKeyDown(Keys.Q) == false)
+                UpdateElevationAngle(+3);
 
             if (state.IsKeyDown(Keys.A) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
-                UpdateElevationAngle(-5);
+                UpdateElevationAngle(-3);
 
-            if (state.IsKeyDown(Keys.D))
+            if (state.IsKeyDown(Keys.A) == true && _previousKeyboardState.IsKeyDown(Keys.A) == false)
             {
-                Components.Remove(_videoStream);
-                Components.Remove(_skeletonRenderer);
+                if (Components.Contains(_videoStream))
+                {
+                    Components.Remove(_videoStream);
+                    Components.Remove(_skeletonRenderer);
+                }
+                else
+                {
+                    Components.Add(_videoStream);
+                    Components.Add(_skeletonRenderer);
+                }
             }
 
             _previousKeyboardState = state;

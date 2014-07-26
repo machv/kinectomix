@@ -111,18 +111,6 @@ namespace Mach.Kinectomix.Screens
             _levelsButton.Position = new Vector2(_startButton.Position.X, _startButton.Position.Y + _startButton.ActualHeight + 60);
             _quitButton.Position = new Vector2(_levelsButton.Position.X, _levelsButton.Position.Y + _levelsButton.ActualHeight + 60);
 
-            KeyboardState state = Keyboard.GetState();
-
-            // Toggle full screen mode
-            if (state.IsKeyDown(Keys.F11))
-            {
-                if (state.IsKeyDown(Keys.F11))
-                {
-                    KinectomixGame game = (ScreenManager.Game as KinectomixGame);
-                    game.IsFullScreen = !game.IsFullScreen;
-                }
-            }
-
             base.Update(gameTime);
         }
 
@@ -138,8 +126,6 @@ namespace Mach.Kinectomix.Screens
 
             base.Draw(gameTime);
         }
-
-
 
         public override void Activated()
         {
