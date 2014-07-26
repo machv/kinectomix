@@ -291,15 +291,21 @@ namespace Mach.Kinectomix.Screens
 
             _pauseButton.Position = new Vector2(ScreenManager.GraphicsDevice.Viewport.Bounds.Width - _pauseButton.Width - 30, 30);
 
+            KeyboardState state = Keyboard.GetState();
+
+            // hide message box
+            if (state.IsKeyDown(Keys.H) == true && _previousKeyboardState.IsKeyDown(Keys.H) == false)
+                _finishedMessageBox.Hide();
+
+            // Pause game
+            if (state.IsKeyDown(Keys.Escape) == true && _previousKeyboardState.IsKeyDown(Keys.Escape) == false && !_isPaused)
+                PauseGame();
+
+
+            _previousKeyboardState = state;
+
             if (!_isPaused)
             {
-                KeyboardState state = Keyboard.GetState();
-
-                if (state.IsKeyDown(Keys.Escape) == true && _previousKeyboardState.IsKeyDown(Keys.Escape) == false)
-                    PauseGame();
-
-                _previousKeyboardState = state;
-
                 bool clickOccurred = false;
                 bool isGestureDetected = false;
 
@@ -879,7 +885,11 @@ namespace Mach.Kinectomix.Screens
                                 continue;
 
                             // TODO overflow
-                            if (i + x >= _level.Board.RowsCount || j + y >= _level.Board.ColumnsCount || _level.Board[i + x, j + y] == null || _level.Board[i + x, j + y].Asset != _level.Molecule[x, y].Asset)
+                            if (i + x >= _level.Board.RowsCount ||
+                                j + y >= _level.Board.ColumnsCount ||
+                                _level.Board[i + x, j + y] == null ||
+                                _level.Board[i + x, j + y].Asset != _level.Molecule[x, y].Asset ||
+                                _level.Board[i + x, j + y].AssetCode != _level.Molecule[x, y].AssetCode)
                             {
                                 isMatch = false;
                                 break;
