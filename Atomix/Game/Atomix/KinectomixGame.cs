@@ -5,11 +5,9 @@ using System;
 using Mach.Xna.Input;
 using Mach.Xna.ScreenManagement;
 using Mach.Xna.Kinect.Components;
-using Mach.Xna.Components;
 using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.Screens;
 using Mach.Kinectomix.Components;
-using Mach.Xna.Kinect.HandState;
 
 namespace Mach.Kinectomix
 {
@@ -123,7 +121,8 @@ namespace Mach.Kinectomix
 
             _cursor = new KinectCircleCursor(this, _visualKinectManager.Manager)
             {
-                HideSystemCursorWhenHandTracked = true
+                HideSystemCursorWhenHandTracked = true,
+                CursorPositionsBufferLength = 5,
             };
 
             _videoStream = new VideoStreamComponent(this, _visualKinectManager)

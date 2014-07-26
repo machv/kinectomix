@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Kinect.Toolkit.Interaction;
 using System.Linq;
-using Mach.Xna.Kinect.Components;
 
-namespace Mach.Xna.Kinect.HandState
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Tracks if active hand is closed.

@@ -15,7 +15,7 @@ namespace Mach.Kinect.Gestures
         /// <param name="frameData">Recorded data.</param>
         /// <param name="trackedJoints">Which points should be included in the gesture.</param>
         /// <param name="dimension">Dimension for tracked points.</param>
-        /// <returns></returns>
+        /// <returns>Instance of <see cref="GestureFrame"/> created from recorded <see cref="FrameData"/>.</returns>
         public static GestureFrame FromFrameData(FrameData frameData, IEnumerable<JointType> trackedJoints, TrackingDimension dimension = TrackingDimension.Three)
         {
             GestureFrame frame = new GestureFrame();

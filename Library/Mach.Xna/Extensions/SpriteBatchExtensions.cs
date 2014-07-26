@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mach.Xna.Input.Extensions
+namespace Mach.Xna.Extensions
 {
     /// <summary>
     /// Extension methods for <see cref="SpriteBatch" /> class.

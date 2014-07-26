@@ -115,9 +115,9 @@ namespace Mach.Kinectomix.Logic
         }
 
         /// <summary>
-        /// Gets the asset code.
+        /// Gets the asset code that describes this board tile.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The asset code that describes this board tile.</returns>
         public string GetAssetCode()
         {
             return string.Format("{1}-{2}-{3}-{4}-{5}-{6}-{7}-{8}_{0}", Asset,

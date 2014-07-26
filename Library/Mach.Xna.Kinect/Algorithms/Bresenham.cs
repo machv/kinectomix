@@ -22,7 +22,7 @@ namespace Mach.Xna.Kinect.Algorithms
         /// </summary>
         /// <param name="start">The start.</param>
         /// <param name="end">The end.</param>
-        /// <returns></returns>
+        /// <returns>Integer points of the line.</returns>
         public static IEnumerable<Point> GetLinePoints(Point start, Point end)
         {
             bool isSteep = Math.Abs(end.Y - start.Y) > Math.Abs(end.X - end.Y);

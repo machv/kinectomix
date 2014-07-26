@@ -151,7 +151,9 @@ namespace Mach.Xna.Components
             set { _inputProvider = value; }
         }
 
-        /// Occurs when a result inside <see cref="MessageBoxBase"/> is selected.
+        /// <summary>
+        /// Occurs when a result inside <see cref="MessageBoxBase" /> is selected.
+        /// </summary>
         public event EventHandler<MessageBoxEventArgs> Changed;
 
         /// <summary>
@@ -331,9 +333,9 @@ namespace Mach.Xna.Components
         }
 
         /// <summary>
-        /// Displays a message box with specified text.
+        /// Displays a message box with specified text with one button, OK.
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">The text to display in the message box.</param>
         public void Show(string text)
         {
             Show(text, MessageBoxButtons.OK);

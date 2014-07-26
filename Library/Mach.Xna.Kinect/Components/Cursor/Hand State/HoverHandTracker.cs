@@ -3,7 +3,7 @@ using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mach.Xna.Kinect.HandState
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Detects hand hover.
@@ -44,8 +44,9 @@ namespace Mach.Xna.Kinect.HandState
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="HoverHandTracker"/> class.
+        /// Initializes a new instance of <see cref="HoverHandTracker" /> class.
         /// </summary>
+        /// <param name="minimalHoverDuration">Minimal duration of the hover.</param>
         public HoverHandTracker(TimeSpan minimalHoverDuration)
         {
             _minimalHoverDuration = minimalHoverDuration;

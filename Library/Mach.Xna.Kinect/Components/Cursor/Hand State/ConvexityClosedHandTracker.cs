@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace Mach.Xna.Kinect.HandState
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Tracks if active hand is closed.

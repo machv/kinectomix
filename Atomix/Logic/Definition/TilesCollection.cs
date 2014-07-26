@@ -105,7 +105,8 @@ namespace Mach.Kinectomix.Logic
         /// <summary>
         /// Add new empty row to the collection at specified index.
         /// </summary>
-        /// <param name="rowIndex"></param>
+        /// <param name="rowIndex">Index on which will be new row added.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">rowIndex</exception>
         public virtual void InsertRow(int rowIndex)
         {
             if (rowIndex < 0 || rowIndex > _rowCount)
@@ -239,7 +240,7 @@ namespace Mach.Kinectomix.Logic
         /// Determines whether collection contains the specified item.
         /// </summary>
         /// <param name="item">The item to look up.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if item exists in the collection.</returns>
         public bool Contains(T item)
         {
             return _tiles.Contains(item);
@@ -268,7 +269,7 @@ namespace Mach.Kinectomix.Logic
         /// Removes the specified item from the <see cref="TilesCollection{T}"/>.
         /// </summary>
         /// <param name="item">The item to remove.</param>
-        /// <returns></returns>
+        /// <returns>Nothing as this method is not implemented.</returns>
         /// <exception cref="System.NotSupportedException">This Method is not valid for this implementation.</exception>
         public bool Remove(T item)
         {
@@ -292,7 +293,7 @@ namespace Mach.Kinectomix.Logic
         /// </summary>
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
-        /// <returns></returns>
+        /// <returns>The index into the one-dimensional array that corresponds to the two-dimensional indexes.</returns>
         protected int GetIndex(int row, int column)
         {
             return row * _columnCount + column;
@@ -314,7 +315,7 @@ namespace Mach.Kinectomix.Logic
         /// <summary>
         /// Gets the <see cref="XmlSchema"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The used <see cref="XmlSchema"/>.</returns>
         public XmlSchema GetSchema()
         {
             return null;

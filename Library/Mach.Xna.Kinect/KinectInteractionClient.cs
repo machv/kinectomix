@@ -15,7 +15,7 @@ namespace Mach.Xna.Kinect
         /// <param name="handType">Type of the hand.</param>
         /// <param name="x">The x coordinate.</param>
         /// <param name="y">The y coordinate.</param>
-        /// <returns></returns>
+        /// <returns>Information about this user interaction.</returns>
         public InteractionInfo GetInteractionInfoAtLocation(int skeletonTrackingId, InteractionHandType handType, double x, double y)
         {
             var interactionInfo = new InteractionInfo

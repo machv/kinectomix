@@ -2,7 +2,7 @@
 using Mach.Kinectomix.Logic;
 using Mach.Xna;
 using Mach.Xna.Components;
-using Mach.Xna.Input.Extensions;
+using Mach.Xna.Extensions;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;

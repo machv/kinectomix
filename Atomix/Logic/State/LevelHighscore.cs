@@ -76,7 +76,7 @@ namespace Mach.Kinectomix.Logic
         /// </summary>
         /// <param name="moves">The new for moves.</param>
         /// <param name="time">The new value for time.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if passed score is better than the one remembered.</returns>
         public bool UpdateIfBetter(int moves, TimeSpan time)
         {
             bool isUpdated = false;

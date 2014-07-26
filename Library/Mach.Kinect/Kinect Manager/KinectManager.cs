@@ -260,7 +260,7 @@ namespace Mach.Kinect
         /// Gets the descriptive text of the <see cref="KinectStatus"/> value.
         /// </summary>
         /// <param name="kinectStatus">The kinect status.</param>
-        /// <returns></returns>
+        /// <returns>The descriptive text of the <see cref="KinectStatus"/> value.</returns>
         public string GetStatusDescription(KinectStatus kinectStatus)
         {
             string status = Localization.KinectManagerResources.Unknown;

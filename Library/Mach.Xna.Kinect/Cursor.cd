@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
-  <Class Name="Mach.Xna.Kinect.HandState.ConvexityClosedHandTracker" Collapsed="true">
+  <Class Name="Mach.Xna.Kinect.Components.ConvexityClosedHandTracker" Collapsed="true">
     <Position X="3" Y="3" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAQAAAEBAAJAAgAAAAABAABEAAACIAkAAAMAAAAgQEA=</HashCode>
+      <HashCode>AAQEAAEBABJAAgAAAAABAABEAAACIAkAAAMAAAAgQEA=</HashCode>
       <FileName>Components\Cursor\Hand State\ConvexityClosedHandTracker.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="Mach.Xna.Kinect.HandState.HoverHandTracker" Collapsed="true">
+  <Class Name="Mach.Xna.Kinect.Components.HoverHandTracker" Collapsed="true">
     <Position X="6.25" Y="3" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAQIAQEAAAIAAgAAAAAQAAAAAAACACAAAAAAAEAAAAA=</HashCode>
@@ -79,7 +79,7 @@
       <FileName>Components\Cursor\KinectCursor.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Interface Name="Mach.Xna.Kinect.HandState.IHandStateTracker">
+  <Interface Name="Mach.Xna.Kinect.Components.IHandStateTracker">
     <Position X="3" Y="0.5" Width="6" />
     <TypeIdentifier>
       <HashCode>AAQAAAEAAAIAAgAAAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>

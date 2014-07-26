@@ -88,7 +88,7 @@ namespace Mach.Xna.Kinect.Components
         /// </summary>
         /// <param name="boundingRectangle">The bounding rectangle in which focus will be checked.</param>
         /// <param name="isSelected">if set to <c>true</c> required time for selection has been met.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if cursor is inside the bounding rectangle; otherwise <c>false</c>.</returns>
         public bool ProcessCursorFocus(Rectangle boundingRectangle, out bool isSelected)
         {
             isSelected = false;

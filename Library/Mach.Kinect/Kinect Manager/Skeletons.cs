@@ -48,8 +48,8 @@ namespace Mach.Kinect
             set { _trackedSkeletonId = value; }
         }
         /// <summary>
-        /// Gets the tracked skeleton by selected tracking strategy defined in <see cref="SkeletonTrackingMode"/>.
-        /// </summary> 
+        /// Gets the tracked skeleton by selected tracking strategy defined in <see cref="SkeletonTrackingMode" />.
+        /// </summary>
         /// <value>
         /// The tracked skeleton.
         /// </value>
@@ -154,7 +154,7 @@ namespace Mach.Kinect
         /// <summary>
         /// Gets any skeleton that is tracked actively or passively.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Any skeleton that is tracked actively or passively.</returns>
         public Skeleton GetAnyKnownkeleton()
         {
             if (Items == null)
@@ -168,7 +168,7 @@ namespace Mach.Kinect
         /// <summary>
         /// Gets any actively tracked skeleton.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Any actively tracked skeleton.</returns>
         public Skeleton GetAnyTrackedSkeleton()
         {
             if (Items == null)
@@ -182,7 +182,7 @@ namespace Mach.Kinect
         /// <summary>
         /// Gets the nearest skeleton that is actively or passively tracked.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The nearest skeleton that is actively or passively tracked.</returns>
         public Skeleton GetNearestKnownSkeleton()
         {
             if (Items == null)
@@ -197,7 +197,7 @@ namespace Mach.Kinect
         /// <summary>
         /// Gets the nearest actively tracked skeleton.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The nearest actively tracked skeleton.</returns>
         public Skeleton GetNearestTrackedSkeleton()
         {
             if (Items == null)
@@ -213,7 +213,7 @@ namespace Mach.Kinect
         /// Gets the skeleton by its ID.
         /// </summary>
         /// <param name="trackingId">The ID of the tracked skeleton.</param>
-        /// <returns></returns>
+        /// <returns>The skeleton by its ID.</returns>
         public Skeleton GetSkeleton(int trackingId)
         {
             if (Items == null)

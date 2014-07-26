@@ -1,12 +1,11 @@
 ﻿using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.Resources;
 using Mach.Xna.Components;
-using Mach.Xna.Input.Extensions;
+using Mach.Xna.Extensions;
 using Mach.Xna.Kinect.Components;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace Mach.Kinectomix.Screens

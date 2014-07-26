@@ -26,8 +26,10 @@
         }
 
         /// <summary>
-        /// Initialize new instance with recognized values.
+        /// Initializes a new instance of the <see cref="SwipeGesture"/> class.
         /// </summary>
+        /// <param name="direction">The direction of swipe gesture.</param>
+        /// <param name="distance">The distance in meters of currently detected swipe gesture.</param>
         public SwipeGesture(SwipeDirection direction, double distance)
         {
             _direction = direction;

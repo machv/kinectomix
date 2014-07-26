@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Mach.Xna.Kinect.HandState
+namespace Mach.Xna.Kinect.Components
 {
     /// <summary>
     /// Tracks status of the active hand.

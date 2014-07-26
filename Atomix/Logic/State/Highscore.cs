@@ -74,8 +74,8 @@ namespace Mach.Kinectomix.Logic
         /// <summary>
         /// Gets the high score of level at specified index. This index corresponds with the index of the <see cref="Level"/> in <see cref="GameDefinition"/>.
         /// </summary>
-        /// <param name="levelIndex">Index of the level.</param>
-        /// <returns></returns>
+        /// <param name="levelIndex">Index of the level that is same as in game definition.</param>
+        /// <returns>The high score of level at specified index. This index corresponds with the index of the <see cref="Level"/> in <see cref="GameDefinition"/>.</returns>
         public LevelHighscore GetLevelHighscore(int levelIndex)
         {
             if (levelIndex >= _levels.Length || levelIndex < 0)
@@ -146,7 +146,7 @@ namespace Mach.Kinectomix.Logic
         /// Deserializes the instance saved in the file.
         /// </summary>
         /// <param name="fileName">Name of the file that contains serialized instance of <see cref="Highscore"/> class.</param>
-        /// <returns></returns>
+        /// <returns>Instance of <see cref="Highscore"/> class deserialized from the file.</returns>
         public static Highscore Load(string fileName)
         {
             Highscore highscore = null;

@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Linq;
-using Mach.Xna.Input.Extensions;
 using Mach.Xna.ScreenManagement;
 using Mach.Xna.Components;
 using Mach.Xna.Kinect.Components;
@@ -14,6 +13,7 @@ using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.ViewModel;
 using Mach.Kinect.Gestures;
 using Mach.Xna;
+using Mach.Xna.Extensions;
 
 namespace Mach.Kinectomix.Screens
 {
