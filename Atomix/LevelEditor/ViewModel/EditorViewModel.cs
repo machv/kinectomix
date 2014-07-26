@@ -88,7 +88,7 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
             _removeLevelCommand = new DelegateCommand<LevelViewModel>(RemoveLevel);
 
             NewLevelsDefinition(); // Create new levels definition
-            _areLevelsChanged = false; // When created first empty level, we do not accept this as created
+            ResetPendingChanges(); // When created first empty level, we do not accept this as created
         }
 
         public ICommand RemoveLevelCommand
@@ -151,6 +151,16 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
             }
         }
 
+        private void ResetPendingChanges()
+        {
+            _areLevelsChanged = false;
+
+            foreach (LevelViewModel level in _levels)
+            {
+                level.IsChanged = false;
+            }
+        }
+
         private void NewLevelsDefinition()
         {
             if (IsAnyPendingChange)
@@ -164,7 +174,7 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
             Levels = new ObservableCollection<LevelViewModel>();
 
             AddNewLevel(); // Add new level inside it
-            _areLevelsChanged = false;
+            ResetPendingChanges();
 
             _addNewLevelCommand.RaiseCanExecuteChanged();
             _saveAsLevelsDefinitionCommand.RaiseCanExecuteChanged();
@@ -232,7 +242,7 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
                     seralizer.Serialize(stream, game);
                 }
 
-                _areLevelsChanged = false;
+                ResetPendingChanges();
             }
         }
 

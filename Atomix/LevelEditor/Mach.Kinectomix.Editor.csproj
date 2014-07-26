@@ -28,9 +28,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ProductName>Level Editor for Kinectomix</ProductName>
+    <ProductName>Kinectomix Editor</ProductName>
     <PublisherName>Vladimír Mach</PublisherName>
-    <ApplicationRevision>5</ApplicationRevision>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -253,7 +254,7 @@
     <FileAssociation Include=".atx">
       <Visible>False</Visible>
       <Description>Kinectomix Levels Definition</Description>
-      <Progid>Kinectomix.Editor</Progid>
+      <Progid>KinectomixEditor</Progid>
       <DefaultIcon>FileIcon.ico</DefaultIcon>
     </FileAssociation>
   </ItemGroup>
