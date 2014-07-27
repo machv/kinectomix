@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
 using Mach.Wpf.Mvvm;
 using Mach.Kinectomix.LevelEditor.Model;
+using System.Windows.Input;
+using System.IO;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Mach.Kinectomix.LevelEditor.ViewModel
 {
     public class AvailableTilesViewModel : NotifyPropertyBase
     {
         private Tiles _tiles;
+        private ICommand _openAtomsAssetsDirectoryCommand;
+        private ICommand _openFixedAssetsDirectoryCommand;
 
         public Tiles Tiles
         {
@@ -16,6 +22,14 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
                 _tiles = value;
                 OnPropertyChanged();
             }
+        }
+        public ICommand OpenAtomsAssetsDirectoryCommand
+        {
+            get { return _openAtomsAssetsDirectoryCommand; }
+        }
+        public ICommand OpenFixedAssetsDirectoryCommand
+        {
+            get { return _openFixedAssetsDirectoryCommand; }
         }
 
         public delegate void TileSelectedEventHandler(object sender, TileSelectedEventArgs e);
@@ -73,10 +87,57 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
 
         public AvailableTilesViewModel()
         {
-
+            _openAtomsAssetsDirectoryCommand = new DelegateCommand(OpenAtomsAssetsDirectory);
+            _openFixedAssetsDirectoryCommand = new DelegateCommand(OpenFixedAssetsDirectory);
         }
 
+        public void OpenAtomsAssetsDirectory()
+        {
+            OpenDirectory(Properties.Settings.Default.AtomTilesDirectory);
+        }
+
+        public void OpenFixedAssetsDirectory()
+        {
+            OpenDirectory(Properties.Settings.Default.FixedTilesDirectory);
+        }
+
+        private void OpenDirectory(string path)
+        {
+            string pathToOpen = null;
+
+            string atomsPath = path;
+            string executablePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            if (Path.IsPathRooted(atomsPath))
+            {
+                if (Directory.Exists(atomsPath))
+                {
+                    pathToOpen = atomsPath;
+                }
+            }
+            else
+            {
+                if (Directory.Exists(Path.Combine(executablePath, atomsPath)))
+                {
+                    pathToOpen = Path.Combine(executablePath, atomsPath);
+                }
+            }
+
+            if (pathToOpen != null)
+            {
+                try
+                {
+                    Process.Start(pathToOpen);
+                }
+                catch
+                { }
+            }
+        }
+
+
+
         public AvailableTilesViewModel(Tiles tiles)
+            : this()
         {
             _tiles = tiles;
         }

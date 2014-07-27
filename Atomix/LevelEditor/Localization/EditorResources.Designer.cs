@@ -171,6 +171,15 @@ namespace Mach.Kinectomix.LevelEditor.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open directory with assets for atoms....
+        /// </summary>
+        public static string OpenAtomsAssetsDirectory {
+            get {
+                return ResourceManager.GetString("OpenAtomsAssetsDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Open levels definition....
         /// </summary>
         public static string OpenDefinition {
@@ -196,6 +205,15 @@ namespace Mach.Kinectomix.LevelEditor.Localization {
         public static string OpenDefinitionPendingChangesTitle {
             get {
                 return ResourceManager.GetString("OpenDefinitionPendingChangesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open directory with assets for fixed tiles....
+        /// </summary>
+        public static string OpenFixedAssetsDirectory {
+            get {
+                return ResourceManager.GetString("OpenFixedAssetsDirectory", resourceCulture);
             }
         }
         

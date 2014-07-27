@@ -155,6 +155,9 @@ Opravdu si přejete si pokračovat a vytvořit novou definici úrovní?</value>
   <data name="NewDefinitionPendingChangesTitle" xml:space="preserve">
     <value>Neuložené změny</value>
   </data>
+  <data name="OpenAtomsAssetsDirectory" xml:space="preserve">
+    <value>Otevřít adresář s grafickými podklady pro atomy...</value>
+  </data>
   <data name="OpenDefinition" xml:space="preserve">
     <value>_Otevřít definici...</value>
   </data>
@@ -165,6 +168,9 @@ Opravdu si přejete si pokračovat a otevřít jinou definici úrovní?</value>
   </data>
   <data name="OpenDefinitionPendingChangesTitle" xml:space="preserve">
     <value>Neuložené změny</value>
+  </data>
+  <data name="OpenFixedAssetsDirectory" xml:space="preserve">
+    <value>Otevřít adresář s grafickými podklady pro překážky...</value>
   </data>
   <data name="SaveDefinitionAs" xml:space="preserve">
     <value>_Uložit definici jako...</value>
