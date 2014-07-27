@@ -5,6 +5,7 @@
         xmlns:Control="clr-namespace:Kinectomix.GestureRecorder.Control"
         xmlns:Converter="clr-namespace:Kinectomix.GestureRecorder.Converter"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
+        Icon="../ApplicationIcon.ico"
         Title="Gesture Recorder" Height="600" Width="600" MinHeight="600">
     <Window.DataContext>
         <ViewModel:RecorderViewModel />

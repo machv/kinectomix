@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Kinectomix.GestureRecorder")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Vladimír Mach")]
 [assembly: AssemblyProduct("Kinectomix.GestureRecorder")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]

@@ -24,6 +24,18 @@ namespace Kinectomix.GestureRecorder.View
             InitializeComponent();
 
             Closing += Window_Closing;
+            Loaded += Window_Loaded;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Any())
+            {
+                string[] activationData = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData;
+                var uri = new Uri(activationData[0]);
+
+                (DataContext as ViewModel.RecorderViewModel).AddGestureFromFile(uri.LocalPath);
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -118,9 +118,26 @@ namespace Kinectomix.GestureRecorder.ViewModel
             XmlSerializer seralizer = new XmlSerializer(typeof(Gesture));
             Gesture gesture = null;
 
-            using (Stream stream = File.Open(fileName, FileMode.Open))
+            try
             {
-                gesture = seralizer.Deserialize(stream) as Gesture;
+                using (Stream stream = File.Open(fileName, FileMode.Open))
+                {
+                    gesture = seralizer.Deserialize(stream) as Gesture;
+                }
+            }
+            catch
+            { }
+            return gesture;
+        }
+
+        public Gesture AddGestureFromFile(string fileName)
+        {
+            Gesture gesture = LoadGestureFromFile(fileName);
+
+            if (gesture != null)
+            {
+                _gestures.Add(new GestureViewModel(gesture));
+                _recognizer.AddGesture(gesture);
             }
 
             return gesture;
