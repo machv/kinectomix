@@ -13,6 +13,7 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
         private Tiles _tiles;
         private ICommand _openAtomsAssetsDirectoryCommand;
         private ICommand _openFixedAssetsDirectoryCommand;
+        private ICommand _reloadUserAssetsCommand;
 
         public Tiles Tiles
         {
@@ -31,7 +32,10 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
         {
             get { return _openFixedAssetsDirectoryCommand; }
         }
-
+        public ICommand ReloadUserAssetsCommand
+        {
+            get { return _reloadUserAssetsCommand; }
+        }
         public delegate void TileSelectedEventHandler(object sender, TileSelectedEventArgs e);
         public event TileSelectedEventHandler TileSelected;
 
@@ -66,6 +70,8 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
             }
         }
 
+        private Tiles.TileType _activeTiles;
+
         public void UpdateAvailableTiles(Tiles.TileType type)
         {
             if (_tiles == null)
@@ -83,12 +89,26 @@ namespace Mach.Kinectomix.LevelEditor.ViewModel
                     AvailableTiles = _tiles.Molecule;
                     break;
             }
+
+            _activeTiles = type;
         }
 
         public AvailableTilesViewModel()
         {
             _openAtomsAssetsDirectoryCommand = new DelegateCommand(OpenAtomsAssetsDirectory);
             _openFixedAssetsDirectoryCommand = new DelegateCommand(OpenFixedAssetsDirectory);
+            _reloadUserAssetsCommand = new DelegateCommand(ReloadUserAssets);
+        }
+
+        public void ReloadUserAssets()
+        {
+            Tiles.RemoveUserAssets(Tiles.AssetType.Atom);
+            Tiles.RemoveUserAssets(Tiles.AssetType.Fixed);
+
+            Tiles.LoadUserAssets(Tiles.AssetType.Fixed, Properties.Settings.Default.FixedTilesDirectory);
+            Tiles.LoadUserAssets(Tiles.AssetType.Atom, Properties.Settings.Default.AtomTilesDirectory);
+
+            UpdateAvailableTiles(_activeTiles);
         }
 
         public void OpenAtomsAssetsDirectory()

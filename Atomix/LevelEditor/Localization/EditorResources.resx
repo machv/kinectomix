@@ -172,6 +172,9 @@ Do you want to continue with opening levels definition?</value>
   <data name="OpenFixedAssetsDirectory" xml:space="preserve">
     <value>Open directory with assets for fixed tiles...</value>
   </data>
+  <data name="ReloadUserAssets" xml:space="preserve">
+    <value>Reload assets from directories</value>
+  </data>
   <data name="SaveDefinitionAs" xml:space="preserve">
     <value>_Save levels definition as...</value>
   </data>

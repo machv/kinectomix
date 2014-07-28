@@ -218,6 +218,15 @@ namespace Mach.Kinectomix.LevelEditor.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reload assets from directories.
+        /// </summary>
+        public static string ReloadUserAssets {
+            get {
+                return ResourceManager.GetString("ReloadUserAssets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Save levels definition as....
         /// </summary>
         public static string SaveDefinitionAs {

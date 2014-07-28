@@ -10,7 +10,7 @@
              StartupUri="View/EditorWindow.xaml">
     <Application.Resources>
         <localization:LocalizedStrings xmlns:local="clr-namespace:Mach.Kinectomix.LevelEditor.Localization" x:Key="LocalizedStrings" />
-        
+
         <Converter:NegateConverter x:Key="NegateConverter" />
         <Converter:AllTrueConveter x:Key="AllTrueConveter" />
         <Converter:NullToTrueConverter x:Key="NullToTrueConverter" />
@@ -184,15 +184,18 @@
                            Tag="{Binding DataContext,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type StackPanel}}}"
                            FontWeight="Bold">
                     <TextBlock.ContextMenu>
-                    <ContextMenu>
-                            <MenuItem Header="{Binding Editor.OpenFixedAssetsDirectory, Source={StaticResource LocalizedStrings}}" 
-                                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.OpenFixedAssetsDirectoryCommand}" 
-                                                  CommandParameter="{Binding}" />
+                        <ContextMenu>
                             <MenuItem Header="{Binding Editor.OpenAtomsAssetsDirectory, Source={StaticResource LocalizedStrings}}" 
                                                   Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.OpenAtomsAssetsDirectoryCommand}" 
                                                   CommandParameter="{Binding}" />
+                            <MenuItem Header="{Binding Editor.OpenFixedAssetsDirectory, Source={StaticResource LocalizedStrings}}" 
+                                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.OpenFixedAssetsDirectoryCommand}" 
+                                                  CommandParameter="{Binding}" />
+                            <MenuItem Header="{Binding Editor.ReloadUserAssets, Source={StaticResource LocalizedStrings}}" 
+                                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.ReloadUserAssetsCommand}" 
+                                                  CommandParameter="{Binding}" />
                         </ContextMenu>
-                </TextBlock.ContextMenu>
+                    </TextBlock.ContextMenu>
                 </TextBlock>
 
                 <ListBox Background="Transparent" BorderThickness="0" ItemsSource="{Binding AvailableTiles}" SelectedItem="{Binding SelectedTile}">

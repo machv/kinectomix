@@ -172,6 +172,9 @@ Opravdu si přejete si pokračovat a otevřít jinou definici úrovní?</value>
   <data name="OpenFixedAssetsDirectory" xml:space="preserve">
     <value>Otevřít adresář s grafickými podklady pro překážky...</value>
   </data>
+  <data name="ReloadUserAssets" xml:space="preserve">
+    <value>Aktualizovat dlaždice z adresářů s grafickými podklady</value>
+  </data>
   <data name="SaveDefinitionAs" xml:space="preserve">
     <value>_Uložit definici jako...</value>
   </data>

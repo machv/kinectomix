@@ -47,6 +47,7 @@ namespace Mach.Kinectomix.LevelEditor.Model
         private ObservableCollection<BoardTileViewModel> _tiles = new ObservableCollection<BoardTileViewModel>();
         private ObservableCollection<BoardTileViewModel> _boardTiles = new ObservableCollection<BoardTileViewModel>();
         private ObservableCollection<BoardTileViewModel> _moleculeTiles = new ObservableCollection<BoardTileViewModel>();
+        private ObservableCollection<BoardTileViewModel> _userTiles = new ObservableCollection<BoardTileViewModel>();
 
         /// <summary>
         /// Gets the all containing tiles.
@@ -101,6 +102,24 @@ namespace Mach.Kinectomix.LevelEditor.Model
                 case TileType.Molecule:
                     _moleculeTiles.Add(tile);
                     break;
+            }
+        }
+
+        public void Remove(BoardTileViewModel tile, TileType type)
+        {
+            switch (type)
+            {
+                case TileType.Board:
+                    _boardTiles.Remove(tile);
+                    break;
+                case TileType.Molecule:
+                    _moleculeTiles.Remove(tile);
+                    break;
+            }
+
+            if (!_moleculeTiles.Contains(tile) && !_boardTiles.Contains(tile))
+            {
+                _tiles.Remove(tile);
             }
         }
 
@@ -167,10 +186,29 @@ namespace Mach.Kinectomix.LevelEditor.Model
 
                     if (type == AssetType.Atom)
                         Add(tileVm, TileType.Molecule);
+
+                    _userTiles.Add(tileVm);
                 }
             }
             catch
             { }
+        }
+
+        public void RemoveUserAssets(AssetType type)
+        {
+            foreach (BoardTileViewModel tileVm in _userTiles)
+            {
+                if (type == AssetType.Atom)
+                {
+                    Remove(tileVm, TileType.Board);
+                    Remove(tileVm, TileType.Molecule);
+                }
+
+                if (type == AssetType.Fixed)
+                {
+                    Remove(tileVm, TileType.Board);
+                }
+            }
         }
 
         /// <summary>
