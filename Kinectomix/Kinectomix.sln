@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinectomix.Content", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinectomix.Logic", "Logic\Mach.Kinectomix.Logic.csproj", "{E3BD22BB-E5F5-4900-8B05-A32C87510EA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinectomix.Editor", "LevelEditor\Mach.Kinectomix.Editor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinectomix.Editor", "Editor\Mach.Kinectomix.Editor.csproj", "{5313A90B-65AB-4D03-AB9E-73C257C765FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect.GestureRecorder", "..\GestureRecorder\Mach.Kinect.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
 EndProject
