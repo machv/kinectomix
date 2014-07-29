@@ -43,7 +43,8 @@ namespace Mach.Kinectomix.Screens
         private SpriteFont _normalFont;
         private SpriteFont _levelFont;
         private SpriteFont _timeFont;
-        private Point _activeAtomIndex = new Point(-1, -1);
+        private Point _previousAtomIndex;
+        private Point _activeAtomIndex;
         private ContentManager _content;
         private SwipeRecognizer _swipeGestures;
         private Level _levelDefinition;
@@ -109,6 +110,9 @@ namespace Mach.Kinectomix.Screens
         /// </summary>
         public override void Initialize()
         {
+            _activeAtomIndex = NoAtomSelected;
+            _previousAtomIndex = NoAtomSelected;
+
             _activeTileOpacity = 0.0f;
             _activeTileOpacityDirection = 1;
             _level = LevelViewModel.FromModel(_levelDefinition, ScreenManager.GraphicsDevice);
@@ -365,7 +369,10 @@ namespace Mach.Kinectomix.Screens
                     {
                         if (_level.Board[i, j] != null)
                         {
-                            if (_level.Board[i, j].RenderRectangle.Contains(mousePosition))
+                            Rectangle renderBox = _level.Board[i, j].RenderRectangle;
+                            Rectangle withTolerance = new Rectangle(renderBox.X - 2, renderBox.Y - 2, renderBox.Width + 4, renderBox.Height + 4);
+                            //if (_level.Board[i, j].RenderRectangle.Contains(mousePosition))
+                            if (withTolerance.Contains(mousePosition))
                             {
                                 if (cursor.IsHandTracked)
                                 {
@@ -463,10 +470,7 @@ namespace Mach.Kinectomix.Screens
                                     {
                                         ClearBoard();
 
-                                        _level.Board[i, j].IsSelected = true;
-                                        _activeAtomIndex = new Point(i, j);
-
-                                        PrepareAvailableTileMovements(_level.Board, i, j);
+                                        ActivateTile(i, j);
                                     }
                                     else if (IsMovementTile(i, j))
                                     {
@@ -563,45 +567,39 @@ namespace Mach.Kinectomix.Screens
         private void ProcessMovementAnimation(GameTime gameTime)
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            // Move atom to new position
-            if (_atomPosition.X == _destinationRectangle.X)
-            {
-                int direction = _moveDirection == MoveDirection.Up ? -1 : 1;
-                _atomPosition.Y += direction * AtomSpeed * elapsed;
-            }
-
-            if (_atomPosition.Y == _destinationRectangle.Y)
-            {
-                int direction = _moveDirection == MoveDirection.Left ? -1 : 1;
-                _atomPosition.X += direction * AtomSpeed * elapsed;
-            }
-
-            // Check if it reached destination
+            float difference = AtomSpeed * elapsed;
             bool _animationFinished = false;
 
             switch (_moveDirection)
             {
                 case MoveDirection.Up:
-                    if (_atomPosition.Y <= _destinationRectangle.Top || _atomPosition.X != _destinationRectangle.X)
+                    _atomPosition.Y += -1 * difference;
+
+                    if (_atomPosition.Y <= _destinationRectangle.Top || _atomPosition.X - _destinationRectangle.X > 2 || _atomPosition.X - _destinationRectangle.X < -2)
                     {
                         _animationFinished = true;
                     }
                     break;
                 case MoveDirection.Down:
-                    if (_atomPosition.Y >= _destinationRectangle.Top || _atomPosition.X != _destinationRectangle.X)
+                    _atomPosition.Y += difference;
+
+                    if (_atomPosition.Y >= _destinationRectangle.Top || _atomPosition.X - _destinationRectangle.X > 2 || _atomPosition.X - _destinationRectangle.X < -2)
                     {
                         _animationFinished = true;
                     }
                     break;
                 case MoveDirection.Left:
-                    if (_atomPosition.X <= _destinationRectangle.Left || _atomPosition.Y != _destinationRectangle.Y)
+                    _atomPosition.X += -1 * difference;
+
+                    if (_atomPosition.X <= _destinationRectangle.Left || _atomPosition.Y - _destinationRectangle.Y > 2 || _atomPosition.Y - _destinationRectangle.Y < -2)
                     {
                         _animationFinished = true;
                     }
                     break;
                 case MoveDirection.Right:
-                    if (_atomPosition.X >= _destinationRectangle.Left || _atomPosition.Y != _destinationRectangle.Y)
+                    _atomPosition.X += difference;
+
+                    if (_atomPosition.X >= _destinationRectangle.Left || _atomPosition.Y - _destinationRectangle.Y > 2 || _atomPosition.Y - _destinationRectangle.Y < -2)
                     {
                         _animationFinished = true;
                     }
@@ -625,8 +623,18 @@ namespace Mach.Kinectomix.Screens
 
         private void ActivateTile(int k, int l)
         {
-            _currentlyHoveredTile.IsSelected = true;
+            _previousAtomIndex = _activeAtomIndex;
             _activeAtomIndex = new Point(k, l);
+
+            if (_previousAtomIndex != NoAtomSelected)
+            {
+                ClearBoard();
+            }
+
+            //_currentlyHoveredTile.IsSelected = true;
+            _level.Board[k, l].IsSelected = true;
+            
+
             PrepareAvailableTileMovements(_level.Board, k, l);
         }
 
@@ -852,7 +860,6 @@ namespace Mach.Kinectomix.Screens
             // start animation
             _isMovementAnimation = true;
             _atomPosition = startAtom.RenderPosition;
-            _animatedAtomRectangle = startAtom.RenderRectangle;
             _destinationRectangle = destinationAtom.RenderRectangle;
             _destination = newCoordinates;
             _atomToMove = startAtom.Asset;
