@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.MonoGame.Kinect", "Mach.Xna.Kinect\Mach.MonoGame.Kinect.csproj", "{D3CEA0A0-CBAB-42BD-B169-16EED44DC1C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.MonoGame", "Mach.Xna\Mach.MonoGame.csproj", "{64930E1B-4C63-41FF-A982-6FF97B05E332}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect", "Mach.Kinect\Mach.Kinect.csproj", "{EFC015B9-F516-4258-A4FD-759F4933104A}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 1
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
+		SccProjectUniqueName0 = Mach.Kinect\\Mach.Kinect.csproj
+		SccProjectName0 = Mach.Kinect
+		SccAuxPath0 = https://tfs.codeplex.com/tfs/tfs15
+		SccLocalPath0 = Mach.Kinect
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3CEA0A0-CBAB-42BD-B169-16EED44DC1C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3CEA0A0-CBAB-42BD-B169-16EED44DC1C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3CEA0A0-CBAB-42BD-B169-16EED44DC1C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3CEA0A0-CBAB-42BD-B169-16EED44DC1C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64930E1B-4C63-41FF-A982-6FF97B05E332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64930E1B-4C63-41FF-A982-6FF97B05E332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64930E1B-4C63-41FF-A982-6FF97B05E332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64930E1B-4C63-41FF-A982-6FF97B05E332}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFC015B9-F516-4258-A4FD-759F4933104A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC015B9-F516-4258-A4FD-759F4933104A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
