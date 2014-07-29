@@ -23,25 +23,26 @@ namespace Mach.Kinectomix.Screens
     /// </summary>
     public class LevelScreen : GameScreen
     {
+        private readonly TimeSpan MinimalHoverDuration = TimeSpan.FromSeconds(1);
+        private readonly Point NoAtomSelected = new Point(-1, -1);
         private const int TileWidth = 60;
         private const int TileHeight = 60;
+
         private bool _isGestureCandidate = false;
-        private TimeSpan _minimalHoverDuration = TimeSpan.FromSeconds(1);
         private int _activeTileOpacityDirection;
         private float _activeTileOpacity;
-        private Texture2D wallTexture;
-        private Texture2D emptyTexture;
-        private Texture2D arrowTexture;
-        private Texture2D activeTexture;
-        private Texture2D idleTexture;
-        private MouseState mouseState;
-        private MouseState lastMouseState;
+        private Texture2D _emptyTexture;
+        private Texture2D _arrowTexture;
+        private Texture2D _activeTexture;
+        private Texture2D _idleTexture;
+        private MouseState _mouseState;
+        private MouseState _lastMouseState;
         private SoundEffect _applause;
-        private Vector2 boardPosition;
+        private Vector2 _boardPosition;
         private SpriteFont _normalFont;
         private SpriteFont _levelFont;
         private SpriteFont _timeFont;
-        private Point activeAtomIndex = new Point(-1, -1);
+        private Point _activeAtomIndex = new Point(-1, -1);
         private ContentManager _content;
         private SwipeRecognizer _swipeGestures;
         private Level _levelDefinition;
@@ -51,20 +52,22 @@ namespace Mach.Kinectomix.Screens
         private SpriteButton _pauseButton;
         private LevelHighscore _highscore;
         private Button _levelNameButton;
-
         private int _leftBoxEndX = 400;
-
         private int _topOffsetMain = 120;
         private Texture2D _backgroundTexture;
+        private bool _isLevelFinished = false;
+        private bool _isLevelPaused = false;
+        private KeyboardState _previousKeyboardState;
+        BoardTileViewModel _currentlyHoveredTile = null;
 
         // Animation stuff
-        protected bool isMovementAnimation = false;
-        protected Vector2 atomPosition;
-        protected Vector2 finalPosition;
-        private Point destination;
-        private string atomToMove;
-        private MoveDirection moveDirection;
-        private float atomSpeed = 400f;
+        protected bool _isMovementAnimation = false;
+        protected Vector2 _atomPosition;
+        protected Vector2 _finalPosition;
+        private Point _destination;
+        private string _atomToMove;
+        private MoveDirection _moveDirection;
+        private float _atomSpeed = 400f;
         private float _renderAtomScale = 1;
 
         // Scoring
@@ -73,15 +76,10 @@ namespace Mach.Kinectomix.Screens
         private TimeSpan _gameDuration;
         private DateTime _lastDate;
 
-        private bool _isLevelFinished = false;
-
         // Message boxes
-        BoardTileViewModel currentlyHoveredTile = null;
-        DateTime lastHoveredTileTime = DateTime.MinValue;
-        private KeyboardState _previousKeyboardState;
+        DateTime _lastHoveredTileTime = DateTime.MinValue;
         private KinectMessageBox _pauseMessageBox;
         private KinectMessageBox _finishedMessageBox;
-        private bool _isPaused = false;
         private KinectButton[] _finishButtons;
         private KinectButton[] _pauseButtons;
 
@@ -207,9 +205,9 @@ namespace Mach.Kinectomix.Screens
             int startY = maximalHeight / 2 - boardHeight / 2;
             startY = 30 + 30 * (startY / 30);
 
-            boardPosition = new Vector2(startX, startY);
+            _boardPosition = new Vector2(startX, startY);
 
-            CalculateBoardTilePositions(boardPosition, _level.Board, scale);
+            CalculateBoardTilePositions(_boardPosition, _level.Board, scale);
 
             int moleculeWidth = _level.Molecule.ColumnsCount * TileWidth;
             int moleculeHeight = _level.Molecule.RowsCount * TileHeight;
@@ -240,15 +238,14 @@ namespace Mach.Kinectomix.Screens
 
             CalculateBoardTilePositions(new Vector2(posX, posY), _level.Molecule, scale);
 
-            wallTexture = _content.Load<Texture2D>("Board/Wall");
-            emptyTexture = _content.Load<Texture2D>("Board/Empty");
-            arrowTexture = _content.Load<Texture2D>("Board/Arrow");
-            activeTexture = _content.Load<Texture2D>("Board/Active");
+            _emptyTexture = _content.Load<Texture2D>("Board/Empty");
+            _arrowTexture = _content.Load<Texture2D>("Board/Arrow");
+            _activeTexture = _content.Load<Texture2D>("Board/Active");
             _applause = _content.Load<SoundEffect>("Sounds/Applause");
             _normalFont = _content.Load<SpriteFont>("Fonts/Normal");
             _levelFont = _content.Load<SpriteFont>("Fonts/LevelName");
             _timeFont = _content.Load<SpriteFont>("Fonts/Time");
-            idleTexture = _content.Load<Texture2D>("Idle");
+            _idleTexture = _content.Load<Texture2D>("Idle");
 
             _levelNameButton.Font = _levelFont;
             _levelNameButton.IsEnabled = false;
@@ -299,96 +296,161 @@ namespace Mach.Kinectomix.Screens
                 _finishedMessageBox.Hide();
 
             // Pause game
-            if (state.IsKeyDown(Keys.Escape) == true && _previousKeyboardState.IsKeyDown(Keys.Escape) == false && !_isPaused)
+            if (state.IsKeyDown(Keys.Escape) == true && _previousKeyboardState.IsKeyDown(Keys.Escape) == false && !_isLevelPaused)
                 PauseGame();
-
 
             _previousKeyboardState = state;
 
-            if (_isPaused)
+            if (_isLevelPaused)
             {
                 GesturesState gesturesState = Gestures.GetState();
-                if(gesturesState.IsGestureRecognized(GestureType.LeftHandWave) || 
+                if (gesturesState.IsGestureRecognized(GestureType.LeftHandWave) ||
                     gesturesState.IsGestureRecognized(GestureType.RightHandWave))
                 {
                     UnpauseGame();
                 }
-            }
-
-            if (!_isPaused)
-            {
-                bool clickOccurred = false;
-                bool isGestureDetected = false;
-
-                lastMouseState = mouseState;
-                mouseState = Mouse.GetState();
-
-                // Recognize a single click of the left mouse button
-                if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
-                {
-                    clickOccurred = true;
-                }
-
-                KinectCursor cursor = (ScreenManager.Game as KinectomixGame).Cursor;
-
-                if (_isLevelFinished)
+                else
                 {
                     return;
                 }
+            }
 
-                _gameDuration += DateTime.Now - _lastDate;
-                _lastDate = DateTime.Now;
+            if (_isLevelFinished)
+            {
+                return;
+            }
 
-                if (isMovementAnimation)
+            // Not paused game
+            bool clickOccurred = false;
+            bool isGestureDetected = false;
+
+            _lastMouseState = _mouseState;
+            _mouseState = Mouse.GetState();
+
+            // Recognize a single click of the left mouse button
+            if (_lastMouseState.LeftButton == ButtonState.Released && _mouseState.LeftButton == ButtonState.Pressed)
+            {
+                clickOccurred = true;
+            }
+
+            KinectCursor cursor = (ScreenManager.Game as KinectomixGame).Cursor;
+
+            _gameDuration += DateTime.Now - _lastDate;
+            _lastDate = DateTime.Now;
+
+            if (_isMovementAnimation)
+            {
+                ProcessMovementAnimation(gameTime);
+            }
+            else
+            {
+                // Detect hover
+                Point mousePosition = cursor.IsHandTracked ?
+                    new Point((int)cursor.Position.X, (int)cursor.Position.Y) :
+                    new Point(_mouseState.X, _mouseState.Y);
+
+                // Clear selection
+                foreach (BoardTileViewModel tile in _level.Board.Where(t => t != null && t.IsHovered == true))
                 {
-                    float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    tile.IsHovered = false;
+                }
 
-                    Vector2 destinationPosition = _level.Board[destination.X, destination.Y].RenderPosition;
+                BoardTileViewModel newHoveredTileBefore = null;
+                DateTime lastHoveredTileTimeBefore = _lastHoveredTileTime;
+                int k = -1;
+                int l = -1;
 
-                    if (atomPosition.X == destinationPosition.X)
+                for (int i = 0; i < _level.Board.RowsCount; i++)
+                {
+                    for (int j = 0; j < _level.Board.ColumnsCount; j++)
                     {
-                        int direction = moveDirection == MoveDirection.Up ? -1 : 1;
-                        atomPosition.Y += direction * atomSpeed * elapsed;
-                    }
-
-                    if (atomPosition.Y == destinationPosition.Y)
-                    {
-                        int direction = moveDirection == MoveDirection.Left ? -1 : 1;
-                        atomPosition.X += direction * atomSpeed * elapsed;
-                    }
-
-                    Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale));
-                    if (tile.Contains((int)atomPosition.X, (int)atomPosition.Y))
-                    {
-                        isMovementAnimation = false;
-                        _level.Board[destination.X, destination.Y].Asset = atomToMove;
-                        _level.Board[destination.X, destination.Y].IsEmpty = false;
-
-                        // Animation finished -> check victory
-                        bool isFinished = CheckFinish();
-                        if (isFinished)
+                        if (_level.Board[i, j] != null)
                         {
-                            ProcessFinish();
+                            if (_level.Board[i, j].RenderRectangle.Contains(mousePosition))
+                            {
+                                if (cursor.IsHandTracked)
+                                {
+                                    // If we are tracking cursor via Kinect, we use some affinity
+                                    if (_level.Board[i, j].IsFixed == false)
+                                    {
+                                        newHoveredTileBefore = _level.Board[i, j];
+                                        k = i;
+                                        l = j;
+                                    }
+                                    else
+                                    {
+                                        int m, n;
+                                        BoardTileViewModel tile = GetNeigbourMoleculeTile(_level.Board, i, j, out m, out n);
+
+                                        if (tile != null)
+                                        {
+                                            newHoveredTileBefore = tile;
+                                            k = m;
+                                            l = n;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // In normal way (mouse) we use direct positions
+                                    newHoveredTileBefore = _level.Board[i, j];
+                                    k = i;
+                                    l = j;
+                                }
+                            }
                         }
                     }
                 }
-                else
-                {
-                    // Detect hover
-                    Point mousePosition = cursor.IsHandTracked ?
-                        new Point((int)cursor.Position.X, (int)cursor.Position.Y) :
-                        new Point(mouseState.X, mouseState.Y);
 
-                    // Clear selection
-                    foreach (BoardTileViewModel tile in _level.Board.Where(t => t != null && t.IsHovered == true))
+                if (newHoveredTileBefore != _currentlyHoveredTile)
+                {
+                    _lastHoveredTileTime = DateTime.Now;
+                    _currentlyHoveredTile = newHoveredTileBefore;
+
+                    if (cursor.IsHandTracked) // Only when is tracked hand via Kinect clear selected tiles.
                     {
-                        tile.IsHovered = false;
+                        ClearBoard();
+                    }
+                    else
+                    {
+                        if (IsMovementTile(_currentlyHoveredTile) == false && IsAtomTile(_currentlyHoveredTile) == false)
+                        {
+                            ClearBoard();
+                            _activeAtomIndex = NoAtomSelected;
+                        }
                     }
 
-                    BoardTileViewModel newHoveredTileBefore = null;
-                    DateTime lastHoveredTileTimeBefore = lastHoveredTileTime;
-                    int k = -1;
-                    int l = -1;
+                    if (_cursor != null)
+                        _cursor.Progress = 0;
+                }
+
+                if (_currentlyHoveredTile != null)
+                {
+                    ProcessHoveredTile(cursor, k, l);
+                }
+
+                // Detect clicks
+                if (clickOccurred || isGestureDetected || cursor.IsHandStateActive)
+                {
+                    Point activityPosition;
+                    if (clickOccurred && !isGestureDetected)
+                    {
+                        activityPosition = new Point(_mouseState.X, _mouseState.Y);
+                    }
+                    else
+                    {
+                        activityPosition = new Point((int)cursor.Position.X, (int)cursor.Position.Y);
+                    }
+
+                    // Find nearest point
+                    Vector2 mPosition = new Vector2(_boardPosition.X, _boardPosition.Y);
+
+                    // Reset active atom to none
+                    if (_activeAtomIndex != NoAtomSelected)
+                    {
+                        _level.Board[_activeAtomIndex.X, _activeAtomIndex.Y].Opacity = 1;
+                    }
+                    _activeAtomIndex = NoAtomSelected; //new Point(-1, -1);
 
                     for (int i = 0; i < _level.Board.RowsCount; i++)
                     {
@@ -396,179 +458,173 @@ namespace Mach.Kinectomix.Screens
                         {
                             if (_level.Board[i, j] != null)
                             {
-                                if (_level.Board[i, j].RenderRectangle.Contains(mousePosition))
+                                Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale));
+                                if (clickOccurred && _level.Board[i, j].RenderRectangle.Contains(activityPosition))
                                 {
-                                    if (cursor.IsHandTracked)
+                                    if (_level.Board[i, j].IsFixed == false)
                                     {
-                                        // If we are tracking cursor via Kinect, we use some affinity
-                                        if (_level.Board[i, j].IsFixed == false)
-                                        {
-                                            newHoveredTileBefore = _level.Board[i, j];
-                                            k = i;
-                                            l = j;
-                                        }
-                                        else
-                                        {
-                                            int m, n;
-                                            BoardTileViewModel tile = GetNeigbourMoleculeTile(_level.Board, i, j, out m, out n);
+                                        ClearBoard();
 
-                                            if (tile != null)
-                                            {
-                                                newHoveredTileBefore = tile;
-                                                k = m;
-                                                l = n;
-                                            }
-                                        }
+                                        _level.Board[i, j].IsSelected = true;
+                                        _activeAtomIndex = new Point(i, j);
+
+                                        PrepareAvailableTileMovements(_level.Board, i, j);
+                                    }
+                                    else if (IsMovementTile(i, j))
+                                    {
+                                        MoveDirection direction = GetDirectionFromAsset(_level.Board[i, j].Asset);
+                                        Point coordinates = new Point(i, j);
+                                        Point atomCoordinates = GetAtomPosition(coordinates, direction);
+
+                                        ProcessTileMove(atomCoordinates, direction);
+
+                                        ClearBoard();
                                     }
                                     else
                                     {
-                                        // In normal way (mouse) we use direct positions
-                                        newHoveredTileBefore = _level.Board[i, j];
-                                        k = i;
-                                        l = j;
+                                        ClearBoard();
                                     }
                                 }
                             }
-                        }
-                    }
 
-                    if (newHoveredTileBefore != currentlyHoveredTile)
-                    {
-                        lastHoveredTileTime = DateTime.Now;
-                        currentlyHoveredTile = newHoveredTileBefore;
-
-                        if (cursor.IsHandTracked) // Only when is tracked hand via Kinect clear selected tiles.
-                        {
-                            ClearBoard();
+                            mPosition.X += TileWidth;
                         }
 
-                        if (_cursor != null)
-                            _cursor.Progress = 0;
-                    }
-
-                    if (currentlyHoveredTile != null)
-                    {
-                        currentlyHoveredTile.IsHovered = true;
-
-                        if (cursor.IsHandTracked && currentlyHoveredTile.IsFixed == false)
-                        {
-                            TimeSpan elapsedTime = DateTime.Now - lastHoveredTileTime;
-
-                            if (_cursor != null)
-                            {
-                                _cursor.Progress = elapsedTime.TotalMilliseconds / _minimalHoverDuration.TotalMilliseconds;
-                            }
-
-                            if (elapsedTime > _minimalHoverDuration)
-                            {
-                                ClearBoard();
-
-                                currentlyHoveredTile.IsSelected = true;
-
-                                activeAtomIndex = new Point(k, l);
-                                PrepareAvailableTileMovements(_level.Board, k, l);
-
-                                if (_cursor != null)
-                                    _cursor.Progress = 0;
-
-                                // prepare for gesture
-                                _swipeGestures.Start(cursor.HandPosition, 0.05);
-                                _isGestureCandidate = true;
-                            }
-                        }
-                    }
-
-                    // Detect clicks
-                    if (clickOccurred || isGestureDetected || cursor.IsHandStateActive)
-                    {
-                        Point activityPosition;
-                        if (clickOccurred && !isGestureDetected)
-                        {
-                            activityPosition = new Point(mouseState.X, mouseState.Y);
-                        }
-                        else
-                        {
-                            activityPosition = new Point((int)cursor.Position.X, (int)cursor.Position.Y);
-                        }
-
-                        // Find nearest point
-                        Vector2 mPosition = new Vector2(boardPosition.X, boardPosition.Y);
-
-                        // Reset active atom to none
-                        activeAtomIndex = new Point(-1, -1);
-
-                        for (int i = 0; i < _level.Board.RowsCount; i++)
-                        {
-                            for (int j = 0; j < _level.Board.ColumnsCount; j++)
-                            {
-                                if (_level.Board[i, j] != null)
-                                {
-                                    Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale));
-                                    if (clickOccurred && _level.Board[i, j].RenderRectangle.Contains(activityPosition))
-                                    {
-                                        if (_level.Board[i, j].IsFixed == false)
-                                        {
-                                            ClearBoard();
-
-                                            _level.Board[i, j].IsSelected = true;
-                                            activeAtomIndex = new Point(i, j);
-
-                                            PrepareAvailableTileMovements(_level.Board, i, j);
-                                        }
-                                        else if (_level.Board[i, j].Asset == "Right" ||
-                                                 _level.Board[i, j].Asset == "Left" ||
-                                                 _level.Board[i, j].Asset == "Up" ||
-                                                 _level.Board[i, j].Asset == "Down")
-                                        {
-                                            MoveDirection direction = GetDirectionFromAsset(_level.Board[i, j].Asset);
-                                            Point coordinates = new Point(i, j);
-                                            Point atomCoordinates = GetAtomPosition(coordinates, direction);
-
-                                            ProcessTileMove(atomCoordinates, direction);
-
-                                            ClearBoard();
-                                        }
-                                    }
-                                }
-
-                                mPosition.X += TileWidth;
-                            }
-
-                            mPosition.X = boardPosition.X;
-                            mPosition.Y += TileHeight;
-                        }
-                    }
-
-                    if (_isGestureCandidate)
-                    {
-                        SwipeGesture recognizedGesture;
-                        _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandPosition, out recognizedGesture);
-                        if (recognizedGesture != null)
-                        {
-                            // Recognized swipe gesture
-                            MoveDirection direction = SwipeToMoveDirection(recognizedGesture.Direction);
-
-                            ProcessTileMove(activeAtomIndex, direction);
-
-                            ClearBoard();
-                        }
-                    }
-
-                    if (!isMovementAnimation && activeAtomIndex.X != -1 && activeAtomIndex.Y != -1)
-                    {
-                        // We have selected atom which is not moved 
-
-                        // update glowing
-                        _activeTileOpacity += 0.02f * _activeTileOpacityDirection;
-                        if (_activeTileOpacity > 1.0)
-                            _activeTileOpacityDirection = -1;
-                        if (_activeTileOpacity < 0.5)
-                            _activeTileOpacityDirection = 1;
-
-                        _level.Board[activeAtomIndex.X, activeAtomIndex.Y].Opacity = _activeTileOpacity;
+                        mPosition.X = _boardPosition.X;
+                        mPosition.Y += TileHeight;
                     }
                 }
+
+                if (_isGestureCandidate)
+                {
+                    SwipeGesture recognizedGesture;
+                    _isGestureCandidate = _swipeGestures.ProcessPosition(cursor.HandPosition, out recognizedGesture);
+                    if (recognizedGesture != null)
+                    {
+                        // Recognized swipe gesture
+                        MoveDirection direction = SwipeToMoveDirection(recognizedGesture.Direction);
+
+                        ProcessTileMove(_activeAtomIndex, direction);
+
+                        ClearBoard();
+                    }
+                }
+
+                if (!_isMovementAnimation && _activeAtomIndex != NoAtomSelected) //; activeAtomIndex.X != -1 && activeAtomIndex.Y != -1)
+                {
+                    // We have selected atom which is not moved -> glow
+                    UpdateGlowingAnimation();
+                }
             }
+        }
+
+        private void UpdateGlowingAnimation()
+        {
+            _activeTileOpacity += 0.02f * _activeTileOpacityDirection;
+            if (_activeTileOpacity > 1.0)
+                _activeTileOpacityDirection = -1;
+            if (_activeTileOpacity < 0.5)
+                _activeTileOpacityDirection = 1;
+
+            _level.Board[_activeAtomIndex.X, _activeAtomIndex.Y].Opacity = _activeTileOpacity;
+        }
+
+        private void ProcessHoveredTile(KinectCursor cursor, int k, int l)
+        {
+            _currentlyHoveredTile.IsHovered = true;
+
+            Point currentMousePosition = new Point(_mouseState.X, _mouseState.Y);
+            if (_currentlyHoveredTile.IsFixed == false && _currentlyHoveredTile.RenderRectangle.Contains(currentMousePosition))
+            {
+                ActivateTile(k, l);
+            }
+            else if (cursor.IsHandTracked && _currentlyHoveredTile.IsFixed == false)
+            {
+                TimeSpan elapsedTime = DateTime.Now - _lastHoveredTileTime;
+
+                if (_cursor != null)
+                {
+                    _cursor.Progress = elapsedTime.TotalMilliseconds / MinimalHoverDuration.TotalMilliseconds;
+                }
+
+                if (elapsedTime > MinimalHoverDuration)
+                {
+                    ClearBoard();
+                    ActivateTile(k, l);
+
+                    if (_cursor != null)
+                        _cursor.Progress = 0;
+
+                    // prepare for gesture
+                    _swipeGestures.Start(cursor.HandPosition, 0.05);
+                    _isGestureCandidate = true;
+                }
+            }
+        }
+
+        private void ProcessMovementAnimation(GameTime gameTime)
+        {
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            Vector2 destinationPosition = _level.Board[_destination.X, _destination.Y].RenderPosition;
+
+            if (_atomPosition.X == destinationPosition.X)
+            {
+                int direction = _moveDirection == MoveDirection.Up ? -1 : 1;
+                _atomPosition.Y += direction * _atomSpeed * elapsed;
+            }
+
+            if (_atomPosition.Y == destinationPosition.Y)
+            {
+                int direction = _moveDirection == MoveDirection.Left ? -1 : 1;
+                _atomPosition.X += direction * _atomSpeed * elapsed;
+            }
+
+            Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale));
+            if (tile.Contains((int)_atomPosition.X, (int)_atomPosition.Y))
+            {
+                _isMovementAnimation = false;
+                _level.Board[_destination.X, _destination.Y].Asset = _atomToMove;
+                _level.Board[_destination.X, _destination.Y].IsEmpty = false;
+
+                // Animation finished -> check victory
+                bool isFinished = CheckFinish();
+                if (isFinished)
+                {
+                    ProcessFinish();
+                }
+            }
+        }
+
+        private void ActivateTile(int k, int l)
+        {
+            _currentlyHoveredTile.IsSelected = true;
+            _activeAtomIndex = new Point(k, l);
+            PrepareAvailableTileMovements(_level.Board, k, l);
+        }
+
+        private bool IsAtomTile(BoardTileViewModel tile)
+        {
+            if (tile == null)
+                return false;
+
+            return tile.IsFixed == false;
+        }
+
+        private bool IsMovementTile(BoardTileViewModel tile)
+        {
+            if (tile == null)
+                return false;
+
+            return tile.Asset == "Right" ||
+                   tile.Asset == "Left" ||
+                   tile.Asset == "Up" ||
+                   tile.Asset == "Down";
+        }
+
+        private bool IsMovementTile(int i, int j)
+        {
+            return IsMovementTile(_level.Board[i, j]);
         }
 
         public override void Draw(GameTime gameTime)
@@ -614,9 +670,9 @@ namespace Mach.Kinectomix.Screens
                 _spriteBatch.DrawStringWithShadow(_timeFont, textToRender, new Vector2(x, 630), Color.Gray);
             }
 
-            if (isMovementAnimation)
+            if (_isMovementAnimation)
             {
-                _spriteBatch.Draw(GetTileTexture(atomToMove), new Rectangle((int)atomPosition.X, (int)atomPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale)), Color.White);
+                _spriteBatch.Draw(GetTileTexture(_atomToMove), new Rectangle((int)_atomPosition.X, (int)_atomPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale)), Color.White);
             }
 
             _spriteBatch.End();
@@ -627,7 +683,7 @@ namespace Mach.Kinectomix.Screens
 
         private void PauseGame()
         {
-            _isPaused = true;
+            _isLevelPaused = true;
             _pauseButton.Freeze();
 
             _pauseMessageBox.Show(Resources.LevelScreenResources.GamePaused, _pauseButtons);
@@ -635,7 +691,7 @@ namespace Mach.Kinectomix.Screens
 
         private void ProcessFinish()
         {
-            _isPaused = true;
+            _isLevelPaused = true;
             _isLevelFinished = true;
 
             if (_highscore == null)
@@ -674,7 +730,7 @@ namespace Mach.Kinectomix.Screens
             _pauseMessageBox.Hide();
             _pauseButton.Unfreeze();
 
-            _isPaused = false;
+            _isLevelPaused = false;
             _lastDate = DateTime.Now;
         }
 
@@ -767,11 +823,11 @@ namespace Mach.Kinectomix.Screens
             BoardTileViewModel atom = _level.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
 
             // start animation
-            isMovementAnimation = true;
-            atomPosition = atom.RenderPosition;
-            destination = newCoordinates;
-            atomToMove = atom.Asset;
-            moveDirection = direction;
+            _isMovementAnimation = true;
+            _atomPosition = atom.RenderPosition;
+            _destination = newCoordinates;
+            _atomToMove = atom.Asset;
+            _moveDirection = direction;
 
             // instead of just switching do the animation
             _level.Board[atomCoordinates.X, atomCoordinates.Y] = _level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
@@ -779,7 +835,7 @@ namespace Mach.Kinectomix.Screens
             _level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true; // but now will be rendered as empty
             _level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// but now will be rendered as empty
 
-            CalculateBoardTilePositions(boardPosition, _level.Board, _renderAtomScale);
+            CalculateBoardTilePositions(_boardPosition, _level.Board, _renderAtomScale);
 
             _moves += 1;
         }
@@ -1033,13 +1089,13 @@ namespace Mach.Kinectomix.Screens
             switch (asset)
             {
                 case "Empty":
-                    tileTexture = emptyTexture;
+                    tileTexture = _emptyTexture;
                     break;
                 case "Left":
                 case "Right":
                 case "Down":
                 case "Up":
-                    tileTexture = arrowTexture;
+                    tileTexture = _arrowTexture;
                     break;
                 default:
                     tileTexture = _level.Assets[asset];
@@ -1115,7 +1171,7 @@ namespace Mach.Kinectomix.Screens
                     if (drawEmpty && drawEmptyTiles)
                     {
                         //_spriteBatch.Draw(emptyTexture, board[i, j].RenderRectangle, Color.White);
-                        _spriteBatch.Draw(emptyTexture, board[i, j].RenderPosition, null, Color.White, 0, Vector2.Zero, board[i, j].RenderScale, SpriteEffects.None, 0);
+                        _spriteBatch.Draw(_emptyTexture, board[i, j].RenderPosition, null, Color.White, 0, Vector2.Zero, board[i, j].RenderScale, SpriteEffects.None, 0);
                     }
 
                     if (tile != null)
@@ -1126,7 +1182,7 @@ namespace Mach.Kinectomix.Screens
                         if (board[i, j].IsHovered && (board[i, j].IsFixed == false || board[i, j].IsEmpty == true))
                         {
                             //_spriteBatch.Draw(activeTexture, board[i, j].RenderRectangle, Color.White);
-                            _spriteBatch.Draw(activeTexture, board[i, j].RenderPosition, null, Color.White, 0, Vector2.Zero, board[i, j].RenderScale, SpriteEffects.None, 0);
+                            _spriteBatch.Draw(_activeTexture, board[i, j].RenderPosition, null, Color.White, 0, Vector2.Zero, board[i, j].RenderScale, SpriteEffects.None, 0);
                         }
                     }
                 }
