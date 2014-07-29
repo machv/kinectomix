@@ -14,7 +14,6 @@ using Mach.Kinectomix.ViewModel;
 using Mach.Kinect.Gestures;
 using Mach.Xna;
 using Mach.Xna.Extensions;
-using System.Collections.Generic;
 
 namespace Mach.Kinectomix.Screens
 {
@@ -27,7 +26,9 @@ namespace Mach.Kinectomix.Screens
         private readonly Point NoAtomSelected = new Point(-1, -1);
         private const int TileWidth = 60;
         private const int TileHeight = 60;
+        private const float AtomSpeed = 400f;
 
+        private float _renderAtomScale = 1;
         private bool _isGestureCandidate = false;
         private int _activeTileOpacityDirection;
         private float _activeTileOpacity;
@@ -63,12 +64,10 @@ namespace Mach.Kinectomix.Screens
         // Animation stuff
         protected bool _isMovementAnimation = false;
         protected Vector2 _atomPosition;
-        protected Vector2 _finalPosition;
+        protected Rectangle _destinationRectangle;
         private Point _destination;
         private string _atomToMove;
         private MoveDirection _moveDirection;
-        private float _atomSpeed = 400f;
-        private float _renderAtomScale = 1;
 
         // Scoring
         private int _moves;
@@ -458,7 +457,6 @@ namespace Mach.Kinectomix.Screens
                         {
                             if (_level.Board[i, j] != null)
                             {
-                                Rectangle tile = new Rectangle((int)mPosition.X, (int)mPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale));
                                 if (clickOccurred && _level.Board[i, j].RenderRectangle.Contains(activityPosition))
                                 {
                                     if (_level.Board[i, j].IsFixed == false)
@@ -487,11 +485,11 @@ namespace Mach.Kinectomix.Screens
                                 }
                             }
 
-                            mPosition.X += TileWidth;
+                            mPosition.X += (TileWidth * _renderAtomScale);
                         }
 
                         mPosition.X = _boardPosition.X;
-                        mPosition.Y += TileHeight;
+                        mPosition.Y += (TileHeight * _renderAtomScale);
                     }
                 }
 
@@ -566,22 +564,51 @@ namespace Mach.Kinectomix.Screens
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            Vector2 destinationPosition = _level.Board[_destination.X, _destination.Y].RenderPosition;
-
-            if (_atomPosition.X == destinationPosition.X)
+            // Move atom to new position
+            if (_atomPosition.X == _destinationRectangle.X)
             {
                 int direction = _moveDirection == MoveDirection.Up ? -1 : 1;
-                _atomPosition.Y += direction * _atomSpeed * elapsed;
+                _atomPosition.Y += direction * AtomSpeed * elapsed;
             }
 
-            if (_atomPosition.Y == destinationPosition.Y)
+            if (_atomPosition.Y == _destinationRectangle.Y)
             {
                 int direction = _moveDirection == MoveDirection.Left ? -1 : 1;
-                _atomPosition.X += direction * _atomSpeed * elapsed;
+                _atomPosition.X += direction * AtomSpeed * elapsed;
             }
 
-            Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale));
-            if (tile.Contains((int)_atomPosition.X, (int)_atomPosition.Y))
+            // Check if it reached destination
+            bool _animationFinished = false;
+
+            switch (_moveDirection)
+            {
+                case MoveDirection.Up:
+                    if (_atomPosition.Y <= _destinationRectangle.Top || _atomPosition.X != _destinationRectangle.X)
+                    {
+                        _animationFinished = true;
+                    }
+                    break;
+                case MoveDirection.Down:
+                    if (_atomPosition.Y >= _destinationRectangle.Top || _atomPosition.X != _destinationRectangle.X)
+                    {
+                        _animationFinished = true;
+                    }
+                    break;
+                case MoveDirection.Left:
+                    if (_atomPosition.X <= _destinationRectangle.Left || _atomPosition.Y != _destinationRectangle.Y)
+                    {
+                        _animationFinished = true;
+                    }
+                    break;
+                case MoveDirection.Right:
+                    if (_atomPosition.X >= _destinationRectangle.Left || _atomPosition.Y != _destinationRectangle.Y)
+                    {
+                        _animationFinished = true;
+                    }
+                    break;
+            }
+
+            if (_animationFinished)
             {
                 _isMovementAnimation = false;
                 _level.Board[_destination.X, _destination.Y].Asset = _atomToMove;
@@ -819,19 +846,21 @@ namespace Mach.Kinectomix.Screens
         private void ProcessTileMove(Point atomCoordinates, MoveDirection direction)
         {
             Point newCoordinates = GetNewAtomPosition(atomCoordinates, direction);
-
-            BoardTileViewModel atom = _level.Board[atomCoordinates.X, atomCoordinates.Y]; // remember atom
+            BoardTileViewModel startAtom = _level.Board[atomCoordinates.X, atomCoordinates.Y];
+            BoardTileViewModel destinationAtom = _level.Board[newCoordinates.X, newCoordinates.Y]; 
 
             // start animation
             _isMovementAnimation = true;
-            _atomPosition = atom.RenderPosition;
+            _atomPosition = startAtom.RenderPosition;
+            _animatedAtomRectangle = startAtom.RenderRectangle;
+            _destinationRectangle = destinationAtom.RenderRectangle;
             _destination = newCoordinates;
-            _atomToMove = atom.Asset;
+            _atomToMove = startAtom.Asset;
             _moveDirection = direction;
 
             // instead of just switching do the animation
             _level.Board[atomCoordinates.X, atomCoordinates.Y] = _level.Board[newCoordinates.X, newCoordinates.Y]; //switch empty place to the atom
-            _level.Board[newCoordinates.X, newCoordinates.Y] = atom; // new field will be atom
+            _level.Board[newCoordinates.X, newCoordinates.Y] = startAtom; // new field will be atom
             _level.Board[newCoordinates.X, newCoordinates.Y].IsEmpty = true; // but now will be rendered as empty
             _level.Board[newCoordinates.X, newCoordinates.Y].Asset = "Empty";// but now will be rendered as empty
 
