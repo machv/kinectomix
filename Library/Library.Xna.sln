@@ -9,9 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Kinect", "Mach.Xna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect", "Mach.Kinect\Mach.Kinect.csproj", "{EFC015B9-F516-4258-A4FD-759F4933104A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Content", "Mach.Xna.Kinect.Content\Mach.Xna.Content.contentproj", "{486929D8-978B-4DBB-A838-5B2439DF7047}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Xna.Content.Compiler", "Mach.Xna.Kinect.ContentCompile\Mach.Xna.Content.Compiler.csproj", "{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
 		SccLocalPath0 = .
@@ -24,6 +28,12 @@ Global
 		SccProjectUniqueName3 = Mach.Xna.Kinect\\Mach.Xna.Kinect.csproj
 		SccProjectName3 = Mach.Xna.Kinect
 		SccLocalPath3 = Mach.Xna.Kinect
+		SccProjectUniqueName4 = Mach.Xna.Kinect.Content\\Mach.Xna.Content.contentproj
+		SccProjectName4 = Mach.Xna.Kinect.Content
+		SccLocalPath4 = Mach.Xna.Kinect.Content
+		SccProjectUniqueName5 = Mach.Xna.Kinect.ContentCompile\\Mach.Xna.Content.Compiler.csproj
+		SccProjectName5 = Mach.Xna.Kinect.ContentCompile
+		SccLocalPath5 = Mach.Xna.Kinect.ContentCompile
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +84,26 @@ Global
 		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|x86.ActiveCfg = Release|Any CPU
 		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|Xbox 360.ActiveCfg = Release|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Debug|Xbox 360.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Release|x86.ActiveCfg = Debug|Any CPU
+		{486929D8-978B-4DBB-A838-5B2439DF7047}.Release|Xbox 360.ActiveCfg = Debug|Any CPU
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|x86.ActiveCfg = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|x86.Build.0 = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Debug|Xbox 360.ActiveCfg = Debug|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|Any CPU.ActiveCfg = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|Mixed Platforms.Build.0 = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|x86.ActiveCfg = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|x86.Build.0 = Release|x86
+		{60EC2377-558D-49A4-BF8A-992D0DA1C9DA}.Release|Xbox 360.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
