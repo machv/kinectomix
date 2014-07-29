@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="Mach.Kinectomix.LevelEditor.View.EditorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:l="clr-namespace:Mach.Kinectomix.LevelEditor"
+             xmlns:locale="clr-namespace:Mach.Kinectomix.LevelEditor.Localization" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="700">
+    <UserControl.Resources>
+        <l:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
+
+        <DataTemplate x:Key="levelListItemTemplate">
+            <Grid Tag="{Binding DataContext,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}">
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{Binding Editor.Delete, Source={StaticResource LocalizedStrings}}" 
+                                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.RemoveLevelCommand}" 
+                                                  CommandParameter="{Binding}" />
+                        <MenuItem Header="{Binding Editor.Export, Source={StaticResource LocalizedStrings}}"
+                                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.Tag.ExportLevelCommand}"
+                                  CommandParameter="{Binding}" />
+                    </ContextMenu>
+                </Grid.ContextMenu>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ContentPresenter Grid.Column="0" Width="64" Height="64" ContentTemplate="{StaticResource ViewOnlyBoard}" Content="{Binding Board}"/>
+                <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Grid.Column="1" Margin="5,0,0,0" Text="{Binding Name}"/>
+
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <DockPanel Margin="0">
+        <Border DockPanel.Dock="Bottom"  Background="WhiteSmoke" BorderBrush="Silver" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
+                    <Button Content="{Binding Editor.AddLevel, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding AddNewLevelCommand}" />
+                    <Button Content="{Binding Editor.ImportLevel, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding ImportLevelCommand}" />
+                </WrapPanel>
+
+                <WrapPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5">
+                    <Button Content="{Binding Editor.NewDefinition, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding NewLevelsDefinitionCommand}" />
+                    <Button Content="{Binding Editor.OpenDefinition, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding LoadLevelsDefinitionCommand}" />
+                    <Button Content="{Binding Editor.SaveDefinitionAs, Source={StaticResource LocalizedStrings}}" Margin="5" Padding="3" Command="{Binding SaveAsLevelsDefinitionCommand}" FontWeight="Bold" />
+                </WrapPanel>
+            </Grid>
+        </Border>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="190" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0" Margin="0">
+                <Grid Margin="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" FontWeight="ExtraLight" FontSize="24" Text="{Binding Editor.GameLevels, Source={StaticResource LocalizedStrings}}" />
+                    <ListBox ItemsSource="{Binding Levels}" 
+                             ItemTemplate="{StaticResource levelListItemTemplate}"
+                             SelectedItem="{Binding Level}" 
+                             Grid.Row="1" 
+                             AllowDrop="True" 
+                             DragOver="OnFileDragOver" 
+                             Drop="OnFileDrop"
+                             l:DragDropHelper.DragDropTemplate="{StaticResource levelListItemTemplate}"
+                             l:DragDropHelper.IsDragSource="true" 
+                             l:DragDropHelper.IsDropTarget="true">
+                    </ListBox>
+                </Grid>
+            </DockPanel>
+
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ResizeBehavior="PreviousAndNext" BorderBrush="Silver" BorderThickness="1,0" />
+
+            <Grid Grid.Column="2" Margin="3" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
+                <Grid Margin="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Margin="0,0,0,5" FontWeight="ExtraLight" FontSize="24" Text="{Binding Level.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" Visibility="{Binding Level, Converter={StaticResource NotNullToVisibilityConverter}}">
+                        <TabItem Header="{Binding Editor.Board, Source={StaticResource LocalizedStrings}}" Tag="Board">
+                            <ContentPresenter Content="{Binding Level.Board}"/>
+                        </TabItem>
+                        <TabItem Header="{Binding Editor.Molecule, Source={StaticResource LocalizedStrings}}" Tag="Molecule">
+                            <ContentPresenter Content="{Binding Level.Molecule}"/>
+                        </TabItem>
+                    </TabControl>
+
+                    <ContentPresenter Content="{Binding TileSelector}" Grid.Row="3"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</UserControl>
