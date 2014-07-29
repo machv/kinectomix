@@ -4,6 +4,7 @@ using Mach.Xna;
 using Mach.Xna.Components;
 using Mach.Xna.Extensions;
 using Mach.Xna.Kinect.Components;
+using Mach.Xna.Kinect.Gestures;
 using Mach.Xna.ScreenManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -154,9 +155,19 @@ namespace Mach.Kinectomix.Screens
             // Cheat for allowing all levels
             if (state.IsKeyDown(Keys.LeftControl) && state.IsKeyDown(Keys.A) && state.IsKeyDown(Keys.L))
             {
-                foreach (Button button in _buttons)
+                UnlockAllLevels();
+            }
+
+            GesturesState gesturesState = Gestures.GetState();
+            if (gesturesState.RecognizedGestures != null)
+            {
+                foreach (RecognizedGesture gesture in gesturesState.RecognizedGestures)
                 {
-                    button.IsEnabled = true;
+                    if (gesture.Gesture.Id == 988)
+                    {
+                        UnlockAllLevels();
+                        break;
+                    }
                 }
             }
 
@@ -282,6 +293,15 @@ namespace Mach.Kinectomix.Screens
 
             base.Update(gameTime);
         }
+
+        private void UnlockAllLevels()
+        {
+            foreach (Button button in _buttons)
+            {
+                button.IsEnabled = true;
+            }
+        }
+
 
         /// <summary>
         /// Draws the screen.

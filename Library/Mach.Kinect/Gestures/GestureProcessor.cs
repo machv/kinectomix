@@ -42,7 +42,7 @@ namespace Mach.Kinect.Gestures
         /// <summary>
         /// Gets the current length of the frame buffer.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The length of the frame buffer.</returns>
         public int FrameBufferLength
         {
             get { return _frameBuffer.Count; }
@@ -86,7 +86,7 @@ namespace Mach.Kinect.Gestures
                 return;
             }
 
-            // transpozice and normalizace of coordinates, 1 unit is length of shoulders (ShoulderRight - ShoulderLeft) 
+            // normalize of coordinates, 1 unit is length of shoulders (Head - ShoulderCenter) 
             JointType first = JointType.Head;
             JointType second = JointType.ShoulderCenter;
 

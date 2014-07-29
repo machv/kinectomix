@@ -14,6 +14,7 @@ using Mach.Kinectomix.ViewModel;
 using Mach.Kinect.Gestures;
 using Mach.Xna;
 using Mach.Xna.Extensions;
+using System.Collections.Generic;
 
 namespace Mach.Kinectomix.Screens
 {
@@ -304,6 +305,16 @@ namespace Mach.Kinectomix.Screens
 
             _previousKeyboardState = state;
 
+            if (_isPaused)
+            {
+                GesturesState gesturesState = Gestures.GetState();
+                if(gesturesState.IsGestureRecognized(GestureType.LeftHandWave) || 
+                    gesturesState.IsGestureRecognized(GestureType.RightHandWave))
+                {
+                    UnpauseGame();
+                }
+            }
+
             if (!_isPaused)
             {
                 bool clickOccurred = false;
@@ -316,15 +327,6 @@ namespace Mach.Kinectomix.Screens
                 if (lastMouseState.LeftButton == ButtonState.Released && mouseState.LeftButton == ButtonState.Pressed)
                 {
                     clickOccurred = true;
-                }
-
-                GesturesState gesturesState = Gestures.GetState();
-                if (gesturesState.RecognizedGestures != null && gesturesState.RecognizedGestures.Count() > 0)
-                //if (gesturesState.IsGestureRecognized(GestureType.RightHandUp))
-                {
-                    clickOccurred = true;
-                    isGestureDetected = true;
-                    //_log = "Gestures: " + gesturesState.RecognizedGestures.Count().ToString() + " / " + gesturesState.RecognizedGestures.ToArray()[0].Gesture.Name;
                 }
 
                 KinectCursor cursor = (ScreenManager.Game as KinectomixGame).Cursor;
@@ -355,7 +357,7 @@ namespace Mach.Kinectomix.Screens
                         atomPosition.X += direction * atomSpeed * elapsed;
                     }
 
-                    Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, (int)(TileWidth * _renderAtomScale) / 4, (int)(TileHeight * _renderAtomScale));
+                    Rectangle tile = new Rectangle((int)destinationPosition.X, (int)destinationPosition.Y, (int)(TileWidth * _renderAtomScale), (int)(TileHeight * _renderAtomScale));
                     if (tile.Contains((int)atomPosition.X, (int)atomPosition.Y))
                     {
                         isMovementAnimation = false;
@@ -662,13 +664,18 @@ namespace Mach.Kinectomix.Screens
                     RestartCurrentLevel();
                     break;
                 case MessageBoxResult.Custom3: // ContinueGame
-                    _pauseMessageBox.Hide();
-                    _pauseButton.Unfreeze();
-
-                    _isPaused = false;
-                    _lastDate = DateTime.Now;
+                    UnpauseGame();
                     break;
             }
+        }
+
+        private void UnpauseGame()
+        {
+            _pauseMessageBox.Hide();
+            _pauseButton.Unfreeze();
+
+            _isPaused = false;
+            _lastDate = DateTime.Now;
         }
 
         private void _finishedMessageBox_Changed(object sender, MessageBoxEventArgs e)

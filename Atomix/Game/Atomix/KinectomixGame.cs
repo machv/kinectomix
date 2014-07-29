@@ -59,6 +59,16 @@ namespace Mach.Kinectomix
             get { return _visualKinectManager; }
         }
         /// <summary>
+        /// Gets the gestures component.
+        /// </summary>
+        /// <value>
+        /// The gestures component.
+        /// </value>
+        public Gestures Gestures
+        {
+            get { return _gestures; }
+        }
+        /// <summary>
         /// Gets the cursor.
         /// </summary>
         /// <value>

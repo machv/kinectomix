@@ -23,7 +23,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <PublishUrl>D:\GAME\</PublishUrl>
+    <PublishUrl>D:\__DP_DVD__\Install\Kinectomix\Game\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -35,7 +35,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>Kinectomix</ProductName>
     <PublisherName>Vladimír Mach</PublisherName>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>10</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

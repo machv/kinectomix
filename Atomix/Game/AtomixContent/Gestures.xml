@@ -38,11 +38,28 @@
       <Filename>7_rightHandRight.gst</Filename>
       <Type>RightHandUp</Type>
     </Item>
+    -->
     <Item>
-      <Filename>marketa_left_hand_left.gst</Filename>
+      <Filename>tlesk0.gst</Filename>
       <Type>RightHandUp</Type>
     </Item>
-    -->
+    <Item>
+      <Filename>tlesk1.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>tlesk2.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>tlesk3.gst</Filename>
+      <Type>RightHandUp</Type>
+    </Item>
+    <Item>
+      <Filename>wave_right_1.gst</Filename>
+      <Type>RightHandWave</Type>
+    </Item>
+    
     <Item>
       <Filename>wave.gst</Filename>
       <Type>LeftHandWave</Type>
