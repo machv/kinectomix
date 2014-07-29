@@ -19,6 +19,19 @@ namespace Mach.Kinect
         private Skeletons.SkeletonTrackingType _skeletonsTrackingType;
         private int _connectedSensorsLimit;
         private bool _processSkeletonsAutomatically;
+        private TransformSmoothParameters _transformSmoothParameters;
+
+        /// <summary>
+        /// Gets or sets custom smoothing values.
+        /// </summary>
+        /// <value>
+        /// Custom smoothing values.
+        /// </value>
+        public TransformSmoothParameters TransformSmoothParameters
+        {
+            get { return _transformSmoothParameters; }
+            set { _transformSmoothParameters = value; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether skeletons should be processed automatically.
@@ -240,6 +253,16 @@ namespace Mach.Kinect
 
             _sensors = new List<ConnectedSensor>();
 
+            // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
+            _transformSmoothParameters = new TransformSmoothParameters()
+            {
+                Smoothing = 0.5f,
+                Correction = 0.5f,
+                Prediction = 0.0f,
+                JitterRadius = 0.05f,
+                MaxDeviationRadius = 0.04f,
+            };
+
             KinectSensor.KinectSensors.StatusChanged += KinectSensors_StatusChanged;
 
             DiscoverSensor();
@@ -358,15 +381,7 @@ namespace Mach.Kinect
                 {
                     if (_startSkeletonStream)
                     {
-                        // http://msdn.microsoft.com/en-us/library/jj131024.aspx + http://msdn.microsoft.com/en-us/library/microsoft.kinect.transformsmoothparameters_properties.aspx for default values
-                        TransformSmoothParameters parameters = new TransformSmoothParameters();
-                        parameters.Smoothing = 0.5f;
-                        parameters.Correction = 0.1f;
-                        parameters.Prediction = 0.5f;
-                        parameters.JitterRadius = 0.1f;
-                        parameters.MaxDeviationRadius = 0.1f;
-
-                        sensor.SkeletonStream.Enable(parameters);
+                        sensor.SkeletonStream.Enable(_transformSmoothParameters);
                     }
 
                     if (_startDepthStream)
