@@ -13,9 +13,9 @@ namespace Mach.Kinectomix.LevelEditor.Localization
 
         static LocalizedStrings()
         {
-            EditorResources.Culture = CultureInfo.CurrentCulture; //.CurrentCulture;
-            TileResources.Culture = CultureInfo.CurrentCulture; //.CurrentCulture;
-            DialogResources.Culture = CultureInfo.CurrentCulture; //.CurrentCulture;
+            EditorResources.Culture = CultureInfo.CurrentUICulture;
+            TileResources.Culture = CultureInfo.CurrentUICulture;
+            DialogResources.Culture = CultureInfo.CurrentUICulture;
         }
 
         /// <summary>
