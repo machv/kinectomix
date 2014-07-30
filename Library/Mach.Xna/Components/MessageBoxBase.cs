@@ -346,9 +346,12 @@ namespace Mach.Xna.Components
         /// </summary>
         public void Hide()
         {
-            foreach (Button button in _renderedButtons)
+            if (_renderedButtons != null)
             {
-                button.Selected -= button_Selected;
+                foreach (Button button in _renderedButtons)
+                {
+                    button.Selected -= button_Selected;
+                }
             }
 
             _isVisible = false;
