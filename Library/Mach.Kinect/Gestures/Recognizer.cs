@@ -159,7 +159,7 @@ namespace Mach.Kinect.Gestures
                         }
                         else
                         {
-                            System.Diagnostics.Debug.Print(string.Format("False positive | {0} | {1} | {2}", candidate.Name, candidateInfo.Item1, cost));
+                            //System.Diagnostics.Debug.Print(string.Format("False positive | {0} | {1} | {2}", candidate.Name, candidateInfo.Item1, cost));
                         }
                     }
                 }
@@ -181,7 +181,7 @@ namespace Mach.Kinect.Gestures
                 }
                 else
                 {
-                    System.Diagnostics.Debug.Print(string.Format("Frame distance | {1} | {0}", frameDistance, gesture.Name));
+                    //System.Diagnostics.Debug.Print(string.Format("Frame distance | {1} | {0}", frameDistance, gesture.Name));
                 }
             }
         }
