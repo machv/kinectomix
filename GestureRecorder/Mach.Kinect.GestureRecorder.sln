@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect.GestureRecorder", "Mach.Kinect.GestureRecorder.csproj", "{97B671A1-997A-4A02-A73C-59711C435CEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Wpf.Mvvm", "..\Library\Mach.Wpf.Mvvm\Mach.Wpf.Mvvm.csproj", "{E6AEFE09-E617-40ED-9594-91E7E7594D32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mach.Kinect", "..\Library\Mach.Kinect\Mach.Kinect.csproj", "{EFC015B9-F516-4258-A4FD-759F4933104A}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs15
+		SccProjectUniqueName0 = Mach.Kinect.GestureRecorder.csproj
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\Library\\Mach.Wpf.Mvvm\\Mach.Wpf.Mvvm.csproj
+		SccProjectName1 = ../Library/Mach.Wpf.Mvvm
+		SccLocalPath1 = ..\\Library\\Mach.Wpf.Mvvm
+		SccProjectUniqueName2 = ..\\Library\\Mach.Kinect\\Mach.Kinect.csproj
+		SccProjectName2 = ../Library/Mach.Kinect
+		SccLocalPath2 = ..\\Library\\Mach.Kinect
+		SccLocalPath3 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97B671A1-997A-4A02-A73C-59711C435CEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6AEFE09-E617-40ED-9594-91E7E7594D32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFC015B9-F516-4258-A4FD-759F4933104A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC015B9-F516-4258-A4FD-759F4933104A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC015B9-F516-4258-A4FD-759F4933104A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
