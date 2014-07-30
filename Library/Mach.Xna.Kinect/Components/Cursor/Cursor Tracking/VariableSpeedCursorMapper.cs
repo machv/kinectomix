@@ -1,4 +1,5 @@
 ﻿using Mach.Kinect;
+using Mach.Xna.Kinect.Extensions;
 using Microsoft.Kinect;
 using Microsoft.Xna.Framework;
 using System;
@@ -108,14 +109,9 @@ namespace Mach.Xna.Kinect.Components
                     // the hand has moved enough to update screen position (jitter control / smoothing)
                     if (Math.Abs(hand.Position.X - _previousPosition.X) > _moveThreshold || Math.Abs(hand.Position.Y - _previousPosition.Y) > _moveThreshold)
                     {
-                        float distance = Vector2.Distance(hand.Position.ToVector2(), _previousPosition.ToVector2());
-                        //Vector2 difference = (hand.Position.ToVector2() - _previousPosition.ToVector2()) / 2;
                         Vector2 handPosition = hand.Position.ToVector2(); // - difference;
 
-                        //System.Diagnostics.Debug.Print("distance: " + distance + " meters");
-
                         float xScaled = (handPosition.X - centerShoulder.Position.X) / ((sameShoulder.Position.X - centerShoulder.Position.X) * 2) * width;
-
                         if (leftHanded)
                             xScaled = width - xScaled;
 
@@ -126,11 +122,8 @@ namespace Mach.Xna.Kinect.Components
                         Vector2 cursor = new Vector2(xScaled, yScaled);
                         cursor = SetBounds(width, height, cursor);
 
-                        float distanceConstant = 0.1f;
-
-                        Vector2 half = (cursor - _previousCursor) * (distanceConstant);
+                        Vector2 half = (cursor - _previousCursor) * _cursorSpeed;
                         cursor = _previousCursor + half;
-
                         cursor = SetBounds(width, height, cursor);
 
                         _previousPosition = hand.Position;
