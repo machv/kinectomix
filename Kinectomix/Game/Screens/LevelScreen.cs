@@ -761,6 +761,9 @@ namespace Mach.Kinectomix.Screens
 
         private void UnpauseGame()
         {
+            if (!_isLevelPaused)
+                return;
+
             _pauseMessageBox.Hide();
             _pauseButton.Unfreeze();
 

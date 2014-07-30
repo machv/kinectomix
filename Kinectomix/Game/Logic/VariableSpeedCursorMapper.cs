@@ -16,6 +16,20 @@ namespace Mach.Kinectomix
         private SkeletonPoint _previousPosition;
         private float _moveThreshold = 0.01f;
         private Vector2 _previousCursor;
+        private float _cursorSpeed;
+
+        /// <summary>
+        /// Gets or sets the cursor speed in percents. Compares current cursor position with previous and adds only defined percents of distance to cursor. 
+        /// Value 0 means cursor will move slowly, Value 1 means normal speed without any modifications.
+        /// </summary>
+        /// <value>
+        /// The cursor speed in percents.
+        /// </value>
+        public float CursorSpeed
+        {
+            get { return _cursorSpeed; }
+            set { _cursorSpeed = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of <see cref="VariableSpeedCursorMapper"/> class.
@@ -36,6 +50,7 @@ namespace Mach.Kinectomix
         {
             _kinectManager = kinectManager;
             _moveThreshold = moveThreshold;
+            _cursorSpeed = 1;
         }
 
         /// <summary>
@@ -95,7 +110,7 @@ namespace Mach.Kinectomix
                     // the hand has moved enough to update screen position (jitter control / smoothing)
                     if (Math.Abs(hand.Position.X - _previousPosition.X) > _moveThreshold || Math.Abs(hand.Position.Y - _previousPosition.Y) > _moveThreshold)
                     {
-                        //float distance = Vector2.Distance(hand.Position.ToVector2(), _previousPosition.ToVector2());
+                        float distance = Vector2.Distance(hand.Position.ToVector2(), _previousPosition.ToVector2());
                         //Vector2 difference = (hand.Position.ToVector2() - _previousPosition.ToVector2()) / 2;
                         Vector2 handPosition = hand.Position.ToVector2(); // - difference;
 
@@ -113,11 +128,11 @@ namespace Mach.Kinectomix
                         Vector2 cursor = new Vector2(xScaled, yScaled);
                         cursor = SetBounds(width, height, cursor);
 
-                        Vector2 half = (cursor - _previousCursor) * 0.2f;
+                        float distanceConstant = 0.1f;
 
-                        System.Diagnostics.Debug.Print(half.ToString());
+                        Vector2 half = (cursor - _previousCursor) * (distanceConstant);
+                        cursor = _previousCursor + half;
 
-                        cursor = cursor - half;
                         cursor = SetBounds(width, height, cursor);
 
                         _previousPosition = hand.Position;
