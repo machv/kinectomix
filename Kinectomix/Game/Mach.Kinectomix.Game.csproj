@@ -105,8 +105,6 @@
   <ItemGroup>
     <Compile Include="Components\Background.cs" />
     <Compile Include="Logic\GameDefinitionFactory.cs" />
-    <Compile Include="Logic\SkeletonPointExtensions.cs" />
-    <Compile Include="Logic\VariableSpeedCursorMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="KinectomixGame.cs" />
