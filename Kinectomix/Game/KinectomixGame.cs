@@ -8,6 +8,7 @@ using Mach.Xna.Kinect.Components;
 using Mach.Kinectomix.Logic;
 using Mach.Kinectomix.Screens;
 using Mach.Kinectomix.Components;
+using Microsoft.Kinect;
 
 namespace Mach.Kinectomix
 {
@@ -126,6 +127,16 @@ namespace Mach.Kinectomix
             IsMouseVisible = true;
 
             _visualKinectManager = new VisualKinectManager(this, true, true);
+
+            _visualKinectManager.Manager.TransformSmoothParameters = new TransformSmoothParameters()
+            {
+                Correction = 0.1f,
+                JitterRadius = 0.15f,
+                MaxDeviationRadius = 0.1f,
+                Prediction = 0.4f,
+                Smoothing = 0.7f,
+            };
+
             _gestures = new Gestures(this, _visualKinectManager.Manager, "Content/Gestures/");
             _skeletonRenderer = new SkeletonRenderer(this, _visualKinectManager, _kinectDebugOffset, _scale);
 
@@ -133,6 +144,7 @@ namespace Mach.Kinectomix
             {
                 HideSystemCursorWhenHandTracked = true,
                 CursorPositionsBufferLength = 5,
+                CursorMapper = new VariableSpeedCursorMapper(_visualKinectManager.Manager),
             };
 
             _videoStream = new VideoStreamComponent(this, _visualKinectManager)

@@ -325,7 +325,6 @@ namespace Mach.Kinectomix.Screens
 
             // Not paused game
             bool clickOccurred = false;
-            bool isGestureDetected = false;
 
             _lastMouseState = _mouseState;
             _mouseState = Mouse.GetState();
@@ -436,10 +435,10 @@ namespace Mach.Kinectomix.Screens
                 }
 
                 // Detect clicks
-                if (clickOccurred || isGestureDetected || cursor.IsHandStateActive)
+                if (clickOccurred || cursor.IsHandStateActive)
                 {
                     Point activityPosition;
-                    if (clickOccurred && !isGestureDetected)
+                    if (clickOccurred)
                     {
                         activityPosition = new Point(_mouseState.X, _mouseState.Y);
                     }
@@ -456,7 +455,7 @@ namespace Mach.Kinectomix.Screens
                     {
                         _level.Board[_activeAtomIndex.X, _activeAtomIndex.Y].Opacity = 1;
                     }
-                    _activeAtomIndex = NoAtomSelected; //new Point(-1, -1);
+                    _activeAtomIndex = NoAtomSelected;
 
                     for (int i = 0; i < _level.Board.RowsCount; i++)
                     {
@@ -853,6 +852,9 @@ namespace Mach.Kinectomix.Screens
 
         private void ProcessTileMove(Point atomCoordinates, MoveDirection direction)
         {
+            if (atomCoordinates == NoAtomSelected)
+                return;
+
             Point newCoordinates = GetNewAtomPosition(atomCoordinates, direction);
             BoardTileViewModel startAtom = _level.Board[atomCoordinates.X, atomCoordinates.Y];
             BoardTileViewModel destinationAtom = _level.Board[newCoordinates.X, newCoordinates.Y]; 
