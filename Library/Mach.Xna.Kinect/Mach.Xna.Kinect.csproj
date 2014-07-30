@@ -79,6 +79,7 @@
     <Compile Include="Components\Cursor\Cursor Tracking\AbsoluteCursorMapper.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\ICursorMapper.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\RelativeCursorMapper.cs" />
+    <Compile Include="Components\Cursor\Cursor Tracking\VariableSpeedCursorMapper.cs" />
     <Compile Include="Components\Cursor\TrackedCursorHand.cs" />
     <Compile Include="Components\Gestures.cs" />
     <Compile Include="Components\Buttons\KinectButton.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Components\VideoStreamComponent.cs" />
     <Compile Include="Components\VideoWhenNoSkeleton.cs" />
     <Compile Include="Components\VisualKinectManager.cs" />
+    <Compile Include="Extensions\SkeletonPointExtensions.cs" />
     <Compile Include="Gestures\GesturesState.cs" />
     <Compile Include="Gestures\GestureType.cs" />
     <Compile Include="Gestures\KnownGesture.cs" />
