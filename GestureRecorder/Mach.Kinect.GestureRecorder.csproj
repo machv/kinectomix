@@ -19,7 +19,7 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>D:\__DP_DVD__\Install\Kinect.GesturesRecorder\</PublishUrl>
+    <PublishUrl>D:\__DP_DVD__\Install\GestureRecorder\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -31,7 +31,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>Gesture Recorder</ProductName>
     <PublisherName>Vladimír Mach</PublisherName>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

@@ -51,10 +51,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithms\Bresenham.cs" />
+    <Compile Include="Components\Buttons\IKinectAwareButton.cs" />
+    <Compile Include="Components\Buttons\KinectButton.cs" />
+    <Compile Include="Components\Buttons\KinectFocusChecker.cs" />
+    <Compile Include="Components\Buttons\KinectSpriteButton.cs" />
     <Compile Include="Components\ClippedEdgesVisualiser.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\AbsoluteCursorMapper.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\ICursorMapper.cs" />
     <Compile Include="Components\Cursor\Cursor Tracking\RelativeCursorMapper.cs" />
+    <Compile Include="Components\Cursor\Cursor Tracking\VariableSpeedCursorMapper.cs" />
     <Compile Include="Components\Cursor\Hand State\ConvexityClosedHandTracker.cs" />
     <Compile Include="Components\Cursor\Hand State\HoverHandTracker.cs" />
     <Compile Include="Components\Cursor\Hand State\IHandStateTracker.cs" />
@@ -63,16 +68,20 @@
     <Compile Include="Components\Cursor\KinectCursor.cs" />
     <Compile Include="Components\Cursor\TrackedCursorHand.cs" />
     <Compile Include="Components\Gestures.cs" />
-    <Compile Include="Components\KinectButton.cs" />
     <Compile Include="Components\KinectMessageBox.cs" />
+    <Compile Include="Components\Localization\KinectMessageBoxResources.cs-CZ.Designer.cs" />
+    <Compile Include="Components\Localization\KinectMessageBoxResources.Designer.cs" />
     <Compile Include="Components\Localization\VisualKinectManagerResources.cs-CZ.Designer.cs" />
     <Compile Include="Components\Localization\VisualKinectManagerResources.Designer.cs" />
     <Compile Include="Components\SkeletonRenderer.cs" />
     <Compile Include="Components\VideoStreamComponent.cs" />
+    <Compile Include="Components\VideoWhenNoSkeleton.cs" />
     <Compile Include="Components\VisualKinectManager.cs" />
+    <Compile Include="Extensions\SkeletonPointExtensions.cs" />
     <Compile Include="Gestures\GesturesState.cs" />
     <Compile Include="Gestures\GestureType.cs" />
     <Compile Include="Gestures\KnownGesture.cs" />
+    <Compile Include="Gestures\KnownGestures.cs" />
     <Compile Include="Input\KinectInputProvider.cs" />
     <Compile Include="Input\KinectInputState.cs" />
     <Compile Include="KinectInteractionClient.cs" />
@@ -94,6 +103,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Components\Localization\KinectMessageBoxResources.cs-CZ.resx" />
+    <EmbeddedResource Include="Components\Localization\KinectMessageBoxResources.resx" />
     <EmbeddedResource Include="Components\Localization\VisualKinectManagerResources.cs-CZ.resx" />
     <EmbeddedResource Include="Components\Localization\VisualKinectManagerResources.resx" />
     <EmbeddedResource Include="Sprites.resx">
