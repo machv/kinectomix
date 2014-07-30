@@ -144,7 +144,7 @@ namespace Mach.Kinectomix
             {
                 HideSystemCursorWhenHandTracked = true,
                 CursorPositionsBufferLength = 5,
-                CursorMapper = new VariableSpeedCursorMapper(_visualKinectManager.Manager),
+                CursorMapper = new VariableSpeedCursorMapper(_visualKinectManager.Manager) { CursorSpeed = 0.1f },
             };
 
             _videoStream = new VideoStreamComponent(this, _visualKinectManager)
